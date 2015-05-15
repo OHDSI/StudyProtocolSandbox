@@ -17,8 +17,13 @@
 #'   \item{"postgresql" for PostgreSQL}
 #'   \item{"redshift" for Amazon Redshift}
 #'   \item{"sql server" for Microsoft SQL Server}
+#'   \item{"pdw" for Microsoft Parallel Data Warehouse (PDW)}
+#'   \item{"netezza" for IBM Netezza}
 #' }
-#' @param user				The user name used to access the server.
+#' @param user				The user name used to access the server. If the user is not specified for SQL Server,
+#' 									  Windows Integrated Security will be used, which requires the SQL Server JDBC drivers
+#' 									  to be installed.
+#' @param domain	    (optional) The Windows domain for SQL Server only.
 #' @param password		The password for that user
 #' @param server			The name of the server
 #' @param port				(optional) The port on the server to connect to
@@ -43,7 +48,7 @@
 #'
 #' @importFrom DBI dbDisconnect
 #' @export
-execute <- function(dbms, user, password, server,
+execute <- function(dbms, user = NULL, domain = NULL, password = NULL, server,
                     port = NULL,
                     cdmSchema, resultsSchema,
                     file = getDefaultStudyFileName(),
@@ -52,6 +57,7 @@ execute <- function(dbms, user, password, server,
     connectionDetails <- DatabaseConnector::createConnectionDetails(dbms=dbms,
                                                                     server=server,
                                                                     user=user,
+                                                                    domain=domain,
                                                                     password=password,
                                                                     schema=cdmSchema,
                                                                     port = port)

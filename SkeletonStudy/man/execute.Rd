@@ -4,8 +4,9 @@
 \alias{execute}
 \title{Execute OHDSI Study (FILL IN NAME)}
 \usage{
-execute(dbms, user, password, server, port = NULL, cdmSchema, resultsSchema,
-  file = getDefaultStudyFileName(), ...)
+execute(dbms, user = NULL, domain = NULL, password = NULL, server,
+  port = NULL, cdmSchema, resultsSchema, file = getDefaultStudyFileName(),
+  ...)
 }
 \arguments{
 \item{dbms}{The type of DBMS running on the server. Valid values are
@@ -15,9 +16,15 @@ execute(dbms, user, password, server, port = NULL, cdmSchema, resultsSchema,
   \item{"postgresql" for PostgreSQL}
   \item{"redshift" for Amazon Redshift}
   \item{"sql server" for Microsoft SQL Server}
+  \item{"pdw" for Microsoft Parallel Data Warehouse (PDW)}
+  \item{"netezza" for IBM Netezza}
 }}
 
-\item{user}{The user name used to access the server.}
+\item{user}{The user name used to access the server. If the user is not specified for SQL Server,
+Windows Integrated Security will be used, which requires the SQL Server JDBC drivers
+to be installed.}
+
+\item{domain}{(optional) The Windows domain for SQL Server only.}
 
 \item{password}{The password for that user}
 
