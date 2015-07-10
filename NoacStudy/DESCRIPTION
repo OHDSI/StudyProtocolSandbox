@@ -1,7 +1,12 @@
 Package: NoacStudy  
 Title: Novel anticoagulant therapy study
 Version: 0.1
-Authors@R: "First Last <first.last@example.com> [aut, cre]"
+Author: 
+  Marc A. Suchard [aut, cre],
+  Martijn J. Schuemie [aut],
+  David Madigan [aut],
+  Patrick B. Ryan [aut]
+Maintainer: Marc A. Suchard <msuchard@ucla.edu>
 Description: What the study does (paragraph)
 Depends:
     R (>= 3.1),
