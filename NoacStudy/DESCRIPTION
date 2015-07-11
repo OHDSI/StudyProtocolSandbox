@@ -1,18 +1,21 @@
-Package: NoacStudy  
+Package: NoacStudy
 Title: Novel anticoagulant therapy study
 Version: 0.1
-Author: 
+Author:
   Marc A. Suchard [aut, cre],
   Martijn J. Schuemie [aut],
   David Madigan [aut],
   Patrick B. Ryan [aut]
 Maintainer: Marc A. Suchard <msuchard@ucla.edu>
-Description: What the study does (paragraph)
+Description: Examine the relative risk of adverse bleeding events in
+  new users of novel anticoagulants vs warfarin.
 Depends:
     R (>= 3.1),
     DatabaseConnector (>= 1.2.1)
 Imports:
     SqlRender,
+    Cyclops,
+    CohortMethod,
     DBI,
     mailR
 Suggests:
