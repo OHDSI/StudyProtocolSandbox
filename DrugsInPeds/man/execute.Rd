@@ -15,6 +15,8 @@ function in the DatabaseConnector package.}
 \item{cdmDatabaseSchema}{Schema name where your patient-level data in OMOP CDM format resides. Note that for SQL Server, this should include
 both the database and schema name, for example 'cdm_data.dbo'.}
 
+\item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write priviliges for storing temporary tables.}
+
 \item{cdmVersion}{Version of the CDM. Can be "4" or "5"}
 
 \item{folder}{(Optional) Name of local file to place results; make sure to use forward slashes (/)}
@@ -27,7 +29,7 @@ a single file called StudyResults.zip.enc.
 Execute OHDSI Drug Utilization in Children
 }
 \details{
-This function executes the OHDSI OHDSI Drug Utilization in Children Study.
+This function executes the OHDSI Drug Utilization in Children Study.
 }
 \examples{
 \dontrun{

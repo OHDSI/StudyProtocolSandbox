@@ -2,6 +2,7 @@ testCode <- function() {
     #library(DrugsInPeds);setwd('s:/temp')
     password <- NULL
     user <- NULL
+    oracleTempSchema <- NULL
 
     dbms <- "sql server"
     server <- "RNDUSRDHIT07.jnj.com"
@@ -21,7 +22,6 @@ testCode <- function() {
     port <- 17001
     cdmVersion <- "5"
 
-    oracleTempSchema <- NULL
 
     connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                     server = server,
@@ -36,6 +36,12 @@ testCode <- function() {
 
 
     email(from = "mschuemi@its.jnj.com", dataDescription = "CDM4 Simulated Data")
+
+    createFiguresAndTables(connectionDetails,
+                           cdmDatabaseSchema = cdmDatabaseSchema,
+                           oracleTempSchema = oracleTempSchema,
+                           cdmVersion = cdmVersion,
+                           folder = "s:/temp/DrugsInPeds")
     #OhdsiSharing::generateKeyPair("s:/temp/public.key","s:/temp/private.key")
 
     #OhdsiSharing::decryptAndDecompressFolder("s:/temp/DrugsInPeds/StudyResults.zip.enc","s:/temp/test","s:/temp/private.key")

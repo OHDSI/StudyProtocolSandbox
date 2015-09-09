@@ -173,7 +173,7 @@ compressAndEncrypt <- function(file){
 #' @title Execute OHDSI Drug Utilization in Children
 #'
 #' @details
-#' This function executes the OHDSI OHDSI Drug Utilization in Children Study.
+#' This function executes the OHDSI Drug Utilization in Children Study.
 #'
 #' @return
 #' Study results are placed in CSV format files in specified local folder. The CSV files are then compressed and encrypted into
@@ -183,6 +183,7 @@ compressAndEncrypt <- function(file){
 #' function in the DatabaseConnector package.
 #' @param cdmDatabaseSchema    Schema name where your patient-level data in OMOP CDM format resides. Note that for SQL Server, this should include
 #' both the database and schema name, for example 'cdm_data.dbo'.
+#' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write priviliges for storing temporary tables.
 #' @param cdmVersion           Version of the CDM. Can be "4" or "5"
 #' @param folder	           (Optional) Name of local file to place results; make sure to use forward slashes (/)
 #'
@@ -411,7 +412,7 @@ getDefaultStudyFolder <- function() { return("DrugsInPeds") }
 
 # Package must provide a default result file name
 #' @export
-getDefaultStudyFileName <- function() { return("DrugsInPeds/StudyResults.zip.enc") }
+getDefaultStudyFileName <- function() { return("StudyResults.zip.enc") }
 
 # Packge must provide default email subject
 #' @export

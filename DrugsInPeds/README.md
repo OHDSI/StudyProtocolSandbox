@@ -50,3 +50,18 @@ email(from = "collaborator@@ohdsi.org",
 * ```from``` is your e-mail address.
 
 * ```dataDescription``` is a short description of the source database, such as the name and version.
+
+Generating figures and tables
+=============================
+
+To locally generate the figures and tables specified in the protocol, you can run
+
+```r
+    createFiguresAndTables(connectionDetails,
+                           cdmDatabaseSchema = cdmDatabaseSchema,
+                           oracleTempSchema = oracleTempSchema,
+                           cdmVersion = cdmVersion,
+                           folder = "my_folder")
+
+```
+

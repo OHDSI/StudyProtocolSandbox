@@ -18,6 +18,7 @@
 {DEFAULT @split_by_age_group = TRUE} 
 {DEFAULT @split_by_year = TRUE} 
 {DEFAULT @split_by_drug_level = 'ingredient'} /* 'ingredient', 'atc3', 'atc1', or 'none' */
+{DEFAULT @cdm_database_schema = 'cdm_data'}
 {DEFAULT @cdm_version = '4'}
 
 {@split_by_drug_level == 'ingredient'} ? {
