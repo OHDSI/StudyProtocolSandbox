@@ -31,7 +31,7 @@ loadHelperTables <- function(conn, oracleTempSchema){
     sql <- SqlRender::loadRenderTranslateSql("CreateYearPeriods.sql",
                                              "DrugsInPeds",
                                              attr(conn,"dbms"),
-                                             oracleTempSchema)
+                                             oracleTempSchema = oracleTempSchema)
     DatabaseConnector::executeSql(conn, sql, progressBar = FALSE, reportOverallTime = FALSE)
 }
 
@@ -45,7 +45,7 @@ findPopulationWithData <- function(conn,
     sql <- SqlRender::loadRenderTranslateSql("FindPopulationWithData.sql",
                                              "DrugsInPeds",
                                              attr(conn,"dbms"),
-                                             oracleTempSchema,
+                                             oracleTempSchema = oracleTempSchema,
                                              cdm_database_schema = cdmDatabaseSchema,
                                              study_start_date = studyStartDate,
                                              study_end_date = studyEndDate,
@@ -76,7 +76,7 @@ saveDenominator <- function(conn,
     sql <- SqlRender::loadRenderTranslateSql("GetDenominator.sql",
                                              "DrugsInPeds",
                                              attr(conn,"dbms"),
-                                             oracleTempSchema,
+                                             oracleTempSchema = oracleTempSchema,
                                              cdm_database_schema = cdmDatabaseSchema,
                                              study_start_date = studyStartDate,
                                              study_end_date = studyEndDate,
@@ -116,7 +116,7 @@ saveNumerator <- function(conn,
     sql <- SqlRender::loadRenderTranslateSql("BuildNumerator.sql",
                                              "DrugsInPeds",
                                              attr(conn,"dbms"),
-                                             oracleTempSchema,
+                                             oracleTempSchema = oracleTempSchema,
                                              cdm_database_schema = cdmDatabaseSchema,
                                              study_start_date = studyStartDate,
                                              study_end_date = studyEndDate,
@@ -130,14 +130,14 @@ saveNumerator <- function(conn,
     sql <- SqlRender::loadRenderTranslateSql("GetNumerator.sql",
                                              "DrugsInPeds",
                                              attr(conn,"dbms"),
-                                             oracleTempSchema)
+                                             oracleTempSchema = oracleTempSchema)
 
     numerator <- DatabaseConnector::querySql(conn, sql)
 
     sql <- SqlRender::loadRenderTranslateSql("DropNumerator.sql",
                                              "DrugsInPeds",
                                              attr(conn,"dbms"),
-                                             oracleTempSchema)
+                                             oracleTempSchema = oracleTempSchema)
 
     DatabaseConnector::executeSql(conn, sql, progressBar = FALSE, reportOverallTime = FALSE)
 
@@ -150,7 +150,7 @@ dropHelperTables <- function(conn, oracleTempSchema){
     sql <- SqlRender::loadRenderTranslateSql("DropHelperTables.sql",
                                              "DrugsInPeds",
                                              attr(conn,"dbms"),
-                                             oracleTempSchema)
+                                             oracleTempSchema = oracleTempSchema)
     DatabaseConnector::executeSql(conn, sql, progressBar = FALSE, reportOverallTime = FALSE)
 }
 
@@ -214,8 +214,8 @@ execute <- function(connectionDetails,
         dir.create(folder)
     }
     setwd(folder)
-    studyStartDate <- "2009-01-01"
-    studyEndDate <- "2013-12-31"
+    studyStartDate <- "20090101"
+    studyEndDate <- "20131231"
     minDaysPerPerson <- 180
 
     conn <- DatabaseConnector::connect(connectionDetails)
@@ -276,8 +276,8 @@ execute <- function(connectionDetails,
     saveDenominator(conn,
                     oracleTempSchema,
                     cdmDatabaseSchema,
-                    "2000-01-01",
-                    "2014-12-31",
+                    "20000101",
+                    "20141231",
                     splitByAgeGroup = TRUE,
                     splitByYear = TRUE,
                     splitByGender = FALSE,
@@ -382,8 +382,8 @@ execute <- function(connectionDetails,
     saveNumerator(conn,
                   oracleTempSchema,
                   cdmDatabaseSchema,
-                  "2000-01-01",
-                  "2014-12-31",
+                  "20000101",
+                  "20141231",
                   splitByAgeGroup = TRUE,
                   splitByYear = TRUE,
                   splitByGender = FALSE,

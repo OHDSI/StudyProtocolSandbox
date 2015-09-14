@@ -59,20 +59,20 @@ FROM (
 				DATEFROMPARTS(year_of_birth, ISNULL(month_of_birth, 7), ISNULL(day_of_birth, 1)) AS date_of_birth,
 				gender_concept_id,
 				CASE 
-					WHEN '@study_start_date' > observation_period_start_date
-						THEN '@study_start_date'
+					WHEN CAST('@study_start_date' AS DATE) > observation_period_start_date
+						THEN CAST('@study_start_date' AS DATE)
 					ELSE observation_period_start_date
 					END AS start_date,
 				CASE 
-					WHEN '@study_end_date' < observation_period_end_date
-						THEN '@study_end_date'
+					WHEN CAST('@study_end_date' AS DATE) < observation_period_end_date
+						THEN CAST('@study_end_date' AS DATE)
 					ELSE observation_period_end_date
 					END AS end_date
 			FROM @cdm_database_schema.person
 			INNER JOIN @cdm_database_schema.observation_period
 				ON person.person_id = observation_period.person_id
-			WHERE '@study_start_date' <= observation_period_end_date
-			    AND '@study_end_date' >= observation_period_start_date
+			WHERE CAST('@study_start_date' AS DATE) <= observation_period_end_date
+			    AND CAST('@study_end_date' AS DATE) >= observation_period_start_date
 			) temp1
 		INNER JOIN #study_population study_population
 		    ON temp1.person_id = study_population.person_id
@@ -89,4 +89,4 @@ GROUP BY
 {@split_by_age_group} ? {	age_group} 
 {@split_by_year} ? {{@split_by_age_group} ? {	,} calendar_year} 
 {@split_by_gender} ? {{@split_by_age_group | @split_by_year} ? {	,} gender_concept_id} 
-};
+}

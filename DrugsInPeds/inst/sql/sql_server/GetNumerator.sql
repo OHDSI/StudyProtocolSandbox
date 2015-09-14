@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ********************************************************************************/
-SELECT * FROM #drug_counts;
+SELECT * FROM #drug_counts

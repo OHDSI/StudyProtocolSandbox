@@ -18,8 +18,22 @@ createTable1 <- function() {
     denominator <- read.csv("DenominatorByAgeGroup.csv", stringsAsFactors = FALSE)
     numerator <- read.csv("NumeratorByAgeGroup.csv", stringsAsFactors = FALSE)
     numeratorInpatient <- numerator[numerator$inpatient == 1,]
+    if (nrow(numeratorInpatient) == 0){
+        numeratorInpatient <- data.frame(conceptId = rep(0, nrow(numerator)),
+                                         conceptName = rep("drug", nrow(numerator)),
+                                         prescriptionCount = rep(0, nrow(numerator)),
+                                         personCount = rep(0, nrow(numerator)),
+                                         ageGroup = numerator$ageGroup)
+    }
     names(numeratorInpatient)[names(numeratorInpatient) == "prescriptionCount"] <- "PrescriptionsInpatient"
     numeratorNotInpatient <- numerator[numerator$inpatient == 0,]
+    if (nrow(numeratorNotInpatient) == 0){
+        numeratorNotInpatient <- data.frame(conceptId = rep(0, nrow(numerator)),
+                                            conceptName = rep("drug", nrow(numerator)),
+                                            prescriptionCount = rep(0, nrow(numerator)),
+                                            personCount = rep(0, nrow(numerator)),
+                                            ageGroup = numerator$ageGroup)
+    }
     names(numeratorNotInpatient)[names(numeratorNotInpatient) == "prescriptionCount"] <- "PrescriptionsNotInpatient"
     data <- merge(denominator, numeratorInpatient[,c("ageGroup","PrescriptionsInpatient")])
     data <- merge(data, numeratorNotInpatient[,c("ageGroup","PrescriptionsNotInpatient")])
@@ -35,8 +49,22 @@ createTable1 <- function() {
     denominator <- read.csv("DenominatorByGender.csv", stringsAsFactors = FALSE)
     numerator <- read.csv("NumeratorByGender.csv", stringsAsFactors = FALSE)
     numeratorInpatient <- numerator[numerator$inpatient == 1,]
+    if (nrow(numeratorInpatient) == 0){
+        numeratorInpatient <- data.frame(conceptId = rep(0, nrow(numerator)),
+                                         conceptName = rep("drug", nrow(numerator)),
+                                         prescriptionCount = rep(0, nrow(numerator)),
+                                         personCount = rep(0, nrow(numerator)),
+                                         genderConceptId = numerator$genderConceptId)
+    }
     names(numeratorInpatient)[names(numeratorInpatient) == "prescriptionCount"] <- "PrescriptionsInpatient"
     numeratorNotInpatient <- numerator[numerator$inpatient == 0,]
+    if (nrow(numeratorNotInpatient) == 0){
+        numeratorNotInpatient <- data.frame(conceptId = rep(0, nrow(numerator)),
+                                            conceptName = rep("drug", nrow(numerator)),
+                                            prescriptionCount = rep(0, nrow(numerator)),
+                                            personCount = rep(0, nrow(numerator)),
+                                            genderConceptId = numerator$genderConceptId)
+    }
     names(numeratorNotInpatient)[names(numeratorNotInpatient) == "prescriptionCount"] <- "PrescriptionsNotInpatient"
     data <- merge(denominator, numeratorInpatient[,c("genderConceptId","PrescriptionsInpatient")])
     data <- merge(data, numeratorNotInpatient[,c("genderConceptId","PrescriptionsNotInpatient")])
@@ -53,8 +81,22 @@ createTable1 <- function() {
     denominator <- read.csv("DenominatorByYear.csv", stringsAsFactors = FALSE)
     numerator <- read.csv("NumeratorByYear.csv", stringsAsFactors = FALSE)
     numeratorInpatient <- numerator[numerator$inpatient == 1,]
+    if (nrow(numeratorInpatient) == 0){
+        numeratorInpatient <- data.frame(conceptId = rep(0, nrow(numerator)),
+                                         conceptName = rep("drug", nrow(numerator)),
+                                         prescriptionCount = rep(0, nrow(numerator)),
+                                         personCount = rep(0, nrow(numerator)),
+                                         calendarYear = numerator$calendarYear)
+    }
     names(numeratorInpatient)[names(numeratorInpatient) == "prescriptionCount"] <- "PrescriptionsInpatient"
     numeratorNotInpatient <- numerator[numerator$inpatient == 0,]
+    if (nrow(numeratorNotInpatient) == 0){
+        numeratorNotInpatient <- data.frame(conceptId = rep(0, nrow(numerator)),
+                                            conceptName = rep("drug", nrow(numerator)),
+                                            prescriptionCount = rep(0, nrow(numerator)),
+                                            personCount = rep(0, nrow(numerator)),
+                                            calendarYear = numerator$calendarYear)
+    }
     names(numeratorNotInpatient)[names(numeratorNotInpatient) == "prescriptionCount"] <- "PrescriptionsNotInpatient"
     data <- merge(denominator, numeratorInpatient[,c("calendarYear","PrescriptionsInpatient")])
     data <- merge(data, numeratorNotInpatient[,c("calendarYear","PrescriptionsNotInpatient")])
@@ -70,8 +112,16 @@ createTable1 <- function() {
     denominator <- read.csv("Denominator.csv", stringsAsFactors = FALSE)
     numerator <- read.csv("Numerator.csv", stringsAsFactors = FALSE)
     data <- denominator
-    data$PrescriptionsInpatient <- numerator$prescriptionCount[numerator$inpatient == 1]
-    data$PrescriptionsNotInpatient <- numerator$prescriptionCount[numerator$inpatient == 0]
+    if (any(numerator$inpatient == 1)) {
+        data$PrescriptionsInpatient <- numerator$prescriptionCount[numerator$inpatient == 1]
+    } else {
+        data$PrescriptionsInpatient <- 0
+    }
+    if (any(numerator$inpatient == 0)) {
+        data$PrescriptionsNotInpatient <- numerator$prescriptionCount[numerator$inpatient == 0]
+    } else {
+        data$PrescriptionsNotInpatient <- 0
+    }
     table1 <- rbind(table1, data.frame(Category = "Total",
                                        NoOfChildren = data$persons,
                                        NoOrPersonYears = round(data$days / 365.25),
@@ -93,21 +143,23 @@ createTable2 <- function(conn, cdmDatabaseSchema) {
     conceptCodes <- DatabaseConnector::querySql(conn, sql)
     names(conceptCodes) <- SqlRender::snakeCaseToCamelCase(names(conceptCodes))
     numeratorInpatient <- numerator[numerator$inpatient == 1,]
-    data <- merge(numeratorInpatient, conceptCodes)
-    data <- data[order(data$conceptCode),]
-    table2a <- data.frame(Class = paste(data$conceptName, "(", data$conceptCode, ")", sep = ""),
-                          UserPrevalence = round(data$personCount/(denominator$days / 365.25 / 1000), digits = 2),
-                          PrescriptionPrevalence = round(data$prescriptionCount/(denominator$days / 365.25 / 1000), digits = 2))
-
+    if (nrow(numeratorInpatient) != 0) {
+        data <- merge(numeratorInpatient, conceptCodes)
+        data <- data[order(data$conceptCode),]
+        table2a <- data.frame(Class = paste(data$conceptName, "(", data$conceptCode, ")", sep = ""),
+                              UserPrevalence = round(data$personCount/(denominator$days / 365.25 / 1000), digits = 2),
+                              PrescriptionPrevalence = round(data$prescriptionCount/(denominator$days / 365.25 / 1000), digits = 2))
+        write.csv(table2a, "Table2a.csv", row.names = FALSE)
+    }
     numeratorNotInpatient <- numerator[numerator$inpatient == 0,]
-    data <- merge(numeratorNotInpatient, conceptCodes)
-    data <- data[order(data$conceptCode),]
-    table2b <- data.frame(Class = paste(data$conceptName, "(", data$conceptCode, ")", sep = ""),
-                          UserPrevalence = round(data$personCount/(denominator$days / 365.25 / 1000), digits = 2),
-                          PrescriptionPrevalence = round(data$prescriptionCount/(denominator$days / 365.25 / 1000), digits = 2))
-
-    write.csv(table2a, "Table2a.csv", row.names = FALSE)
-    write.csv(table2b, "Table2b.csv", row.names = FALSE)
+    if (nrow(numeratorNotInpatient) != 0) {
+        data <- merge(numeratorNotInpatient, conceptCodes)
+        data <- data[order(data$conceptCode),]
+        table2b <- data.frame(Class = paste(data$conceptName, "(", data$conceptCode, ")", sep = ""),
+                              UserPrevalence = round(data$personCount/(denominator$days / 365.25 / 1000), digits = 2),
+                              PrescriptionPrevalence = round(data$prescriptionCount/(denominator$days / 365.25 / 1000), digits = 2))
+        write.csv(table2b, "Table2b.csv", row.names = FALSE)
+    }
 }
 
 createTable3 <- function(conn, cdmDatabaseSchema, oracleTempSchema, cdmVersion) {
@@ -126,6 +178,7 @@ createTable3 <- function(conn, cdmDatabaseSchema, oracleTempSchema, cdmVersion) 
     sql <- SqlRender::loadRenderTranslateSql("TopDrugsPerClass.sql",
                                              "DrugsInPeds",
                                              attr(conn,"dbms"),
+                                             oracleTempSchema = oracleTempSchema,
                                              cdm_database_schema = cdmDatabaseSchema,
                                              top_n = 5,
                                              cdm_version = cdmVersion)
@@ -153,28 +206,30 @@ createFigure1 <- function() {
     numerator <- read.csv("NumeratorByAgeGroupByAtc1.csv", stringsAsFactors = FALSE)
 
     numeratorInpatient <- numerator[numerator$inpatient == 1,]
-    data <- merge(denominator, numeratorInpatient)
-    data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
-    data$ageGroup <- factor(data$ageGroup, levels = c("<2 years","2-11 years","12-18 years"))
-    ggplot2::ggplot(data, ggplot2::aes(x = ageGroup, y = Prevalence)) +
-        ggplot2::geom_bar(stat = "identity") +
-        ggplot2::facet_grid(.~ conceptName) +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
-                       strip.text.x = ggplot2::element_text(angle=-90))
-
-    ggplot2::ggsave("Figure1a.png", width = 9, height = 9, dpi= 200)
+    if (nrow(numeratorInpatient) != 0){
+        data <- merge(denominator, numeratorInpatient)
+        data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
+        data$ageGroup <- factor(data$ageGroup, levels = c("<2 years","2-11 years","12-18 years"))
+        ggplot2::ggplot(data, ggplot2::aes(x = ageGroup, y = Prevalence)) +
+            ggplot2::geom_bar(stat = "identity") +
+            ggplot2::facet_grid(.~ conceptName) +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
+                           strip.text.x = ggplot2::element_text(angle=-90))
+        ggplot2::ggsave("Figure1a.png", width = 9, height = 9, dpi= 200)
+    }
 
     numeratorNotInpatient <- numerator[numerator$inpatient == 0,]
-    data <- merge(denominator, numeratorNotInpatient)
-    data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
-    data$ageGroup <- factor(data$ageGroup, levels = c("<2 years","2-11 years","12-18 years"))
-    ggplot2::ggplot(data, ggplot2::aes(x = ageGroup, y = Prevalence)) +
-        ggplot2::geom_bar(stat = "identity") +
-        ggplot2::facet_grid(.~ conceptName) +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
-                       strip.text.x = ggplot2::element_text(angle=-90))
-
-    ggplot2::ggsave("Figure1b.png", width = 9, height = 9, dpi= 200)
+    if (nrow(numeratorNotInpatient) != 0){
+        data <- merge(denominator, numeratorNotInpatient)
+        data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
+        data$ageGroup <- factor(data$ageGroup, levels = c("<2 years","2-11 years","12-18 years"))
+        ggplot2::ggplot(data, ggplot2::aes(x = ageGroup, y = Prevalence)) +
+            ggplot2::geom_bar(stat = "identity") +
+            ggplot2::facet_grid(.~ conceptName) +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
+                           strip.text.x = ggplot2::element_text(angle=-90))
+        ggplot2::ggsave("Figure1b.png", width = 9, height = 9, dpi= 200)
+    }
 }
 
 createFigure2 <- function() {
@@ -182,30 +237,31 @@ createFigure2 <- function() {
     numerator <- read.csv("NumeratorByGenderByAtc1.csv", stringsAsFactors = FALSE)
 
     numeratorInpatient <- numerator[numerator$inpatient == 1,]
-    data <- merge(denominator, numeratorInpatient)
-    data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
-    data$Gender <- "Male"
-    data$Gender[data$genderConceptId == 8532] <- "Female"
-    ggplot2::ggplot(data, ggplot2::aes(x = Gender, y = Prevalence)) +
-        ggplot2::geom_bar(stat = "identity") +
-        ggplot2::facet_grid(.~ conceptName) +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
-                       strip.text.x = ggplot2::element_text(angle=-90))
-
-    ggplot2::ggsave("Figure2a.png", width = 9, height = 9, dpi= 200)
-
+    if (nrow(numeratorInpatient) != 0){
+        data <- merge(denominator, numeratorInpatient)
+        data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
+        data$Gender <- "Male"
+        data$Gender[data$genderConceptId == 8532] <- "Female"
+        ggplot2::ggplot(data, ggplot2::aes(x = Gender, y = Prevalence)) +
+            ggplot2::geom_bar(stat = "identity") +
+            ggplot2::facet_grid(.~ conceptName) +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
+                           strip.text.x = ggplot2::element_text(angle=-90))
+        ggplot2::ggsave("Figure2a.png", width = 9, height = 9, dpi= 200)
+    }
     numeratorNotInpatient <- numerator[numerator$inpatient == 0,]
-    data <- merge(denominator, numeratorNotInpatient)
-    data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
-    data$Gender <- "Male"
-    data$Gender[data$genderConceptId == 8532] <- "Female"
-    ggplot2::ggplot(data, ggplot2::aes(x = Gender, y = Prevalence)) +
-        ggplot2::geom_bar(stat = "identity") +
-        ggplot2::facet_grid(.~ conceptName) +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
-                       strip.text.x = ggplot2::element_text(angle=-90))
-
-    ggplot2::ggsave("Figure2b.png", width = 9, height = 9, dpi= 200)
+    if (nrow(numeratorNotInpatient) != 0){
+        data <- merge(denominator, numeratorNotInpatient)
+        data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
+        data$Gender <- "Male"
+        data$Gender[data$genderConceptId == 8532] <- "Female"
+        ggplot2::ggplot(data, ggplot2::aes(x = Gender, y = Prevalence)) +
+            ggplot2::geom_bar(stat = "identity") +
+            ggplot2::facet_grid(.~ conceptName) +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
+                           strip.text.x = ggplot2::element_text(angle=-90))
+        ggplot2::ggsave("Figure2b.png", width = 9, height = 9, dpi= 200)
+    }
 }
 
 createFigure3 <- function() {
@@ -213,28 +269,30 @@ createFigure3 <- function() {
     numerator <- read.csv("NumeratorByAgeGroupByYearByAtc1.csv", stringsAsFactors = FALSE)
 
     numeratorInpatient <- numerator[numerator$inpatient == 1,]
-    data <- merge(denominator, numeratorInpatient)
-    data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
-    data$ageGroup <- factor(data$ageGroup, levels = c("<2 years","2-11 years","12-18 years"))
-    ggplot2::ggplot(data, ggplot2::aes(x = calendarYear, y = Prevalence)) +
-        ggplot2::geom_line() +
-        ggplot2::facet_grid(conceptName ~ ageGroup, scales = "free") +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
-                       strip.text.y = ggplot2::element_text(angle=0))
-
-    ggplot2::ggsave("Figure3a.png", width = 10, height = 8, dpi= 200)
+    if (nrow(numeratorInpatient) != 0){
+        data <- merge(denominator, numeratorInpatient)
+        data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
+        data$ageGroup <- factor(data$ageGroup, levels = c("<2 years","2-11 years","12-18 years"))
+        ggplot2::ggplot(data, ggplot2::aes(x = calendarYear, y = Prevalence)) +
+            ggplot2::geom_line() +
+            ggplot2::facet_grid(conceptName ~ ageGroup, scales = "free") +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
+                           strip.text.y = ggplot2::element_text(angle=0))
+        ggplot2::ggsave("Figure3a.png", width = 10, height = 8, dpi= 200)
+    }
 
     numeratorNotInpatient <- numerator[numerator$inpatient == 0,]
-    data <- merge(denominator, numeratorNotInpatient)
-    data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
-    data$ageGroup <- factor(data$ageGroup, levels = c("<2 years","2-11 years","12-18 years"))
-    ggplot2::ggplot(data, ggplot2::aes(x = calendarYear, y = Prevalence)) +
-        ggplot2::geom_line() +
-        ggplot2::facet_grid(conceptName ~ ageGroup, scales = "free") +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
-                       strip.text.y = ggplot2::element_text(angle=0))
-
-    ggplot2::ggsave("Figure3b.png", width = 10, height = 8, dpi= 200)
+    if (nrow(numeratorNotInpatient) != 0){
+        data <- merge(denominator, numeratorNotInpatient)
+        data$Prevalence <- data$personCount/(data$days / 365.25 / 1000)
+        data$ageGroup <- factor(data$ageGroup, levels = c("<2 years","2-11 years","12-18 years"))
+        ggplot2::ggplot(data, ggplot2::aes(x = calendarYear, y = Prevalence)) +
+            ggplot2::geom_line() +
+            ggplot2::facet_grid(conceptName ~ ageGroup, scales = "free") +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle=-90),
+                           strip.text.y = ggplot2::element_text(angle=0))
+        ggplot2::ggsave("Figure3b.png", width = 10, height = 8, dpi= 200)
+    }
 }
 
 #' @title Create figures and tables for the paper

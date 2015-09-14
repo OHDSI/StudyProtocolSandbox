@@ -91,7 +91,7 @@ WHERE LEN(drug_class.concept_code) = 1
 {@split_by_drug_level == 'none'} ? {
 SELECT drug.concept_id AS drug_concept_id,
 	0 AS concept_id,
-	'drug' AS concept_name
+	CAST('drug' AS VARCHAR) AS concept_name
 INTO #drug_mapping
 FROM @cdm_database_schema.concept drug
 {@cdm_version == 4} ? {
@@ -130,8 +130,8 @@ FROM (
 		ON drug_exposure.person_id = person.person_id
     LEFT JOIN @cdm_database_schema.visit_occurrence
 		ON drug_exposure.visit_occurrence_id = visit_occurrence.visit_occurrence_id
-	WHERE drug_exposure_start_date > '@study_start_date'
-		AND drug_exposure_start_date < '@study_end_date'		
+	WHERE drug_exposure_start_date > CAST('@study_start_date' AS DATE)
+		AND drug_exposure_start_date < CAST('@study_end_date' AS DATE)	
 	) filtered
 INNER JOIN #age_group age_group
 	ON age >= start_age

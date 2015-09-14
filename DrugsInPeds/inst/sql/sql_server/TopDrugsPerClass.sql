@@ -19,7 +19,10 @@
 
 SELECT *
 FROM (
-	SELECT *,
+	SELECT concept_code, 
+	    concept_name, 
+		person_count,
+		inpatient,
 		ROW_NUMBER() OVER (
 			PARTITION BY concept_code, inpatient ORDER BY - person_count
 			) AS row_num
@@ -39,4 +42,4 @@ FROM (
 			AND LEN(drug_class.concept_code) = 1
 		) temp1
 	) temp2
-WHERE row_num <= @top_n;
+WHERE row_num <= @top_n
