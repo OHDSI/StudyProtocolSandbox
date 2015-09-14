@@ -37,6 +37,7 @@ loadHelperTables <- function(conn, oracleTempSchema){
 
 findPopulationWithData <- function(conn,
                                    oracleTempSchema,
+                                   cdmDatabaseSchema,
                                    studyStartDate,
                                    studyEndDate,
                                    minDaysPerPerson) {
@@ -227,6 +228,7 @@ execute <- function(connectionDetails,
 
     findPopulationWithData(conn,
                            oracleTempSchema,
+                           cdmDatabaseSchema,
                            studyStartDate,
                            studyEndDate,
                            minDaysPerPerson)

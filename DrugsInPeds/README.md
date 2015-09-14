@@ -62,6 +62,6 @@ To locally generate the figures and tables specified in the protocol, you can ru
                            oracleTempSchema = oracleTempSchema,
                            cdmVersion = cdmVersion,
                            folder = "my_folder")
-
 ```
 
+where my_folder is the path to the folder where the results of the ```execute``` command were stored.
