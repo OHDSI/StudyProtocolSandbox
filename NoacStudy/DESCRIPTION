@@ -1,5 +1,5 @@
 Package: NoacStudy
-Title: Novel anticoagulant therapy study
+Title: Novel oral anticoagulant therapy study
 Version: 0.1
 Author:
   Marc A. Suchard [aut, cre],
@@ -8,7 +8,7 @@ Author:
   Patrick B. Ryan [aut]
 Maintainer: Marc A. Suchard <msuchard@ucla.edu>
 Description: Examine the relative risk of adverse bleeding events in
-  new users of novel anticoagulants vs warfarin.
+  new users of novel oral anticoagulants vs warfarin.
 Depends:
     R (>= 3.1),
     DatabaseConnector (>= 1.2.1)
