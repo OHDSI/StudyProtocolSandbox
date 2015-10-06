@@ -43,7 +43,9 @@ createCohorts <- function(connectionDetails,
     conn <- DatabaseConnector::connect(connectionDetails)
 
     # Create study cohort table structure:
-    sql <- "CREATE TABLE @work_database_schema.@study_cohort_table (cohort_definition_id INT, subject_id BIGINT, cohort_start_date DATE, cohort_end_date DATE);"
+    sql <- "IF OBJECT_ID('@work_database_schema.@study_cohort_table', 'U') IS NOT NULL
+        DROP TABLE @work_database_schema.@study_cohort_table;
+        CREATE TABLE @work_database_schema.@study_cohort_table (cohort_definition_id INT, subject_id BIGINT, cohort_start_date DATE, cohort_end_date DATE);"
     sql <- SqlRender::renderSql(sql, work_database_schema = workDatabaseSchema, study_cohort_table = studyCohortTable)$sql
     sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
     DatabaseConnector::executeSql(conn, sql, progressBar = FALSE, reportOverallTime = FALSE)
@@ -140,19 +142,32 @@ createCohorts <- function(connectionDetails,
     sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @work_database_schema.@study_cohort_table GROUP BY cohort_definition_id"
     sql <- SqlRender::renderSql(sql, work_database_schema = workDatabaseSchema, study_cohort_table = studyCohortTable)$sql
     sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-    counts <- DatabaseConnector::querySql(connection, sql)
-    idToName <- data.frame(cohort_definition_id = c(1,10,11,12,13,14,15,16),
-                      cohort_name = c("Exposure",
-                                      "Myocardial infartcion",
-                                      "Myocardial infarction and ischemic death",
-                                      "Gastrointestinal hemorrhage",
-                                      "Angioedema",
-                                      "Acute renal failure",
-                                      "Drug induced liver injury",
-                                      "Heart failure"))
-    counts <- merge(counts, idToName)
+    counts <- DatabaseConnector::querySql(conn, sql)
+    names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
+    counts <- addOutcomeNames(counts, "cohortDefinitionId")
     write.csv(counts, file.path(outputFolder,"CohortCounts.csv"))
     print(counts)
 
     RJDBC::dbDisconnect(conn)
+}
+
+#' Add names to a data frame with outcome IDs
+#'
+#' @param data                 The data frame to add the outcome names to
+#' @param outcomeIdColumnName  The name of the column in the data frame that holds the outcome IDs.
+#'
+#' @export
+addOutcomeNames <- function(data, outcomeIdColumnName = "outcomeId"){
+    idToName <- data.frame(outcomeId = c(1,10,11,12,13,14,15,16),
+                           cohortName = c("Exposure",
+                                          "Myocardial infartcion",
+                                          "Myocardial infarction and ischemic death",
+                                          "Gastrointestinal hemorrhage",
+                                          "Angioedema",
+                                          "Acute renal failure",
+                                          "Drug induced liver injury",
+                                          "Heart failure"))
+    names(idToName)[1] <- outcomeIdColumnName
+    data <- merge(data, idToName)
+    return(data)
 }

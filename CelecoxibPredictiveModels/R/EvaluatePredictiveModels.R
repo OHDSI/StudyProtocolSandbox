@@ -25,6 +25,7 @@
 evaluatePredictiveModels <- function(outputFolder) {
 
     outcomeIds <- 10:16
+    minOutcomeCount <- 25
 
     testCohortDataFile <- file.path(outputFolder, "testCohortData")
     testCovariateDataFile <- file.path(outputFolder, "testCovariateData")
@@ -33,32 +34,42 @@ evaluatePredictiveModels <- function(outputFolder) {
     testCovariateData <- PatientLevelPrediction::loadCovariateData(testCovariateDataFile)
     testOutcomeData <- PatientLevelPrediction::loadOutcomeData(testOutcomeDataFile)
 
+    counts <- summary(testOutcomeData)$counts
     for (outcomeId in outcomeIds){
         modelFile <- file.path(outputFolder, paste("model_o",outcomeId, ".rds", sep = ""))
-        model <- readRDS(modelFile)
+        if (counts$personCount[counts$outcomeId == outcomeId] > minOutcomeCount && file.exists(modelFile)){
+            writeLines(paste("- Evaluating model for outcome", outcomeId))
+            model <- readRDS(modelFile)
 
-        predictionsFile <- file.path(outputFolder, paste("predictions_o",outcomeId, ".rds", sep = ""))
-        if (file.exists(predictionsFile)){
-            predictions <- readRDS(predictionsFile)
-        } else {
-            predictions <- PatientLevelPrediction::predictProbabilities(model, testCohortData, testCovariateData)
-            saveRDS(predictions, predictionsFile)
-        }
+            predictionsFile <- file.path(outputFolder, paste("predictions_o",outcomeId, ".rds", sep = ""))
+            if (file.exists(predictionsFile)){
+                predictions <- readRDS(predictionsFile)
+            } else {
+                predictions <- PatientLevelPrediction::predictProbabilities(model, testCohortData, testCovariateData)
+                saveRDS(predictions, predictionsFile)
+            }
 
-        aucFile <- file.path(outputFolder, paste("auc_o",outcomeId, ".csv", sep = ""))
-        if (!file.exists(aucFile)){
-            auc <- PatientLevelPrediction::computeAuc(predictions, testOutcomeData)
-            write.csv(auc, aucFile, row.names = FALSE)
-        }
+            detailsFile <- file.path(outputFolder, paste("details_o",outcomeId, ".csv", sep = ""))
+            if (!file.exists(detailsFile)){
+                details <- PatientLevelPrediction::getModelDetails(model, testCovariateData)
+                write.csv(details, detailsFile, row.names = FALSE)
+            }
 
-        rocFile <- file.path(outputFolder, paste("roc_o",outcomeId, ".png", sep = ""))
-        if (!file.exists(rocFile)){
-            PatientLevelPrediction::plotRoc(predictions, testOutcomeData, fileName = rocFile)
-        }
+            aucFile <- file.path(outputFolder, paste("auc_o",outcomeId, ".csv", sep = ""))
+            if (!file.exists(aucFile)){
+                auc <- PatientLevelPrediction::computeAuc(predictions, testOutcomeData, confidenceInterval = TRUE)
+                write.csv(auc, aucFile, row.names = FALSE)
+            }
 
-        calibrationFile <- file.path(outputFolder, paste("calibration_o",outcomeId, ".png", sep = ""))
-        if (!file.exists(calibrationFile)){
-            PatientLevelPrediction::plotCalibration(predictions, testOutcomeData, numberOfStrata = 10, fileName = calibrationFile)
+            rocFile <- file.path(outputFolder, paste("roc_o",outcomeId, ".png", sep = ""))
+            if (!file.exists(rocFile)){
+                PatientLevelPrediction::plotRoc(predictions, testOutcomeData, fileName = rocFile)
+            }
+
+            calibrationFile <- file.path(outputFolder, paste("calibration_o",outcomeId, ".png", sep = ""))
+            if (!file.exists(calibrationFile)){
+                PatientLevelPrediction::plotCalibration(predictions, testOutcomeData, numberOfStrata = 10, fileName = calibrationFile)
+            }
         }
     }
 }

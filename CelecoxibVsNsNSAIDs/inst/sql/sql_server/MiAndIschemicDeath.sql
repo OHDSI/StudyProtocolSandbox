@@ -4,16 +4,56 @@ FROM
 (
  SELECT 0 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select DISTINCT concept_id from @cdm_database_schema.CONCEPT where concept_id in (1118084) and invalid_reason is null
+  select DISTINCT concept_id from @cdm_database_schema.CONCEPT where concept_id in (4329847) and invalid_reason is null
     UNION 
 
   select c.concept_id
   from @cdm_database_schema.CONCEPT c
   join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (1118084)
+  and ca.ancestor_concept_id in (4329847)
   and c.invalid_reason is null
 
 ) I
+LEFT JOIN
+(
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (314666)and invalid_reason is null
+    UNION 
+
+  select c.concept_id
+  from @cdm_database_schema.CONCEPT c
+  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
+  and ca.ancestor_concept_id in (314666)
+  and c.invalid_reason is null
+
+) E ON I.concept_id = E.concept_id
+WHERE E.concept_id is null
+) C
+UNION
+SELECT 1 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
+( 
+  select DISTINCT concept_id from @cdm_database_schema.CONCEPT where concept_id in (321318,316995,4329847,315296) and invalid_reason is null
+    UNION 
+
+  select c.concept_id
+  from @cdm_database_schema.CONCEPT c
+  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
+  and ca.ancestor_concept_id in (321318,316995,4329847,315296)
+  and c.invalid_reason is null
+
+) I
+LEFT JOIN
+(
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (314666)and invalid_reason is null
+    UNION 
+
+  select c.concept_id
+  from @cdm_database_schema.CONCEPT c
+  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
+  and ca.ancestor_concept_id in (314666)
+  and c.invalid_reason is null
+
+) E ON I.concept_id = E.concept_id
+WHERE E.concept_id is null
 ) C
 ) C
 ;
@@ -25,20 +65,33 @@ FROM
   select P.person_id, P.start_date, P.end_date, ROW_NUMBER() OVER (PARTITION BY person_id ORDER BY start_date ASC) ordinal
   FROM 
   (
-  select C.person_id, C.drug_era_start_date as start_date, C.drug_era_end_date as end_date, C.drug_concept_id as TARGET_CONCEPT_ID
+  select C.person_id, C.condition_start_date as start_date, COALESCE(C.condition_end_date, DATEADD(day,1,C.condition_start_date)) as end_date, C.CONDITION_CONCEPT_ID as TARGET_CONCEPT_ID
 from 
 (
-  select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date) as ordinal
-  FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 0)
+        select co.*, ROW_NUMBER() over (PARTITION BY co.person_id ORDER BY co.condition_start_date) as ordinal
+        FROM @cdm_database_schema.CONDITION_OCCURRENCE co
+where co.condition_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 0)
+) C
+JOIN @cdm_database_schema.VISIT_OCCURRENCE V on C.visit_occurrence_id = V.visit_occurrence_id and C.person_id = V.person_id
+WHERE C.condition_type_concept_id in (38000183,38000199,44786627,38000184,38000200)
+AND V.visit_concept_id in (9203,9201)
+
+UNION
+select C.person_id, C.death_date as start_date, DATEADD(d,1,C.death_date) as end_date, C.cause_concept_id as TARGET_CONCEPT_ID
+from 
+(
+  select d.*
+  FROM @cdm_database_schema.DEATH d
+
 ) C
 
-WHERE C.ordinal = 1
+
+
 
   ) P
 ) P
 JOIN @cdm_database_schema.observation_period OP on P.person_id = OP.person_id and P.start_date between OP.observation_period_start_date and op.observation_period_end_date
-WHERE DATEADD(day,183,OP.OBSERVATION_PERIOD_START_DATE) <= P.START_DATE AND DATEADD(day,0,P.START_DATE) <= OP.OBSERVATION_PERIOD_END_DATE AND P.ordinal = 1
+WHERE DATEADD(day,0,OP.OBSERVATION_PERIOD_START_DATE) <= P.START_DATE AND DATEADD(day,0,P.START_DATE) <= OP.OBSERVATION_PERIOD_END_DATE
 ;
 
 
@@ -53,9 +106,121 @@ FROM
     select pe.person_id, pe.start_date, pe.end_date
     FROM #PrimaryCriteriaEvents pe
     
+JOIN (
+select 0 as index_id, event_id
+FROM
+(
+  select event_id FROM
+  (
+    select 0 as index_id, event_id
+FROM
+(
+  select event_id FROM
+  (
+    SELECT 0 as index_id, p.event_id
+FROM #PrimaryCriteriaEvents P
+LEFT JOIN
+(
+  select C.person_id, C.condition_start_date as start_date, COALESCE(C.condition_end_date, DATEADD(day,1,C.condition_start_date)) as end_date, C.CONDITION_CONCEPT_ID as TARGET_CONCEPT_ID
+from 
+(
+        select co.*, ROW_NUMBER() over (PARTITION BY co.person_id ORDER BY co.condition_start_date) as ordinal
+        FROM @cdm_database_schema.CONDITION_OCCURRENCE co
+where co.condition_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 0)
+) C
+JOIN @cdm_database_schema.VISIT_OCCURRENCE V on C.visit_occurrence_id = V.visit_occurrence_id and C.person_id = V.person_id
+WHERE C.condition_type_concept_id in (38000183,38000199,44786627,38000184,38000200)
+AND V.visit_concept_id in (9203,9201)
+
+) A on A.person_id = P.person_id and A.START_DATE BETWEEN DATEADD(day,0,P.START_DATE) and DATEADD(day,0,P.START_DATE)
+GROUP BY p.event_id
+HAVING COUNT(A.TARGET_CONCEPT_ID) >= 1
+
+
+UNION
+SELECT 1 as index_id, p.event_id
+FROM #PrimaryCriteriaEvents P
+LEFT JOIN
+(
+  select C.person_id, C.condition_start_date as start_date, COALESCE(C.condition_end_date, DATEADD(day,1,C.condition_start_date)) as end_date, C.CONDITION_CONCEPT_ID as TARGET_CONCEPT_ID
+from 
+(
+        select co.*, ROW_NUMBER() over (PARTITION BY co.person_id ORDER BY co.condition_start_date) as ordinal
+        FROM @cdm_database_schema.CONDITION_OCCURRENCE co
+where co.condition_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 0)
+) C
+
+
+
+) A on A.person_id = P.person_id and A.START_DATE BETWEEN DATEADD(day,-30,P.START_DATE) and DATEADD(day,-1,P.START_DATE)
+GROUP BY p.event_id
+HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
+
+
+  ) CQ
+  GROUP BY event_id
+  HAVING COUNT(index_id) = 2
+) G
+
+UNION
+select 1 as index_id, event_id
+FROM
+(
+  select event_id FROM
+  (
+    SELECT 0 as index_id, p.event_id
+FROM #PrimaryCriteriaEvents P
+LEFT JOIN
+(
+  select C.person_id, C.death_date as start_date, DATEADD(d,1,C.death_date) as end_date, C.cause_concept_id as TARGET_CONCEPT_ID
+from 
+(
+  select d.*
+  FROM @cdm_database_schema.DEATH d
+
+) C
+
+
+
+
+) A on A.person_id = P.person_id and A.START_DATE BETWEEN DATEADD(day,0,P.START_DATE) and DATEADD(day,0,P.START_DATE)
+GROUP BY p.event_id
+HAVING COUNT(A.TARGET_CONCEPT_ID) >= 1
+
+
+UNION
+SELECT 1 as index_id, p.event_id
+FROM #PrimaryCriteriaEvents P
+LEFT JOIN
+(
+  select C.person_id, C.condition_start_date as start_date, COALESCE(C.condition_end_date, DATEADD(day,1,C.condition_start_date)) as end_date, C.CONDITION_CONCEPT_ID as TARGET_CONCEPT_ID
+from 
+(
+        select co.*, ROW_NUMBER() over (PARTITION BY co.person_id ORDER BY co.condition_start_date) as ordinal
+        FROM @cdm_database_schema.CONDITION_OCCURRENCE co
+where co.condition_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 1)
+) C
+JOIN @cdm_database_schema.VISIT_OCCURRENCE V on C.visit_occurrence_id = V.visit_occurrence_id and C.person_id = V.person_id
+WHERE V.visit_concept_id in (9203,9201)
+
+) A on A.person_id = P.person_id and A.START_DATE BETWEEN DATEADD(day,-1,P.START_DATE) and DATEADD(day,0,P.START_DATE)
+GROUP BY p.event_id
+HAVING COUNT(A.TARGET_CONCEPT_ID) >= 1
+
+
+  ) CQ
+  GROUP BY event_id
+  HAVING COUNT(index_id) = 2
+) G
+
+  ) CQ
+  GROUP BY event_id
+  
+) G
+) AC on AC.event_id = pe.event_id
   ) RawEvents
 ) Results
-WHERE Results.ordinal = 1
+
 ;
 
 TRUNCATE TABLE #Codesets;

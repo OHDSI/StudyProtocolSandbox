@@ -76,7 +76,8 @@ execute <- function(connectionDetails,
                       workDatabaseSchema,
                       studyCohortTable,
                       oracleTempSchema,
-                      cdmVersion)
+                      cdmVersion,
+                      outputFolder)
     }
 
     if (createPredictiveModels) {

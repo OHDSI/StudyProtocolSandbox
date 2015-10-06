@@ -41,11 +41,13 @@ createPredictiveModels <- function(connectionDetails,
                                    outputFolder) {
 
     outcomeIds <- 10:16
+    minOutcomeCount <- 25
 
     cohortDataFile <- file.path(outputFolder, "cohortData")
     if (file.exists(cohortDataFile)) {
         cohortData <- PatientLevelPrediction::loadCohortData(cohortDataFile)
     } else {
+        writeLines("- Extracting cohorts")
         cohortData <- PatientLevelPrediction::getDbCohortData(connectionDetails,
                                                               cdmDatabaseSchema = cdmDatabaseSchema,
                                                               cohortDatabaseSchema = workDatabaseSchema,
@@ -60,6 +62,7 @@ createPredictiveModels <- function(connectionDetails,
     if (file.exists(covariateDataFile)) {
         covariateData <- PatientLevelPrediction::loadCovariateData(covariateDataFile)
     } else {
+        writeLines("- Extracting covariates")
         covariateSettings <- PatientLevelPrediction::createCovariateSettings(useCovariateDemographics = TRUE,
                                                                              useCovariateDemographicsGender = TRUE,
                                                                              useCovariateDemographicsRace = TRUE,
@@ -125,8 +128,9 @@ createPredictiveModels <- function(connectionDetails,
 
     outcomeDataFile <- file.path(outputFolder, "outcomeData")
     if (file.exists(outcomeDataFile)) {
-        outcomeData <- PatientLevelPrediction::loadCohortData(outcomeDataFile)
+        outcomeData <- PatientLevelPrediction::loadOutcomeData(outcomeDataFile)
     } else {
+        writeLines("- Extracting outcomes")
         outcomeData <- PatientLevelPrediction::getDbOutcomeData(connectionDetails,
                                                                 cdmDatabaseSchema = cdmDatabaseSchema,
                                                                 cohortDatabaseSchema = workDatabaseSchema,
@@ -169,11 +173,21 @@ createPredictiveModels <- function(connectionDetails,
         trainCohortData <- parts[[1]]$cohortData
         trainCovariateData <- parts[[1]]$covariateData
         trainOutcomeData <- parts[[1]]$outcomeData
-    }
+        testCohortData <- parts[[2]]$cohortData
+        testCovariateData <- parts[[2]]$covariateData
+        testOutcomeData <- parts[[2]]$outcomeData
 
+        write.csv(summary(trainCohortData)$counts, file.path(outputFolder, "trainCohortSize.csv"), row.names = FALSE)
+        write.csv(addOutcomeNames(summary(trainOutcomeData)$counts), file.path(outputFolder, "trainOutcomeCounts.csv"), row.names = FALSE)
+        write.csv(summary(testCohortData)$counts, file.path(outputFolder, "testCohortSize.csv"), row.names = FALSE)
+        write.csv(addOutcomeNames(summary(testOutcomeData)$counts), file.path(outputFolder, "testOutcomeCounts.csv"), row.names = FALSE)
+    }
+    counts <- summary(trainOutcomeData)$counts
     for (outcomeId in outcomeIds){
         modelFile <- file.path(outputFolder, paste("model_o",outcomeId, ".rds", sep = ""))
-        if (!file.exists(modelFile)){
+        if (counts$personCount[counts$outcomeId == outcomeId] > minOutcomeCount &&
+            !file.exists(modelFile)){
+            writeLines(paste("- Fitting model for outcome", outcomeId))
             control = Cyclops::createControl(noiseLevel = "quiet",
                                              cvType = "auto",
                                              startingVariance = 0.1,
