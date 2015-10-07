@@ -51,7 +51,7 @@ createCohorts <- function(connectionDetails,
     DatabaseConnector::executeSql(conn, sql, progressBar = FALSE, reportOverallTime = FALSE)
 
     writeLines("- Creating exposure cohort")
-    sql <- SqlRender::loadRenderTranslateSql("Exposure.sql",
+    sql <- SqlRender::loadRenderTranslateSql("Celecoxib.sql",
                                              "CelecoxibPredictiveModels",
                                              dbms = connectionDetails$dbms,
                                              oracleTempSchema = oracleTempSchema,
@@ -160,7 +160,7 @@ createCohorts <- function(connectionDetails,
 addOutcomeNames <- function(data, outcomeIdColumnName = "outcomeId"){
     idToName <- data.frame(outcomeId = c(1,10,11,12,13,14,15,16),
                            cohortName = c("Exposure",
-                                          "Myocardial infartcion",
+                                          "Myocardial infarction",
                                           "Myocardial infarction and ischemic death",
                                           "Gastrointestinal hemorrhage",
                                           "Angioedema",

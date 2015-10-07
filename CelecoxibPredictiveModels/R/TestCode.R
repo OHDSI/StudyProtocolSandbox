@@ -18,4 +18,10 @@
     oracleTempSchema <- NULL
     cdmVersion <- "5"
     outputFolder <- "S:/temp/CelecoxibPredictiveModels"
+
+    execute(connectionDetails,
+            cdmDatabaseSchema = cdmDatabaseSchema,
+            workDatabaseSchema = workDatabaseSchema,
+            studyCohortTable = studyCohortTable,
+            outputFolder = outputFolder)
 }

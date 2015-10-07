@@ -51,8 +51,11 @@ createPredictiveModels <- function(connectionDetails,
         cohortData <- PatientLevelPrediction::getDbCohortData(connectionDetails,
                                                               cdmDatabaseSchema = cdmDatabaseSchema,
                                                               cohortDatabaseSchema = workDatabaseSchema,
+
                                                               cohortTable = studyCohortTable,
                                                               cohortIds = 1,
+                                                              useCohortEndDate = FALSE,
+                                                              windowPersistence = 365,
                                                               cdmVersion = cdmVersion)
 
         PatientLevelPrediction::saveCohortData(cohortData, cohortDataFile)
@@ -63,6 +66,15 @@ createPredictiveModels <- function(connectionDetails,
         covariateData <- PatientLevelPrediction::loadCovariateData(covariateDataFile)
     } else {
         writeLines("- Extracting covariates")
+
+        conn <- DatabaseConnector::connect(connectionDetails)
+        sql <- "SELECT descendant_concept_id FROM @cdm_database_schema.concept_ancestor WHERE ancestor_concept_id = 1118084"
+        sql <- SqlRender::renderSql(sql, cdm_database_schema = cdmDatabaseSchema)$sql
+        sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+        celecoxibDrugs <- DatabaseConnector::querySql(conn, sql)
+        celecoxibDrugs <- celecoxibDrugs[,1]
+        RJDBC::dbDisconnect(conn)
+
         covariateSettings <- PatientLevelPrediction::createCovariateSettings(useCovariateDemographics = TRUE,
                                                                              useCovariateDemographicsGender = TRUE,
                                                                              useCovariateDemographicsRace = TRUE,
@@ -111,7 +123,7 @@ createPredictiveModels <- function(connectionDetails,
                                                                              useCovariateRiskScoresCHADS2VASc = TRUE,
                                                                              useCovariateInteractionYear = FALSE,
                                                                              useCovariateInteractionMonth = FALSE,
-                                                                             excludedCovariateConceptIds = c(),
+                                                                             excludedCovariateConceptIds = celecoxibDrugs,
                                                                              includedCovariateConceptIds = c(),
                                                                              deleteCovariatesSmallCount = 100)
 
@@ -120,6 +132,8 @@ createPredictiveModels <- function(connectionDetails,
                                                                     cohortDatabaseSchema = workDatabaseSchema,
                                                                     cohortTable = studyCohortTable,
                                                                     cohortIds = 1,
+                                                                    useCohortEndDate = FALSE,
+                                                                    windowPersistence = 365,
                                                                     covariateSettings = covariateSettings,
                                                                     cdmVersion = cdmVersion)
 
@@ -136,6 +150,8 @@ createPredictiveModels <- function(connectionDetails,
                                                                 cohortDatabaseSchema = workDatabaseSchema,
                                                                 cohortTable = studyCohortTable,
                                                                 cohortIds = 1,
+                                                                useCohortEndDate = FALSE,
+                                                                windowPersistence = 365,
                                                                 outcomeDatabaseSchema = workDatabaseSchema,
                                                                 outcomeTable = studyCohortTable,
                                                                 outcomeIds = outcomeIds,

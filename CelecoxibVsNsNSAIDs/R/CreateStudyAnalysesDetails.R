@@ -43,7 +43,7 @@ createAnalysisDetails <- function(connectionDetails,
     RJDBC::dbDisconnect(conn)
 
 
-    # 80180 = Osteoarthritis. Note that all descendants will also be included
+    # 80180 = Osteoarthritis. Note that all descendant concepts will also be included
     dcos <- CohortMethod::createDrugComparatorOutcomes(targetId = 1,
                                                        comparatorId = 2,
                                                        exclusionConceptIds = nsaids,
