@@ -57,18 +57,18 @@ evaluatePredictiveModels <- function(outputFolder) {
 
             aucFile <- file.path(outputFolder, paste("auc_o",outcomeId, ".csv", sep = ""))
             if (!file.exists(aucFile)){
-                auc <- PatientLevelPrediction::computeAuc(predictions, testOutcomeData, confidenceInterval = TRUE)
+                auc <- PatientLevelPrediction::computeAuc(predictions, testOutcomeData, testCohortData, confidenceInterval = TRUE)
                 write.csv(auc, aucFile, row.names = FALSE)
             }
 
             rocFile <- file.path(outputFolder, paste("roc_o",outcomeId, ".png", sep = ""))
             if (!file.exists(rocFile)){
-                PatientLevelPrediction::plotRoc(predictions, testOutcomeData, fileName = rocFile)
+                PatientLevelPrediction::plotRoc(predictions, testOutcomeData, testCohortData, fileName = rocFile)
             }
 
             calibrationFile <- file.path(outputFolder, paste("calibration_o",outcomeId, ".png", sep = ""))
             if (!file.exists(calibrationFile)){
-                PatientLevelPrediction::plotCalibration(predictions, testOutcomeData, numberOfStrata = 10, fileName = calibrationFile)
+                PatientLevelPrediction::plotCalibration(predictions, testOutcomeData, testCohortData, numberOfStrata = 10, fileName = calibrationFile)
             }
         }
     }
