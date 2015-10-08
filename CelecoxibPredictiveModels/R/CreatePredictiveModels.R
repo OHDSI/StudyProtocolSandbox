@@ -51,7 +51,6 @@ createPredictiveModels <- function(connectionDetails,
         cohortData <- PatientLevelPrediction::getDbCohortData(connectionDetails,
                                                               cdmDatabaseSchema = cdmDatabaseSchema,
                                                               cohortDatabaseSchema = workDatabaseSchema,
-
                                                               cohortTable = studyCohortTable,
                                                               cohortIds = 1,
                                                               useCohortEndDate = FALSE,
@@ -132,8 +131,6 @@ createPredictiveModels <- function(connectionDetails,
                                                                     cohortDatabaseSchema = workDatabaseSchema,
                                                                     cohortTable = studyCohortTable,
                                                                     cohortIds = 1,
-                                                                    useCohortEndDate = FALSE,
-                                                                    windowPersistence = 365,
                                                                     covariateSettings = covariateSettings,
                                                                     cdmVersion = cdmVersion)
 
