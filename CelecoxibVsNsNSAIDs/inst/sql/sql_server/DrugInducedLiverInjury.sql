@@ -215,3 +215,4 @@ DROP TABLE #Codesets;
 
 TRUNCATE TABLE #PrimaryCriteriaEvents;
 DROP TABLE #PrimaryCriteriaEvents;
+
