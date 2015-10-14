@@ -21,6 +21,7 @@ How to run
     install_github("ohdsi/PatientLevelPrediction") 
     install_github("ohdsi/CohortMethod")
 	install_github("ohdsi/OhdsiSharing")
+	install_github("ohdsi/EmpiricalCalibration")
 	install_github("ohdsi/StudyProtocols/CelecoxibVsNsNSAIDs")
 	```
 

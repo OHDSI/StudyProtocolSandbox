@@ -20,5 +20,12 @@
     outputFolder <- "S:/temp/CelecoxibVsNsNSAIDs"
 
 
+    execute(connectionDetails = connectionDetails,
+            cdmDatabaseSchema = cdmDatabaseSchema,
+            workDatabaseSchema = workDatabaseSchema,
+            studyCohortTable = studyCohortTable,
+            oracleTempSchema = oracleTempSchema,
+            cdmVersion = cdmVersion,
+            outputFolder = outputFolder)
 
 }

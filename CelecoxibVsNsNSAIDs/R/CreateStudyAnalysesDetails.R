@@ -23,14 +23,12 @@
 #' function in the DatabaseConnector package.
 #' @param cdmDatabaseSchema    Schema name where your patient-level data in OMOP CDM format resides. Note that for SQL Server, this should include
 #' both the database and schema name, for example 'cdm_data.dbo'.
-#' @param cdmVersion           Version of the CDM. Can be "4" or "5"
 #' @param outputFolder	       Name of local folder to place results; make sure to use forward slashes (/)
 #'
 #' @export
-createAnalysisDetails <- function(connectionDetails,
+createAnalysesDetails <- function(connectionDetails,
                                   cdmDatabaseSchema,
-                                  outputFolder,
-                                  cdmVersion) {
+                                  outputFolder) {
     conn <- DatabaseConnector::connect(connectionDetails)
 
     # Get all NSAIDs:
@@ -41,7 +39,7 @@ createAnalysisDetails <- function(connectionDetails,
     nsaids <- nsaids$CONCEPT_ID
 
     RJDBC::dbDisconnect(conn)
-
+    negativeControlIds <- c(24609, 29735, 73754, 80004, 134718, 139099, 141932, 192367, 193739, 194997, 197236, 199074, 255573, 257007, 313459, 314658, 316084, 319843, 321596, 374366, 375292, 380094, 433753, 433811, 436665, 436676, 436940, 437784, 438134, 440358, 440374, 443617, 443800, 4084966, 4288310)
 
     # 80180 = Osteoarthritis. Note that all descendant concepts will also be included
     dcos <- CohortMethod::createDrugComparatorOutcomes(targetId = 1,
@@ -49,7 +47,7 @@ createAnalysisDetails <- function(connectionDetails,
                                                        exclusionConceptIds = nsaids,
                                                        excludedCovariateConceptIds = nsaids,
                                                        indicationConceptIds = 80180,
-                                                       outcomeIds = c(10:16, 100:110)) #TODO: add negative control IDs
+                                                       outcomeIds = c(10:16, negativeControlIds))
     drugComparatorOutcomesList <- list(dcos)
 
     covarSettings <- PatientLevelPrediction::createCovariateSettings(useCovariateDemographics = TRUE,
@@ -118,28 +116,6 @@ createAnalysisDetails <- function(connectionDetails,
 
     matchOnPsArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
 
-    cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
-                                                  description = "Matching plus simple outcome model",
-                                                  getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                  createPs = TRUE,
-                                                  createPsArgs = createPsArgs,
-                                                  matchOnPs = TRUE,
-                                                  matchOnPsArgs = matchOnPsArgs,
-                                                  fitOutcomeModel = TRUE,
-                                                  fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
-    stratifyByPsArgs <- CohortMethod::createStratifyByPsArgs(numberOfStrata = 5)
-
-    cmAnalysis3 <- CohortMethod::createCmAnalysis(analysisId = 3,
-                                                  description = "Stratification plus simple outcome model",
-                                                  getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                  createPs = TRUE,
-                                                  createPsArgs = createPsArgs,
-                                                  stratifyByPs = TRUE,
-                                                  stratifyByPsArgs = stratifyByPsArgs,
-                                                  fitOutcomeModel = TRUE,
-                                                  fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
     fitOutcomeModelArgs2 <- CohortMethod::createFitOutcomeModelArgs(riskWindowStart = 0,
                                                                     riskWindowEnd = 30,
                                                                     addExposureDaysToEnd = TRUE,
@@ -147,8 +123,8 @@ createAnalysisDetails <- function(connectionDetails,
                                                                     modelType = "cox",
                                                                     stratifiedCox = TRUE)
 
-    cmAnalysis4 <- CohortMethod::createCmAnalysis(analysisId = 4,
-                                                  description = "Matching plus stratified outcome model",
+    cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
+                                                  description = "Matching plus simple stratified outcome model",
                                                   getDbCohortMethodDataArgs = getDbCmDataArgs,
                                                   createPs = TRUE,
                                                   createPsArgs = createPsArgs,
@@ -165,7 +141,7 @@ createAnalysisDetails <- function(connectionDetails,
                                                                     modelType = "cox",
                                                                     stratifiedCox = TRUE)
 
-    cmAnalysis5 <- CohortMethod::createCmAnalysis(analysisId = 5,
+    cmAnalysis3 <- CohortMethod::createCmAnalysis(analysisId = 3,
                                                   description = "Matching plus full outcome model",
                                                   getDbCohortMethodDataArgs = getDbCmDataArgs,
                                                   createPs = TRUE,
@@ -176,7 +152,7 @@ createAnalysisDetails <- function(connectionDetails,
                                                   fitOutcomeModel = TRUE,
                                                   fitOutcomeModelArgs = fitOutcomeModelArgs3)
 
-    cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4, cmAnalysis5)
+    cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3)
 
     CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(outputFolder, "cmAnalysisList.txt"))
     CohortMethod::saveDrugComparatorOutcomesList(drugComparatorOutcomesList, file.path(outputFolder, "drugComparatorOutcomesList.txt"))

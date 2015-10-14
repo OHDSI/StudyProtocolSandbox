@@ -2,7 +2,7 @@ Package: CelecoxibVsNsNSAIDs
 Title: Celecoxib versus non-selective NSAIDs
 Version: 0.1
 Author: Martijn J. Schuemie [aut, cre],
-	Patrick B. Ryan [aut]
+    Patrick B. Ryan [aut]
 Maintainer: Martijn J. Schuemie <schuemie@ohdsi.org>
 Description: What the study does (paragraph)
 Depends:
@@ -11,6 +11,7 @@ Depends:
 Imports:
     SqlRender (>= 1.1.2),
     CohortMethod (>= 1.1.0),
+    EmpiricalCalibration,
     DBI,
     OhdsiSharing,
     ggplot2

@@ -60,10 +60,11 @@ execute <- function(connectionDetails,
                     createCohorts = TRUE,
                     createStudyAnalysesDetails = TRUE,
                     runAnalyses = TRUE,
+                    empiricalCalibration = TRUE,
                     packageResultsForSharing = TRUE) {
 
     if (cdmVersion == 4) {
-      stop("CDM version 4 not supported")
+        stop("CDM version 4 not supported")
     }
 
     if (!file.exists(outputFolder))
@@ -76,15 +77,15 @@ execute <- function(connectionDetails,
                       workDatabaseSchema,
                       studyCohortTable,
                       oracleTempSchema,
-                      cdmVersion)
+                      cdmVersion,
+                      outputFolder)
     }
 
     if (createStudyAnalysesDetails) {
         writeLines("Creating study analyses details")
-        createStudyAnalysesDetails(connectionDetails,
-                                   cdmDatabaseSchema,
-                                   outputFolder,
-                                   cdmVersion)
+        createAnalysesDetails(connectionDetails,
+                              cdmDatabaseSchema,
+                              outputFolder)
     }
 
     if (runAnalyses) {
@@ -106,13 +107,18 @@ execute <- function(connectionDetails,
                                     psCvThreads = 10,
                                     computeCovarBalThreads = 2,
                                     trimMatchStratifyThreads = 10,
-                                    fitOutcomeModelThreads = 4,
+                                    fitOutcomeModelThreads = 3,
                                     outcomeCvThreads = 10)
         # TODO: exposure multi-threading parameters
     }
 
+    if (empiricalCalibration) {
+        writeLines("Performing empirical calibration")
+        doEmpiricalCalibration()
+    }
+
     if (packageResultsForSharing) {
-		writeLines("Packaging results")
+        writeLines("Packaging results")
         packageResults(outputFolder = outputFolder)
     }
 }

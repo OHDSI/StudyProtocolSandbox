@@ -9,7 +9,7 @@ execute(connectionDetails, cdmDatabaseSchema,
   studyCohortTable = "ohdsi_celecoxib_nsnsaids", oracleTempSchema = NULL,
   cdmVersion = 5, outputFolder, createCohorts = TRUE,
   createStudyAnalysesDetails = TRUE, runAnalyses = TRUE,
-  packageResultsForSharing = TRUE)
+  empiricalCalibration = TRUE, packageResultsForSharing = TRUE)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the \code{\link[DatabaseConnector]{createConnectionDetails}}
