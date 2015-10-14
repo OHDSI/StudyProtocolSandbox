@@ -43,29 +43,11 @@ createPredictiveModels <- function(connectionDetails,
     outcomeIds <- 10:16
     minOutcomeCount <- 25
 
-    cohortDataFile <- file.path(outputFolder, "cohortData")
-    if (file.exists(cohortDataFile)) {
-        cohortData <- PatientLevelPrediction::loadCohortData(cohortDataFile)
+    plpDataFile <- file.path(outputFolder, "plpData")
+    if (file.exists(plpDataFile)) {
+        plpData <- PatientLevelPrediction::loadPlpData(plpDataFile)
     } else {
-        writeLines("- Extracting cohorts")
-        cohortData <- PatientLevelPrediction::getDbCohortData(connectionDetails,
-                                                              cdmDatabaseSchema = cdmDatabaseSchema,
-                                                              cohortDatabaseSchema = workDatabaseSchema,
-                                                              cohortTable = studyCohortTable,
-                                                              cohortIds = 1,
-                                                              useCohortEndDate = FALSE,
-                                                              windowPersistence = 365,
-                                                              cdmVersion = cdmVersion)
-
-        PatientLevelPrediction::saveCohortData(cohortData, cohortDataFile)
-    }
-
-    covariateDataFile <- file.path(outputFolder, "covariateData")
-    if (file.exists(covariateDataFile)) {
-        covariateData <- PatientLevelPrediction::loadCovariateData(covariateDataFile)
-    } else {
-        writeLines("- Extracting covariates")
-
+        writeLines("- Extracting cohorts/covariates/outcomes")
         conn <- DatabaseConnector::connect(connectionDetails)
         sql <- "SELECT descendant_concept_id FROM @cdm_database_schema.concept_ancestor WHERE ancestor_concept_id = 1118084"
         sql <- SqlRender::renderSql(sql, cdm_database_schema = cdmDatabaseSchema)$sql
@@ -126,88 +108,63 @@ createPredictiveModels <- function(connectionDetails,
                                                                              includedCovariateConceptIds = c(),
                                                                              deleteCovariatesSmallCount = 100)
 
-        covariateData <- PatientLevelPrediction::getDbCovariateData(connectionDetails,
-                                                                    cdmDatabaseSchema = cdmDatabaseSchema,
-                                                                    cohortDatabaseSchema = workDatabaseSchema,
-                                                                    cohortTable = studyCohortTable,
-                                                                    cohortIds = 1,
-                                                                    covariateSettings = covariateSettings,
-                                                                    cdmVersion = cdmVersion)
 
-        PatientLevelPrediction::saveCovariateData(covariateData, covariateDataFile)
+
+
+        plpData <- PatientLevelPrediction::getDbPlpData(connectionDetails,
+                                                        cdmDatabaseSchema = cdmDatabaseSchema,
+                                                        cohortDatabaseSchema = workDatabaseSchema,
+                                                        cohortTable = studyCohortTable,
+                                                        cohortIds = 1,
+                                                        useCohortEndDate = FALSE,
+                                                        windowPersistence = 365,
+                                                        covariateSettings = covariateSettings,
+                                                        outcomeDatabaseSchema = workDatabaseSchema,
+                                                        outcomeTable = studyCohortTable,
+                                                        outcomeIds = outcomeIds,
+                                                        cdmVersion = cdmVersion)
+
+
+        PatientLevelPrediction::savePlpData(plpData, plpDataFile)
     }
 
-    outcomeDataFile <- file.path(outputFolder, "outcomeData")
-    if (file.exists(outcomeDataFile)) {
-        outcomeData <- PatientLevelPrediction::loadOutcomeData(outcomeDataFile)
-    } else {
-        writeLines("- Extracting outcomes")
-        outcomeData <- PatientLevelPrediction::getDbOutcomeData(connectionDetails,
-                                                                cdmDatabaseSchema = cdmDatabaseSchema,
-                                                                cohortDatabaseSchema = workDatabaseSchema,
-                                                                cohortTable = studyCohortTable,
-                                                                cohortIds = 1,
-                                                                useCohortEndDate = FALSE,
-                                                                windowPersistence = 365,
-                                                                outcomeDatabaseSchema = workDatabaseSchema,
-                                                                outcomeTable = studyCohortTable,
-                                                                outcomeIds = outcomeIds,
-                                                                cdmVersion = cdmVersion)
-
-        PatientLevelPrediction::saveOutcomeData(outcomeData, outcomeDataFile)
-    }
-
-    trainCohortDataFile <- file.path(outputFolder, "trainCohortData")
-    trainCovariateDataFile <- file.path(outputFolder, "trainCovariateData")
-    trainOutcomeDataFile <- file.path(outputFolder, "trainOutcomeData")
-    testCohortDataFile <- file.path(outputFolder, "testCohortData")
-    testCovariateDataFile <- file.path(outputFolder, "testCovariateData")
-    testOutcomeDataFile <- file.path(outputFolder, "testOutcomeData")
-    if (file.exists(trainCohortDataFile) &&
-        file.exists(trainCovariateDataFile) &&
-        file.exists(trainOutcomeDataFile) &&
-        file.exists(testCohortDataFile) &&
-        file.exists(testCovariateDataFile) &&
-        file.exists(testOutcomeDataFile)) {
-        trainCohortData <- PatientLevelPrediction::loadCohortData(trainCohortDataFile)
-        trainCovariateData <- PatientLevelPrediction::loadCovariateData(trainCovariateDataFile)
-        trainOutcomeData <- PatientLevelPrediction::loadOutcomeData(trainOutcomeDataFile)
+    trainPlpDataFile <- file.path(outputFolder, "trainPlptData")
+    testPlpDataFile <- file.path(outputFolder, "testPlpData")
+    if (file.exists(trainPlpDataFile) &&
+        file.exists(testPlpDataFile)) {
+        trainPlpData <- PatientLevelPrediction::loadPlpData(trainPlpDataFile)
     } else {
         writeLines("Creating train-test split")
-        parts <- PatientLevelPrediction::splitData(cohortData, covariateData, outcomeData, c(0.75, 0.25))
+        parts <- PatientLevelPrediction::splitData(plpData, c(0.75, 0.25))
 
-        PatientLevelPrediction::saveCohortData(parts[[1]]$cohortData, trainCohortDataFile)
-        PatientLevelPrediction::saveCovariateData(parts[[1]]$covariateData, trainCovariateDataFile)
-        PatientLevelPrediction::saveOutcomeData(parts[[1]]$outcomeData, trainOutcomeDataFile)
-        PatientLevelPrediction::saveCohortData(parts[[2]]$cohortData, testCohortDataFile)
-        PatientLevelPrediction::saveCovariateData(parts[[2]]$covariateData, testCovariateDataFile)
-        PatientLevelPrediction::saveOutcomeData(parts[[2]]$outcomeData, testOutcomeDataFile)
+        PatientLevelPrediction::savePlpData(parts[[1]], trainPlpDataFile)
+        PatientLevelPrediction::savePlpData(parts[[2]], testPlpDataFile)
 
-        trainCohortData <- parts[[1]]$cohortData
-        trainCovariateData <- parts[[1]]$covariateData
-        trainOutcomeData <- parts[[1]]$outcomeData
-        testCohortData <- parts[[2]]$cohortData
-        testCovariateData <- parts[[2]]$covariateData
-        testOutcomeData <- parts[[2]]$outcomeData
+        trainPlpData <- parts[[1]]
+        testPlpData <- parts[[2]]
 
-        write.csv(summary(trainCohortData)$counts, file.path(outputFolder, "trainCohortSize.csv"), row.names = FALSE)
-        write.csv(addOutcomeNames(summary(trainOutcomeData)$counts), file.path(outputFolder, "trainOutcomeCounts.csv"), row.names = FALSE)
-        write.csv(summary(testCohortData)$counts, file.path(outputFolder, "testCohortSize.csv"), row.names = FALSE)
-        write.csv(addOutcomeNames(summary(testOutcomeData)$counts), file.path(outputFolder, "testOutcomeCounts.csv"), row.names = FALSE)
+        sumTrainPlpData <- summary(trainPlpData)
+        sumTestPlpData <- summary(testPlpData)
+
+        write.csv(c(summary(trainPlpData)$subjectCount, summary(trainPlpData)$windowCount), file.path(outputFolder, "trainCohortSize.csv"), row.names = FALSE)
+        write.csv(addOutcomeNames(summary(trainPlpData)$outcomeCounts), file.path(outputFolder, "trainOutcomeCounts.csv"), row.names = FALSE)
+        write.csv(c(summary(testPlpData)$subjectCount, summary(testPlpData)$windowCount), file.path(outputFolder, "testCohortSize.csv"), row.names = FALSE)
+        write.csv(addOutcomeNames(summary(trainPlpData)$outcomeCounts), file.path(outputFolder, "testOutcomeCounts.csv"), row.names = FALSE)
     }
-    counts <- summary(trainOutcomeData)$counts
+    counts <- summary(trainPlpData)$outcomeCounts
     for (outcomeId in outcomeIds){
+        writeLines(paste(outcomeId))
         modelFile <- file.path(outputFolder, paste("model_o",outcomeId, ".rds", sep = ""))
-        if (counts$personCount[counts$outcomeId == outcomeId] > minOutcomeCount &&
+        if (counts$eventCount[counts$outcomeId == outcomeId] > minOutcomeCount &&
             !file.exists(modelFile)){
             writeLines(paste("- Fitting model for outcome", outcomeId))
             control = Cyclops::createControl(noiseLevel = "quiet",
                                              cvType = "auto",
                                              startingVariance = 0.1,
                                              threads = 10)
-            model <- PatientLevelPrediction::fitPredictiveModel(trainCohortData,
-                                                                trainCovariateData,
-                                                                trainOutcomeData,
+
+
+            model <- PatientLevelPrediction::fitPredictiveModel(trainPlpData,
                                                                 outcomeId = outcomeId,
                                                                 modelType = "logistic",
                                                                 control = control)
