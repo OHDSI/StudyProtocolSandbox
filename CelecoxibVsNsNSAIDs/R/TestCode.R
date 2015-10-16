@@ -20,6 +20,13 @@
     outputFolder <- "S:/temp/CelecoxibVsNsNSAIDs"
 
 
+    cdmDatabaseSchema <- "cdm_truven_ccae_v5.dbo"
+    workDatabaseSchema <- "scratch.dbo"
+    studyCohortTable <- "ohdsi_celecoxib_vs_nsnsaids_ccae"
+    oracleTempSchema <- NULL
+    cdmVersion <- "5"
+    outputFolder <- "S:/temp/CelecoxibVsNsNSAIDs_CCAE"
+
     execute(connectionDetails = connectionDetails,
             cdmDatabaseSchema = cdmDatabaseSchema,
             workDatabaseSchema = workDatabaseSchema,

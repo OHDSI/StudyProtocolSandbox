@@ -114,7 +114,7 @@ execute <- function(connectionDetails,
 
     if (empiricalCalibration) {
         writeLines("Performing empirical calibration")
-        doEmpiricalCalibration()
+        doEmpiricalCalibration(outputFolder = outputFolder)
     }
 
     if (packageResultsForSharing) {
