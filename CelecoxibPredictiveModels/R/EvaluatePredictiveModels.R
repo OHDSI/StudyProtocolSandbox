@@ -28,7 +28,7 @@ evaluatePredictiveModels <- function(outputFolder) {
     minOutcomeCount <- 25
 
     testPlpDataFile <- file.path(outputFolder, "testPlpData")
-    testCohortData <- PatientLevelPrediction::loadPlpData(testPlpDataFile)
+    testPlpData <- PatientLevelPrediction::loadPlpData(testPlpDataFile)
 
     counts <- summary(testPlpData)$outcomeCounts
     for (outcomeId in outcomeIds){
