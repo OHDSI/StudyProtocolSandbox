@@ -3,7 +3,7 @@ OHDSI Celecoxib predictive models study
 
 This study aims to...
 
-Detailed information and protocol is available on the [OHDSI Wiki](http://www.ohdsi.org/web/wiki/doku.php?id=research:celecoxib_predictive_models).
+Detailed information and protocol is available on the [OHDSI Wiki](http://www.ohdsi.org/web/wiki/doku.php?id=research:celecoxib_prediction_models).
 
 How to run
 ==========
