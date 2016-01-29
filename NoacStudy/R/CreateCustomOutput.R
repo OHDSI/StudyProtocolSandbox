@@ -10,18 +10,18 @@
 createCustomOutput <- function(outputFolder) {
   outcomeReference <- readRDS(file.path(outputFolder, "outcomeModelReference.rds"))
   analysisSummary <- read.csv(file.path(outputFolder, "Results.csv"))
-  cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "Rivaroxaban")
+  cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "NoacStudy")
   cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
   # Add analysis description:
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <- cmAnalysisList[[i]]$description
   }
-  drugComparatorOutcomesListFile <- system.file("settings", "drugComparatorOutcomesList.txt", package = "Rivaroxaban")
+  drugComparatorOutcomesListFile <- system.file("settings", "drugComparatorOutcomesList.txt", package = "NoacStudy")
   drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
   
   negControlCohortIds <- unique(analysisSummary$outcomeId[analysisSummary$outcomeId > 100])
   
-  cohortDefinitionsFile <- system.file("settings", "cohorts.csv", package = "Rivaroxaban")
+  cohortDefinitionsFile <- system.file("settings", "cohorts.csv", package = "NoacStudy")
   cohortDefinitions <- read.csv(cohortDefinitionsFile)
   
   drugComparatorOutcome <- drugComparatorOutcomesList[[1]]

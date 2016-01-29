@@ -1,11 +1,11 @@
 .formatAndCheckCode <- function() {
   OhdsiRTools::formatRFolder()
-  OhdsiRTools::checkUsagePackage("Rivaroxaban")
+  OhdsiRTools::checkUsagePackage("NoacStudy")
 }
 
 .createManualAndVignettes <- function() {
-  shell("rm extras/Rivaroxaban")
-  shell("R CMD Rd2pdf ./ --output=extras/Rivaroxaban.pdf")
+  shell("rm extras/NoacStudy")
+  shell("R CMD Rd2pdf ./ --output=extras/NoacStudy.pdf")
 }
 
 .insertCohortDefinitions <- function() {

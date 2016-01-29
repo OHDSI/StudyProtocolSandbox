@@ -1,8 +1,8 @@
 #' @title
-#' Execute the Rivaroxaban study
+#' Execute the novel oral anticoagulant study
 #'
 #' @details
-#' This function executes the Rivaroxaban study.
+#' This function executes the novel oral anticoagulant study.
 #'
 #' @return
 #' TODO
@@ -78,9 +78,9 @@ execute <- function(connectionDetails,
   
   if (runAnalyses) {
     writeLines("Running analyses")
-    cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "Rivaroxaban")
+    cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "NoacStudy")
     cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
-    drugComparatorOutcomesListFile <- system.file("settings", "drugComparatorOutcomesList.txt", package = "Rivaroxaban")
+    drugComparatorOutcomesListFile <- system.file("settings", "drugComparatorOutcomesList.txt", package = "NoacStudy")
     drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
     CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
                                 cdmDatabaseSchema = cdmDatabaseSchema,

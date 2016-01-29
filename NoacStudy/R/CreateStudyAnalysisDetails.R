@@ -34,13 +34,13 @@ createAnalysesDetails <- function(outputFolder) {
   #   excludedConcepts <- excludedConcepts$DESCENDANT_CONCEPT_ID
   # dummy <- dbDisconnect(connection)
   
-  cohortDefinitionsFile <- system.file("settings", "cohorts.csv", package = "Rivaroxaban")
+  cohortDefinitionsFile <- system.file("settings", "cohorts.csv", package = "NoacStudy")
   cohortDefinitions <- read.csv(cohortDefinitionsFile)
   exposureCohortId <- cohortDefinitions[cohortDefinitions$cohortType == 0,]$cohortDefinitionId
   outcomeCohortId <- cohortDefinitions[cohortDefinitions$cohortType == 1,]$cohortDefinitionId
   negativeControlCohortId <- cohortDefinitions[cohortDefinitions$cohortType == 2,]$cohortDefinitionId
   
-  excludedConceptsFile <- system.file("settings", "excludedConcepts.csv", package = "Rivaroxaban")
+  excludedConceptsFile <- system.file("settings", "excludedConcepts.csv", package = "NoacStudy")
   excludedConcepts <- read.csv(excludedConceptsFile)
   excludedConcepts <- excludedConcepts$conceptId
 

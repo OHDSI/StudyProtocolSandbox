@@ -2,7 +2,7 @@
 % Please edit documentation in R/Main.R
 \name{execute}
 \alias{execute}
-\title{Execute the Rivaroxaban study}
+\title{Execute the novel oral anticoagulant study}
 \usage{
 execute(connectionDetails, cdmDatabaseSchema,
   workDatabaseSchema = cdmDatabaseSchema, studyCohortTable = "cohort_noac",
@@ -41,7 +41,7 @@ priviliges for storing temporary tables.}
 TODO
 }
 \details{
-This function executes the Rivaroxaban study.
+This function executes the novel oral anticoagulant study.
 }
 \examples{
 \dontrun{
