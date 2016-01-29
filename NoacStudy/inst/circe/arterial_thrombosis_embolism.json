@@ -1,0 +1,208 @@
+{
+  "PrimaryCriteria": {
+    "CriteriaList": [
+      {
+        "ConditionOccurrence": {
+          "CodesetId": 0,
+          "ConditionType": [
+            {
+              "CONCEPT_ID": 38000183,
+              "CONCEPT_NAME": "Inpatient detail - primary",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            },
+            {
+              "CONCEPT_ID": 38000199,
+              "CONCEPT_NAME": "Inpatient header - primary",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            },
+            {
+              "CONCEPT_ID": 44786627,
+              "CONCEPT_NAME": "Primary Condition",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            },
+            {
+              "CONCEPT_ID": 38000184,
+              "CONCEPT_NAME": "Inpatient detail - 1st position",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            },
+            {
+              "CONCEPT_ID": 38000200,
+              "CONCEPT_NAME": "Inpatient header - 1st position",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            }
+          ],
+          "VisitType": [
+            {
+              "CONCEPT_ID": 9203,
+              "CONCEPT_NAME": "Emergency Room Visit",
+              "CONCEPT_CODE": "ER",
+              "DOMAIN_ID": "Visit",
+              "VOCABULARY_ID": "Visit"
+            },
+            {
+              "CONCEPT_ID": 9201,
+              "CONCEPT_NAME": "Inpatient Visit",
+              "CONCEPT_CODE": "IP",
+              "DOMAIN_ID": "Visit",
+              "VOCABULARY_ID": "Visit"
+            }
+          ]
+        }
+      }
+    ],
+    "ObservationWindow": {
+      "PriorDays": 0,
+      "PostDays": 0
+    },
+    "PrimaryCriteriaLimit": {
+      "Type": "All"
+    }
+  },
+  "AdditionalCriteria": {
+    "Type": "ALL",
+    "CriteriaList": [
+      {
+        "Criteria": {
+          "ConditionOccurrence": {
+            "CodesetId": 0
+          }
+        },
+        "StartWindow": {
+          "Start": {
+            "Days": 30,
+            "Coeff": -1
+          },
+          "End": {
+            "Days": 1,
+            "Coeff": -1
+          }
+        },
+        "Occurrence": {
+          "Type": 1,
+          "Count": 0
+        }
+      }
+    ],
+    "Groups": []
+  },
+  "ConceptSets": [
+    {
+      "id": 0,
+      "name": "Arterial Embolism",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 312339,
+              "CONCEPT_NAME": "Arterial embolism",
+              "CONCEPT_CODE": "54687002",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4278217,
+              "CONCEPT_NAME": "Arterial thrombosis",
+              "CONCEPT_CODE": "65198009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 200132,
+              "CONCEPT_NAME": "Atheroembolism of renal arteries",
+              "CONCEPT_CODE": "51677000",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 375557,
+              "CONCEPT_NAME": "Cerebral embolism",
+              "CONCEPT_CODE": "75543006",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 441874,
+              "CONCEPT_NAME": "Cerebral thrombosis",
+              "CONCEPT_CODE": "71444005",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 321037,
+              "CONCEPT_NAME": "Cholesterol embolus syndrome",
+              "CONCEPT_CODE": "236489002",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4057039,
+              "CONCEPT_NAME": "Fat embolism",
+              "CONCEPT_CODE": "212372004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 440417,
+              "CONCEPT_NAME": "Pulmonary embolism",
+              "CONCEPT_CODE": "59282003",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40481852,
+              "CONCEPT_NAME": "Septic embolus of artery",
+              "CONCEPT_CODE": "442105001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          }
+        ]
+      }
+    }
+  ],
+  "ExpressionLimit": {
+    "Type": "All"
+  }
+}
