@@ -24,10 +24,10 @@ install:
   - mkdir -p ~/Rlib
   - echo 'R_LIBS=~/Rlib' > .Renviron
   - echo 'options(repos = "http://cran.rstudio.com")' > .Rprofile
-  - echo 'drat::addRepo("OHDSI")' >> .Rprofile
   - mkdir -p ~/.R
   - Rscript -e 'if (!require("devtools")) install.packages("devtools")'
   - Rscript -e 'if (!require("drat")) install.packages("drat")'
+  - echo 'drat::addRepo("OHDSI")' >> .Rprofile  
   - Rscript -e 'if (!require("CohortMethod")) install.packages("CohortMethod", dependencies = TRUE)'
   - Rscript -e 'update.packages(ask = FALSE, instlib = "~/Rlib")'
 
