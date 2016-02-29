@@ -16,6 +16,9 @@ addToDrat(){
   git fetch upstream 2>err.txt
   git checkout gh-pages
 
+  ## Link to local R packages
+  echo 'R_LIBS=~/Rlib' > .Renviron
+
   Rscript -e "drat::insertPackage('$PKG_REPO/$PKG_TARBALL', \
     repodir = '.', \
     commit='Travis update: $PKG_TARBALL build $TRAVIS_BUILD_NUMBER')"
