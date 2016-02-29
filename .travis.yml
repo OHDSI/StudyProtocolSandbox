@@ -29,6 +29,7 @@ install:
   - Rscript -e 'if (!require("drat")) install.packages("drat")'
   - echo 'drat::addRepo("OHDSI")' >> .Rprofile  
   - Rscript -e 'if (!require("CohortMethod")) install.packages("CohortMethod", dependencies = TRUE)'
+  - Rscript -e 'if (!require("mailR")) install.packages("mailR", dependencies = TRUE)'
   - Rscript -e 'update.packages(ask = FALSE, instlib = "~/Rlib")'
 
 before_script:
