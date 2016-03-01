@@ -1,6 +1,21 @@
-generateReport <- function(outputFolder) {
+
+.renameFilesAndFolders <- function(outcomeReference, newOutputFolder, oldOutputFolder) {
+    columns <- c(grep("*Folder", names(outcomeReference)), grep("*File", names(outcomeReference)))
+    for (idx in columns) {
+        outcomeReference[, idx] <- sub(oldOutputFolder, newOutputFolder, outcomeReference[, idx])
+    }
+    return(outcomeReference)
+}
+
+
+generateReport <- function(outputFolder, oldOutputFolder = NULL) {
   intro <- "This reports describes the results from a comparative effectiveness study comparing new users of rivaroxaban to new users of warfarin. The study was restricted to those people with a prior diagnose of diabetes. Propensity scores were generated using large scale regression, and one-on-one matching was performed. Effect sizes were estimated using a univariate Cox regression, conditioned on the matched sets. A set of negative control outcomes was included to estimate residual bias and calibrate p-values."
   outcomeReference <- readRDS(file.path(outputFolder, "outcomeModelReference.rds"))
+
+  if (!is.null(oldOutputFolder)) {
+    outcomeReference <- NoacStudy:::.renameFilesAndFolders(outcomeReference, outputFolder, oldOutputFolder)
+  }
+
   results <- read.csv(file.path(outputFolder, "Results.csv"))
   cohortDefinitionsFile <- system.file("settings", "cohorts.csv", package = "NoacStudy")
   cohortDefinitions <- read.csv(cohortDefinitionsFile)

@@ -20,7 +20,8 @@ Imports:
     DBI,
     OhdsiSharing,
     ggplot2,
-    mailR
+    mailR,
+    ReporteRs
 Suggests:
     testthat
 License: Apache License 2.0
