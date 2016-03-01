@@ -38,48 +38,54 @@ createCohorts <- function(connectionDetails,
     dir.create(sqlFolder)
   }
 
-  #create table shells to populate
+  # create table shells to populate
   connection <- DatabaseConnector::connect(connectionDetails)
   sql <- SqlRender::loadRenderTranslateSql("create_tables.sql",
                                            "NoacStudy",
                                            dbms = connectionDetails$dbms,
                                            oracleTempSchema = oracleTempSchema,
-                                           target_database_schema=workDatabaseSchema,
-                                           target_cohort_definition_table=studyCohortDefinitionTable,
-                                           target_cohort_table=studyCohortTable)
+                                           target_database_schema = workDatabaseSchema,
+                                           target_cohort_definition_table = studyCohortDefinitionTable,
+                                           target_cohort_table = studyCohortTable)
   SqlRender::writeSql(sql, file.path(sqlFolder, "create_tables.sql"))
-  DatabaseConnector::executeSql(connection,sql)
+  DatabaseConnector::executeSql(connection, sql)
 
-  #populate cohort definitions and cohorts
+  # populate cohort definitions and cohorts
   cohortDefinitionsFile <- system.file("settings", "cohorts.csv", package = "NoacStudy")
   cohortDefinitions <- read.csv(cohortDefinitionsFile)
-  cohortDefinitions <- cohortDefinitions[cohortDefinitions$cohortType %in% c(0,1),]
-  for(i in 1:nrow(cohortDefinitions)) {
-    writeLines(paste("Starting work on cohort definition ",cohortDefinitions$cohortDefinitionId[i]," (",cohortDefinitions$cohortDefinitionName[i],")",sep=""))
+  cohortDefinitions <- cohortDefinitions[cohortDefinitions$cohortType %in% c(0, 1), ]
+  for (i in 1:nrow(cohortDefinitions)) {
+    writeLines(paste("Starting work on cohort definition ",
+                     cohortDefinitions$cohortDefinitionId[i],
+                     " (",
+                     cohortDefinitions$cohortDefinitionName[i],
+                     ")",
+                     sep = ""))
 
-    cohortDefinitionSql <- "DELETE FROM @target_database_schema.@target_cohort_definition_table WHERE COHORT_DEFINITION_ID = @cohort_definition_id;\n
-     INSERT INTO @target_database_schema.@target_cohort_definition_table VALUES (@cohort_definition_id, '@cohort_definition_name', @cohortType); \n\n"
+    cohortDefinitionSql <- "DELETE FROM @target_database_schema.@target_cohort_definition_table WHERE COHORT_DEFINITION_ID = @cohort_definition_id;\n\n     INSERT INTO @target_database_schema.@target_cohort_definition_table VALUES (@cohort_definition_id, '@cohort_definition_name', @cohortType); \n\n"
 
     sql <- SqlRender::renderSql(cohortDefinitionSql,
-                         target_database_schema=workDatabaseSchema,
-                         target_cohort_definition_table=studyCohortDefinitionTable,
-                         cohort_definition_id = cohortDefinitions$cohortDefinitionId[i],
-                         cohort_definition_name = cohortDefinitions$cohortDefinitionName[i],
-                         cohortType=cohortDefinitions$cohortType[i])$sql
+                                target_database_schema = workDatabaseSchema,
+                                target_cohort_definition_table = studyCohortDefinitionTable,
+                                cohort_definition_id = cohortDefinitions$cohortDefinitionId[i],
+                                cohort_definition_name = cohortDefinitions$cohortDefinitionName[i],
+                                cohortType = cohortDefinitions$cohortType[i])$sql
 
-    sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms, oracleTempSchema = oracleTempSchema)$sql
-    DatabaseConnector::executeSql(connection,sql, progressBar = FALSE, reportOverallTime = FALSE)
+    sql <- SqlRender::translateSql(sql,
+                                   targetDialect = connectionDetails$dbms,
+                                   oracleTempSchema = oracleTempSchema)$sql
+    DatabaseConnector::executeSql(connection, sql, progressBar = FALSE, reportOverallTime = FALSE)
 
     sql <- SqlRender::loadRenderTranslateSql(cohortDefinitions$filename[i],
                                              "NoacStudy",
                                              dbms = connectionDetails$dbms,
                                              oracleTempSchema = oracleTempSchema,
                                              cdm_database_schema = cdmDatabaseSchema,
-                                             target_database_schema=workDatabaseSchema,
-                                             target_cohort_table=studyCohortTable,
+                                             target_database_schema = workDatabaseSchema,
+                                             target_cohort_table = studyCohortTable,
                                              cohort_definition_id = cohortDefinitions$cohortDefinitionId[i])
     SqlRender::writeSql(sql, file.path(sqlFolder, cohortDefinitions$filename[i]))
-    DatabaseConnector::executeSql(connection,sql)
+    DatabaseConnector::executeSql(connection, sql)
   }
   writeLines("Starting creating negative control")
   sql <- SqlRender::loadRenderTranslateSql("create_negative_controls.sql",
@@ -87,12 +93,12 @@ createCohorts <- function(connectionDetails,
                                            dbms = connectionDetails$dbms,
                                            oracleTempSchema = oracleTempSchema,
                                            cdm_database_schema = cdmDatabaseSchema,
-                                           target_database_schema=workDatabaseSchema,
-                                           target_cohort_table=studyCohortTable,
+                                           target_database_schema = workDatabaseSchema,
+                                           target_cohort_table = studyCohortTable,
                                            target_cohort_definition_table = studyCohortDefinitionTable)
 
   SqlRender::writeSql(sql, file.path(sqlFolder, "create_negative_controls.sql"))
-  DatabaseConnector::executeSql(connection,sql)
+  DatabaseConnector::executeSql(connection, sql)
 
   # Check number of subjects per cohort:
   sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @work_database_schema.@study_cohort_table GROUP BY cohort_definition_id"

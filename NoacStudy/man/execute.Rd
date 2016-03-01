@@ -10,7 +10,10 @@ execute(connectionDetails, cdmDatabaseSchema,
   oracleTempSchema = NULL, cdmVersion = 5, outputFolder,
   createCohorts = TRUE, runAnalyses = TRUE, empiricalCalibration = TRUE,
   packageResultsForSharing = TRUE, createCustomOutput = TRUE,
-  generateReport = TRUE)
+  generateReport = TRUE, getDbCohortMethodDataThreads = 1,
+  createPsThreads = 1, psCvThreads = 1, computeCovarBalThreads = 1,
+  trimMatchStratifyThreads = 1, fitOutcomeModelThreads = 1,
+  outcomeCvThreads = 1)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -36,9 +39,48 @@ priviliges for storing temporary tables.}
 
 \item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
 (/)}
+
+\item{createCohorts}{Create cohort tables from database (TRUE) or use previously saved cohort information (FALSE)}
+
+\item{runAnalyses}{Run propensity score and outcome model fitting (TRUE) or use previously saved models (FALSE)}
+
+\item{empiricalCalibration}{Perform empirical calibration of outcome models (TRUE/FALSE)}
+
+\item{packageResultsForSharing}{Package all intermediate files and models in `outputFolder` to share (TRUE/FALSE)}
+
+\item{createCustomOutput}{Create custom output in `outputFolder`}
+
+\item{generateReport}{Generate results report in `outputFolder`}
+
+\item{getDbCohortMethodDataThreads}{The number of parallel threads to use for building the
+cohortMethod data objects.}
+
+\item{createPsThreads}{The number of parallel threads to use for fitting the
+propensity models.}
+
+\item{psCvThreads}{The number of parallel threads to use for the cross-
+validation when estimating the hyperparameter for the
+propensity model. Note that the total number of CV
+threads at one time could be `createPsThreads *
+psCvThreads`.}
+
+\item{computeCovarBalThreads}{The number of parallel threads to use for computing the
+covariate balance.}
+
+\item{trimMatchStratifyThreads}{The number of parallel threads to use for trimming,
+matching and stratifying.}
+
+\item{fitOutcomeModelThreads}{The number of parallel threads to use for fitting the
+outcome models.}
+
+\item{outcomeCvThreads}{The number of parallel threads to use for the cross-
+validation when estimating the hyperparameter for the
+outcome model. Note that the total number of CV threads
+at one time could be `fitOutcomeModelThreads *
+outcomeCvThreads`.}
 }
 \value{
-TODO
+Nothing.  All intermediate files, models and reports are in `outputFolder`.
 }
 \details{
 This function executes the novel oral anticoagulant study.
@@ -51,11 +93,9 @@ connectionDetails <- createConnectionDetails(dbms = "postgresql",
                                              server = "myserver")
 
 execute(connectionDetails,
-        cdmDatabaseSchema = "cdm_data",
-        workDatabaseSchema = "results",
-        oracleTempSchema = NULL,
-        outputFolder = "c:/temp/study_results",
-        cdmVersion = "5")
+        cdmDatabaseSchema = "mdcr_v5",
+        workDatabaseSchema = "ohdsi",
+        outputFolder = "~/study_results")
 
 }
 

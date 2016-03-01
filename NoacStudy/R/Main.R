@@ -5,25 +5,55 @@
 #' This function executes the novel oral anticoagulant study.
 #'
 #' @return
-#' TODO
+#' Nothing.  All intermediate files, models and reports are in `outputFolder`.
 #'
-#' @param connectionDetails    An object of type \code{connectionDetails} as created using the
-#'                             \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
-#'                             DatabaseConnector package.
-#' @param cdmDatabaseSchema    Schema name where your patient-level data in OMOP CDM format resides.
-#'                             Note that for SQL Server, this should include both the database and
-#'                             schema name, for example 'cdm_data.dbo'.
-#' @param workDatabaseSchema   Schema name where intermediate data can be stored. You will need to have
-#'                             write priviliges in this schema. Note that for SQL Server, this should
-#'                             include both the database and schema name, for example 'cdm_data.dbo'.
-#' @param studyCohortTable     The name of the table that will be created in the work database schema.
-#'                             This table will hold the exposure and outcome cohorts used in this
-#'                             study.
-#' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
-#'                             priviliges for storing temporary tables.
-#' @param cdmVersion           Version of the CDM. Can be "4" or "5"
-#' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
-#'                             (/)
+#' @param connectionDetails              An object of type \code{connectionDetails} as created using
+#'                                       the \code{\link[DatabaseConnector]{createConnectionDetails}}
+#'                                       function in the DatabaseConnector package.
+#' @param cdmDatabaseSchema              Schema name where your patient-level data in OMOP CDM format
+#'                                       resides. Note that for SQL Server, this should include both
+#'                                       the database and schema name, for example 'cdm_data.dbo'.
+#' @param workDatabaseSchema             Schema name where intermediate data can be stored. You will
+#'                                       need to have write priviliges in this schema. Note that for
+#'                                       SQL Server, this should include both the database and schema
+#'                                       name, for example 'cdm_data.dbo'.
+#' @param studyCohortTable               The name of the table that will be created in the work
+#'                                       database schema. This table will hold the exposure and outcome
+#'                                       cohorts used in this study.
+#' @param oracleTempSchema               Should be used in Oracle to specify a schema where the user
+#'                                       has write priviliges for storing temporary tables.
+#' @param cdmVersion                     Version of the CDM. Can be "4" or "5"
+#' @param outputFolder                   Name of local folder to place results; make sure to use
+#'                                       forward slashes (/)
+#'
+#' @param createCohorts                  Create cohort tables from database (TRUE) or use previously
+#'                                       saved cohort information (FALSE)
+#' @param runAnalyses                    Run propensity score and outcome model fitting (TRUE) or use
+#'                                       previously saved models (FALSE)
+#' @param empiricalCalibration           Perform empirical calibration of outcome models (TRUE/FALSE)
+#' @param packageResultsForSharing       Package all intermediate files and models in `outputFolder` to
+#'                                       share (TRUE/FALSE)
+#' @param createCustomOutput             Create custom output in `outputFolder`
+#' @param generateReport                 Generate results report in `outputFolder`
+#'
+#' @param getDbCohortMethodDataThreads   The number of parallel threads to use for building the
+#'                                       cohortMethod data objects.
+#' @param createPsThreads                The number of parallel threads to use for fitting the
+#'                                       propensity models.
+#' @param psCvThreads                    The number of parallel threads to use for the cross-
+#'                                       validation when estimating the hyperparameter for the
+#'                                       propensity model. Note that the total number of CV threads at
+#'                                       one time could be `createPsThreads * psCvThreads`.
+#' @param computeCovarBalThreads         The number of parallel threads to use for computing the
+#'                                       covariate balance.
+#' @param trimMatchStratifyThreads       The number of parallel threads to use for trimming, matching
+#'                                       and stratifying.
+#' @param fitOutcomeModelThreads         The number of parallel threads to use for fitting the outcome
+#'                                       models.
+#' @param outcomeCvThreads               The number of parallel threads to use for the cross-
+#'                                       validation when estimating the hyperparameter for the outcome
+#'                                       model. Note that the total number of CV threads at one time
+#'                                       could be `fitOutcomeModelThreads * outcomeCvThreads`.
 #'
 #' @examples
 #' \dontrun{
@@ -33,11 +63,9 @@
 #'                                              server = "myserver")
 #'
 #' execute(connectionDetails,
-#'         cdmDatabaseSchema = "cdm_data",
-#'         workDatabaseSchema = "results",
-#'         oracleTempSchema = NULL,
-#'         outputFolder = "c:/temp/study_results",
-#'         cdmVersion = "5")
+#'         cdmDatabaseSchema = "mdcr_v5",
+#'         workDatabaseSchema = "ohdsi",
+#'         outputFolder = "~/study_results")
 #'
 #' }
 #'
@@ -55,15 +83,22 @@ execute <- function(connectionDetails,
                     empiricalCalibration = TRUE,
                     packageResultsForSharing = TRUE,
                     createCustomOutput = TRUE,
-                    generateReport = TRUE) {
-  
+                    generateReport = TRUE,
+                    getDbCohortMethodDataThreads = 1,
+                    createPsThreads = 1,
+                    psCvThreads = 1,
+                    computeCovarBalThreads = 1,
+                    trimMatchStratifyThreads = 1,
+                    fitOutcomeModelThreads = 1,
+                    outcomeCvThreads = 1) {
+
   if (cdmVersion == 4) {
     stop("CDM version 4 not supported")
   }
-  
+
   if (!file.exists(outputFolder))
     dir.create(outputFolder)
-  
+
   if (createCohorts) {
     writeLines("Creating exposure and outcome cohorts")
     createCohorts(connectionDetails,
@@ -75,12 +110,14 @@ execute <- function(connectionDetails,
                   cdmVersion,
                   outputFolder)
   }
-  
+
   if (runAnalyses) {
     writeLines("Running analyses")
     cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "NoacStudy")
     cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
-    drugComparatorOutcomesListFile <- system.file("settings", "drugComparatorOutcomesList.txt", package = "NoacStudy")
+    drugComparatorOutcomesListFile <- system.file("settings",
+                                                  "drugComparatorOutcomesList.txt",
+                                                  package = "NoacStudy")
     drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
     CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
                                 cdmDatabaseSchema = cdmDatabaseSchema,
@@ -92,26 +129,26 @@ execute <- function(connectionDetails,
                                 cmAnalysisList = cmAnalysisList,
                                 cdmVersion = cdmVersion,
                                 drugComparatorOutcomesList = drugComparatorOutcomesList,
-                                getDbCohortMethodDataThreads = 1,
-                                createPsThreads = 1,
-                                psCvThreads = 30,
-                                computeCovarBalThreads = 5,
-                                trimMatchStratifyThreads = 10,
-                                fitOutcomeModelThreads = 5,
-                                outcomeCvThreads = 10)
+                                getDbCohortMethodDataThreads = getDbCohortMethodDataThreads,
+                                createPsThreads = createPsThreads,
+                                psCvThreads = psCvThreads,
+                                computeCovarBalThreads = computeCovarBalThreads,
+                                trimMatchStratifyThreads = trimMatchStratifyThreads,
+                                fitOutcomeModelThreads = fitOutcomeModelThreads,
+                                outcomeCvThreads = outcomeCvThreads)
     # TODO: exposure multi-threading parameters
   }
-  
+
   if (empiricalCalibration) {
     writeLines("Performing empirical calibration")
     doEmpiricalCalibration(outputFolder = outputFolder)
   }
-  
+
   if (createCustomOutput) {
     writeLines("Creating custom output")
     createCustomOutput(outputFolder = outputFolder)
   }
-  
+
   if (generateReport) {
     writeLines("Generating report")
     generateReport(outputFolder = outputFolder)
