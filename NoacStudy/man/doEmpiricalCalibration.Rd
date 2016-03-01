@@ -13,7 +13,7 @@ doEmpiricalCalibration(outputFolder)
 Perform empirical calibration
 }
 \details{
-Performs empricical calibration using the negative control outcomes, and computes
-the calibrated p-values
+Performs empricical calibration using the negative control outcomes, and computes the calibrated
+p-values
 }
 

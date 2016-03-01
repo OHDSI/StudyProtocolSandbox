@@ -1,10 +1,10 @@
 
 .renameFilesAndFolders <- function(outcomeReference, newOutputFolder, oldOutputFolder) {
-    columns <- c(grep("*Folder", names(outcomeReference)), grep("*File", names(outcomeReference)))
-    for (idx in columns) {
-        outcomeReference[, idx] <- sub(oldOutputFolder, newOutputFolder, outcomeReference[, idx])
-    }
-    return(outcomeReference)
+  columns <- c(grep("*Folder", names(outcomeReference)), grep("*File", names(outcomeReference)))
+  for (idx in columns) {
+    outcomeReference[, idx] <- sub(oldOutputFolder, newOutputFolder, outcomeReference[, idx])
+  }
+  return(outcomeReference)
 }
 
 
@@ -13,7 +13,7 @@ generateReport <- function(outputFolder, oldOutputFolder = NULL) {
   outcomeReference <- readRDS(file.path(outputFolder, "outcomeModelReference.rds"))
 
   if (!is.null(oldOutputFolder)) {
-    outcomeReference <- NoacStudy:::.renameFilesAndFolders(outcomeReference, outputFolder, oldOutputFolder)
+    outcomeReference <- .renameFilesAndFolders(outcomeReference, outputFolder, oldOutputFolder)
   }
 
   results <- read.csv(file.path(outputFolder, "Results.csv"))

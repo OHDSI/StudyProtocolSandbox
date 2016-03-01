@@ -16,37 +16,44 @@ execute(connectionDetails, cdmDatabaseSchema,
   outcomeCvThreads = 1)
 }
 \arguments{
-\item{connectionDetails}{An object of type \code{connectionDetails} as created using the
-\code{\link[DatabaseConnector]{createConnectionDetails}} function in the
-DatabaseConnector package.}
+\item{connectionDetails}{An object of type \code{connectionDetails} as created using
+the \code{\link[DatabaseConnector]{createConnectionDetails}}
+function in the DatabaseConnector package.}
 
-\item{cdmDatabaseSchema}{Schema name where your patient-level data in OMOP CDM format resides.
-Note that for SQL Server, this should include both the database and
-schema name, for example 'cdm_data.dbo'.}
+\item{cdmDatabaseSchema}{Schema name where your patient-level data in OMOP CDM format
+resides. Note that for SQL Server, this should include both
+the database and schema name, for example 'cdm_data.dbo'.}
 
-\item{workDatabaseSchema}{Schema name where intermediate data can be stored. You will need to have
-write priviliges in this schema. Note that for SQL Server, this should
-include both the database and schema name, for example 'cdm_data.dbo'.}
+\item{workDatabaseSchema}{Schema name where intermediate data can be stored. You will
+need to have write priviliges in this schema. Note that for
+SQL Server, this should include both the database and schema
+name, for example 'cdm_data.dbo'.}
 
-\item{studyCohortTable}{The name of the table that will be created in the work database schema.
-This table will hold the exposure and outcome cohorts used in this
-study.}
+\item{studyCohortTable}{The name of the table that will be created in the work
+database schema. This table will hold the exposure and outcome
+cohorts used in this study.}
 
-\item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
-priviliges for storing temporary tables.}
+\item{studyCohortDefinitionTable}{The table in the work database schema containing the
+definitions of the cohorts.}
+
+\item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user
+has write priviliges for storing temporary tables.}
 
 \item{cdmVersion}{Version of the CDM. Can be "4" or "5"}
 
-\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
-(/)}
+\item{outputFolder}{Name of local folder to place results; make sure to use
+forward slashes (/)}
 
-\item{createCohorts}{Create cohort tables from database (TRUE) or use previously saved cohort information (FALSE)}
+\item{createCohorts}{Create cohort tables from database (TRUE) or use previously
+saved cohort information (FALSE)}
 
-\item{runAnalyses}{Run propensity score and outcome model fitting (TRUE) or use previously saved models (FALSE)}
+\item{runAnalyses}{Run propensity score and outcome model fitting (TRUE) or use
+previously saved models (FALSE)}
 
 \item{empiricalCalibration}{Perform empirical calibration of outcome models (TRUE/FALSE)}
 
-\item{packageResultsForSharing}{Package all intermediate files and models in `outputFolder` to share (TRUE/FALSE)}
+\item{packageResultsForSharing}{Package all intermediate files and models in `outputFolder` to
+share (TRUE/FALSE)}
 
 \item{createCustomOutput}{Create custom output in `outputFolder`}
 
@@ -60,29 +67,27 @@ propensity models.}
 
 \item{psCvThreads}{The number of parallel threads to use for the cross-
 validation when estimating the hyperparameter for the
-propensity model. Note that the total number of CV
-threads at one time could be `createPsThreads *
-psCvThreads`.}
+propensity model. Note that the total number of CV threads at
+one time could be `createPsThreads * psCvThreads`.}
 
 \item{computeCovarBalThreads}{The number of parallel threads to use for computing the
 covariate balance.}
 
-\item{trimMatchStratifyThreads}{The number of parallel threads to use for trimming,
-matching and stratifying.}
+\item{trimMatchStratifyThreads}{The number of parallel threads to use for trimming, matching
+and stratifying.}
 
-\item{fitOutcomeModelThreads}{The number of parallel threads to use for fitting the
-outcome models.}
+\item{fitOutcomeModelThreads}{The number of parallel threads to use for fitting the outcome
+models.}
 
 \item{outcomeCvThreads}{The number of parallel threads to use for the cross-
-validation when estimating the hyperparameter for the
-outcome model. Note that the total number of CV threads
-at one time could be `fitOutcomeModelThreads *
-outcomeCvThreads`.}
+validation when estimating the hyperparameter for the outcome
+model. Note that the total number of CV threads at one time
+could be `fitOutcomeModelThreads * outcomeCvThreads`.}
 }
 \value{
 Nothing.  All intermediate files, models and reports are in `outputFolder`.
 }
-\details{
+\description{
 This function executes the novel oral anticoagulant study.
 }
 \examples{

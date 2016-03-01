@@ -3,18 +3,6 @@
 #' @details
 #' This function creates files specifying the analyses that will be performed.
 #'
-#' @param connectionDetails            An object of type \code{connectionDetails} as created using the
-#'                                     \code{\link[DatabaseConnector]{createConnectionDetails}}
-#'                                     function in the DatabaseConnector package.
-#' @param cdmDatabaseSchema            Schema name where your patient-level data in OMOP CDM format
-#'                                     resides. Note that for SQL Server, this should include both the
-#'                                     database and schema name, for example 'cdm_data.dbo'.
-#' @param workDatabaseSchema           Schema name where intermediate data can be stored. You will need
-#'                                     to have write priviliges in this schema. Note that for SQL
-#'                                     Server, this should include both the database and schema name,
-#'                                     for example 'cdm_data.dbo'.
-#' @param studyCohortDefinitionTable   The table in the work database schema containing the definitions
-#'                                     of the cohorts.
 #' @param outputFolder                 Name of local folder to place results; make sure to use forward
 #'                                     slashes (/)
 #'
@@ -38,7 +26,7 @@ createAnalysesDetails <- function(outputFolder) {
 
   cohortDefinitionsFile <- system.file("settings", "cohorts.csv", package = "NoacStudy")
   cohortDefinitions <- read.csv(cohortDefinitionsFile)
-  exposureCohortId <- cohortDefinitions[cohortDefinitions$cohortType == 0, ]$cohortDefinitionId
+  # exposureCohortId <- cohortDefinitions[cohortDefinitions$cohortType == 0, ]$cohortDefinitionId
   outcomeCohortId <- cohortDefinitions[cohortDefinitions$cohortType == 1, ]$cohortDefinitionId
   negativeControlCohortId <- cohortDefinitions[cohortDefinitions$cohortType == 2, ]$cohortDefinitionId
 

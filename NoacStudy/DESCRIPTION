@@ -18,9 +18,8 @@ Imports:
     Cyclops,
     EmpiricalCalibration,
     DBI,
-    OhdsiSharing,
-    ggplot2,
-    mailR,
+    PatientLevelPrediction,
+    OhdsiRTools,
     ReporteRs
 Suggests:
     testthat

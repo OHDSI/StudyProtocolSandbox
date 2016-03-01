@@ -7,22 +7,8 @@
 createAnalysesDetails(outputFolder)
 }
 \arguments{
-\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
-(/)}
-
-\item{connectionDetails}{An object of type \code{connectionDetails} as created using the
-\code{\link[DatabaseConnector]{createConnectionDetails}} function in the
-DatabaseConnector package.}
-
-\item{cdmDatabaseSchema}{Schema name where your patient-level data in OMOP CDM format resides.
-Note that for SQL Server, this should include both the database and
-schema name, for example 'cdm_data.dbo'.}
-
-\item{workDatabaseSchema}{Schema name where intermediate data can be stored. You will need to have
-write priviliges in this schema. Note that for SQL Server, this should
-include both the database and schema name, for example 'cdm_data.dbo'.}
-
-\item{studyCohortDefinitionTable}{The table in the work database schema containing the definitions of the cohorts.}
+\item{outputFolder}{Name of local folder to place results; make sure to use forward
+slashes (/)}
 }
 \description{
 Create the analyses details

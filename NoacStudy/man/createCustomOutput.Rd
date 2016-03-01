@@ -13,7 +13,7 @@ createCustomOutput(outputFolder)
 Create custom output for this study
 }
 \details{
-Performs empricical calibration using the negative control outcomes, and computes
-the calibrated p-values
+Performs empricical calibration using the negative control outcomes, and computes the calibrated
+p-values
 }
 

@@ -1,7 +1,7 @@
 #' @title
 #' Execute the novel oral anticoagulant study
 #'
-#' @details
+#' @description
 #' This function executes the novel oral anticoagulant study.
 #'
 #' @return
@@ -20,6 +20,8 @@
 #' @param studyCohortTable               The name of the table that will be created in the work
 #'                                       database schema. This table will hold the exposure and outcome
 #'                                       cohorts used in this study.
+#' @param studyCohortDefinitionTable     The table in the work database schema containing the
+#'                                       definitions of the cohorts.
 #' @param oracleTempSchema               Should be used in Oracle to specify a schema where the user
 #'                                       has write priviliges for storing temporary tables.
 #' @param cdmVersion                     Version of the CDM. Can be "4" or "5"
