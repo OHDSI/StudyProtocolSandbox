@@ -19,10 +19,10 @@ Imports:
     EmpiricalCalibration,
     DBI,
     PatientLevelPrediction,
-    OhdsiRTools,
-    ReporteRs
+    OhdsiRTools
 Suggests:
-    testthat
+    testthat,
+    ReporteRs
 License: Apache License 2.0
 LazyData: true
 RoxygenNote: 5.0.1

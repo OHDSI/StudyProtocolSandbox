@@ -9,6 +9,10 @@
 
 
 generateReport <- function(outputFolder, oldOutputFolder = NULL) {
+  if (!requireNamespace("ReporteRs")) {
+      stop("ReporteRs package is not available")
+  }
+
   intro <- "This reports describes the results from a comparative effectiveness study comparing new users of rivaroxaban to new users of warfarin. The study was restricted to those people with a prior diagnose of diabetes. Propensity scores were generated using large scale regression, and one-on-one matching was performed. Effect sizes were estimated using a univariate Cox regression, conditioned on the matched sets. A set of negative control outcomes was included to estimate residual bias and calibrate p-values."
   outcomeReference <- readRDS(file.path(outputFolder, "outcomeModelReference.rds"))
 
