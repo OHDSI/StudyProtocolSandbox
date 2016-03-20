@@ -8,7 +8,12 @@
 }
 
 
-generateReport <- function(outputFolder, oldOutputFolder = NULL) {
+#' @export
+generateReport <- function(outputFolder,
+                           analysisId = 7,
+                           targetId = 5,
+                           comparatorId = 6,
+                           oldOutputFolder = NULL) {
   if (!requireNamespace("ReporteRs")) {
       stop("ReporteRs package is not available")
   }
@@ -23,9 +28,7 @@ generateReport <- function(outputFolder, oldOutputFolder = NULL) {
   results <- read.csv(file.path(outputFolder, "Results.csv"))
   cohortDefinitionsFile <- system.file("settings", "cohorts.csv", package = "NoacStudy")
   cohortDefinitions <- read.csv(cohortDefinitionsFile)
-  analysisId <- 7
-  targetId <- 5
-  comparatorId <- 6
+
   negControlCohortIds <- unique(results$outcomeId[results$outcomeId > 100])
 
   # cmData <- CohortMethod::loadCohortMethodData(outcomeReferenceSubset$cohortMethodDataFolder[1])

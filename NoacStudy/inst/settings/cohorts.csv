@@ -3,8 +3,6 @@ cohortDefinitionId,cohortDefinitionName,filename,cohortType
 2,Warfarin new users with all inclusion criteria,warfarin.sql,0
 3,Dabigatran new users with all inclusion criteria,dabigatran.sql,0
 4,Apixaban new users with all inclusion criteria,apixaban.sql,0
-5,Rivaroxaban new users with all inclusion criteria and prior DM,rivaroxaban_prior_diabetes.sql,0
-6,Warfarin new users with all inclusion criteria and prior DM,warfarin_prior_diabetes.sql,0
 10,Ischemic stroke,ischemic_stroke.sql,1
 11,Intracranial hemorrhage,intracranial_hemorrhage.sql,1
 12,Gastrointestinal hemorrhage,gastrointestinal_hemorrhage.sql,1

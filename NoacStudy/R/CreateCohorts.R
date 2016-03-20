@@ -57,6 +57,7 @@ createCohorts <- function(connectionDetails,
   cohortDefinitionsFile <- system.file("settings", "cohorts.csv", package = "NoacStudy")
   cohortDefinitions <- read.csv(cohortDefinitionsFile)
   cohortDefinitions <- cohortDefinitions[cohortDefinitions$cohortType %in% c(0, 1), ]
+
   for (i in 1:nrow(cohortDefinitions)) {
     writeLines(paste("Starting work on cohort definition ",
                      cohortDefinitions$cohortDefinitionId[i],

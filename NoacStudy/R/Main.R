@@ -28,6 +28,10 @@
 #' @param outputFolder                   Name of local folder to place results; make sure to use
 #'                                       forward slashes (/)
 #'
+#' @param targetDrug                     Select which target drugs to run: `Rivaroxaban`, `Dabigatran`
+#'                                       or both
+#' @param analysisDesign                 Select which analysis designs to run: `main` or `all`
+#'
 #' @param createCohorts                  Create cohort tables from database (TRUE) or use previously
 #'                                       saved cohort information (FALSE)
 #' @param runAnalyses                    Run propensity score and outcome model fitting (TRUE) or use
@@ -80,6 +84,8 @@ execute <- function(connectionDetails,
                     oracleTempSchema = NULL,
                     cdmVersion = 5,
                     outputFolder,
+                    drugTarget = c("Rivaroxaban", "Dabigatran"),
+                    analysisDesign = "main",
                     createCohorts = TRUE,
                     runAnalyses = TRUE,
                     empiricalCalibration = TRUE,
@@ -96,6 +102,16 @@ execute <- function(connectionDetails,
 
   if (cdmVersion == 4) {
     stop("CDM version 4 not supported")
+  }
+
+  analysisDesign <- tolower(analysisDesign)
+  if (!analysisDesign %in% c("main", "all")) {
+    stop("Invalid analysis design specification")
+  }
+
+  drugTarget <- tolower(drugTarget)
+  if (any(!(drugTarget %in% c("rivaroxaban", "dabigatran")))) {
+    stop("Invalid target drug specification")
   }
 
   if (!file.exists(outputFolder))
@@ -115,12 +131,45 @@ execute <- function(connectionDetails,
 
   if (runAnalyses) {
     writeLines("Running analyses")
+
     cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "NoacStudy")
     cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
+    if (analysisDesign == "main") {
+        filter <- list()
+        matchId <- c(1,7) # TODO Describe which these are
+        newListId <- 1
+        for (i in 1:length(cmAnalysisList)) {
+            if (cmAnalysisList[[i]]$analysisId %in% matchId) {
+                filter[[newListId]] <- cmAnalysisList[[i]]
+                newListId <- newListId + 1
+            }
+        }
+        cmAnalysisList <- filter
+    }
+
     drugComparatorOutcomesListFile <- system.file("settings",
                                                   "drugComparatorOutcomesList.txt",
                                                   package = "NoacStudy")
     drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
+    excludeTargetId <- c()
+    if (!("rivaroxaban" %in% drugTarget)) {
+        excludeTargetId <- c(excludeTargetId, 1) # Rivaroxaban
+    }
+    if (!("dabigatran" %in% drugTarget)) {
+        excludeTargetId <- c(excludeTargetId, 3) # Dabigatran
+    }
+    if (length(excludeTargetId) > 0) {
+        filter <- list()
+        newListId <- 1
+        for (i in 1:length(drugComparatorOutcomesList)) {
+            if (!(drugComparatorOutcomesList[[i]]$targetId %in% excludeTargetId)) {
+                filter[[newListId]] <- drugComparatorOutcomesList[[i]]
+                newListId <- newListId + 1
+            }
+        }
+        drugComparatorOutcomesList <- filter
+    }
+
     CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
                                 cdmDatabaseSchema = cdmDatabaseSchema,
                                 exposureDatabaseSchema = workDatabaseSchema,
@@ -138,7 +187,6 @@ execute <- function(connectionDetails,
                                 trimMatchStratifyThreads = trimMatchStratifyThreads,
                                 fitOutcomeModelThreads = fitOutcomeModelThreads,
                                 outcomeCvThreads = outcomeCvThreads)
-    # TODO: exposure multi-threading parameters
   }
 
   if (empiricalCalibration) {
