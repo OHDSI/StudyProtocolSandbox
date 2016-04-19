@@ -176,7 +176,7 @@ runSelfControlledCaseSeries <- function(connectionDetails,
             result$description[idx] <- "Using age and season"
 
             ### Analysis 4: Adding event-dependent observation ###
-            if (outcomeId != 1066 && outcomeId != 1068 && outcomeId != 1069 && !(outcomeId %in% 1116:1119) && outcomeId < 1125) {
+            # if (outcomeId != 1066 && outcomeId != 1068 && outcomeId != 1069 && !(outcomeId %in% 1116:1119) && outcomeId < 1125) {
                 analysisFolder <- file.path(sccsFolder, "Analysis_4")
                 if (!file.exists(analysisFolder))
                     dir.create(analysisFolder)
@@ -208,7 +208,7 @@ runSelfControlledCaseSeries <- function(connectionDetails,
                 result$logRr[idx] <- outcomeModel$estimates$logRr[1]
                 result$seLogRr[idx] <- outcomeModel$estimates$seLogRr[1]
                 result$description[idx] <- "Using event-dependent observation"
-            }
+            # }
             ### Analysis 5: MSCCS ###
             analysisFolder <- file.path(sccsFolder, "Analysis_5")
             if (!file.exists(analysisFolder))

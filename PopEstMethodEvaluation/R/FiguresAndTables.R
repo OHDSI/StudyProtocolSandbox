@@ -17,7 +17,7 @@
 # limitations under the License.
 
 #' @export
-createFiguresAndTablesForMethod <- function(shareableResultsFolder) {
+createFiguresAndTables <- function(shareableResultsFolder) {
     # shareableResultsFolder <- file.path(workFolder, "shareableResults")
     estimatesFile <- file.path(shareableResultsFolder, "Estimates.csv")
     estimates <- read.csv(estimatesFile)
@@ -186,13 +186,31 @@ createShareableResults <- function(workFolder) {
     estimates <- rbind(estimates, sccEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
 
     sccAnalysisListFile <- system.file("settings", "sccAnalysisSettings.txt", package = "PopEstMethodEvaluation")
-    sccAnalysisList <- CohortMethod::loadCmAnalysisList(sccAnalysisListFile)
+    sccAnalysisList <- SelfControlledCohort::loadSccAnalysisList(sccAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(sccAnalysisList, "analysisId"))
     description <- unlist(OhdsiRTools::selectFromList(sccAnalysisList, "description"))
     analysisRef <- rbind(analysisRef, data.frame(method = "scc",
                                                  analysisId = analysisId,
                                                  description = description))
 
+    # ICTPD #
+    ictpdSummaryFile <- file.path(workFolder, "ictpdSummary.rds")
+    if (!file.exists(ictpdSummaryFile)) {
+        stop(paste0("Couldn't find ", ictpdSummaryFile, ", please make sure you've successfully completed run runIctpd"))
+    }
+    ictpdEstimates <- readRDS(ictpdSummaryFile)
+    ictpdEstimates$method <- "ictpd"
+    colnames(ictpdEstimates)[colnames(ictpdEstimates) == "exposureofinterest"] <- "exposureId"
+    colnames(ictpdEstimates)[colnames(ictpdEstimates) == "outcomeofinterest"] <- "outcomeId"
+    estimates <- rbind(estimates, ictpdEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
+
+    ictpdAnalysisListFile <- system.file("settings", "ictpdAnalysisSettings.txt", package = "PopEstMethodEvaluation")
+    ictpdAnalysisList <- IcTemporalPatternDiscovery::loadIctpdAnalysisList(ictpdAnalysisListFile)
+    analysisId <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "analysisId"))
+    description <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "description"))
+    analysisRef <- rbind(analysisRef, data.frame(method = "ictpd",
+                                                 analysisId = analysisId,
+                                                 description = description))
 
     estimatesFile <- file.path(shareableResultsFolder, "Estimates.csv")
     write.csv(estimates, estimatesFile, row.names = FALSE)

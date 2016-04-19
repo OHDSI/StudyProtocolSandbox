@@ -104,4 +104,12 @@ runSelfControlledCohort(connectionDetails = connectionDetails,
                         workFolder = workFolder,
                         cdmVersion = cdmVersion)
 
+runIctpd(connectionDetails = connectionDetails,
+         cdmDatabaseSchema = cdmDatabaseSchema,
+         oracleTempSchema = oracleTempSchema,
+         outcomeDatabaseSchema = outcomeDatabaseSchema,
+         outcomeTable = outcomeTable,
+         workFolder = workFolder,
+         cdmVersion = cdmVersion)
+
 createShareableResults(workFolder = workFolder)
