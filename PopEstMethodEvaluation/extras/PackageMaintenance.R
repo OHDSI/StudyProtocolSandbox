@@ -23,7 +23,8 @@ shell("rm extras/PopEstMethodEvaluation.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/PopEstMethodEvaluation.pdf")
 
 # Create analysis details
-createCohortMethodSettings(fileName = "inst/settings/cmAnalysisSettings.txt")
-createSelfControlledCohortSettings(fileName = "inst/settings/sccAnalysisSettings.txt")
-createIctpdSettings(fileName = "inst/settings/ictpdAnalysisSettings.txt")
+PopEstMethodEvaluation::createCohortMethodSettings(fileName = "inst/settings/cmAnalysisSettings.txt")
+PopEstMethodEvaluation::createSccsSettings(fileName = "inst/settings/sccsAnalysisSettings.txt")
+PopEstMethodEvaluation::createSelfControlledCohortSettings(fileName = "inst/settings/sccAnalysisSettings.txt")
+PopEstMethodEvaluation::createIctpdSettings(fileName = "inst/settings/ictpdAnalysisSettings.txt")
 

@@ -35,18 +35,20 @@ createFiguresAndTables <- function(shareableResultsFolder) {
                               meanSlope = 0,
                               sdIntercept = 0,
                               sdSlope = 0)
-    trueRrs <- unique(data$targetEffectSize)
-    performance <- data.frame(method = rep(analysisRef$method, length(trueRrs)),
-                              analysisId = rep(analysisRef$analysisId, length(trueRrs)),
-                              trueRr = rep(trueRrs, each = nrow(analysisRef)),
-                              mse = NA,
-                              auc = NA,
-                              coverage = NA)
+    performance <- data.frame()
     for (i in 1:nrow(analysisRef)) {
         # i <- 1
         method <- analysisRef$method[i]
         analysisId <- analysisRef$analysisId[i]
         analysisData <- data[data$analysisId == analysisId & data$method == method, ]
+
+        analysisPerformance <- MethodEvaluation::computeMetrics(logRr = analysisData$logRr,
+                                                                seLogRr = analysisData$seLogRr,
+                                                                trueLogRr = log(analysisData$targetEffectSize))
+        analysisPerformance$method <- method
+        analysisPerformance$analysisId <- analysisId
+        analysisPerformance$trueRr <- exp(analysisPerformance$trueLogRr)
+        performance <- rbind(performance, analysisPerformance)
 
         trueAndObsFile <- file.path(shareableResultsFolder, paste0("trueAndObs_",method, "_a", analysisId, ".png"))
         EmpiricalCalibration::plotTrueAndObserved(logRr = analysisData$logRr,
@@ -60,30 +62,6 @@ createFiguresAndTables <- function(shareableResultsFolder) {
                                                   trueLogRr = log(analysisData$targetEffectSize),
                                                   showAucs = TRUE,
                                                   fileName = rocsFile)
-
-        coverageFile <- file.path(shareableResultsFolder, paste0("coverage_",method, "_a", analysisId,".png"))
-        EmpiricalCalibration::plotCoverage(logRr = analysisData$logRr,
-                                           seLogRr = analysisData$seLogRr,
-                                           trueLogRr = log(analysisData$targetEffectSize),
-                                           fileName = coverageFile)
-
-        # Compute performance
-        mse <- MethodEvaluation::computeMse(logRr = analysisData$logRr,
-                                            trueLogRr = log(analysisData$targetEffectSize))
-
-        coverage <- MethodEvaluation::computeCoverage(logRr = analysisData$logRr,
-                                                      seLogRr = analysisData$seLogRr,
-                                                      trueLogRr = log(analysisData$targetEffectSize))
-        auc <- MethodEvaluation::computeAucs(logRr = analysisData$logRr,
-                                             trueLogRr = log(analysisData$targetEffectSize))
-        for (trueRr in trueRrs){
-            idx <- performance$analysisId == analysisId & performance$method == method & performance$trueRr == trueRr
-            performance$mse[idx] <- mse$mse[exp(mse$trueLogRr) == trueRr]
-            performance$coverage[idx] <- coverage$withCi[exp(coverage$trueLogRr) == trueRr]
-            if (trueRr != 1) {
-                performance$auc[idx] <- auc$auc[exp(auc$trueLogRr) == trueRr]
-            }
-        }
 
         nullDistFile <- file.path(shareableResultsFolder, paste0("nullDist_",method, "_a", analysisId,".png"))
         EmpiricalCalibration::plotCalibrationEffect(logRrNegatives = analysisData$logRr[analysisData$targetEffectSize == 1],
@@ -109,6 +87,7 @@ createFiguresAndTables <- function(shareableResultsFolder) {
         calibrated <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = analysisData$logRr,
                                                                         seLogRr = analysisData$seLogRr,
                                                                         model = errorModel)
+
         calibrated$targetEffectSize <- analysisData$targetEffectSize
         trueAndObsCaliFile <- file.path(shareableResultsFolder, paste0("trueAndObsCali_",method, "_a", analysisId, ".png"))
         EmpiricalCalibration::plotTrueAndObserved(logRr = calibrated$logRr,
@@ -118,11 +97,11 @@ createFiguresAndTables <- function(shareableResultsFolder) {
                                                   fileName = trueAndObsCaliFile)
 
 
-        coverageCaliFile <- file.path(shareableResultsFolder, paste0("coverageCali_",method, "_a", analysisId,".png"))
-        EmpiricalCalibration::plotCoverage(logRr = calibrated$logRr,
-                                           seLogRr = calibrated$seLogRr,
-                                           trueLogRr = log(calibrated$targetEffectSize),
-                                           fileName = coverageCaliFile)
+        coverageFile <- file.path(shareableResultsFolder, paste0("coverage_",method, "_a", analysisId,".png"))
+        EmpiricalCalibration::plotCiCalibration(logRr = analysisData$logRr,
+                                                seLogRr = analysisData$seLogRr,
+                                                trueLogRr = log(analysisData$targetEffectSize),
+                                                fileName = coverageFile)
     }
     errorModelsFile <- file.path(shareableResultsFolder, paste0("errorModels.csv"))
     write.csv(errorModels, file = errorModelsFile, row.names = FALSE)

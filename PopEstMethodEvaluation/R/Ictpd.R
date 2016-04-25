@@ -45,7 +45,7 @@ runIctpd <- function(connectionDetails,
         }
         ictpdAnalysisListFile <- system.file("settings", "ictpdAnalysisSettings.txt", package = "PopEstMethodEvaluation")
         ictpdAnalysisList <- IcTemporalPatternDiscovery::loadIctpdAnalysisList(ictpdAnalysisListFile)
-        ictpResult <- IcTemporalPatternDiscovery::runIctpdAnalyses(connectionDetails = connectionDetails,
+        ictpdResult <- IcTemporalPatternDiscovery::runIctpdAnalyses(connectionDetails = connectionDetails,
                                                                    cdmDatabaseSchema = cdmDatabaseSchema,
                                                                    oracleTempSchema = oracleTempSchema,
                                                                    exposureTable = "drug_era",
@@ -57,7 +57,7 @@ runIctpd <- function(connectionDetails,
                                                                    outputFolder = ictpdFolder,
                                                                    getDbIctpdDataThreads = 1,
                                                                    calculateStatisticsIcThreads = 1)
-        ictpdSummary <- IcTemporalPatternDiscovery::summarizeAnalyses(ictpResult)
+        ictpdSummary <- IcTemporalPatternDiscovery::summarizeAnalyses(ictpdResult)
         saveRDS(ictpdSummary, ictpdSummaryFile)
     }
     delta <- Sys.time() - start
