@@ -11,9 +11,10 @@ Imports:
     RJDBC,
     Cyclops,
     MethodEvaluation,
-    SelfControlledCaseSeries,
     FeatureExtraction,
     CohortMethod,
+    SelfControlledCohort,
+    SelfControlledCaseSeries,
     IcTemporalPatternDiscovery,
     EmpiricalCalibration
 Suggests:

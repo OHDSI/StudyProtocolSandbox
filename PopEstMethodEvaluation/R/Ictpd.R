@@ -30,7 +30,7 @@ runIctpd <- function(connectionDetails,
         stop("Cannot find injection summary file. Please run injectSignals first.")
     injectedSignals <- readRDS(injectionSummaryFile)
 
-    ictpdFolder <- file.path(workFolder, "ICTemporalPatternDiscovery")
+    ictpdFolder <- file.path(workFolder, "icTemporalPatternDiscovery")
     if (!file.exists(ictpdFolder))
         dir.create(ictpdFolder)
 
@@ -45,7 +45,7 @@ runIctpd <- function(connectionDetails,
         }
         ictpdAnalysisListFile <- system.file("settings", "ictpdAnalysisSettings.txt", package = "PopEstMethodEvaluation")
         ictpdAnalysisList <- IcTemporalPatternDiscovery::loadIctpdAnalysisList(ictpdAnalysisListFile)
-        ictpResult <- IcTemporalPatternDiscovery::runIctpdAnalyses(connectionDetails = connectionDetails,
+        ictpdResult <- IcTemporalPatternDiscovery::runIctpdAnalyses(connectionDetails = connectionDetails,
                                                                    cdmDatabaseSchema = cdmDatabaseSchema,
                                                                    oracleTempSchema = oracleTempSchema,
                                                                    exposureTable = "drug_era",
@@ -57,8 +57,8 @@ runIctpd <- function(connectionDetails,
                                                                    outputFolder = ictpdFolder,
                                                                    getDbIctpdDataThreads = 1,
                                                                    calculateStatisticsIcThreads = 1)
-        sccSummary <- SelfControlledCohort::summarizeAnalyses(sccResult)
-        saveRDS(sccSummary, sccSummaryFile)
+        ictpdSummary <- IcTemporalPatternDiscovery::summarizeAnalyses(ictpdResult)
+        saveRDS(ictpdSummary, ictpdSummaryFile)
     }
     delta <- Sys.time() - start
     writeLines(paste("Completed SelfControlledCohort analyses in", signif(delta, 3), attr(delta, "units")))

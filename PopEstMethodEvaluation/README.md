@@ -18,7 +18,9 @@ How to run
 	install_github("ohdsi/Cyclops")
 	install_github("ohdsi/FeatureExtraction") 
 	install_github("ohdsi/CohortMethod")
+	install_github("ohdsi/SelfControlledCohort")
 	install_github("ohdsi/SelfControlledCaseSeries")
+	install_github("ohdsi/IcTemporalPatternDiscovery")
 	install_github("ohdsi/StudyProtocolSandbox/PopEstMethodEvaluation")
 	```
 
@@ -31,11 +33,50 @@ How to run
 												 user = "joe",
 												 password = "secret",
 												 server = "myserver")
+    workFolder <- "s:/temp/PopEstMethodEvaluation"
 
-	execute(connectionDetails,
-			cdmDatabaseSchema = "cdm_data",
-			oracleTempSchema = NULL,
-			cdmVersion = "4")
+	injectSignals(connectionDetails = connectionDetails,
+                  cdmDatabaseSchema = cdmDatabaseSchema,
+                  oracleTempSchema = oracleTempSchema,
+                  outcomeDatabaseSchema = outcomeDatabaseSchema,
+                  outcomeTable = outcomeTable,
+                  workFolder = workFolder,
+                  cdmVersion = cdmVersion,
+                  createBaselineCohorts = FALSE)
+    
+    runCohortMethod(connectionDetails = connectionDetails,
+                    cdmDatabaseSchema = cdmDatabaseSchema,
+                    oracleTempSchema = oracleTempSchema,
+                    outcomeDatabaseSchema = outcomeDatabaseSchema,
+                    outcomeTable = outcomeTable,
+                    workFolder = workFolder,
+                    cdmVersion = cdmVersion)
+    
+    runSelfControlledCaseSeries(connectionDetails = connectionDetails,
+                                cdmDatabaseSchema = cdmDatabaseSchema,
+                                oracleTempSchema = oracleTempSchema,
+                                outcomeDatabaseSchema = outcomeDatabaseSchema,
+                                outcomeTable = outcomeTable,
+                                workFolder = workFolder,
+                                cdmVersion = cdmVersion)
+    
+    runSelfControlledCohort(connectionDetails = connectionDetails,
+                            cdmDatabaseSchema = cdmDatabaseSchema,
+                            oracleTempSchema = oracleTempSchema,
+                            outcomeDatabaseSchema = outcomeDatabaseSchema,
+                            outcomeTable = outcomeTable,
+                            workFolder = workFolder,
+                            cdmVersion = cdmVersion)
+    
+    runIctpd(connectionDetails = connectionDetails,
+             cdmDatabaseSchema = cdmDatabaseSchema,
+             oracleTempSchema = oracleTempSchema,
+             outcomeDatabaseSchema = outcomeDatabaseSchema,
+             outcomeTable = outcomeTable,
+             workFolder = workFolder,
+             cdmVersion = cdmVersion)
+    
+    createShareableResults(workFolder = workFolder)
 	```
 
 	* For details on how to configure```createConnectionDetails``` in your environment type this for help:
@@ -57,11 +98,7 @@ Generating figures and tables
 To locally generate the figures and tables described in the protocol, you can run
 
 ```r
-    createFiguresAndTables(connectionDetails,
-                           cdmDatabaseSchema = cdmDatabaseSchema,
-                           oracleTempSchema = oracleTempSchema,
-                           cdmVersion = cdmVersion,
-                           folder = "my_folder")
+    createFiguresAndTables(folder = "my_folder")
 ```
 
-where ```my_folder``` is the path to the folder where the results of the ```execute``` command were stored.
+where ```my_folder``` is the path to the folder where the results of the ```createShareableResults``` command were stored.
