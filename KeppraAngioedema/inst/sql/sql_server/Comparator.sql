@@ -67,11 +67,11 @@ FROM
   select P.person_id, P.start_date, P.end_date, ROW_NUMBER() OVER (PARTITION BY person_id ORDER BY start_date ASC) ordinal
   FROM 
   (
-  select C.person_id, C.drug_exposure_start_date as start_date, COALESCE(C.drug_exposure_end_date, DATEADD(day, 1, C.drug_exposure_start_date)) as end_date, C.drug_concept_id as TARGET_CONCEPT_ID
+  select C.person_id, C.drug_era_start_date as start_date, C.drug_era_end_date as end_date, C.drug_concept_id as TARGET_CONCEPT_ID
 from 
 (
-  select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_exposure_start_date) as ordinal
-  FROM @cdm_database_schema.DRUG_EXPOSURE de
+  select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date) as ordinal
+  FROM @cdm_database_schema.DRUG_ERA de
 where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 3)
 ) C
 
@@ -115,7 +115,7 @@ where co.condition_concept_id in (SELECT concept_id from  #Codesets where codese
 
 
 
-) A on A.person_id = P.person_id and A.START_DATE BETWEEN P.OP_START_DATE AND P.OP_END_DATE AND A.START_DATE BETWEEN P.OP_START_DATE and DATEADD(day,-1,P.START_DATE)
+) A on A.person_id = P.person_id and A.START_DATE BETWEEN P.OP_START_DATE AND P.OP_END_DATE AND A.START_DATE BETWEEN P.OP_START_DATE and DATEADD(day,0,P.START_DATE)
 GROUP BY p.event_id
 HAVING COUNT(A.TARGET_CONCEPT_ID) >= 1
 

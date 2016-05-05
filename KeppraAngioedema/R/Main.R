@@ -79,6 +79,10 @@ execute <- function(connectionDetails,
     if (!file.exists(outputFolder))
         dir.create(outputFolder)
 
+    cmOutputFolder <- file.path(outputFolder, "cmOutput")
+    if (!file.exists(cmOutputFolder))
+        dir.create(cmOutputFolder)
+
     if (createCohorts) {
         writeLines("Creating exposure and outcome cohorts")
         createCohorts(connectionDetails,
@@ -88,6 +92,7 @@ execute <- function(connectionDetails,
                       oracleTempSchema,
                       cdmVersion,
                       outputFolder)
+        writeLines("")
     }
 
     if (runAnalyses) {
@@ -102,7 +107,7 @@ execute <- function(connectionDetails,
                                     exposureTable = studyCohortTable,
                                     outcomeDatabaseSchema = workDatabaseSchema,
                                     outcomeTable = studyCohortTable,
-                                    outputFolder = outputFolder,
+                                    outputFolder = cmOutputFolder,
                                     oracleTempSchema = oracleTempSchema,
                                     cmAnalysisList = cmAnalysisList,
                                     cdmVersion = cdmVersion,
@@ -110,15 +115,18 @@ execute <- function(connectionDetails,
                                     getDbCohortMethodDataThreads = 1,
                                     createStudyPopThreads = max(3, maxCores),
                                     createPsThreads = 1,
-                                    psCvThreads = max(10, maxCores),
-                                    computeCovarBalThreads = max(3, maxCores),
-                                    trimMatchStratifyThreads = max(4, maxCores),
+                                    psCvThreads = min(16, maxCores),
+                                    computeCovarBalThreads = min(3, maxCores),
+                                    trimMatchStratifyThreads = min(10, maxCores),
                                     fitOutcomeModelThreads = max(1, round(maxCores/16)),
-                                    outcomeCvThreads = max(16, maxCores),
+                                    outcomeCvThreads = min(16, maxCores),
                                     refitPsForEveryOutcome = FALSE)
+        writeLines("")
     }
     if (packageResults) {
+        writeLines("Packaging results in export folder for sharing")
         packageResults(outputFolder)
+        writeLines("")
     }
     invisible(NULL)
 }

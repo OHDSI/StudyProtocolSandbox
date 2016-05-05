@@ -1,5 +1,5 @@
 OHDSI Keppra and the Risk of Angioedema study
-=================================================
+=============================================
 
 This study aims to evaluate angioedema risk in seizure disorder patients exposed to Keppra (levetiracetam) compared with those exposed to phenytoin sodium. A potential link between levetiracetam and angioedema has been recently raised by the Food and Drug Administration in their review of spontaneous reporting data. In this study, we will analyze data from a distributed network using the OHDSI CohortMethod package.
 
@@ -40,7 +40,8 @@ How to run
 			studyCohortTable = "celecoxib_vs_nsnsaids",
 			oracleTempSchema = NULL,
 			outputFolder = "c:/temp/study_results",
-			cdmVersion = "5")
+			cdmVersion = "5",
+			maxCores = 4)
 	```
 
 	* For details on how to configure```createConnectionDetails``` in your environment type this for help:
@@ -59,6 +60,8 @@ How to run
 	* ```cdmVersion``` is the version of the CDM. Can be "4" or "5".
 	
 	* ```outputFolder``` a location in your local file system where results can be written.
+	
+	* ```maxCores``` is the number of cores that are available for parallel processing. If more cores are made available this can speed up the analyses. Preferrably, this should be set the number of cores available in the machine.
 
 4. Mail the file ```export/studyResult.zip``` in the output folder to the study coordinator.
 

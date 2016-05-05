@@ -24,29 +24,35 @@
 #' @export
 packageResults <- function(outputFolder) {
   exportFolder <- file.path(outputFolder, "export")
-
   if (!file.exists(exportFolder))
     dir.create(exportFolder)
+  cmOutputFolder <- file.path(outputFolder, "cmOutput")
 
-  outcomeReference <- readRDS(file.path(outputFolder, "outcomeModelReference.rds"))
+  outcomeReference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
   analysisSummary <- CohortMethod::summarizeAnalyses(outcomeReference)
 
-  ### Write main results table ###
-  write.csv(analysisSummary, file.path(exportFolder, "Results.csv"), row.names = FALSE)
+  ### Write results table ###
+  write.csv(analysisSummary, file.path(exportFolder, "MainResults.csv"), row.names = FALSE)
+
+  ### Main attrition table ###
+  strataFile <- outcomeReference$strataFile[outcomeReference$analysisId == 3 & outcomeReference$outcomeId == 3]
+  strata <- readRDS(strataFile)
+  attrition <- CohortMethod::getAttritionTable(strata)
+  write.csv(attrition, file.path(exportFolder, "Attrition.csv"), row.names = FALSE)
 
   ### Main propensity score plot ###
   psFileName <- outcomeReference$sharedPsFile[outcomeReference$sharedPsFile != ""][1]
   ps <- readRDS(psFileName)
   CohortMethod::plotPs(ps, fileName = file.path(exportFolder, "PS_pref_scale.png"))
   CohortMethod::plotPs(ps, scale = "propensity", fileName = file.path(exportFolder, "PS.png"))
+  CohortMethod::plotPs(strata, unfilteredData = ps, fileName = file.path(exportFolder, "PS_after_matching_pref_scale.png"))
+  CohortMethod::plotPs(strata, unfilteredData = ps, scale = "propensity", fileName = file.path(exportFolder, "PS_after_matching.png"))
 
-  ### Two covariate balance plots ###
+  ### Main balance table ###
   balFileName <- outcomeReference$covariateBalanceFile[outcomeReference$outcomeId == 3 & outcomeReference$analysisId == 3]
   balance <- readRDS(balFileName)
-  CohortMethod::plotCovariateBalanceScatterPlot(balance, fileName = file.path(exportFolder,
-                                                                              "Balance_scatterplot.png"))
-  CohortMethod::plotCovariateBalanceOfTopVariables(balance, fileName = file.path(exportFolder,
-                                                                                 "Balance_topVars.png"))
+  balance <- balance[, c("covariateId", "covariateName" ,"beforeMatchingStdDiff", "afterMatchingStdDiff")]
+  write.csv(balance, file.path(exportFolder, "Balance.csv"), row.names = FALSE)
 
   ### Add all to zip file ###
   zipName <- file.path(exportFolder, "StudyResults.zip")

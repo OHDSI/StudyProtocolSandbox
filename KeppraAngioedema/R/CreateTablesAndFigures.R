@@ -21,20 +21,25 @@
 #' Creates tables and figures for viewing and interpreting the results. Requires that the \code{\link{execute}} function has
 #' completed first.
 #'
-#' @param outputFolder  The path to the output folder containing the results.
+#' @param exportFolder  The path to the export folder containing the results.
 #'
 #' @export
-createTableAndFigures <- function(outputFolder) {
-  outcomeReference <- readRDS(file.path(outputFolder, "outcomeModelReference.rds"))
-  analysisSummary <- CohortMethod::summarizeAnalyses(outcomeReference)
-  cmAnalysisList <- CohortMethod::loadCmAnalysisList(file.path(outputFolder, "cmAnalysisList.txt"))
+createTableAndFigures <- function(exportFolder) {
+  analysisSummary <- read.csv(file.path(exportFolder, "MainResults.csv"))
+  cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "KeppraAngioedema")
+  cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
+
+  tablesAndFiguresFolder <- file.path(exportFolder, "tablesAndFigures")
+  if (!file.exists(tablesAndFiguresFolder))
+      dir.create(tablesAndFiguresFolder)
+
   # Add analysis description:
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <- cmAnalysisList[[i]]$description
   }
 
-  negControlCohortIds <- unique(analysisSummary$outcomeId[analysisSummary$outcomeId > 100])
-  # Calibrate p-values:
+  negControlCohortIds <- unique(analysisSummary$outcomeId[analysisSummary$outcomeId != 3])
+  # Calibrate p-values and draw calibration plots:
   for (analysisId in unique(analysisSummary$analysisId)) {
     negControlSubset <- analysisSummary[analysisSummary$analysisId == analysisId & analysisSummary$outcomeId %in%
       negControlCohortIds, ]
@@ -55,7 +60,21 @@ createTableAndFigures <- function(outputFolder) {
       analysisSummary$calibratedP_ub95ci[analysisSummary$analysisId == analysisId] <- subset$calibratedP_ub95ci
       analysisSummary$null_mean[analysisSummary$analysisId == analysisId] <- subset$null_mean
       analysisSummary$null_sd[analysisSummary$analysisId == analysisId] <- subset$null_sd
+      EmpiricalCalibration::plotCalibration(negControlSubset$logRr,
+                                            negControlSubset$seLogRr,
+                                            fileName = file.path(tablesAndFiguresFolder, paste0("Cal_a", analysisId, ".png")))
+      hoi <- analysisSummary[analysisSummary$analysisId == analysisId & !(analysisSummary$outcomeId %in% negControlCohortIds), ]
+      EmpiricalCalibration::plotCalibrationEffect(negControlSubset$logRr,
+                                            negControlSubset$seLogRr,
+                                            hoi$logRr,
+                                            hoi$seLogRr,
+                                            fileName = file.path(tablesAndFiguresFolder, paste0("CalEffect_a", analysisId, ".png")))
     }
   }
-  write.csv(analysisSummary, file.path(outputFolder, "Results.csv"), row.names = FALSE)
+  write.csv(analysisSummary, file.path(tablesAndFiguresFolder, "EmpiricalCalibration.csv"), row.names = FALSE)
+
+  # Balance plots:
+  balance <- read.csv(file.path(exportFolder, "Balance.csv"))
+  CohortMethod::plotCovariateBalanceScatterPlot(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceScatterPlot.png"))
+  CohortMethod::plotCovariateBalanceOfTopVariables(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceTopVariables.png"))
 }
