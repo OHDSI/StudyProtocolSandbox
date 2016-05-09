@@ -7,8 +7,7 @@
 createAnalysesDetails(outputFolder)
 }
 \arguments{
-\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
-(/)}
+\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes (/)}
 }
 \description{
 Create the analyses details

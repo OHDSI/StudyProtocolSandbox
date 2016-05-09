@@ -34,7 +34,8 @@ priviliges for storing temporary tables.}
 \item{cdmVersion}{Version of the CDM. Can be "4" or "5"}
 
 \item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
-(/). Do not use a folder on a network drive since this greatly impacts performance.}
+(/). Do not use a folder on a network drive since this greatly impacts
+performance.}
 
 \item{createCohorts}{Create the studyCohortTable table with the exposure and outcome cohorts?}
 
@@ -61,8 +62,8 @@ connectionDetails <- createConnectionDetails(dbms = "postgresql",
 execute(connectionDetails,
         cdmDatabaseSchema = "cdm_data",
         workDatabaseSchema = "results",
-       studyCohortTable = "ohdsi_keppra_angioedema",
-       oracleTempSchema = NULL,
+        studyCohortTable = "ohdsi_keppra_angioedema",
+        oracleTempSchema = NULL,
         outputFolder = "c:/temp/study_results",
         maxCores = 4)
 }

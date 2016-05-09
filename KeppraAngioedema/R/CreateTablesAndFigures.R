@@ -18,10 +18,10 @@
 #' Create tables and figures
 #'
 #' @details
-#' Creates tables and figures for viewing and interpreting the results. Requires that the \code{\link{execute}} function has
-#' completed first.
+#' Creates tables and figures for viewing and interpreting the results. Requires that the
+#' \code{\link{execute}} function has completed first.
 #'
-#' @param exportFolder  The path to the export folder containing the results.
+#' @param exportFolder   The path to the export folder containing the results.
 #'
 #' @export
 createTableAndFigures <- function(exportFolder) {
@@ -31,7 +31,7 @@ createTableAndFigures <- function(exportFolder) {
 
   tablesAndFiguresFolder <- file.path(exportFolder, "tablesAndFigures")
   if (!file.exists(tablesAndFiguresFolder))
-      dir.create(tablesAndFiguresFolder)
+    dir.create(tablesAndFiguresFolder)
 
   # Add analysis description:
   for (i in 1:length(cmAnalysisList)) {
@@ -62,23 +62,35 @@ createTableAndFigures <- function(exportFolder) {
       analysisSummary$null_sd[analysisSummary$analysisId == analysisId] <- subset$null_sd
       EmpiricalCalibration::plotCalibration(negControlSubset$logRr,
                                             negControlSubset$seLogRr,
-                                            fileName = file.path(tablesAndFiguresFolder, paste0("Cal_a", analysisId, ".png")))
-      hoi <- analysisSummary[analysisSummary$analysisId == analysisId & !(analysisSummary$outcomeId %in% negControlCohortIds), ]
+                                            fileName = file.path(tablesAndFiguresFolder,
+                                                                 paste0("Cal_a", analysisId, ".png")))
+      hoi <- analysisSummary[analysisSummary$analysisId == analysisId & !(analysisSummary$outcomeId %in%
+        negControlCohortIds), ]
       EmpiricalCalibration::plotCalibrationEffect(negControlSubset$logRr,
-                                            negControlSubset$seLogRr,
-                                            hoi$logRr,
-                                            hoi$seLogRr,
-                                            fileName = file.path(tablesAndFiguresFolder, paste0("CalEffect_a", analysisId, ".png")))
+                                                  negControlSubset$seLogRr,
+                                                  hoi$logRr,
+                                                  hoi$seLogRr,
+                                                  fileName = file.path(tablesAndFiguresFolder,
+                                                                       paste0("CalEffect_a", analysisId, ".png")))
     }
   }
-  write.csv(analysisSummary, file.path(tablesAndFiguresFolder, "EmpiricalCalibration.csv"), row.names = FALSE)
+  write.csv(analysisSummary, file.path(tablesAndFiguresFolder,
+                                       "EmpiricalCalibration.csv"), row.names = FALSE)
 
   # Balance plots:
   balance <- read.csv(file.path(exportFolder, "Balance1On1Matching.csv"))
-  CohortMethod::plotCovariateBalanceScatterPlot(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceScatterPlot1On1Matching.png"))
-  CohortMethod::plotCovariateBalanceOfTopVariables(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceTopVariables1On1Matching.png"))
+  CohortMethod::plotCovariateBalanceScatterPlot(balance,
+                                                fileName = file.path(tablesAndFiguresFolder,
+                                                                              "BalanceScatterPlot1On1Matching.png"))
+  CohortMethod::plotCovariateBalanceOfTopVariables(balance,
+                                                   fileName = file.path(tablesAndFiguresFolder,
+                                                                                 "BalanceTopVariables1On1Matching.png"))
 
   balance <- read.csv(file.path(exportFolder, "BalanceVarRatioMatching.csv"))
-  CohortMethod::plotCovariateBalanceScatterPlot(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceScatterPlotVarRatioMatching.png"))
-  CohortMethod::plotCovariateBalanceOfTopVariables(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceTopVariablesVarRatioMatching.png"))
+  CohortMethod::plotCovariateBalanceScatterPlot(balance,
+                                                fileName = file.path(tablesAndFiguresFolder,
+                                                                              "BalanceScatterPlotVarRatioMatching.png"))
+  CohortMethod::plotCovariateBalanceOfTopVariables(balance,
+                                                   fileName = file.path(tablesAndFiguresFolder,
+                                                                                 "BalanceTopVariablesVarRatioMatching.png"))
 }

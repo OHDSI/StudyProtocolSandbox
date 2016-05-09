@@ -35,7 +35,8 @@
 #'                             priviliges for storing temporary tables.
 #' @param cdmVersion           Version of the CDM. Can be "4" or "5"
 #' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
-#'                             (/). Do not use a folder on a network drive since this greatly impacts performance.
+#'                             (/). Do not use a folder on a network drive since this greatly impacts
+#'                             performance.
 #' @param createCohorts        Create the studyCohortTable table with the exposure and outcome cohorts?
 #' @param runAnalyses          Perform the cohort method analyses?
 #' @param packageResults       Package the results for sharing?
@@ -52,8 +53,8 @@
 #' execute(connectionDetails,
 #'         cdmDatabaseSchema = "cdm_data",
 #'         workDatabaseSchema = "results",
-#'        studyCohortTable = "ohdsi_keppra_angioedema",
-#'        oracleTempSchema = NULL,
+#'         studyCohortTable = "ohdsi_keppra_angioedema",
+#'         oracleTempSchema = NULL,
 #'         outputFolder = "c:/temp/study_results",
 #'         maxCores = 4)
 #' }
@@ -71,63 +72,67 @@ execute <- function(connectionDetails,
                     packageResults = TRUE,
                     maxCores = 4) {
 
-    if (cdmVersion == 4) {
-        stop("CDM version 4 not supported")
-    }
+  if (cdmVersion == 4) {
+    stop("CDM version 4 not supported")
+  }
 
-    if (!file.exists(outputFolder))
-        dir.create(outputFolder)
+  if (!file.exists(outputFolder))
+    dir.create(outputFolder)
 
-    cmOutputFolder <- file.path(outputFolder, "cmOutput")
-    if (!file.exists(cmOutputFolder))
-        dir.create(cmOutputFolder)
+  cmOutputFolder <- file.path(outputFolder, "cmOutput")
+  if (!file.exists(cmOutputFolder))
+    dir.create(cmOutputFolder)
 
-    if (createCohorts) {
-        writeLines("Creating exposure and outcome cohorts")
-        createCohorts(connectionDetails,
-                      cdmDatabaseSchema,
-                      workDatabaseSchema,
-                      studyCohortTable,
-                      oracleTempSchema,
-                      cdmVersion,
-                      outputFolder)
-        writeLines("")
-    }
+  if (createCohorts) {
+    writeLines("Creating exposure and outcome cohorts")
+    createCohorts(connectionDetails,
+                  cdmDatabaseSchema,
+                  workDatabaseSchema,
+                  studyCohortTable,
+                  oracleTempSchema,
+                  cdmVersion,
+                  outputFolder)
+    writeLines("")
+  }
 
-    if (runAnalyses) {
-        writeLines("Running analyses")
-        cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "KeppraAngioedema")
-        cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
-        drugComparatorOutcomesListFile <- system.file("settings", "drugComparatorOutcomesList.txt", package = "KeppraAngioedema")
-        drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
-        CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
-                                    cdmDatabaseSchema = cdmDatabaseSchema,
-                                    exposureDatabaseSchema = workDatabaseSchema,
-                                    exposureTable = studyCohortTable,
-                                    outcomeDatabaseSchema = workDatabaseSchema,
-                                    outcomeTable = studyCohortTable,
-                                    outputFolder = cmOutputFolder,
-                                    oracleTempSchema = oracleTempSchema,
-                                    cmAnalysisList = cmAnalysisList,
-                                    cdmVersion = cdmVersion,
-                                    drugComparatorOutcomesList = drugComparatorOutcomesList,
-                                    getDbCohortMethodDataThreads = 1,
-                                    createStudyPopThreads = max(3, maxCores),
-                                    createPsThreads = 1,
-                                    psCvThreads = min(16, maxCores),
-                                    computeCovarBalThreads = min(3, maxCores),
-                                    trimMatchStratifyThreads = min(10, maxCores),
-                                    fitOutcomeModelThreads = max(1, round(maxCores/4)),
-                                    outcomeCvThreads = min(4, maxCores),
-                                    refitPsForEveryOutcome = FALSE)
-        writeLines("")
-    }
-    if (packageResults) {
-        writeLines("Packaging results in export folder for sharing")
-        packageResults(connectionDetails = connectionDetails,
-                       cdmDatabaseSchema = cdmDatabaseSchema,
-                       outputFolder = outputFolder)
-        writeLines("")
-    }
-    invisible(NULL)
+  if (runAnalyses) {
+    writeLines("Running analyses")
+    cmAnalysisListFile <- system.file("settings",
+                                      "cmAnalysisList.txt",
+                                      package = "KeppraAngioedema")
+    cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
+    drugComparatorOutcomesListFile <- system.file("settings",
+                                                  "drugComparatorOutcomesList.txt",
+                                                  package = "KeppraAngioedema")
+    drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
+    CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
+                                cdmDatabaseSchema = cdmDatabaseSchema,
+                                exposureDatabaseSchema = workDatabaseSchema,
+                                exposureTable = studyCohortTable,
+                                outcomeDatabaseSchema = workDatabaseSchema,
+                                outcomeTable = studyCohortTable,
+                                outputFolder = cmOutputFolder,
+                                oracleTempSchema = oracleTempSchema,
+                                cmAnalysisList = cmAnalysisList,
+                                cdmVersion = cdmVersion,
+                                drugComparatorOutcomesList = drugComparatorOutcomesList,
+                                getDbCohortMethodDataThreads = 1,
+                                createStudyPopThreads = max(3, maxCores),
+                                createPsThreads = 1,
+                                psCvThreads = min(16, maxCores),
+                                computeCovarBalThreads = min(3, maxCores),
+                                trimMatchStratifyThreads = min(10, maxCores),
+                                fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                outcomeCvThreads = min(4, maxCores),
+                                refitPsForEveryOutcome = FALSE)
+    writeLines("")
+  }
+  if (packageResults) {
+    writeLines("Packaging results in export folder for sharing")
+    packageResults(connectionDetails = connectionDetails,
+                   cdmDatabaseSchema = cdmDatabaseSchema,
+                   outputFolder = outputFolder)
+    writeLines("")
+  }
+  invisible(NULL)
 }

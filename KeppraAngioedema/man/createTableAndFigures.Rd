@@ -13,7 +13,7 @@ createTableAndFigures(exportFolder)
 Create tables and figures
 }
 \details{
-Creates tables and figures for viewing and interpreting the results. Requires that the \code{\link{execute}} function has
-completed first.
+Creates tables and figures for viewing and interpreting the results. Requires that the
+\code{\link{execute}} function has completed first.
 }
 

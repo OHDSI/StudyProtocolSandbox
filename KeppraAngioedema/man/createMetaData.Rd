@@ -21,7 +21,7 @@ schema name, for example 'cdm_data.dbo'.}
 Create metadata file
 }
 \details{
-Creates a file containing metadata about the source data (taken from the cdm_source table)
-and R package versions.
+Creates a file containing metadata about the source data (taken from the cdm_source table) and R
+package versions.
 }
 

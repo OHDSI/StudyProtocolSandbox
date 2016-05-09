@@ -20,7 +20,7 @@ TRUE if the upload was successful.
 Submit the study results to the study coordinating center
 }
 \details{
-This will upload the file \code{StudyResults.zip} to the study coordinating center using Amazon S3. This requires
-an active internet connection.
+This will upload the file \code{StudyResults.zip} to the study coordinating center using Amazon S3.
+This requires an active internet connection.
 }
 

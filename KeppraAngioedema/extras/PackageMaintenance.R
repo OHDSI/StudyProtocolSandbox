@@ -48,7 +48,7 @@ ncNames <- querySql(connection, sql)
 dbDisconnect(connection)
 
 writeLines(paste(ncNames$CONCEPT_ID, collapse = ", "))
-writeLines(paste0("\"",paste(ncNames$CONCEPT_NAME, collapse = "\", \""), "\""))
+writeLines(paste0("\"", paste(ncNames$CONCEPT_NAME, collapse = "\", \""), "\""))
 
 
 sql <- "SELECT descendant_concept_id FROM cdm_truven_mdcd.dbo.concept_ancestor WHERE ancestor_concept_id IN (711584, 740910) ORDER BY descendant_concept_id"

@@ -15,7 +15,8 @@ DatabaseConnector package.}
 Note that for SQL Server, this should include both the database and
 schema name, for example 'cdm_data.dbo'.}
 
-\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes (/)}
+\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
+(/)}
 }
 \description{
 Package the results for sharing with OHDSI researchers
