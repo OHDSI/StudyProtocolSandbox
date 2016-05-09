@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' @title
 #' Execute OHDSI Keppra and the Risk of Angioedema study
 #'
 #' @details
@@ -36,7 +35,7 @@
 #'                             priviliges for storing temporary tables.
 #' @param cdmVersion           Version of the CDM. Can be "4" or "5"
 #' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
-#'                             (/).
+#'                             (/). Do not use a folder on a network drive since this greatly impacts performance.
 #' @param createCohorts        Create the studyCohortTable table with the exposure and outcome cohorts?
 #' @param runAnalyses          Perform the cohort method analyses?
 #' @param packageResults       Package the results for sharing?
@@ -53,10 +52,10 @@
 #' execute(connectionDetails,
 #'         cdmDatabaseSchema = "cdm_data",
 #'         workDatabaseSchema = "results",
-#'         oracleTempSchema = NULL,
+#'        studyCohortTable = "ohdsi_keppra_angioedema",
+#'        oracleTempSchema = NULL,
 #'         outputFolder = "c:/temp/study_results",
-#'         cdmVersion = "5")
-#'
+#'         maxCores = 4)
 #' }
 #'
 #' @export
@@ -64,7 +63,7 @@ execute <- function(connectionDetails,
                     cdmDatabaseSchema,
                     workDatabaseSchema = cdmDatabaseSchema,
                     studyCohortTable = "ohdsi_keppra_angioedema",
-                    oracleTempSchema = NULL,
+                    oracleTempSchema = workDatabaseSchema,
                     cdmVersion = 5,
                     outputFolder,
                     createCohorts = TRUE,
@@ -118,14 +117,16 @@ execute <- function(connectionDetails,
                                     psCvThreads = min(16, maxCores),
                                     computeCovarBalThreads = min(3, maxCores),
                                     trimMatchStratifyThreads = min(10, maxCores),
-                                    fitOutcomeModelThreads = max(1, round(maxCores/16)),
-                                    outcomeCvThreads = min(16, maxCores),
+                                    fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                    outcomeCvThreads = min(4, maxCores),
                                     refitPsForEveryOutcome = FALSE)
         writeLines("")
     }
     if (packageResults) {
         writeLines("Packaging results in export folder for sharing")
-        packageResults(outputFolder)
+        packageResults(connectionDetails = connectionDetails,
+                       cdmDatabaseSchema = cdmDatabaseSchema,
+                       outputFolder = outputFolder)
         writeLines("")
     }
     invisible(NULL)

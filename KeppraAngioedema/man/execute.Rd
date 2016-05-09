@@ -6,9 +6,10 @@
 \usage{
 execute(connectionDetails, cdmDatabaseSchema,
   workDatabaseSchema = cdmDatabaseSchema,
-  studyCohortTable = "ohdsi_keppra_angioedema", oracleTempSchema = NULL,
-  cdmVersion = 5, outputFolder, createCohorts = TRUE, runAnalyses = TRUE,
-  packageResults = TRUE, maxCores = 4)
+  studyCohortTable = "ohdsi_keppra_angioedema",
+  oracleTempSchema = workDatabaseSchema, cdmVersion = 5, outputFolder,
+  createCohorts = TRUE, runAnalyses = TRUE, packageResults = TRUE,
+  maxCores = 4)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -33,7 +34,7 @@ priviliges for storing temporary tables.}
 \item{cdmVersion}{Version of the CDM. Can be "4" or "5"}
 
 \item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
-(/).}
+(/). Do not use a folder on a network drive since this greatly impacts performance.}
 
 \item{createCohorts}{Create the studyCohortTable table with the exposure and outcome cohorts?}
 
@@ -43,6 +44,9 @@ priviliges for storing temporary tables.}
 
 \item{maxCores}{How many parallel cores should be used? If more cores are made available
 this can speed up the analyses.}
+}
+\description{
+Execute OHDSI Keppra and the Risk of Angioedema study
 }
 \details{
 This function executes the OHDSI Keppra and the Risk of Angioedema study.
@@ -57,10 +61,10 @@ connectionDetails <- createConnectionDetails(dbms = "postgresql",
 execute(connectionDetails,
         cdmDatabaseSchema = "cdm_data",
         workDatabaseSchema = "results",
-        oracleTempSchema = NULL,
+       studyCohortTable = "ohdsi_keppra_angioedema",
+       oracleTempSchema = NULL,
         outputFolder = "c:/temp/study_results",
-        cdmVersion = "5")
-
+        maxCores = 4)
 }
 
 }

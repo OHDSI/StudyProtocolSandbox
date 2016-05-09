@@ -4,10 +4,10 @@
 \alias{createTableAndFigures}
 \title{Create tables and figures}
 \usage{
-createTableAndFigures(outputFolder)
+createTableAndFigures(exportFolder)
 }
 \arguments{
-\item{outputFolder}{The path to the output folder containing the results.}
+\item{exportFolder}{The path to the export folder containing the results.}
 }
 \description{
 Create tables and figures

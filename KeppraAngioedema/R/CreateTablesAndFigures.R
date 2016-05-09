@@ -74,7 +74,11 @@ createTableAndFigures <- function(exportFolder) {
   write.csv(analysisSummary, file.path(tablesAndFiguresFolder, "EmpiricalCalibration.csv"), row.names = FALSE)
 
   # Balance plots:
-  balance <- read.csv(file.path(exportFolder, "Balance.csv"))
-  CohortMethod::plotCovariateBalanceScatterPlot(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceScatterPlot.png"))
-  CohortMethod::plotCovariateBalanceOfTopVariables(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceTopVariables.png"))
+  balance <- read.csv(file.path(exportFolder, "Balance1On1Matching.csv"))
+  CohortMethod::plotCovariateBalanceScatterPlot(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceScatterPlot1On1Matching.png"))
+  CohortMethod::plotCovariateBalanceOfTopVariables(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceTopVariables1On1Matching.png"))
+
+  balance <- read.csv(file.path(exportFolder, "BalanceVarRatioMatching.csv"))
+  CohortMethod::plotCovariateBalanceScatterPlot(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceScatterPlotVarRatioMatching.png"))
+  CohortMethod::plotCovariateBalanceOfTopVariables(balance, fileName = file.path(tablesAndFiguresFolder, "BalanceTopVariablesVarRatioMatching.png"))
 }

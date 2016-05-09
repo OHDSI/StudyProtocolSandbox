@@ -41,7 +41,14 @@ execute(connectionDetails = connectionDetails,
         cdmVersion = cdmVersion,
         outputFolder = outputFolder,
         createCohorts = TRUE,
-        maxCores = 30)
+        maxCores = 32)
+
+createTableAndFigures(file.path(outputFolder, "export"))
+
+
+submitResults(file.path(outputFolder, "export"),
+              key = Sys.getenv("keyAngioedema"),
+              secret = Sys.getenv("secretAngioedema"))
 
 ### Test on Oracle ###
 
@@ -72,7 +79,6 @@ execute(connectionDetails = connectionDetails,
         createCohorts = TRUE,
         maxCores = 30)
 
-createTableAndFigures(file.path(outputFolder, "export"))
 
 om <- readRDS(file.path(outputFolder, "cmOutput", "Analysis_3", "om_t1_c2_o3.rds"))
 summary(om)
