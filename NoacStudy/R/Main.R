@@ -36,30 +36,33 @@
 #'                                       saved cohort information (FALSE)
 #' @param runAnalyses                    Run propensity score and outcome model fitting (TRUE) or use
 #'                                       previously saved models (FALSE)
-#' @param empiricalCalibration           Perform empirical calibration of outcome models (TRUE/FALSE)
-#' @param packageResultsForSharing       Package all intermediate files and models in `outputFolder` to
-#'                                       share (TRUE/FALSE)
-#' @param createCustomOutput             Create custom output in `outputFolder`
-#' @param generateReport                 Generate results report in `outputFolder`
-#'
-#' @param getDbCohortMethodDataThreads   The number of parallel threads to use for building the
-#'                                       cohortMethod data objects.
-#' @param createPsThreads                The number of parallel threads to use for fitting the
-#'                                       propensity models.
-#' @param psCvThreads                    The number of parallel threads to use for the cross-
-#'                                       validation when estimating the hyperparameter for the
-#'                                       propensity model. Note that the total number of CV threads at
-#'                                       one time could be `createPsThreads * psCvThreads`.
-#' @param computeCovarBalThreads         The number of parallel threads to use for computing the
-#'                                       covariate balance.
-#' @param trimMatchStratifyThreads       The number of parallel threads to use for trimming, matching
-#'                                       and stratifying.
-#' @param fitOutcomeModelThreads         The number of parallel threads to use for fitting the outcome
-#'                                       models.
-#' @param outcomeCvThreads               The number of parallel threads to use for the cross-
-#'                                       validation when estimating the hyperparameter for the outcome
-#'                                       model. Note that the total number of CV threads at one time
-#'                                       could be `fitOutcomeModelThreads * outcomeCvThreads`.
+#' @param packageResults       Package the results for sharing?
+#' @param maxCores             How many parallel cores should be used? If more cores are made available
+#'                             this can speed up the analyses.
+# #' @param empiricalCalibration           Perform empirical calibration of outcome models (TRUE/FALSE)
+# #' @param packageResultsForSharing       Package all intermediate files and models in `outputFolder` to
+# #'                                       share (TRUE/FALSE)
+# #' @param createCustomOutput             Create custom output in `outputFolder`
+# #' @param generateReport                 Generate results report in `outputFolder`
+# #'
+# #' @param getDbCohortMethodDataThreads   The number of parallel threads to use for building the
+# #'                                       cohortMethod data objects.
+# #' @param createPsThreads                The number of parallel threads to use for fitting the
+# #'                                       propensity models.
+# #' @param psCvThreads                    The number of parallel threads to use for the cross-
+# #'                                       validation when estimating the hyperparameter for the
+# #'                                       propensity model. Note that the total number of CV threads at
+# #'                                       one time could be `createPsThreads * psCvThreads`.
+# #' @param computeCovarBalThreads         The number of parallel threads to use for computing the
+# #'                                       covariate balance.
+# #' @param trimMatchStratifyThreads       The number of parallel threads to use for trimming, matching
+# #'                                       and stratifying.
+# #' @param fitOutcomeModelThreads         The number of parallel threads to use for fitting the outcome
+# #'                                       models.
+# #' @param outcomeCvThreads               The number of parallel threads to use for the cross-
+# #'                                       validation when estimating the hyperparameter for the outcome
+# #'                                       model. Note that the total number of CV threads at one time
+# #'                                       could be `fitOutcomeModelThreads * outcomeCvThreads`.
 #'
 #' @examples
 #' \dontrun{
@@ -71,7 +74,8 @@
 #' execute(connectionDetails,
 #'         cdmDatabaseSchema = "mdcr_v5",
 #'         workDatabaseSchema = "ohdsi",
-#'         outputFolder = "~/study_results")
+#'         outputFolder = "~/study_results",
+#'	       maxCores = 4)
 #'
 #' }
 #'
@@ -87,18 +91,9 @@ execute <- function(connectionDetails,
                     drugTarget = c("Rivaroxaban", "Dabigatran"),
                     analysisDesign = "main",
                     createCohorts = TRUE,
-                    runAnalyses = TRUE,
-                    empiricalCalibration = TRUE,
-                    packageResultsForSharing = TRUE,
-                    createCustomOutput = TRUE,
-                    generateReport = TRUE,
-                    getDbCohortMethodDataThreads = 1,
-                    createPsThreads = 1,
-                    psCvThreads = 1,
-                    computeCovarBalThreads = 1,
-                    trimMatchStratifyThreads = 1,
-                    fitOutcomeModelThreads = 1,
-                    outcomeCvThreads = 1) {
+                    runAnalyses = TRUE,                   
+                    packageResults = TRUE,
+                    maxCores = 4) {
 
   if (cdmVersion == 4) {
     stop("CDM version 4 not supported")
@@ -127,6 +122,7 @@ execute <- function(connectionDetails,
                   oracleTempSchema,
                   cdmVersion,
                   outputFolder)
+    writeLines("")
   }
 
   if (runAnalyses) {
@@ -180,28 +176,40 @@ execute <- function(connectionDetails,
                                 cmAnalysisList = cmAnalysisList,
                                 cdmVersion = cdmVersion,
                                 drugComparatorOutcomesList = drugComparatorOutcomesList,
-                                getDbCohortMethodDataThreads = getDbCohortMethodDataThreads,
-                                createPsThreads = createPsThreads,
-                                psCvThreads = psCvThreads,
-                                computeCovarBalThreads = computeCovarBalThreads,
-                                trimMatchStratifyThreads = trimMatchStratifyThreads,
-                                fitOutcomeModelThreads = fitOutcomeModelThreads,
-                                outcomeCvThreads = outcomeCvThreads)
+                                getDbCohortMethodDataThreads = 1,
+                                createStudyPopThreads = max(3, maxCores),
+                                createPsThreads = 1,
+                                psCvThreads = min(16, maxCores),
+                                computeCovarBalThreads = min(3, maxCores),
+                                trimMatchStratifyThreads = min(10, maxCores),
+                                fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                outcomeCvThreads = min(4, maxCores),
+                                refitPsForEveryOutcome = FALSE)
+    writeLines("")
+  }
+  
+  if (packageResults) {
+    writeLines("Packaging results in export folder for sharing")
+    packageResults(connectionDetails = connectionDetails,
+                   cdmDatabaseSchema = cdmDatabaseSchema,
+                   outputFolder = outputFolder)
+    writeLines("")  
   }
 
-  if (empiricalCalibration) {
-    writeLines("Performing empirical calibration")
-    doEmpiricalCalibration(outputFolder = outputFolder)
-  }
+#   if (empiricalCalibration) {
+#     writeLines("Performing empirical calibration")
+#     doEmpiricalCalibration(outputFolder = outputFolder)
+#   }
+# 
+#   if (createCustomOutput) {
+#     writeLines("Creating custom output")
+#     createCustomOutput(outputFolder = outputFolder)
+#   }
+# 
+#   if (generateReport) {
+#     writeLines("Generating report")
+#     generateReport(outputFolder = outputFolder)
+#   }
 
-  if (createCustomOutput) {
-    writeLines("Creating custom output")
-    createCustomOutput(outputFolder = outputFolder)
-  }
-
-  if (generateReport) {
-    writeLines("Generating report")
-    generateReport(outputFolder = outputFolder)
-  }
-
+  invisible(NULL)
 }
