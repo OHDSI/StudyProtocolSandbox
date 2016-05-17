@@ -88,10 +88,10 @@ execute <- function(connectionDetails,
                     oracleTempSchema = NULL,
                     cdmVersion = 5,
                     outputFolder,
-                    drugTarget = c("Rivaroxaban", "Dabigatran"),
+                    targetDrug = c("Rivaroxaban", "Dabigatran"),
                     analysisDesign = "main",
                     createCohorts = TRUE,
-                    runAnalyses = TRUE,                   
+                    runAnalyses = TRUE,
                     packageResults = TRUE,
                     maxCores = 4) {
 
@@ -104,8 +104,8 @@ execute <- function(connectionDetails,
     stop("Invalid analysis design specification")
   }
 
-  drugTarget <- tolower(drugTarget)
-  if (any(!(drugTarget %in% c("rivaroxaban", "dabigatran")))) {
+  targetDrug <- tolower(targetDrug)
+  if (any(!(targetDrug %in% c("rivaroxaban", "dabigatran")))) {
     stop("Invalid target drug specification")
   }
 
@@ -148,10 +148,10 @@ execute <- function(connectionDetails,
                                                   package = "NoacStudy")
     drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
     excludeTargetId <- c()
-    if (!("rivaroxaban" %in% drugTarget)) {
+    if (!("rivaroxaban" %in% targetDrug)) {
         excludeTargetId <- c(excludeTargetId, 1) # Rivaroxaban
     }
-    if (!("dabigatran" %in% drugTarget)) {
+    if (!("dabigatran" %in% targetDrug)) {
         excludeTargetId <- c(excludeTargetId, 3) # Dabigatran
     }
     if (length(excludeTargetId) > 0) {
@@ -187,25 +187,25 @@ execute <- function(connectionDetails,
                                 refitPsForEveryOutcome = FALSE)
     writeLines("")
   }
-  
+
   if (packageResults) {
     writeLines("Packaging results in export folder for sharing")
     packageResults(connectionDetails = connectionDetails,
                    cdmDatabaseSchema = cdmDatabaseSchema,
                    outputFolder = outputFolder)
-    writeLines("")  
+    writeLines("")
   }
 
 #   if (empiricalCalibration) {
 #     writeLines("Performing empirical calibration")
 #     doEmpiricalCalibration(outputFolder = outputFolder)
 #   }
-# 
+#
 #   if (createCustomOutput) {
 #     writeLines("Creating custom output")
 #     createCustomOutput(outputFolder = outputFolder)
 #   }
-# 
+#
 #   if (generateReport) {
 #     writeLines("Generating report")
 #     generateReport(outputFolder = outputFolder)

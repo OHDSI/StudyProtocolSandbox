@@ -8,7 +8,7 @@ execute(connectionDetails, cdmDatabaseSchema,
   workDatabaseSchema = cdmDatabaseSchema, studyCohortTable = "cohort_noac",
   studyCohortDefinitionTable = "cohort_definition_noac",
   oracleTempSchema = NULL, cdmVersion = 5, outputFolder,
-  drugTarget = c("Rivaroxaban", "Dabigatran"), analysisDesign = "main",
+  targetDrug = c("Rivaroxaban", "Dabigatran"), analysisDesign = "main",
   createCohorts = TRUE, runAnalyses = TRUE, packageResults = TRUE,
   maxCores = 4)
 }
@@ -41,6 +41,9 @@ has write priviliges for storing temporary tables.}
 \item{outputFolder}{Name of local folder to place results; make sure to use
 forward slashes (/)}
 
+\item{targetDrug}{Select which target drugs to run: `Rivaroxaban`, `Dabigatran`
+or both}
+
 \item{analysisDesign}{Select which analysis designs to run: `main` or `all`}
 
 \item{createCohorts}{Create cohort tables from database (TRUE) or use previously
@@ -53,9 +56,6 @@ previously saved models (FALSE)}
 
 \item{maxCores}{How many parallel cores should be used? If more cores are made available
 this can speed up the analyses.}
-
-\item{targetDrug}{Select which target drugs to run: `Rivaroxaban`, `Dabigatran`
-or both}
 }
 \value{
 Nothing.  All intermediate files, models and reports are in `outputFolder`.

@@ -57,7 +57,7 @@ createAnalysesDetails <- function(outputFolder) {
   # specify analysis settings
 
   # define covariates - use all available main effects, no interaction terms
-  covarSettings <- PatientLevelPrediction::createCovariateSettings(useCovariateDemographics = TRUE,
+  covarSettings <- FeatureExtraction::createCovariateSettings(useCovariateDemographics = TRUE,
                                                                    useCovariateConditionOccurrence = TRUE,
                                                                    useCovariateConditionOccurrence365d = TRUE,
                                                                    useCovariateConditionOccurrence30d = TRUE,
