@@ -2,9 +2,11 @@
 
 export(createCohorts)
 export(createCustomOutput)
+export(createMetaData)
 export(doEmpiricalCalibration)
 export(execute)
 export(generateReport)
-import(DBI)
+export(packageResults)
 import(DatabaseConnector)
+import(JDBC)
 import(SqlRender)
