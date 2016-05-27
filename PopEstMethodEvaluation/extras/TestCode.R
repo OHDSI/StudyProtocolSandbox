@@ -112,4 +112,9 @@ runIctpd(connectionDetails = connectionDetails,
          workFolder = workFolder,
          cdmVersion = cdmVersion)
 
-createShareableResults(workFolder = workFolder)
+packageResults(connectionDetails = connectionDetails,
+               cdmDatabaseSchema = cdmDatabaseSchema,
+               workFolder = workFolder)
+
+createFiguresAndTables(file.path(workFolder, "export"))
+

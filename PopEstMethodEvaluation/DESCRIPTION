@@ -1,6 +1,6 @@
 Package: PopEstMethodEvaluation
 Title: Evaluation of Population-Level Estimation Methods
-Version: 0.1
+Version: 0.1.0
 Author: Martijn J. Schuemie [aut, cre]
 Maintainer: Martijn J. Schuemie <schuemie@ohdsi.org>
 Description: What the study does (paragraph)
@@ -16,7 +16,8 @@ Imports:
     SelfControlledCohort,
     SelfControlledCaseSeries,
     IcTemporalPatternDiscovery,
-    EmpiricalCalibration
+    EmpiricalCalibration,
+    OhdsiSharing
 Suggests:
     testthat
 License: Apache License 2.0

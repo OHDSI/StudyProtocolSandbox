@@ -17,13 +17,13 @@
 # limitations under the License.
 
 #' @export
-createFiguresAndTables <- function(shareableResultsFolder) {
-    # shareableResultsFolder <- file.path(workFolder, "shareableResults")
-    estimatesFile <- file.path(shareableResultsFolder, "Estimates.csv")
+createFiguresAndTables <- function(exportFolder) {
+    # exportFolder <- file.path(workFolder, "shareableResults")
+    estimatesFile <- file.path(exportFolder, "Estimates.csv")
     estimates <- read.csv(estimatesFile)
-    analysisRefFile <- file.path(shareableResultsFolder, "AnalysisRef.csv")
+    analysisRefFile <- file.path(exportFolder, "AnalysisRef.csv")
     analysisRef <-  read.csv(analysisRefFile)
-    injectionSummaryFile <- file.path(shareableResultsFolder, "InjectionSummary.csv")
+    injectionSummaryFile <- file.path(exportFolder, "InjectionSummary.csv")
     injectedSignals <-  read.csv(injectionSummaryFile)
 
     injectedSignals$outcomeId <- injectedSignals$newOutcomeId
@@ -37,7 +37,7 @@ createFiguresAndTables <- function(shareableResultsFolder) {
                               sdSlope = 0)
     performance <- data.frame()
     for (i in 1:nrow(analysisRef)) {
-        # i <- 1
+        # i <- 8
         method <- analysisRef$method[i]
         analysisId <- analysisRef$analysisId[i]
         analysisData <- data[data$analysisId == analysisId & data$method == method, ]
@@ -50,26 +50,26 @@ createFiguresAndTables <- function(shareableResultsFolder) {
         analysisPerformance$trueRr <- exp(analysisPerformance$trueLogRr)
         performance <- rbind(performance, analysisPerformance)
 
-        trueAndObsFile <- file.path(shareableResultsFolder, paste0("trueAndObs_",method, "_a", analysisId, ".png"))
+        trueAndObsFile <- file.path(exportFolder, paste0("trueAndObs_",method, "_a", analysisId, ".png"))
         EmpiricalCalibration::plotTrueAndObserved(logRr = analysisData$logRr,
                                                   seLogRr = analysisData$seLogRr,
                                                   trueLogRr = log(analysisData$targetEffectSize),
                                                   xLabel = "Incidence rate ratio",
                                                   fileName = trueAndObsFile)
 
-        rocsFile <- file.path(shareableResultsFolder, paste0("aucs_",method, "_a", analysisId,".png"))
+        rocsFile <- file.path(exportFolder, paste0("aucs_",method, "_a", analysisId,".png"))
         MethodEvaluation::plotRocsInjectedSignals(logRr = analysisData$logRr,
                                                   trueLogRr = log(analysisData$targetEffectSize),
                                                   showAucs = TRUE,
                                                   fileName = rocsFile)
 
-        nullDistFile <- file.path(shareableResultsFolder, paste0("nullDist_",method, "_a", analysisId,".png"))
+        nullDistFile <- file.path(exportFolder, paste0("nullDist_",method, "_a", analysisId,".png"))
         EmpiricalCalibration::plotCalibrationEffect(logRrNegatives = analysisData$logRr[analysisData$targetEffectSize == 1],
                                                     seLogRrNegatives = analysisData$seLogRr[analysisData$targetEffectSize == 1],
                                                     xLabel = "Incidence rate ratio",
                                                     fileName = nullDistFile)
 
-        calibrationFile <- file.path(shareableResultsFolder, paste0("calibration_",method, "_a", analysisId,".png"))
+        calibrationFile <- file.path(exportFolder, paste0("calibration_",method, "_a", analysisId,".png"))
         EmpiricalCalibration::plotCalibration(logRr = analysisData$logRr[analysisData$targetEffectSize == 1],
                                               seLogRr = analysisData$seLogRr[analysisData$targetEffectSize == 1],
                                               useMcmc = FALSE,
@@ -89,7 +89,7 @@ createFiguresAndTables <- function(shareableResultsFolder) {
                                                                         model = errorModel)
 
         calibrated$targetEffectSize <- analysisData$targetEffectSize
-        trueAndObsCaliFile <- file.path(shareableResultsFolder, paste0("trueAndObsCali_",method, "_a", analysisId, ".png"))
+        trueAndObsCaliFile <- file.path(exportFolder, paste0("trueAndObsCali_",method, "_a", analysisId, ".png"))
         EmpiricalCalibration::plotTrueAndObserved(logRr = calibrated$logRr,
                                                   seLogRr = calibrated$seLogRr,
                                                   trueLogRr = log(calibrated$targetEffectSize),
@@ -97,28 +97,49 @@ createFiguresAndTables <- function(shareableResultsFolder) {
                                                   fileName = trueAndObsCaliFile)
 
 
-        coverageFile <- file.path(shareableResultsFolder, paste0("coverage_",method, "_a", analysisId,".png"))
+        coverageFile <- file.path(exportFolder, paste0("coverage_",method, "_a", analysisId,".png"))
         EmpiricalCalibration::plotCiCalibration(logRr = analysisData$logRr,
                                                 seLogRr = analysisData$seLogRr,
                                                 trueLogRr = log(analysisData$targetEffectSize),
                                                 fileName = coverageFile)
     }
-    errorModelsFile <- file.path(shareableResultsFolder, paste0("errorModels.csv"))
+    errorModelsFile <- file.path(exportFolder, paste0("errorModels.csv"))
     write.csv(errorModels, file = errorModelsFile, row.names = FALSE)
-    performanceFile <- file.path(shareableResultsFolder, paste0("performance.csv"))
+    performanceFile <- file.path(exportFolder, paste0("performance.csv"))
     write.csv(performance, file = performanceFile, row.names = FALSE)
 }
 
+#' Package the results for sharing with OHDSI researchers
+#'
+#' @details
+#' This function packages the results.
+#'
+#' @param connectionDetails   An object of type \code{connectionDetails} as created using the
+#'                            \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+#'                            DatabaseConnector package.
+#' @param cdmDatabaseSchema   Schema name where your patient-level data in OMOP CDM format resides.
+#'                            Note that for SQL Server, this should include both the database and
+#'                            schema name, for example 'cdm_data.dbo'.
+#' @param workFolder          Name of local folder to place results; make sure to use forward slashes
+#'                            (/)
+#'
 #' @export
-createShareableResults <- function(workFolder) {
+packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
     injectionSummaryFile <- file.path(workFolder, "injectionSummary.rds")
     if (!file.exists(injectionSummaryFile))
         stop("Cannot find injection summary file. Please run injectSignals first.")
     injectedSignals <- readRDS(injectionSummaryFile)
 
-    shareableResultsFolder <- file.path(workFolder, "shareableResults")
-    if (!file.exists(shareableResultsFolder))
-        dir.create(shareableResultsFolder)
+    exportFolder <- file.path(workFolder, "export")
+    if (!file.exists(exportFolder))
+        dir.create(exportFolder)
+
+    createMetaData(addCdmSource = TRUE,
+                   connectionDetails = connectionDetails,
+                   cdmDatabaseSchema = cdmDatabaseSchema,
+                   addPackageVersions = TRUE,
+                   package = "PopEstMethodEvaluation",
+                   exportFolder = exportFolder)
 
     ### Create overall results table and analysisRef table ###
     estimates <- data.frame()
@@ -191,13 +212,66 @@ createShareableResults <- function(workFolder) {
                                                  analysisId = analysisId,
                                                  description = description))
 
-    estimatesFile <- file.path(shareableResultsFolder, "Estimates.csv")
+    estimatesFile <- file.path(exportFolder, "Estimates.csv")
     write.csv(estimates, estimatesFile, row.names = FALSE)
 
-    analysisRefFile <- file.path(shareableResultsFolder, "AnalysisRef.csv")
+    analysisRefFile <- file.path(exportFolder, "AnalysisRef.csv")
     write.csv(analysisRef, analysisRefFile, row.names = FALSE)
 
     injectedSignals <- injectedSignals[, c("exposureId", "outcomeId", "newOutcomeId", "targetEffectSize", "trueEffectSize", "trueEffectSizeFirstExposure")]
-    injectionSummaryFile <- file.path(shareableResultsFolder, "InjectionSummary.csv")
+    injectionSummaryFile <- file.path(exportFolder, "InjectionSummary.csv")
     write.csv(injectedSignals, injectionSummaryFile, row.names = FALSE)
+
+    ### Add all to zip file ###
+    zipName <- file.path(exportFolder, "StudyResults.zip")
+    OhdsiSharing::compressFolder(exportFolder, zipName)
+    writeLines(paste("\nStudy results are ready for sharing at:", zipName))
+}
+
+#' Create metadata file
+#'
+#' @details
+#' Creates a file containing metadata about the source data (taken from the cdm_source table) and R
+#' package versions.
+#'
+#' @param addCdmSource        Add information from the CDM_SOURCE table?
+#' @param connectionDetails   An object of type \code{connectionDetails} as created using the
+#'                            \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+#'                            DatabaseConnector package.
+#' @param cdmDatabaseSchema   Schema name where your patient-level data in OMOP CDM format resides.
+#'                            Note that for SQL Server, this should include both the database and
+#'                            schema name, for example 'cdm_data.dbo'.
+#' @param exportFolder        The name of the folder where the metadata file should be created.
+#' @param addPackageVersions  Add information on the versions of dependency packages?
+#' @param package             Name of the package for which we want to list the versions of its dependencies.#'
+#'
+#' @export
+createMetaData <- function(addCdmSource = TRUE,
+                           connectionDetails,
+                           cdmDatabaseSchema,
+                           addPackageVersions = TRUE,
+                           package,
+                           exportFolder) {
+    lines <- c()
+    if (addCdmSource) {
+        conn <- DatabaseConnector::connect(connectionDetails)
+        sql <- "SELECT * FROM @cdm_database_schema.cdm_source"
+        sql <- SqlRender::renderSql(sql, cdm_database_schema = cdmDatabaseSchema)$sql
+        sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+        cdmSource <- DatabaseConnector::querySql(conn, sql)
+        RJDBC::dbDisconnect(conn)
+        lines <- c(lines, paste(names(cdmSource), cdmSource[1, ], sep = ": "))
+    }
+    if (addPackageVersions) {
+        installed <- utils::installed.packages()[,c("Package", "Version", "Depends", "Imports")]
+        pkg <- installed[installed[,"Package"] == package,]
+        depends <- strsplit(pkg["Depends"], ",")[[1]]
+        imports <- strsplit(pkg["Imports"], ",")[[1]]
+        dependencies <- c(depends, imports)
+        dependencies <- gsub("\n| (.*)", "", dependencies)
+        dependencies <- installed[installed[, "Package"] %in% c(dependencies, package),]
+        lines <- c(lines,paste0(dependencies[, "Package"], " version: ", dependencies[, "Version"]))
+    }
+    write(lines, file.path(exportFolder, "MetaData.txt"))
+    invisible(NULL)
 }

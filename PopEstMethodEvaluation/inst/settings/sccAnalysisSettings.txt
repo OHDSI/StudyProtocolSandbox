@@ -15,7 +15,7 @@
       "stratifyByAge": false,
       "stratifyByYear": false,
       "useLengthOfExposureExposed": true,
-      "timeAtRiskExposedStart": 1,
+      "timeAtRiskExposedStart": 0,
       "surveillanceExposed": 0,
       "useLengthOfExposureUnexposed": true,
       "timeAtRiskUnexposedStart": -1,
@@ -44,7 +44,7 @@
       "stratifyByAge": false,
       "stratifyByYear": false,
       "useLengthOfExposureExposed": false,
-      "timeAtRiskExposedStart": 1,
+      "timeAtRiskExposedStart": 0,
       "surveillanceExposed": 30,
       "useLengthOfExposureUnexposed": false,
       "timeAtRiskUnexposedStart": -1,
@@ -59,7 +59,7 @@
   },
   {
     "analysisId": 3,
-    "description": "30 days of each exposure, index date in exposure window, require full obs",
+    "description": "Length of exposure, index date in exposure window, require full obs",
     "runSelfControlledCohortArgs": {
       "firstOccurrenceDrugOnly": false,
       "firstOccurrenceConditionOnly": false,
@@ -73,7 +73,7 @@
       "stratifyByAge": false,
       "stratifyByYear": false,
       "useLengthOfExposureExposed": true,
-      "timeAtRiskExposedStart": 1,
+      "timeAtRiskExposedStart": 0,
       "surveillanceExposed": 0,
       "useLengthOfExposureUnexposed": true,
       "timeAtRiskUnexposedStart": -1,
@@ -102,7 +102,7 @@
       "stratifyByAge": false,
       "stratifyByYear": false,
       "useLengthOfExposureExposed": false,
-      "timeAtRiskExposedStart": 1,
+      "timeAtRiskExposedStart": 0,
       "surveillanceExposed": 30,
       "useLengthOfExposureUnexposed": false,
       "timeAtRiskUnexposedStart": -1,
@@ -175,7 +175,7 @@
   },
   {
     "analysisId": 7,
-    "description": "30 days of each exposure, index date ignored, require full obs",
+    "description": "Length of exposure, index date ignored, require full obs",
     "runSelfControlledCohortArgs": {
       "firstOccurrenceDrugOnly": false,
       "firstOccurrenceConditionOnly": false,

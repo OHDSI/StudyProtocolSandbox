@@ -44,7 +44,7 @@ runSelfControlledCohort <- function(connectionDetails,
             }
         }
         sccAnalysisListFile <- system.file("settings", "sccAnalysisSettings.txt", package = "PopEstMethodEvaluation")
-        sccAnalysisList <- SelfControlledCohort::loadsccAnalysisList(sccAnalysisListFile)
+        sccAnalysisList <- SelfControlledCohort::loadSccAnalysisList(sccAnalysisListFile)
         sccResult <- SelfControlledCohort::runSccAnalyses(connectionDetails = connectionDetails,
                                                           cdmDatabaseSchema = cdmDatabaseSchema,
                                                           oracleTempSchema = oracleTempSchema,
@@ -69,7 +69,7 @@ createSelfControlledCohortSettings <- function(fileName) {
     runSccArgs1 <- SelfControlledCohort::createRunSelfControlledCohortArgs(firstOccurrenceDrugOnly = FALSE,
                                                                            firstOccurrenceConditionOnly = FALSE,
                                                                            useLengthOfExposureExposed = TRUE,
-                                                                           timeAtRiskExposedStart = 1,
+                                                                           timeAtRiskExposedStart = 0,
                                                                            surveillanceExposed = 0,
                                                                            hasFullTimeAtRisk = FALSE,
                                                                            timeAtRiskUnexposedStart = -1,
@@ -85,7 +85,7 @@ createSelfControlledCohortSettings <- function(fileName) {
     runSccArgs2 <- SelfControlledCohort::createRunSelfControlledCohortArgs(firstOccurrenceDrugOnly = FALSE,
                                                                            firstOccurrenceConditionOnly = FALSE,
                                                                            useLengthOfExposureExposed = FALSE,
-                                                                           timeAtRiskExposedStart = 1,
+                                                                           timeAtRiskExposedStart = 0,
                                                                            surveillanceExposed = 30,
                                                                            hasFullTimeAtRisk = FALSE,
                                                                            timeAtRiskUnexposedStart = -1,
@@ -101,7 +101,7 @@ createSelfControlledCohortSettings <- function(fileName) {
     runSccArgs3 <- SelfControlledCohort::createRunSelfControlledCohortArgs(firstOccurrenceDrugOnly = FALSE,
                                                                            firstOccurrenceConditionOnly = FALSE,
                                                                            useLengthOfExposureExposed = TRUE,
-                                                                           timeAtRiskExposedStart = 1,
+                                                                           timeAtRiskExposedStart = 0,
                                                                            surveillanceExposed = 0,
                                                                            hasFullTimeAtRisk = TRUE,
                                                                            timeAtRiskUnexposedStart = -1,
@@ -111,14 +111,14 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            followupWindow = 183)
 
     sccAnalysis3 <- SelfControlledCohort::createSccAnalysis(analysisId = 3,
-                                                            description = "30 days of each exposure, index date in exposure window, require full obs",
+                                                            description = "Length of exposure, index date in exposure window, require full obs",
                                                             runSelfControlledCohortArgs = runSccArgs3)
 
 
     runSccArgs4 <- SelfControlledCohort::createRunSelfControlledCohortArgs(firstOccurrenceDrugOnly = FALSE,
                                                                            firstOccurrenceConditionOnly = FALSE,
                                                                            useLengthOfExposureExposed = FALSE,
-                                                                           timeAtRiskExposedStart = 1,
+                                                                           timeAtRiskExposedStart = 0,
                                                                            surveillanceExposed = 30,
                                                                            hasFullTimeAtRisk = TRUE,
                                                                            timeAtRiskUnexposedStart = -1,
@@ -176,7 +176,7 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            followupWindow = 183)
 
     sccAnalysis7 <- SelfControlledCohort::createSccAnalysis(analysisId = 7,
-                                                            description = "30 days of each exposure, index date ignored, require full obs",
+                                                            description = "Length of exposure, index date ignored, require full obs",
                                                             runSelfControlledCohortArgs = runSccArgs7)
 
 

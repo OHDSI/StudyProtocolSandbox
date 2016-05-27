@@ -21,6 +21,7 @@ How to run
 	install_github("ohdsi/SelfControlledCohort")
 	install_github("ohdsi/SelfControlledCaseSeries")
 	install_github("ohdsi/IcTemporalPatternDiscovery")
+	install_github("ohdsi/OhdsiSharing")
 	install_github("ohdsi/StudyProtocolSandbox/PopEstMethodEvaluation")
 	```
 
@@ -42,7 +43,7 @@ How to run
                   outcomeTable = outcomeTable,
                   workFolder = workFolder,
                   cdmVersion = cdmVersion,
-                  createBaselineCohorts = FALSE)
+                  createBaselineCohorts = TRUE)
     
     runCohortMethod(connectionDetails = connectionDetails,
                     cdmDatabaseSchema = cdmDatabaseSchema,
@@ -76,7 +77,9 @@ How to run
              workFolder = workFolder,
              cdmVersion = cdmVersion)
     
-    createShareableResults(workFolder = workFolder)
+    packageResults(connectionDetails = connectionDetails,
+                   cdmDatabaseSchema = cdmDatabaseSchema,
+                   workFolder = workFolder)
 	```
 
 	* For details on how to configure```createConnectionDetails``` in your environment type this for help:
@@ -90,7 +93,11 @@ How to run
 
 	* ```cdmVersion``` is the version of the CDM. Can be "4" or "5".
 
-4. Please e-mail the file ```StudyResults.zip.enc``` in the ```PopEstMethodEvaluation``` folder to the study coordinator.
+4. Upload the file ```export/studyResult.zip``` in the output folder to the study coordinator:
+    ```r
+    submitResults("c:/temp/study_results/export", key = "<key>", secret = "<secret>")
+    ```
+    Where ```key``` and ```secret``` are the credentials provided to you personally by the study coordinator.
 
 Generating figures and tables
 =============================
