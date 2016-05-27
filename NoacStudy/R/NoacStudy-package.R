@@ -2,7 +2,7 @@
 #'
 #' @name SkeletonStudy
 #' @docType package
-#' @import DBI
+#' @import RJDBC
 #' @import SqlRender
 #' @import DatabaseConnector
 NULL

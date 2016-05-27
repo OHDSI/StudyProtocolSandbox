@@ -115,7 +115,7 @@ createCohorts <- function(connectionDetails,
   write.csv(counts, file.path(outputFolder, "CohortCounts.csv"))
   print(counts)
 
-  DBI::dbDisconnect(connection)
+  RJDBC::dbDisconnect(connection)
 
   writeLines("Finished all cohorts")
 }

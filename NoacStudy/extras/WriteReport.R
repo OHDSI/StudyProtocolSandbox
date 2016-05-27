@@ -7,9 +7,7 @@
   return(outcomeReference)
 }
 
-
-#' @export
-generateReport <- function(outputFolder,
+writeReport <- function(outputFolder,
                            analysisId = 7,
                            targetId = 5,
                            comparatorId = 6,
