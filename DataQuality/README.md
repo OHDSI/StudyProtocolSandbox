@@ -11,7 +11,5 @@ This principle was used in the initial study of Achilles Heel output. (precursor
 
 If any site requires a formal Data Use Agreement between the your site and the Data Quality Study Principal Investigator, please indicate so. 
 
-#Iterative development
-
-We plan to arrive at thresholds for some data quality measures. (e.g., average number of patients per provider). We hope to execute number of new measures at different sites (claims data, EHR data) to arrive at thresholds values that could be used in data quality rules/checks. We may need multiple iterations to arrive at such thresholds (and tweaks to the measure computations) as we explore more sites.
-
+#Additional tools
+The tool relies on new computations done via Achilles. Using Achilles version >1.2 is required
