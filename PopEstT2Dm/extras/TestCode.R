@@ -17,7 +17,6 @@
 # limitations under the License.
 
 library(PopEstT2Dm)
-#setwd('s:/temp')
 options('fftempdir' = 's:/fftemp')
 
 workFolder <- "s:/temp/PopEstT2Dm"
@@ -47,4 +46,20 @@ createCohorts(connectionDetails = connectionDetails,
               workDatabaseSchema = workDatabaseSchema,
               studyCohortTable = studyCohortTable,
               exposureCohortSummaryTable = exposureCohortSummaryTable,
-              outputFolder = workFolder)
+              workFolder = workFolder)
+
+fetchAllDataFromServer(connectionDetails = connectionDetails,
+                       cdmDatabaseSchema = cdmDatabaseSchema,
+                       oracleTempSchema = oracleTempSchema,
+                       workDatabaseSchema = workDatabaseSchema,
+                       studyCohortTable = studyCohortTable,
+                       workFolder = workFolder)
+
+generateAllCohortMethodDataObjects(workFolder)
+
+fitAllPsModels(workFolder, fitThreads = 6, cvThreads = 5)
+
+plotAllPsDistributions(workFolder)
+
+CohortMethod::plotPs(ps)
+

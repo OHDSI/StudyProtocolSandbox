@@ -1,4 +1,4 @@
-# Copyright 2015 Observational Health Data Sciences and Informatics
+# Copyright 2016 Observational Health Data Sciences and Informatics
 #
 # This file is part of PopEstT2Dm
 #
@@ -38,7 +38,7 @@
 #'                             study.
 #' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
 #'                             priviliges for storing temporary tables.
-#' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
+#' @param workFolder           Name of local folder to place results; make sure to use forward slashes
 #'                             (/)
 #'
 #' @export
@@ -48,7 +48,7 @@ createCohorts <- function(connectionDetails,
                           studyCohortTable = "ohdsi_t2dm_cohorts",
                           exposureCohortSummaryTable = "ohdsi_t2dm_cohort_summary",
                           oracleTempSchema,
-                          outputFolder) {
+                          workFolder) {
     conn <- DatabaseConnector::connect(connectionDetails)
 
     # Create study cohort table structure:
@@ -79,7 +79,7 @@ createCohorts <- function(connectionDetails,
 
     exposureSummary <- DatabaseConnector::querySql(conn, "SELECT * FROM scratch.dbo.mschuemie_t2dm_exposure_summary")
     colnames(exposureSummary) <- SqlRender::snakeCaseToCamelCase(colnames(exposureSummary))
-    write.csv(exposureSummary, file.path(outputFolder, "exposureSummary.csv"), row.names = FALSE)
+    write.csv(exposureSummary, file.path(workFolder, "exposureSummary.csv"), row.names = FALSE)
 
     writeLines("- Creating negative control cohorts")
     pathToCsv <- system.file("settings", "NegativeControls.csv", package = "PopEstT2Dm")
@@ -137,10 +137,10 @@ createCohorts <- function(connectionDetails,
     cohortNames <- rbind(cohortNames, data.frame(cohortDefinitionId = negativeControls$conceptId,
                                                  name = negativeControls$name,
                                                  type = "negativeControl"))
-    write.csv(cohortNames, file.path(outputFolder, "cohortNames.csv"), row.names = FALSE)
+    write.csv(cohortNames, file.path(workFolder, "cohortNames.csv"), row.names = FALSE)
 
     counts <- merge(counts, cohortNames)
-    write.csv(counts, file.path(outputFolder, "cohortCounts.csv"), row.names = FALSE)
+    write.csv(counts, file.path(workFolder, "cohortCounts.csv"), row.names = FALSE)
     print(counts)
 
     RJDBC::dbDisconnect(conn)
