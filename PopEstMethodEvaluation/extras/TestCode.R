@@ -17,51 +17,22 @@
 # limitations under the License.
 
 library(PopEstMethodEvaluation)
-setwd('s:/temp')
+#setwd('s:/temp')
 options('fftempdir' = 's:/fftemp')
 
 workFolder <- "s:/temp/PopEstMethodEvaluation"
 
-pw <- NULL
-dbms <- "sql server"
-user <- NULL
-server <- "RNDUSRDHIT07.jnj.com"
-cdmDatabaseSchema <- "cdm_truven_mdcd.dbo"
-oracleTempSchema <- NULL
-outcomeDatabaseSchema <- "scratch.dbo"
-outcomeTable <- "mschuemie_outcomes"
-port <- NULL
-cdmVersion <- "4"
-
-dbms <- "postgresql"
-user <- "postgres"
-server <- "localhost/ohdsi"
-cdmDatabaseSchema <- "vocabulary5"
-oracleTempSchema <- NULL
-outcomeDatabaseSchema <- "scratch"
-outcomeTable <- "mschuemie_outcomes"
-port <- NULL
-cdmVersion <- "4"
 
 pw <- NULL
 dbms <- "pdw"
 user <- NULL
 server <- "JRDUSAPSCTL01"
-cdmDatabaseSchema <- "CDM_Truven_ccae.dbo"
+cdmDatabaseSchema <- "CDM_Truven_MDCD_V432.dbo"
 oracleTempSchema <- NULL
 outcomeDatabaseSchema <- "scratch.dbo"
 outcomeTable <- "mschuemie_outcomes"
-port <- 17001
-cdmVersion <- "4"
-
-pw <- NULL
-dbms <- "pdw"
-user <- NULL
-server <- "JRDUSAPSCTL01"
-cdmDatabaseSchema <- "CDM_Truven_MDCD_V5.dbo"
-oracleTempSchema <- NULL
-outcomeDatabaseSchema <- "scratch.dbo"
-outcomeTable <- "mschuemie_outcomes"
+nestingCohortDatabaseSchema <- "scratch.dbo"
+nestingCohortTable <- "mschuemi_nesting_cohorts"
 port <- 17001
 cdmVersion <- "5"
 
@@ -79,6 +50,13 @@ injectSignals(connectionDetails = connectionDetails,
               workFolder = workFolder,
               cdmVersion = cdmVersion,
               createBaselineCohorts = FALSE)
+
+createNestingCohorts(connectionDetails = connectionDetails,
+                     cdmDatabaseSchema = cdmDatabaseSchema,
+                     oracleTempSchema = oracleTempSchema,
+                     nestingCohortDatabaseSchema = nestingCohortDatabaseSchema,
+                     nestingCohortTable = nestingCohortTable,
+                     cdmVersion = cdmVersion)
 
 runCohortMethod(connectionDetails = connectionDetails,
                 cdmDatabaseSchema = cdmDatabaseSchema,
@@ -111,6 +89,17 @@ runIctpd(connectionDetails = connectionDetails,
          outcomeTable = outcomeTable,
          workFolder = workFolder,
          cdmVersion = cdmVersion)
+
+runCaseControl(connectionDetails = connectionDetails,
+         cdmDatabaseSchema = cdmDatabaseSchema,
+         oracleTempSchema = oracleTempSchema,
+         outcomeDatabaseSchema = outcomeDatabaseSchema,
+         outcomeTable = outcomeTable,
+         nestingCohortDatabaseSchema = nestingCohortDatabaseSchema,
+         nestingCohortTable = nestingCohortTable,
+         workFolder = workFolder,
+         cdmVersion = cdmVersion,
+         maxCores = 20)
 
 packageResults(connectionDetails = connectionDetails,
                cdmDatabaseSchema = cdmDatabaseSchema,

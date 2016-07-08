@@ -34,12 +34,12 @@ injectSignals <- function(connectionDetails,
         if (createBaselineCohorts) {
             connection <- DatabaseConnector::connect(connectionDetails)
 
-            sql <- loadRenderTranslateSql("CreateNegativeControlOutcomes",
-                                          packageName = "MethodEvaluation",
-                                          dbms = connectionDetails$dbms,
-                                          cdmDatabaseSchema = cdmDatabaseSchema,
-                                          resultsDatabaseSchema = outcomeDatabaseSchema,
-                                          outcomeTable = outcomeTable)
+            sql <- SqlRender::loadRenderTranslateSql("CreateNegativeControlOutcomes.sql",
+                                                     packageName = "PopEstMethodEvaluation",
+                                                     dbms = connectionDetails$dbms,
+                                                     cdmDatabaseSchema = cdmDatabaseSchema,
+                                                     resultsDatabaseSchema = outcomeDatabaseSchema,
+                                                     outcomeTable = outcomeTable)
             if (cdmVersion == "4"){
                 sql <- gsub("cohort_definition_id", "cohort_concept_id", sql)
                 sql <- gsub("visit_concept_id", "place_of_service_concept_id", sql)
@@ -48,10 +48,10 @@ injectSignals <- function(connectionDetails,
             DatabaseConnector::executeSql(connection, sql)
 
             # Check number of subjects per cohort:
-            sql <- "SELECT cohort_concept_id, COUNT(*) AS count FROM @resultsDatabaseSchema.@outcomeTable GROUP BY cohort_concept_id"
+            sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @resultsDatabaseSchema.@outcomeTable GROUP BY cohort_definition_id"
             sql <- SqlRender::renderSql(sql, resultsDatabaseSchema = outcomeDatabaseSchema, outcomeTable = outcomeTable)$sql
             sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-            if (cdmVersion != "4"){
+            if (cdmVersion == "4"){
                 sql <- gsub("cohort_definition_id", "cohort_concept_id", sql)
             }
             print(DatabaseConnector::querySql(connection, sql))

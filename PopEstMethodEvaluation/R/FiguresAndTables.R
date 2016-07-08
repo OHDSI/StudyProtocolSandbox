@@ -152,9 +152,17 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
     }
     sccsEstimates <- readRDS(sccsSummaryFile)
     sccsEstimates$method <- "sccs"
+    colnames(sccsEstimates)[colnames(sccsEstimates) == "logRr(Exposure of interest)"] <- "logRr"
+    colnames(sccsEstimates)[colnames(sccsEstimates) == "seLogRr(Exposure of interest)"] <- "seLogRr"
     estimates <- rbind(estimates, sccsEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
-    analyses <- unique(sccsEstimates[!is.na(estimates$logRr), c("method", "analysisId", "description")])
-    analysisRef <- rbind(analysisRef, analyses)
+
+    sccsAnalysisListFile <- system.file("settings", "sccsAnalysisSettings.txt", package = "PopEstMethodEvaluation")
+    sccsAnalysisList <- SelfControlledCaseSeries::loadSccsAnalysisList(sccsAnalysisListFile)
+    analysisId <- unlist(OhdsiRTools::selectFromList(sccsAnalysisList, "analysisId"))
+    description <- unlist(OhdsiRTools::selectFromList(sccsAnalysisList, "description"))
+    analysisRef <- rbind(analysisRef, data.frame(method = "sccs",
+                                                 analysisId = analysisId,
+                                                 description = description))
 
     # CohortMethod #
     cmSummaryFile <- file.path(workFolder, "cmSummary.rds")
@@ -209,6 +217,23 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
     analysisId <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "analysisId"))
     description <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "description"))
     analysisRef <- rbind(analysisRef, data.frame(method = "ictpd",
+                                                 analysisId = analysisId,
+                                                 description = description))
+
+    # Case-control #
+    ccSummaryFile <- file.path(workFolder, "ccSummary.rds")
+    if (!file.exists(ccSummaryFile)) {
+        stop(paste0("Couldn't find ", ccSummaryFile, ", please make sure you've successfully completed run runIctpd"))
+    }
+    ccEstimates <- readRDS(ccSummaryFile)
+    ccEstimates$method <- "cc"
+    estimates <- rbind(estimates, ccEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
+
+    ccAnalysisListFile <- system.file("settings", "ccAnalysisSettings.txt", package = "PopEstMethodEvaluation")
+    ccAnalysisList <- CaseControl::loadCcAnalysisList(ccAnalysisListFile)
+    analysisId <- unlist(OhdsiRTools::selectFromList(ccAnalysisList, "analysisId"))
+    description <- unlist(OhdsiRTools::selectFromList(ccAnalysisList, "description"))
+    analysisRef <- rbind(analysisRef, data.frame(method = "cc",
                                                  analysisId = analysisId,
                                                  description = description))
 

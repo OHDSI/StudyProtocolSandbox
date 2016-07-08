@@ -27,4 +27,9 @@ PopEstMethodEvaluation::createCohortMethodSettings(fileName = "inst/settings/cmA
 PopEstMethodEvaluation::createSccsSettings(fileName = "inst/settings/sccsAnalysisSettings.txt")
 PopEstMethodEvaluation::createSelfControlledCohortSettings(fileName = "inst/settings/sccAnalysisSettings.txt")
 PopEstMethodEvaluation::createIctpdSettings(fileName = "inst/settings/ictpdAnalysisSettings.txt")
+PopEstMethodEvaluation::createCaseControlSettings(fileName = "inst/settings/ccAnalysisSettings.txt")
+
+# Insert cohort definitions into package
+# OhdsiRTools::insertCirceDefinitionInPackage(2409, "Rheumatoid arthritis")
+OhdsiRTools::insertCirceDefinitionInPackage(2542, "Osteoarthritis")
 

@@ -30,7 +30,7 @@ runSelfControlledCaseSeries <- function(connectionDetails,
         stop("Cannot find injection summary file. Please run injectSignals first.")
     injectedSignals <- readRDS(injectionSummaryFile)
 
-    sccsFolder <- file.path(workFolder, "SelfControlledCaseSeries")
+    sccsFolder <- file.path(workFolder, "selfControlledCaseSeries")
     if (!file.exists(sccsFolder))
         dir.create(sccsFolder)
 
@@ -54,7 +54,7 @@ runSelfControlledCaseSeries <- function(connectionDetails,
                                                                 sccsAnalysisList = sccsAnalysisList,
                                                                 exposureOutcomeList = eoList,
                                                                 cdmVersion = cdmVersion,
-                                                                outputFolder = sccsSummaryFile,
+                                                                outputFolder = sccsFolder,
                                                                 combineDataFetchAcrossOutcomes = TRUE,
                                                                 getDbSccsDataThreads = 1,
                                                                 createSccsEraDataThreads = 5,
