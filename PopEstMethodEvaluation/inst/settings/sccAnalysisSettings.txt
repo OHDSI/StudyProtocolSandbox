@@ -23,7 +23,6 @@
       "hasFullTimeAtRisk": false,
       "washoutWindow": 183,
       "followupWindow": 183,
-      "shrinkage": 0.0001,
       "attr_class": "args"
     },
     "attr_class": "sccAnalysis"
@@ -52,7 +51,6 @@
       "hasFullTimeAtRisk": false,
       "washoutWindow": 183,
       "followupWindow": 183,
-      "shrinkage": 0.0001,
       "attr_class": "args"
     },
     "attr_class": "sccAnalysis"
@@ -81,7 +79,6 @@
       "hasFullTimeAtRisk": true,
       "washoutWindow": 183,
       "followupWindow": 183,
-      "shrinkage": 0.0001,
       "attr_class": "args"
     },
     "attr_class": "sccAnalysis"
@@ -110,7 +107,6 @@
       "hasFullTimeAtRisk": true,
       "washoutWindow": 183,
       "followupWindow": 183,
-      "shrinkage": 0.0001,
       "attr_class": "args"
     },
     "attr_class": "sccAnalysis"
@@ -139,7 +135,6 @@
       "hasFullTimeAtRisk": false,
       "washoutWindow": 183,
       "followupWindow": 183,
-      "shrinkage": 0.0001,
       "attr_class": "args"
     },
     "attr_class": "sccAnalysis"
@@ -168,7 +163,6 @@
       "hasFullTimeAtRisk": false,
       "washoutWindow": 183,
       "followupWindow": 183,
-      "shrinkage": 0.0001,
       "attr_class": "args"
     },
     "attr_class": "sccAnalysis"
@@ -197,7 +191,6 @@
       "hasFullTimeAtRisk": true,
       "washoutWindow": 183,
       "followupWindow": 183,
-      "shrinkage": 0.0001,
       "attr_class": "args"
     },
     "attr_class": "sccAnalysis"
@@ -226,7 +219,6 @@
       "hasFullTimeAtRisk": true,
       "washoutWindow": 183,
       "followupWindow": 183,
-      "shrinkage": 0.0001,
       "attr_class": "args"
     },
     "attr_class": "sccAnalysis"

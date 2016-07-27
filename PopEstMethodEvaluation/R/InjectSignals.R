@@ -24,7 +24,8 @@ injectSignals <- function(connectionDetails,
                           outcomeTable = "cohort",
                           workFolder,
                           cdmVersion = "5",
-                          createBaselineCohorts = TRUE) {
+                          createBaselineCohorts = TRUE,
+                          maxThreads = 1) {
     injectionFolder <- file.path(workFolder, "SignalInjection")
     if (!file.exists(injectionFolder))
         dir.create(injectionFolder)
@@ -60,6 +61,8 @@ injectSignals <- function(connectionDetails,
         #Diclofenac and all negative control outcomes:
         exposureOutcomePairs <- data.frame(exposureId = 1124300,
                                            outcomeId = c(24609, 29735, 73754, 80004, 134718, 139099, 141932, 192367, 193739, 194997, 197236, 199074, 255573, 257007, 313459, 314658, 316084, 319843, 321596, 374366, 375292, 380094, 433753, 433811, 436665, 436676, 436940, 437784, 438134, 440358, 440374, 443617, 443800, 4084966, 4288310))
+       # exposureOutcomePairs <- data.frame(exposureId = 1124300,
+        #                                   outcomeId = c(24609, 29735))
 
         prior = Cyclops::createPrior("laplace", exclude = 0, useCrossValidation = TRUE)
 
@@ -67,7 +70,7 @@ injectSignals <- function(connectionDetails,
                                          startingVariance = 0.001,
                                          noiseLevel = "quiet",
                                          tolerance = 2e-07,
-                                         threads = 10)
+                                         threads = min(c(5, maxThreads)))
 
         result <- MethodEvaluation::injectSignals(connectionDetails,
                                                   cdmDatabaseSchema = cdmDatabaseSchema,
@@ -88,7 +91,8 @@ injectSignals <- function(connectionDetails,
                                                   addExposureDaysToEnd = TRUE,
                                                   effectSizes = c(1, 1.25, 1.5, 2, 4),
                                                   workFolder = injectionFolder,
-                                                  cdmVersion = cdmVersion)
+                                                  cdmVersion = cdmVersion,
+                                                  outcomeThreads = max(c(1, floor(maxThreads / 5))))
         saveRDS(result, injectionSummaryFile)
     }
 }

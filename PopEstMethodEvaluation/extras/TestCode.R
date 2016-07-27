@@ -17,10 +17,9 @@
 # limitations under the License.
 
 library(PopEstMethodEvaluation)
-#setwd('s:/temp')
-options('fftempdir' = 's:/fftemp')
+options('fftempdir' = 'r:/fftemp')
 
-workFolder <- "s:/temp/PopEstMethodEvaluation"
+workFolder <- "r:/PopEstMethodEvaluation"
 
 
 pw <- NULL
@@ -49,7 +48,8 @@ injectSignals(connectionDetails = connectionDetails,
               outcomeTable = outcomeTable,
               workFolder = workFolder,
               cdmVersion = cdmVersion,
-              createBaselineCohorts = FALSE)
+              createBaselineCohorts = FALSE,
+              maxThreads = 32)
 
 createNestingCohorts(connectionDetails = connectionDetails,
                      cdmDatabaseSchema = cdmDatabaseSchema,
@@ -106,4 +106,8 @@ packageResults(connectionDetails = connectionDetails,
                workFolder = workFolder)
 
 createFiguresAndTables(file.path(workFolder, "export"))
+
+
+
+
 
