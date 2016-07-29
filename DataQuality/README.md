@@ -2,6 +2,44 @@
 
 This is an informatics study that focuses on data quality (rather than a clinical question).
 
+#How to execute the study (old)
+
+
+Step 1 is to execute latest version of Achilles. Step 2 is to execute the R code below:
+
+```R
+#use your previous connectionDetails object with username and psw for database
+#or get it from an external file 
+source('c:/r/conn.R')  #
+
+
+library(DataQuality)
+
+workFolder <- 'c:/temp/DQ'  #folder must exist (use forward slashes)
+
+#populate database parameters
+cdmDatabaseSchema <-'ccae'
+resultsDatabaseSchema <-'ccae' #at most sites this likely will not be the same as cdmDatabaseSchema
+
+
+executeDQ(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseSchema,workFolder = workFolder)
+
+packageResults(connectionDetails,cdmDatabaseSchema,workFolder)
+
+```
+To submit results, use the following command (study is using OHDSI bucket mechanism (Amazon S3 technology) 
+
+```R
+submitResults(exportFolder =file.path(workFolder,'export'),
+              studyBucketName = 'ohdsi-study-dataquality',
+              key=studyKey,
+              secret =studySecret
+              )
+
+
+```
+
+
 #Use of output data
 
 If any site requires a formal Data Use Agreement between the your site and the Data Quality Study Principal Investigator please fill in the  Data Use Agreement template (see  the extras folder) and email it to the DQ study PI (for second signature for data recipient).
@@ -16,7 +54,7 @@ This principle was used in the initial study of Achilles Heel output. (precursor
 #Additional tools
 The tool relies on new computations done via Achilles. Using Achilles version >1.2 is required
 
-#How to execute the study
+#How to execute the study (old)
 
 The study is fully contained in the existing Achilles package and only extracts are used in this study.
 

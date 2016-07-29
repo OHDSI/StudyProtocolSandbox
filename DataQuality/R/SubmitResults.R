@@ -21,6 +21,7 @@
 #' This requires an active internet connection.
 #'
 #' @param exportFolder   The path to the folder containing the \code{StudyResults.zip} file.
+#' @param studyBucketName  Name of the bucket to use (provided by the study coordinator)
 #' @param key            The key string as provided by the study coordinator
 #' @param secret         The secret string as provided by the study coordinator
 #'
@@ -28,14 +29,14 @@
 #' TRUE if the upload was successful.
 #'
 #' @export
-submitResults <- function(exportFolder, key, secret) {
+submitResults <- function(exportFolder, studyBucketName, key, secret) {
   zipName <- file.path(exportFolder, "StudyResults.zip")
   if (!file.exists(zipName)) {
     stop(paste("Cannot find file", zipName))
   }
   writeLines(paste0("Uploading file '", zipName, "' to study coordinating center"))
   result <- OhdsiSharing::putS3File(file = zipName,
-                                    bucket = "ohdsi-study-angioedema",
+                                    bucket = studyBucketName,
                                     key = key,
                                     secret = secret)
   if (result) {

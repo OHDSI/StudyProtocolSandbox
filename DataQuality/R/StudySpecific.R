@@ -1,4 +1,6 @@
-execute <- function(connectionDetails,
+#' Execute all components of the DataQuality study (resultsDatabaseSchema is where Achilles results are)
+#' @export
+executeDQ <- function(connectionDetails,
                     cdmDatabaseSchema,
                     resultsDatabaseSchema = cdmDatabaseSchema,
                     oracleTempSchema = resultsDatabaseSchema,
@@ -7,17 +9,32 @@ execute <- function(connectionDetails,
   
   
   #create export folder
+  #create export subfolder in workFolder
+  exportFolder <- file.path(workFolder, "export")
+  if (!file.exists(exportFolder))
+    dir.create(exportFolder)
+  
   
   #multiple steps here exporting to export folder
+  
   doTree(connectionDetails,
          cdmDatabaseSchema,
-         resultsDatabaseSchema = cdmDatabaseSchema,
+         resultsDatabaseSchema = resultsDatabaseSchema,
          oracleTempSchema = resultsDatabaseSchema,
          cdmVersion = cdmVersion,
-         exportFolder ='output/export')
+         workFolder = workFolder)
+  
+  
+  #export of data
+  #done separately for now, may be included later
+  
+  
+  #final cleanup
+  writeLines("Done with executeDQ")
   
   
 }
+
 
 #' experimental funtion with graphic output
 #' @export
@@ -26,12 +43,13 @@ doTree <- function(connectionDetails,
                    resultsDatabaseSchema = cdmDatabaseSchema,
                    oracleTempSchema = resultsDatabaseSchema,
                    cdmVersion = 5,
-                   exportFolder ='output/export'
-) {
+                   workFolder) {
   
   if (cdmVersion == 4) {
     stop("CDM version 4 not supported")
   }
+  
+  exportFolder<-file.path(workFolder,"export")
   
   if (!file.exists(exportFolder))
     dir.create(exportFolder)
@@ -63,15 +81,17 @@ doTree <- function(connectionDetails,
   cyear=as.numeric(format(Sys.Date(), "%Y"))
   data$age=cyear-as.numeric(data$stratum_1)
   
-  ggplot2::ggplot(data=data, ggplot2::aes(x=age, y=statistic_value)) + ggplot2::geom_bar(stat="identity") + ggplot2::coord_flip()
-  ggplot2::ggsave(file.path(exportFolder, "DemogrPyramid.png"), width = 9, height = 9, dpi= 200)
   
+  ggplot2::ggplot(data=data, ggplot2::aes(x=age, y=statistic_value)) + ggplot2::geom_bar(stat="identity") + ggplot2::coord_flip()
+  ggplot2::ggsave(file.path(exportFolder, "DemogrPyramidFigure.png"), width = 9, height = 9, dpi= 200)
+  
+  write.csv(data,file = file.path(exportFolder,'DemogrPyramidData.csv'),row.names = F)
   
   # Clean up
   RJDBC::dbDisconnect(conn)
   
   writeLines("Done")
-  output
+  
 }
 
 

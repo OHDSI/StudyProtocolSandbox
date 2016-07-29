@@ -6,8 +6,7 @@
 \usage{
 doTree(connectionDetails, cdmDatabaseSchema,
   resultsDatabaseSchema = cdmDatabaseSchema,
-  oracleTempSchema = resultsDatabaseSchema, cdmVersion = 5,
-  exportFolder = "output/export")
+  oracleTempSchema = resultsDatabaseSchema, cdmVersion = 5, workFolder)
 }
 \description{
 experimental funtion with graphic output
