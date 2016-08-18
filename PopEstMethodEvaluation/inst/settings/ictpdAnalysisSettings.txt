@@ -1,0 +1,48 @@
+[
+  {
+    "analysisId": 1,
+    "description": "Using censoring",
+    "getDbIctpdDataArgs": {
+      "drugTypeConceptIdList": 38000182,
+      "conditionTypeConceptIdList": 38000247,
+      "controlPeriodStart": -1080,
+      "controlPeriodEnd": -361,
+      "riskPeriodStart": 1,
+      "riskPeriodEnd": 30,
+      "censor": true,
+      "attr_class": "args"
+    },
+    "calculateStatisticsIcArgs": {
+      "multipleControlPeriods": "110",
+      "multipleRiskPeriods": "10000",
+      "shrinkage": 0.5,
+      "icPercentile": 0.025,
+      "metric": "IC025",
+      "attr_class": "args"
+    },
+    "attr_class": "ictpdAnalysis"
+  },
+  {
+    "analysisId": 2,
+    "description": "No censoring",
+    "getDbIctpdDataArgs": {
+      "drugTypeConceptIdList": 38000182,
+      "conditionTypeConceptIdList": 38000247,
+      "controlPeriodStart": -1080,
+      "controlPeriodEnd": -361,
+      "riskPeriodStart": 1,
+      "riskPeriodEnd": 30,
+      "censor": false,
+      "attr_class": "args"
+    },
+    "calculateStatisticsIcArgs": {
+      "multipleControlPeriods": "110",
+      "multipleRiskPeriods": "10000",
+      "shrinkage": 0.5,
+      "icPercentile": 0.025,
+      "metric": "IC025",
+      "attr_class": "args"
+    },
+    "attr_class": "ictpdAnalysis"
+  }
+]

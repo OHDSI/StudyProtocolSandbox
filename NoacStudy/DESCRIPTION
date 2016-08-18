@@ -10,15 +10,20 @@ Maintainer: Marc A. Suchard <msuchard@ucla.edu>
 Description: Examine the relative risk of adverse bleeding events in
   new users of novel oral anticoagulants vs warfarin.
 Depends:
-    R (>= 3.1),
-    DatabaseConnector (>= 1.2.1)
+    R (>= 3.2.2),
+    DatabaseConnector (>= 1.4.0)
 Imports:
-    SqlRender,
+    SqlRender (>= 1.1.3),
+    FeatureExtraction (>= 1.0.0),
+    CohortMethod (>= 2.0.2),
     Cyclops,
-    CohortMethod,
-    DBI,
-    mailR
+    EmpiricalCalibration,
+    RJDBC,
+    OhdsiRTools,
+    OhdsiSharing (>= 0.1.1)
 Suggests:
-    testthat
+    testthat,
+    ReporteRs
 License: Apache License 2.0
 LazyData: true
+RoxygenNote: 5.0.1

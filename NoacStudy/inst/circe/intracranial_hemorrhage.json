@@ -1,0 +1,192 @@
+{
+  "PrimaryCriteria": {
+    "CriteriaList": [
+      {
+        "ConditionOccurrence": {
+          "CodesetId": 0,
+          "ConditionType": [
+            {
+              "CONCEPT_ID": 38000183,
+              "CONCEPT_NAME": "Inpatient detail - primary",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            },
+            {
+              "CONCEPT_ID": 38000199,
+              "CONCEPT_NAME": "Inpatient header - primary",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            },
+            {
+              "CONCEPT_ID": 44786627,
+              "CONCEPT_NAME": "Primary Condition",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            },
+            {
+              "CONCEPT_ID": 38000184,
+              "CONCEPT_NAME": "Inpatient detail - 1st position",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            },
+            {
+              "CONCEPT_ID": 38000200,
+              "CONCEPT_NAME": "Inpatient header - 1st position",
+              "CONCEPT_CODE": "OMOP generated",
+              "DOMAIN_ID": "Condition Type",
+              "VOCABULARY_ID": "Condition Type"
+            }
+          ],
+          "VisitType": [
+            {
+              "CONCEPT_ID": 9203,
+              "CONCEPT_NAME": "Emergency Room Visit",
+              "CONCEPT_CODE": "ER",
+              "DOMAIN_ID": "Visit",
+              "VOCABULARY_ID": "Visit"
+            },
+            {
+              "CONCEPT_ID": 9201,
+              "CONCEPT_NAME": "Inpatient Visit",
+              "CONCEPT_CODE": "IP",
+              "DOMAIN_ID": "Visit",
+              "VOCABULARY_ID": "Visit"
+            }
+          ]
+        }
+      }
+    ],
+    "ObservationWindow": {
+      "PriorDays": 0,
+      "PostDays": 0
+    },
+    "PrimaryCriteriaLimit": {
+      "Type": "All"
+    }
+  },
+  "AdditionalCriteria": {
+    "Type": "ALL",
+    "CriteriaList": [
+      {
+        "Criteria": {
+          "ConditionOccurrence": {
+            "CodesetId": 0
+          }
+        },
+        "StartWindow": {
+          "Start": {
+            "Days": 90,
+            "Coeff": -1
+          },
+          "End": {
+            "Days": 1,
+            "Coeff": -1
+          }
+        },
+        "Occurrence": {
+          "Type": 1,
+          "Count": 0
+        }
+      }
+    ],
+    "Groups": []
+  },
+  "ConceptSets": [
+    {
+      "id": 0,
+      "name": "Intracranial hemorrhage",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 376713,
+              "CONCEPT_NAME": "Cerebral hemorrhage",
+              "CONCEPT_CODE": "274100004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4014781,
+              "CONCEPT_NAME": "Closed traumatic subdural hemorrhage",
+              "CONCEPT_CODE": "209947002",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 252477,
+              "CONCEPT_NAME": "Extradural hemorrhage following injury without open intracranial wound",
+              "CONCEPT_CODE": "43216008",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 439847,
+              "CONCEPT_NAME": "Intracranial hemorrhage",
+              "CONCEPT_CODE": "1386000",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 42873157,
+              "CONCEPT_NAME": "Intracranial hemorrhage following injury",
+              "CONCEPT_CODE": "450410005",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 436430,
+              "CONCEPT_NAME": "Nontraumatic extradural hemorrhage",
+              "CONCEPT_CODE": "397809001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 432923,
+              "CONCEPT_NAME": "Subarachnoid hemorrhage",
+              "CONCEPT_CODE": "21454007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 435959,
+              "CONCEPT_NAME": "Subarachnoid hemorrhage following injury without open intracranial wound",
+              "CONCEPT_CODE": "28048009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 439040,
+              "CONCEPT_NAME": "Subdural hemorrhage",
+              "CONCEPT_CODE": "35486000",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "ExpressionLimit": {
+    "Type": "All"
+  }
+}

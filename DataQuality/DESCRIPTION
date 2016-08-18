@@ -1,0 +1,14 @@
+Package: DataQuality
+Title: Second Data Quaity Study
+Version: 0.1
+Authors@R: "Vojtech Huser <vojtech.huser@nih.gov> [aut, cre]"
+Description: This study focuses on Data Quality. It tries to determine thresholds.
+Depends:
+    R (>= 3.2.2),
+    DatabaseConnector (>= 1.4.0)
+Imports:
+    SqlRender,
+    ggplot2
+License: Apache License 2.0
+LazyData: true
+RoxygenNote: 5.0.1

@@ -1,0 +1,1579 @@
+{
+  "PrimaryCriteria": {
+    "CriteriaList": [
+      {
+        "DrugEra": {
+          "CodesetId": 3,
+          "EraStartDate": {
+            "Value": "2011-11-1",
+            "Op": "gt"
+          },
+          "First": true,
+          "AgeAtStart": {
+            "Value": 21,
+            "Op": "gte"
+          }
+        }
+      }
+    ],
+    "ObservationWindow": {
+      "PriorDays": 183,
+      "PostDays": 0
+    },
+    "PrimaryCriteriaLimit": {
+      "Type": "First"
+    }
+  },
+  "AdditionalCriteria": {
+    "Type": "ALL",
+    "CriteriaList": [],
+    "Groups": [
+      {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ConditionOccurrence": {
+                "CodesetId": 1
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": -1
+              }
+            },
+            "Occurrence": {
+              "Type": 2,
+              "Count": 1
+            }
+          }
+        ],
+        "Groups": []
+      },
+      {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "DrugExposure": {
+                "CodesetId": 0
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 1,
+                "Coeff": -1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          }
+        ],
+        "Groups": []
+      },
+      {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "DrugExposure": {
+                "CodesetId": 3
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 1,
+                "Coeff": -1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          }
+        ],
+        "Groups": []
+      },
+      {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "DrugExposure": {
+                "CodesetId": 4
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Days": 183,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 1,
+                "Coeff": -1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          }
+        ],
+        "Groups": []
+      },
+      {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ConditionOccurrence": {
+                "CodesetId": 5
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          },
+          {
+            "Criteria": {
+              "ProcedureOccurrence": {
+                "CodesetId": 5
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          },
+          {
+            "Criteria": {
+              "Observation": {
+                "CodesetId": 5
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          }
+        ],
+        "Groups": []
+      },
+      {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ConditionOccurrence": {
+                "CodesetId": 7
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Days": 30,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          },
+          {
+            "Criteria": {
+              "ProcedureOccurrence": {
+                "CodesetId": 7
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Days": 30,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          },
+          {
+            "Criteria": {
+              "Observation": {
+                "CodesetId": 7
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Days": 30,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          }
+        ],
+        "Groups": []
+      },
+      {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ConditionOccurrence": {
+                "CodesetId": 8
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          },
+          {
+            "Criteria": {
+              "ProcedureOccurrence": {
+                "CodesetId": 8
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          },
+          {
+            "Criteria": {
+              "Observation": {
+                "CodesetId": 8
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          }
+        ],
+        "Groups": []
+      },
+      {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ProcedureOccurrence": {
+                "CodesetId": 9
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Days": 183,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          }
+        ],
+        "Groups": []
+      }
+    ]
+  },
+  "ConceptSets": [
+    {
+      "id": 0,
+      "name": "warfarin",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 1310149,
+              "CONCEPT_NAME": "Warfarin",
+              "CONCEPT_CODE": "11289",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "name": "atrial fibrillation",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 313217,
+              "CONCEPT_NAME": "Atrial fibrillation",
+              "CONCEPT_CODE": "49436004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 314665,
+              "CONCEPT_NAME": "Atrial flutter",
+              "CONCEPT_CODE": "5370000",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4108832,
+              "CONCEPT_NAME": "Atrial fibrillation and flutter",
+              "CONCEPT_CODE": "195080001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "name": "rivaroxaban",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 40241331,
+              "CONCEPT_NAME": "rivaroxaban",
+              "CONCEPT_CODE": "1114195",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "name": "anticoagulants",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 40241331,
+              "CONCEPT_NAME": "rivaroxaban",
+              "CONCEPT_CODE": "1114195",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40228152,
+              "CONCEPT_NAME": "dabigatran etexilate",
+              "CONCEPT_CODE": "1037042",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 1310149,
+              "CONCEPT_NAME": "Warfarin",
+              "CONCEPT_CODE": "11289",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43013024,
+              "CONCEPT_NAME": "apixaban",
+              "CONCEPT_CODE": "1364430",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "name": "Heart valve or mitral stenosis",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 4013355,
+              "CONCEPT_NAME": "Implantation of heart valve",
+              "CONCEPT_CODE": "112815000",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4013356,
+              "CONCEPT_NAME": "Resuture of heart valve prosthesis, poppet",
+              "CONCEPT_CODE": "112817008",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4060089,
+              "CONCEPT_NAME": "H/O: artificial heart valve",
+              "CONCEPT_CODE": "161677002",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4020159,
+              "CONCEPT_NAME": "Mechanical complication of heart valve prosthesis",
+              "CONCEPT_CODE": "213036006",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4121484,
+              "CONCEPT_NAME": "Replacement of heart valve poppet, prosthetic",
+              "CONCEPT_CODE": "233912002",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4339971,
+              "CONCEPT_NAME": "Reinsertion of heart valve, prosthetic",
+              "CONCEPT_CODE": "233059007",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4119522,
+              "CONCEPT_NAME": "Prosthetic heart valve sample",
+              "CONCEPT_CODE": "258543009",
+              "DOMAIN_ID": "Specimen",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43020459,
+              "CONCEPT_NAME": "Mechanical breakdown of prosthetic heart valve",
+              "CONCEPT_CODE": "285961000119107",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4145884,
+              "CONCEPT_NAME": "Prosthetic replacement of heart valve",
+              "CONCEPT_CODE": "307279007",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44782431,
+              "CONCEPT_NAME": "History of mechanical heart valve replacement",
+              "CONCEPT_CODE": "33711000119109",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4195003,
+              "CONCEPT_NAME": "Heart valve stenosis",
+              "CONCEPT_CODE": "44241007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 312773,
+              "CONCEPT_NAME": "Mechanical complication due to heart valve prosthesis",
+              "CONCEPT_CODE": "43873004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4181749,
+              "CONCEPT_NAME": "Revision of prosthesis of heart valve",
+              "CONCEPT_CODE": "54315009",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4165384,
+              "CONCEPT_NAME": "Implantation of heart valve prosthesis or synthetic device",
+              "CONCEPT_CODE": "47432005",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44783274,
+              "CONCEPT_NAME": "Mechanical heart valve replacement",
+              "CONCEPT_CODE": "699347000",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2617334,
+              "CONCEPT_NAME": "PROVISION OF TEST MATERIALS AND EQUIPMENT FOR HOME INR MONITORING TO PATIENT WITH MECHANICAL HEART VALVE(S) WHO MEETS MEDICARE COVERAGE CRITERIA. INCLUDES PROVISION OF MATERIALS FOR USE IN THE HOME AND REPORTING OF TEST RESULTS TO PHYSICIAN; PER 4 TESTS",
+              "CONCEPT_CODE": "G0249",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "HCPCS"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2617335,
+              "CONCEPT_NAME": "PHYSICIAN REVIEW, INTERPRETATION AND PATIENT MANAGEMENT OF HOME INR TESTING FOR A PATIENT WITH MECHANICAL HEART VALVE(S) WHO MEETS OTHER COVERAGE CRITERIA; PER 4 TESTS (DOES NOT REQUIRE FACE-TO-FACE SERVICE)",
+              "CONCEPT_CODE": "G0250",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "HCPCS"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2001447,
+              "CONCEPT_NAME": "Replacement of heart valve",
+              "CONCEPT_CODE": "35.2",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2001448,
+              "CONCEPT_NAME": "Replacement of unspecified heart valve",
+              "CONCEPT_CODE": "35.20",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40757085,
+              "CONCEPT_NAME": "Implantation of catheter-delivered prosthetic aortic heart valve; endovascular approach",
+              "CONCEPT_CODE": "0256T",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40757036,
+              "CONCEPT_NAME": "Implantation of catheter-delivered prosthetic aortic heart valve; open thoracic approach (eg, transapical, transventricular)",
+              "CONCEPT_CODE": "0257T",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43528049,
+              "CONCEPT_NAME": "Implantation of catheter-delivered prosthetic aortic heart valve, open thoracic approach, (eg, transapical, other than transaortic)",
+              "CONCEPT_CODE": "0318T",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 315273,
+              "CONCEPT_NAME": "Mitral valve stenosis",
+              "CONCEPT_CODE": "79619009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4047527,
+              "CONCEPT_NAME": "Mitral valve stenosis and regurgitation",
+              "CONCEPT_CODE": "123802001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4110937,
+              "CONCEPT_NAME": "Non-rheumatic mitral valve stenosis",
+              "CONCEPT_CODE": "194727002",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4304541,
+              "CONCEPT_NAME": "Rheumatic mitral valve insufficiency AND aortic valve stenosis",
+              "CONCEPT_CODE": "81552002",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "name": "Long-term care visit",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 42898160,
+              "CONCEPT_NAME": "Long Term Care Visit",
+              "CONCEPT_CODE": "LTCP",
+              "DOMAIN_ID": "Visit",
+              "VOCABULARY_ID": "Visit"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "name": "Hemodialysis or perineotal dialysis",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 4120120,
+              "CONCEPT_NAME": "Hemodialysis",
+              "CONCEPT_CODE": "302497006",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2003564,
+              "CONCEPT_NAME": "Peritoneal dialysis",
+              "CONCEPT_CODE": "54.98",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4324124,
+              "CONCEPT_NAME": "Peritoneal dialysis",
+              "CONCEPT_CODE": "71192002",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 435649,
+              "CONCEPT_NAME": "Complication of hemodialysis",
+              "CONCEPT_CODE": "85223007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4126124,
+              "CONCEPT_NAME": "Acute disorder of hemodialysis",
+              "CONCEPT_CODE": "236538004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4137616,
+              "CONCEPT_NAME": "Hemodialysis-associated amyloidosis",
+              "CONCEPT_CODE": "32599008",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4099603,
+              "CONCEPT_NAME": "Megaloblastic anemia due to hemodialysis",
+              "CONCEPT_CODE": "27366005",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4092504,
+              "CONCEPT_NAME": "Adequacy of hemodialysis",
+              "CONCEPT_CODE": "251869004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4297658,
+              "CONCEPT_NAME": "Hemodialysis-associated secondary amyloidosis of skin",
+              "CONCEPT_CODE": "402458002",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4300106,
+              "CONCEPT_NAME": "Skin lesion associated with hemodialysis",
+              "CONCEPT_CODE": "402762007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4297919,
+              "CONCEPT_NAME": "Hemodialysis-associated pseudoporphyria",
+              "CONCEPT_CODE": "403732009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4300099,
+              "CONCEPT_NAME": "Hemodialysis-associated pruritus",
+              "CONCEPT_CODE": "403733004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 313232,
+              "CONCEPT_NAME": "Hemodialysis-associated hypotension",
+              "CONCEPT_CODE": "408667000",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40480136,
+              "CONCEPT_NAME": "Dependence on hemodialysis",
+              "CONCEPT_CODE": "443143006",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44782924,
+              "CONCEPT_NAME": "Misplacement of hemodialysis catheter",
+              "CONCEPT_CODE": "698937002",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4181476,
+              "CONCEPT_NAME": "Dependence on hemodialysis due to end stage renal disease",
+              "CONCEPT_CODE": "428982002",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2101833,
+              "CONCEPT_NAME": "Hemodialysis plan of care documented (ESRD)",
+              "CONCEPT_CODE": "0505F",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2617550,
+              "CONCEPT_NAME": "End stage renal disease patient requiring hemodialysis vascular access documented to have received autogenous av fistula",
+              "CONCEPT_CODE": "G8081",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2617551,
+              "CONCEPT_NAME": "End stage renal disease patient requiring hemodialysis documented to have received vascular access other than autogenous av fistula",
+              "CONCEPT_CODE": "G8082",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2617552,
+              "CONCEPT_NAME": "End-stage renal disease patient requiring hemodialysis vascular access was not an eligible candidate for autogenous av fistula",
+              "CONCEPT_CODE": "G8085",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43533281,
+              "CONCEPT_NAME": "Patient receiving maintenance hemodialysis in an outpatient dialysis facility",
+              "CONCEPT_CODE": "G8956",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44786469,
+              "CONCEPT_NAME": "Documentation of patient receiving maintenance hemodialysis for greater than or equal to 90 days with a catheter for documented reasons (eg, patient is undergoing palliative dialysis with a catheter, patient approved by a qualified transplant program and",
+              "CONCEPT_CODE": "G9264",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44786470,
+              "CONCEPT_NAME": "Patient receiving maintenance hemodialysis for greater than or equal to 90 days with a catheter as the mode of vascular access",
+              "CONCEPT_CODE": "G9265",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44786471,
+              "CONCEPT_NAME": "Patient receiving maintenance hemodialysis for greater than or equal to 90 days without a catheter as the mode of vascular access",
+              "CONCEPT_CODE": "G9266",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "name": "Kidney transplant",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 2003626,
+              "CONCEPT_NAME": "Other kidney transplantation",
+              "CONCEPT_CODE": "55.69",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4324754,
+              "CONCEPT_NAME": "Examination of recipient after kidney transplant",
+              "CONCEPT_CODE": "428645009",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40664909,
+              "CONCEPT_NAME": "Patient receiving hemodialysis, peritoneal dialysis or kidney transplantation",
+              "CONCEPT_CODE": "G8727",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "HCPCS"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2721092,
+              "CONCEPT_NAME": "Simultaneous pancreas kidney transplantation",
+              "CONCEPT_CODE": "S2065",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "HCPCS"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4046829,
+              "CONCEPT_NAME": "Anesthesia for renal transplant, recipient",
+              "CONCEPT_CODE": "23137002",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4022805,
+              "CONCEPT_NAME": "Live donor renal transplant",
+              "CONCEPT_CODE": "175901007",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4021107,
+              "CONCEPT_NAME": "Cadaveric renal transplant",
+              "CONCEPT_CODE": "175902000",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4343000,
+              "CONCEPT_NAME": "Xenograft renal transplant",
+              "CONCEPT_CODE": "236138007",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4346636,
+              "CONCEPT_NAME": "Renal transplant arteriogram",
+              "CONCEPT_CODE": "241249008",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4346505,
+              "CONCEPT_NAME": "Renal transplant venogram",
+              "CONCEPT_CODE": "241250008",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4197300,
+              "CONCEPT_NAME": "Donor renal transplantation",
+              "CONCEPT_CODE": "313030004",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4347789,
+              "CONCEPT_NAME": "Renal transplant venous sampling",
+              "CONCEPT_CODE": "241251007",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 37521745,
+              "CONCEPT_NAME": "Renal transplant",
+              "CONCEPT_CODE": "10038533",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "MedDRA"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4322471,
+              "CONCEPT_NAME": "Transplant of kidney",
+              "CONCEPT_CODE": "70536003",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2109589,
+              "CONCEPT_NAME": "Renal autotransplantation, reimplantation of kidney",
+              "CONCEPT_CODE": "50380",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2109586,
+              "CONCEPT_NAME": "Renal allotransplantation, implantation of graft; excluding donor and recipient nephrectomy",
+              "CONCEPT_CODE": "50360",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2109584,
+              "CONCEPT_NAME": "Backbench reconstruction of cadaver or living donor renal allograft prior to transplantation; ureteral anastomosis, each",
+              "CONCEPT_CODE": "50329",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4002215,
+              "CONCEPT_NAME": "Kidney implantation",
+              "CONCEPT_CODE": "119980000",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4163566,
+              "CONCEPT_NAME": "Renal replacement",
+              "CONCEPT_CODE": "398887003",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "name": "joint replacement/arthroplasty surgery",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 2101634,
+              "CONCEPT_NAME": "Anesthesia for open procedures involving hip joint; total hip arthroplasty",
+              "CONCEPT_CODE": "01214",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2101635,
+              "CONCEPT_NAME": "Anesthesia for open procedures involving hip joint; revision of total hip arthroplasty",
+              "CONCEPT_CODE": "01215",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2101660,
+              "CONCEPT_NAME": "Anesthesia for open or endoscopic total knee joint replacement",
+              "CONCEPT_CODE": "01402",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2103931,
+              "CONCEPT_NAME": "Arthroplasty, elbow; with distal humerus and proximal ulnar prosthetic replacement (eg, total elbow)",
+              "CONCEPT_CODE": "24363",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2104836,
+              "CONCEPT_NAME": "Arthroplasty, acetabular and proximal femoral prosthetic replacement (total hip arthroplasty), with or without autograft or allograft",
+              "CONCEPT_CODE": "27130",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2104837,
+              "CONCEPT_NAME": "Conversion of previous hip surgery to total hip arthroplasty, with or without autograft or allograft",
+              "CONCEPT_CODE": "27132",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2104838,
+              "CONCEPT_NAME": "Revision of thigh bone and hip joint prosthesis",
+              "CONCEPT_CODE": "27134",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2104839,
+              "CONCEPT_NAME": "Revision of hip joint prosthesis",
+              "CONCEPT_CODE": "27137",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2104840,
+              "CONCEPT_NAME": "Revision of thigh bone prosthesis",
+              "CONCEPT_CODE": "27138",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2105103,
+              "CONCEPT_NAME": "Arthroplasty, knee, condyle and plateau; medial AND lateral compartments with or without patella resurfacing (total knee arthroplasty)",
+              "CONCEPT_CODE": "27447",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2105128,
+              "CONCEPT_NAME": "Revision of one component of total knee joint prosthesis",
+              "CONCEPT_CODE": "27486",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2105129,
+              "CONCEPT_NAME": "Revision of lower thigh bone and both shin bone components of total knee joint prosthesis",
+              "CONCEPT_CODE": "27487",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000070,
+              "CONCEPT_NAME": "Revision of hip replacement, acetabular component",
+              "CONCEPT_CODE": "00.71",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000069,
+              "CONCEPT_NAME": "Revision of hip replacement, both acetabular and femoral components",
+              "CONCEPT_CODE": "00.70",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000071,
+              "CONCEPT_NAME": "Revision of hip replacement, femoral component",
+              "CONCEPT_CODE": "00.72",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000072,
+              "CONCEPT_NAME": "Revision of hip replacement, acetabular liner and/or femoral head only",
+              "CONCEPT_CODE": "00.73",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000073,
+              "CONCEPT_NAME": "Hip bearing surface, metal-on-polyethylene",
+              "CONCEPT_CODE": "00.74",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000074,
+              "CONCEPT_NAME": "Hip bearing surface, metal-on-metal",
+              "CONCEPT_CODE": "00.75",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000075,
+              "CONCEPT_NAME": "Hip bearing surface, ceramic-on-ceramic",
+              "CONCEPT_CODE": "00.76",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000076,
+              "CONCEPT_NAME": "Hip bearing surface, ceramic-on-polyethylene",
+              "CONCEPT_CODE": "00.77",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000078,
+              "CONCEPT_NAME": "Revision of knee replacement, total (all components)",
+              "CONCEPT_CODE": "00.80",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000079,
+              "CONCEPT_NAME": "Revision of knee replacement, tibial component",
+              "CONCEPT_CODE": "00.81",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000080,
+              "CONCEPT_NAME": "Revision of knee replacement, femoral component",
+              "CONCEPT_CODE": "00.82",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000081,
+              "CONCEPT_NAME": "Revision of knee replacement, patellar component",
+              "CONCEPT_CODE": "00.83",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000082,
+              "CONCEPT_NAME": "Revision of total knee replacement, tibial insert (liner)",
+              "CONCEPT_CODE": "00.84",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000083,
+              "CONCEPT_NAME": "Resurfacing hip, total, acetabulum and femoral head",
+              "CONCEPT_CODE": "00.85",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000084,
+              "CONCEPT_NAME": "Resurfacing hip, partial, femoral head",
+              "CONCEPT_CODE": "00.86",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000085,
+              "CONCEPT_NAME": "Resurfacing hip, partial, acetabulum",
+              "CONCEPT_CODE": "00.87",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2005891,
+              "CONCEPT_NAME": "Total hip replacement",
+              "CONCEPT_CODE": "81.51",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4203771,
+              "CONCEPT_NAME": "Total replacement of hip",
+              "CONCEPT_CODE": "52734007",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4162099,
+              "CONCEPT_NAME": "Prosthetic arthroplasty of the hip",
+              "CONCEPT_CODE": "397956004",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4207955,
+              "CONCEPT_NAME": "Insertion of hip prosthesis, total",
+              "CONCEPT_CODE": "55423004",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4134857,
+              "CONCEPT_NAME": "Insertion of hip prosthesis",
+              "CONCEPT_CODE": "398010007",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2104835,
+              "CONCEPT_NAME": "Hemiarthroplasty, hip, partial (eg, femoral stem prosthesis, bipolar arthroplasty)",
+              "CONCEPT_CODE": "27125",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2005902,
+              "CONCEPT_NAME": "Partial hip replacement",
+              "CONCEPT_CODE": "81.52",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2005904,
+              "CONCEPT_NAME": "Total knee replacement",
+              "CONCEPT_CODE": "81.54",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 45887894,
+              "CONCEPT_NAME": "Revision of total hip arthroplasty",
+              "CONCEPT_CODE": "1004910",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4266062,
+              "CONCEPT_NAME": "Revision of total hip replacement",
+              "CONCEPT_CODE": "62402000",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4010119,
+              "CONCEPT_NAME": "Revision of hip replacement",
+              "CONCEPT_CODE": "112727005",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4001859,
+              "CONCEPT_NAME": "Hip joint implantation",
+              "CONCEPT_CODE": "119610009",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    }
+  ],
+  "ExpressionLimit": {
+    "Type": "First"
+  }
+}

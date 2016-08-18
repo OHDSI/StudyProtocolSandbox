@@ -1,0 +1,71 @@
+cohortDefinitionId,cohortDefinitionName,filename,cohortType
+1,Rivaroxaban new users with all inclusion criteria,rivaroxaban.sql,0
+2,Warfarin new users with all inclusion criteria,warfarin.sql,0
+3,Dabigatran new users with all inclusion criteria,dabigatran.sql,0
+4,Apixaban new users with all inclusion criteria,apixaban.sql,0
+10,Ischemic stroke,ischemic_stroke.sql,1
+11,Intracranial hemorrhage,intracranial_hemorrhage.sql,1
+12,Gastrointestinal hemorrhage,gastrointestinal_hemorrhage.sql,1
+13,Non-GI extracranial hemorrhage,non_gi_extracranial_hemorrhage.sql,1
+14,Acute myocardial infarction,acute_myocardial_infarction.sql,1
+15,Deep vein thrombosis,deep_vein_thrombosis.sql,1
+16,Pulmonary embolism,pulmonary_embolism.sql,1
+17,Arterial thrombosis embolism,arterial_thrombosis_embolism.sql,1
+18,"Combined outcome (IS, ICH, DVT, PE, AE)",combined.sql,1
+35606949,First occurrence of Lacrimation decreased,,2
+35607026,First occurrence of Blebitis,,2
+35506612,First occurrence of Diabetes with hyperosmolarity,,2
+35506621,First occurrence of Type 1 diabetes mellitus,,2
+37320318,First occurrence of Rosacea,,2
+37119529,First occurrence of Prostatitis,,2
+37119539,First occurrence of Atrophic vulvovaginitis,,2
+37320079,First occurrence of Hyperkeratosis,,2
+37320098,First occurrence of Actinic keratosis,,2
+37420593,First occurrence of Tobacco user,,2
+37420358,First occurrence of Postmenopause,,2
+37420426,First occurrence of Familial risk factor,,2
+2213473,"First occurrence of Tetanus, diphtheria toxoids and acellular pertussis vaccine (Tdap), when administered to individuals 7 years or older, for intramuscular use",,2
+2109919,"First occurrence of Circumcision, surgical excision other than clamp, device, or dorsal slit; older than 28 days of age",,2
+2212542,First occurrence of PSA (prostate specific antigen) measurement,,2
+2212884,First occurrence of Analysis for antibody to HIV-1 and HIV-2 virus,,2
+2212945,First occurrence of Blood group typing (ABO),,2
+2212830,First occurrence of Skin test for tuberculosis,,2
+2213440,"First occurrence of Influenza virus vaccine, trivalent, split virus, when administered to individuals 3 years of age and older, for intramuscular use",,2
+28060,First occurrence of Streptococcal sore throat,,2
+134438,First occurrence of Contact dermatitis,,2
+36315380,First occurrence of Weight decreased,,2
+37520888,First occurrence of Cataract operation,,2
+37521024,First occurrence of Obesity surgery,,2
+36315910,First occurrence of Smear cervix abnormal,,2
+36315934,First occurrence of Mammogram abnormal,,2
+37522022,First occurrence of Influenza immunisation,,2
+36416637,First occurrence of Hypertriglyceridaemia,,2
+36416695,First occurrence of Gout,,2
+36617553,First occurrence of Uterine leiomyoma,,2
+36110587,First occurrence of Infective exacerbation of chronic obstructive airways disease,,2
+36919212,"First occurrence of Sleep disorder due to general medical condition, insomnia type",,2
+36918850,First occurrence of Adjustment disorder with mixed anxiety and depressed mood,,2
+36918858,First occurrence of Anxiety,,2
+36718555,First occurrence of Insomnia,,2
+37019460,First occurrence of Calculus ureteric,,2
+36313741,First occurrence of Prostatic specific antigen increased,,2
+36110386,First occurrence of Onychomycosis,,2
+37119607,First occurrence of Benign prostatic hyperplasia,,2
+35406331,First occurrence of Cerumen impaction,,2
+35406349,First occurrence of Otitis externa,,2
+35406361,First occurrence of Deafness neurosensory,,2
+35406391,First occurrence of Tinnitus,,2
+35406402,First occurrence of Eustachian tube disorder,,2
+36211101,First occurrence of Foot fracture,,2
+36110951,First occurrence of Papilloma viral infection,,2
+35607337,First occurrence of Vitreous opacities,,2
+35607461,First occurrence of Presbyopia,,2
+36314156,First occurrence of Blood glucose abnormal,,2
+36110933,First occurrence of Influenza,,2
+36516895,First occurrence of Foot deformity,,2
+36516905,First occurrence of Intervertebral disc disorder,,2
+36516909,First occurrence of Sciatica,,2
+36617158,First occurrence of Fibrocystic breast disease,,2
+36617163,First occurrence of Breast cancer female,,2
+36617187,First occurrence of Dermal cyst,,2
+2313636,"First occurrence of Eye and medical examination for diagnosis and treatment, established patient, 1 or more visits",,2
