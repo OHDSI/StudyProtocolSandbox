@@ -49,7 +49,7 @@ injectSignals(connectionDetails = connectionDetails,
               workFolder = workFolder,
               cdmVersion = cdmVersion,
               createBaselineCohorts = FALSE,
-              maxThreads = 32)
+              maxCores = 32)
 
 createNestingCohorts(connectionDetails = connectionDetails,
                      cdmDatabaseSchema = cdmDatabaseSchema,
@@ -64,7 +64,8 @@ runCohortMethod(connectionDetails = connectionDetails,
                 outcomeDatabaseSchema = outcomeDatabaseSchema,
                 outcomeTable = outcomeTable,
                 workFolder = workFolder,
-                cdmVersion = cdmVersion)
+                cdmVersion = cdmVersion,
+                maxCores = 32)
 
 runSelfControlledCaseSeries(connectionDetails = connectionDetails,
                             cdmDatabaseSchema = cdmDatabaseSchema,
