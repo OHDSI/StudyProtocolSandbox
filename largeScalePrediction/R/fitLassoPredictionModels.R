@@ -37,27 +37,26 @@ fitLassoPredictionModels <- function(workFolder){
 
     outcomeIds <- plpData$metaData$call$outcomeIds
     for(oid in outcomeIds){
-      population <- tryCatch({
-          read.csv(file.path(workFolder, 'Populations',oid))[,-1]
+      tryCatch({
+          population <- read.csv(file.path(workFolder, 'Populations',oid))[,-1]
+          attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
+          attr(population, "metaData")$outcomeId <- oid
+
+          modelSettings <- PatientLevelPrediction::setLassoLogisticRegression()
+          trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
+                                                         modelSettings,
+                                                         testSplit='time',
+                                                         testFraction=0.25,
+                                                         nfold=3,
+                                                         save=file.path(workFolder,'models', 'lrModels',oid)
+          )
+
+          # do plots and save in plot subdirectory...
+          PatientLevelPrediction::plotPlp(trainedModel, file.path(workFolder,'models', 'lrModels',oid))
+
           },error = function(e) {
-          return()
+              flog.info(paste0('Error for ', oid, ': ',e))
       })
-
-      attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
-      attr(population, "metaData")$outcomeId <- oid
-
-      modelSettings <- PatientLevelPrediction::setLassoLogisticRegression()
-      trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
-                                                     modelSettings,
-                                                     testSplit='time',
-                                                     testFraction=0.25,
-                                                     nfold=3,
-                                                     save=file.path(workFolder,'models', 'lrModels',oid)
-                                                     )
-
-      # do plots and save in plot subdirectory...
-      PatientLevelPrediction::plotPlp(trainedModel, file.path(workFolder,'models', 'lrModels',oid))
-
     }
 
 }

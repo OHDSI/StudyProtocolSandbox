@@ -37,23 +37,26 @@ fitGBMPredictionModels <- function(workFolder){
 
     outcomeIds <- plpData$metaData$call$outcomeIds
     for(oid in outcomeIds){
-        population <-read.csv(file.path(workFolder, 'Populations',oid))[,-1]
-        attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
-        attr(population, "metaData")$outcomeId <- oid
+        tryCatch({
+            population <-read.csv(file.path(workFolder, 'Populations',oid))[,-1]
+            attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
+            attr(population, "metaData")$outcomeId <- oid
 
-        modelSettings <- PatientLevelPrediction::setGradientBoostingMachine(ntrees=c(50,100,250),
-                                                                            max_depth = c(4,7,16),
-                                                                            min_rows = c(1,20))
-        trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
-                                                       modelSettings,
-                                                       testSplit='time',
-                                                       testFraction=0.25,
-                                                       nfold=3,
-                                                       save=file.path(workFolder,'models', 'gbmModels',oid)
-        )
+            modelSettings <- PatientLevelPrediction::setGradientBoostingMachine(ntrees=c(50,100,250),
+                                                                                max_depth = c(4,7,16),
+                                                                                min_rows = c(1,20))
+            trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
+                                                           modelSettings,
+                                                           testSplit='time',
+                                                           testFraction=0.25,
+                                                           nfold=3,
+                                                           save=file.path(workFolder,'models', 'gbmModels',oid)
+            )
 
-        PatientLevelPrediction::plotPlp(trainedModel, file.path(workFolder,'models', 'gbmModels',oid))
-
+            PatientLevelPrediction::plotPlp(trainedModel, file.path(workFolder,'models', 'gbmModels',oid))
+        },error = function(e) {
+            flog.info(paste0('Error for ', oid, ': ',e))
+        })
 
     }
 }

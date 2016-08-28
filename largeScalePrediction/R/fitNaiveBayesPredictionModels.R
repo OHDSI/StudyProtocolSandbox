@@ -36,21 +36,24 @@ fitNaiveBayesPredictionModels <- function(workFolder){
 
     outcomeIds <- plpData$metaData$call$outcomeIds
     for(oid in outcomeIds){
-        population <-read.csv(file.path(workFolder, 'Populations',oid))[,-1]
-        attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
-        attr(population, "metaData")$outcomeId <- oid
+        tryCatch({
+            population <-read.csv(file.path(workFolder, 'Populations',oid))[,-1]
+            attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
+            attr(population, "metaData")$outcomeId <- oid
 
-        modelSettings <- PatientLevelPrediction::setNaiveBayes()
-        trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
-                                                       modelSettings,
-                                                       testSplit='time',
-                                                       testFraction=0.25,
-                                                       nfold=3,
-                                                       save=file.path(workFolder,'models', 'nbModels',oid)
-        )
+            modelSettings <- PatientLevelPrediction::setNaiveBayes()
+            trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
+                                                           modelSettings,
+                                                           testSplit='time',
+                                                           testFraction=0.25,
+                                                           nfold=3,
+                                                           save=file.path(workFolder,'models', 'nbModels',oid)
+            )
 
-        PatientLevelPrediction::plotPlp(trainedModel, file.path(workFolder,'models', 'nbModels',oid))
-
+            PatientLevelPrediction::plotPlp(trainedModel, file.path(workFolder,'models', 'nbModels',oid))
+        },error = function(e) {
+            flog.info(paste0('Error for ', oid, ': ',e))
+        })
 
     }
 
