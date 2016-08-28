@@ -19,13 +19,13 @@
 library(LargeScalePrediction)
 options('fftempdir' = 's:/fftemp')
 
-workFolder <- "t:/temp/SomeBySomePrediction"
+workFolder <- "t:/temp/LargeScalePrediction"
 
 pw <- NULL
 dbms <- "pdw"
 user <- NULL
 server <- "JRDUSAPSCTL01"
-cdmDatabaseSchema <- "CDM_Truven_MDCD_V432.dbo"
+cdmDatabaseSchema <- "CDM_Truven_MDCD_V446.dbo"
 oracleTempSchema <- NULL
 workDatabaseSchema <- "scratch.dbo"
 studyCohortTable <- "sbsTest_depression_cohort"

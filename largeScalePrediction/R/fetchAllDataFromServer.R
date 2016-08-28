@@ -84,7 +84,7 @@ fetchAllDataFromServer <- function(connectionDetails = connectionDetails,
     # insert the at risk cohort:
     flog.info('Inserting risk cohort into cohort table')
     sql <- SqlRender::loadRenderTranslateSql('PTD.sql',
-                                             "SomeBySomePrediction",
+                                             "LargeScalePrediction",
                                              dbms = connectionDetails$dbms,
                                              oracleTempSchema = oracleTempSchema,
                                              cdm_database_schema = cdmDatabaseSchema,
@@ -95,11 +95,11 @@ fetchAllDataFromServer <- function(connectionDetails = connectionDetails,
 
     # now insert all the outcome cohorts
     flog.info('Inserting outcomes into cohort table')
-    outcomes <- system.file("settings", "OutcomesOfInterest.csv", package = "SomeBySomePrediction")
+    outcomes <- system.file("settings", "OutcomesOfInterest.csv", package = "LargeScalePrediction")
     outcomes <- read.csv(outcomes)
     for(i in 1:nrow(outcomes)){
         sql <- SqlRender::loadRenderTranslateSql(paste0(outcomes[i,2],'.sql'),
-                                                 "SomeBySomePrediction",
+                                                 "LargeScalePrediction",
                                                  dbms = connectionDetails$dbms,
                                                  oracleTempSchema = oracleTempSchema,
                                                  cdm_database_schema = cdmDatabaseSchema,
@@ -111,7 +111,7 @@ fetchAllDataFromServer <- function(connectionDetails = connectionDetails,
 
     # load the covariateSettings
     # add logging to say loading covariateSettings
-    pathToSettings <- system.file("settings", "covariateSettings.R", package = "SomeBySomePrediction")
+    pathToSettings <- system.file("settings", "covariateSettings.R", package = "LargeScalePrediction")
     source(pathToSettings)
 
     # Get the plpData

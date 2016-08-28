@@ -37,7 +37,12 @@ fitLassoPredictionModels <- function(workFolder){
 
     outcomeIds <- plpData$metaData$call$outcomeIds
     for(oid in outcomeIds){
-      population <-read.csv(file.path(workFolder, 'Populations',oid))[,-1]
+      population <- tryCatch({
+          read.csv(file.path(workFolder, 'Populations',oid))[,-1]
+          },error = function(e) {
+          return()
+      })
+
       attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
       attr(population, "metaData")$outcomeId <- oid
 
