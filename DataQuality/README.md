@@ -40,7 +40,7 @@ executeDQ(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseS
 
 packageResults(connectionDetails,cdmDatabaseSchema,workFolder)
 
-#expect the resulting zip file (this small data subset is being submitted to the study team)
+#to see what is being used, inspect the resulting zip file (this small data subset is being submitted to the study team)
 ```
 
 ##Step 4
