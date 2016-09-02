@@ -4,16 +4,30 @@ This is an informatics study that focuses on data quality (rather than a clinica
 
 #How to execute the study (old)
 
+##Step 1
+Execute the latest version of Achilles
 
-Step 1 is to execute latest version of Achilles. Step 2 is to execute the R code below:
+##Step 2.
+Install the package DataQuality. The --no-multiarch eliminates errors on some Windows computers (it is not always necessar). 
+
+```R
+install.packages("devtools")
+library(devtools)
+install_github("ohdsi/StudyProtocolSandbox/DataQuality",args="--no-multiarch")
+library(DataQuality)
+
+```
+
+##Step 3. 
+Execute the following code:
 
 ```R
 #use your previous connectionDetails object with username and psw for database
 #or get it from an external file 
 source('c:/r/conn.R')  #
 
-
 library(DataQuality)
+
 
 workFolder <- 'c:/temp/DQ'  #folder must exist (use forward slashes)
 
@@ -26,7 +40,13 @@ executeDQ(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseS
 
 packageResults(connectionDetails,cdmDatabaseSchema,workFolder)
 
+#expect the resulting zip file (this small data subset is being submitted to the study team)
 ```
+
+##Step 4
+This step is optional. ZIP file can also be emailed.
+To use OHDSI mechanism for data submission, ask the study PI (Vojtech Huser) via email to provide you studyKey and studySecret keys to allow you to upload the data to a studyBucket.
+
 To submit results, use the following command (study is using OHDSI bucket mechanism (Amazon S3 technology) 
 
 ```R
@@ -54,9 +74,10 @@ This principle was used in the initial study of Achilles Heel output. (precursor
 #Additional tools
 The tool relies on new computations done via Achilles. Using Achilles version >1.2 is required
 
-#How to execute the study (old)
 
-The study is fully contained in the existing Achilles package and only extracts are used in this study.
+# ARCHIVED OLD  CONTENT - How to execute the study (old)
+
+The study only needs current  Achilles package and only extracts from those results are used in the DQ study.
 
 Step 1 is to execute latest version of Achilles. Step 2 is to execute the R code below:
 
