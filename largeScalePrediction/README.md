@@ -1,12 +1,14 @@
 OHDSI Patient Level Prediction for therapeutically treated depression
 ======================================================================
 
+UNDER DEVELOPMENT
+
 This study aims to generate prediction models for a large number of outcomes within
 a cohort of people with therapeutically treated depression
 
 How to run
 ==========
-1. Make sure that you have Java installed. If you don't have Java already intalled on your computed (on most computers it already is installed), go to java.com to get the latest version. (If you have trouble building with rJava below, be sure on Windows that your Path variable includes the path to jvm.dll (Windows Button --> type "path" --> Edit Environmental Variables --> Edit PATH variable, add to end ;C:/Program Files/Java/jre/bin/server) or wherever it is on your system.)
+1. Make sure that you have Java installed. If you don't have Java already installed on your computed (on most computers it already is installed), go to java.com to get the latest version. (If you have trouble building with rJava below, be sure on Windows that your Path variable includes the path to jvm.dll (Windows Button --> type "path" --> Edit Environmental Variables --> Edit PATH variable, add to end ;C:/Program Files/Java/jre/bin/server) or wherever it is on your system.)
 
 2. Make sure that you have Python installed. If you don't have Python already intalled on your computed, go to https://www.continuum.io/downloads to get the latest version. 
 
@@ -20,6 +22,7 @@ How to run
 	install_github("ohdsi/DatabaseConnector")
 	install_github("ohdsi/Cyclops")
 	install_github("ohdsi/FeatureExtraction") 
+	install_github("ohdsi/BigKnn")
 	install_github("ohdsi/PatientLevelPrediction")
 	install_github("ohdsi/OhdsiSharing")
 	install_github("ohdsi/StudyProtocolSandbox/LargeScalePrediction")
