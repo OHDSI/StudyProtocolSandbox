@@ -91,13 +91,16 @@ fetchAllDataFromServer <- function(connectionDetails = connectionDetails,
                                              target_database_schema = workDatabaseSchema,
                                              target_cohort_table = studyCohortTable,
                                              target_cohort_id = 2788)
-    DatabaseConnector::executeSql(conn, sql, progressBar = FALSE, reportOverallTime = FALSE)
+    DatabaseConnector::executeSql(conn, sql, progressBar = TRUE, reportOverallTime = FALSE)
 
-    # now insert all the outcome cohorts
-    flog.info('Inserting outcomes into cohort table')
+    # insert all the outcome cohorts
     outcomes <- system.file("settings", "OutcomesOfInterest.csv", package = "LargeScalePrediction")
     outcomes <- read.csv(outcomes)
-    for(i in 1:nrow(outcomes)){
+    nrOutcomes <- nrow(outcomes)
+    flog.info(paste0('Inserting ',nrOutcomes,' outcomes into cohort table'))
+
+    for(i in 1:nrOutcomes){
+        flog.info(paste0('Inserting ', outcomes$name[i],' (',i,'/',nrOutcomes,')'))
         sql <- SqlRender::loadRenderTranslateSql(paste0(outcomes[i,2],'.sql'),
                                                  "LargeScalePrediction",
                                                  dbms = connectionDetails$dbms,
@@ -106,16 +109,14 @@ fetchAllDataFromServer <- function(connectionDetails = connectionDetails,
                                                  target_database_schema = workDatabaseSchema,
                                                  target_cohort_table = studyCohortTable,
                                                  target_cohort_id = outcomes[i,1])
-        DatabaseConnector::executeSql(conn, sql, progressBar = FALSE, reportOverallTime = FALSE)
+        DatabaseConnector::executeSql(conn, sql, progressBar = TRUE, reportOverallTime = FALSE)
     }
 
     # load the covariateSettings
-    # add logging to say loading covariateSettings
     pathToSettings <- system.file("settings", "covariateSettings.R", package = "LargeScalePrediction")
     source(pathToSettings)
 
-    # Get the plpData
-    # add logging to say downloading data
+    # get the plpData
     flog.info('Extracting plpData')
     plpData <- PatientLevelPrediction::getPlpData(connectionDetails=connectionDetails,
                                                   cdmDatabaseSchema=cdmDatabaseSchema,
@@ -130,11 +131,11 @@ fetchAllDataFromServer <- function(connectionDetails = connectionDetails,
                                                   washoutPeriod = 365,
                                                   covariateSettings = covSettings)
 
-    # save the plpData:
+    # save the plpData
     flog.info('Saving plpData')
     if(!dir.exists(file.path(workFolder,'data'))){dir.create(file.path(workFolder,'data'))}
     PatientLevelPrediction::savePlpData(plpData, file=file.path(workFolder,'data'))
+    flog.info('Done.')
 
-    # add the logging to say it is complete
     return(TRUE)
 }
