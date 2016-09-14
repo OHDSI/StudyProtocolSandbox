@@ -29,7 +29,7 @@
 #'                            (/)
 #'
 #' @export
-packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
+packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder, dbName=cdmDatabaseSchema) {
   
   #create export subfolder in workFolder
     exportFolder <- file.path(workFolder, "export")
@@ -43,7 +43,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
 
     
     ### Add all to zip file ###
-    zipName <- file.path(exportFolder, "StudyResults.zip")
+    zipName <- file.path(exportFolder, paste0(dbName,"-StudyResults.zip"))
     OhdsiSharing::compressFolder(exportFolder, zipName)
     writeLines(paste("\nStudy results are ready for sharing at:", zipName))
 }
