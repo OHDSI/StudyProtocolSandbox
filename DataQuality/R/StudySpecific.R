@@ -125,7 +125,7 @@ doSelectiveExport <- function(connectionDetails,
   #get query
   
   
-  sql <- "select * from @results_database_schema.achilles_results_derived where measure_id not like '%PersonCnt%' order by measure_id,stratum_1;"
+  sql <- "select * from @results_database_schema.achilles_results_derived where measure_id not like '%PersonCnt%' order by measure_id,stratum_1"
   
   #old query (smaller was)
   # select * from @results_database_schema.achilles_results_derived r where measure_id in ('ach_2000:Percentage',
@@ -157,7 +157,7 @@ doSelectiveExport <- function(connectionDetails,
   a.stratum_1_name,stratum_2_name  from @results_database_schema.achilles_results_dist d 
   join @results_database_schema.achilles_analysis a on d.analysis_id = a.analysis_id
   where d.analysis_id 
-  in (103,104,105,106,107,203,206,211,403,506,511,512,513,514,515,603,703,803,903,1803) order by analysis_id;"
+  in (103,104,105,106,107,203,206,211,403,506,511,512,513,514,515,603,703,803,903,1803) order by analysis_id"
   
   
   sql <- SqlRender::renderSql(sql,results_database_schema = resultsDatabaseSchema)$sql
@@ -177,7 +177,7 @@ doSelectiveExport <- function(connectionDetails,
   #------dist results table section
   
   
-  sql <- "select * from  @results_database_schema.achilles_heel_results a;"
+  sql <- "select * from  @results_database_schema.achilles_heel_results a"
   
   
   sql <- SqlRender::renderSql(sql,results_database_schema = resultsDatabaseSchema)$sql
