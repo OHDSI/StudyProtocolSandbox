@@ -1,8 +1,8 @@
 Package: DataQuality
-Title: Second Data Quaity Study
-Version: 0.1
+Title: Data Quality study in OHDSI
+Version: 0.2
 Authors@R: "Vojtech Huser <vojtech.huser@nih.gov> [aut, cre]"
-Description: This study focuses on Data Quality. It tries to determine thresholds.
+Description: This study focuses on Data Quality. It tries to determine thresholds. Heel evaluation was a precursor to this study.
 Depends:
     R (>= 3.2.2),
     DatabaseConnector (>= 1.4.0)
