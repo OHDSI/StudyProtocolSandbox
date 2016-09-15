@@ -4,7 +4,7 @@
 \alias{submitResults}
 \title{Submit the study results to the study coordinating center}
 \usage{
-submitResults(exportFolder, studyBucketName, key, secret)
+submitResults(exportFolder, dbName, studyBucketName, key, secret)
 }
 \arguments{
 \item{exportFolder}{The path to the folder containing the \code{StudyResults.zip} file.}
