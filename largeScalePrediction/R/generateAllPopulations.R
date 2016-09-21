@@ -46,13 +46,28 @@ generateAllPopulations <- function(workFolder, verbosity=INFO){
     # for each outcomeId create the popualtion:
     for(oid in outcomeIds){
         # add log message to state oid population being created...
-        population <- PatientLevelPrediction::createStudyPopulation(plpData, outcomeId=oid,
-                                                                    requireTimeAtRisk=T,
-                                                                    minTimeAtRisk = 1,
-                                                                    riskWindowStart=1,
-                                                                    addExposureDaysToStart=F,
-                                                                    riskWindowEnd=366,
-                                                                    addExposureDaysToEnd=F)
+
+        # get all the non outcome people with 365 days observation
+        population_non <- PatientLevelPrediction::createStudyPopulation(plpData, outcomeId=oid,
+                                                                        requireTimeAtRisk=T,
+                                                                        minTimeAtRisk = 365,
+                                                                        riskWindowStart=1,
+                                                                        addExposureDaysToStart=F,
+                                                                        riskWindowEnd=366,
+                                                                        addExposureDaysToEnd=F)
+        population_non <- population_non[population_non$outcomeCount==0,]
+        # get all the outcomes (even if only partially observed)
+        population_out <- PatientLevelPrediction::createStudyPopulation(plpData, outcomeId=oid,
+                                                                        requireTimeAtRisk=T,
+                                                                        minTimeAtRisk = 1,
+                                                                        riskWindowStart=1,
+                                                                        addExposureDaysToStart=F,
+                                                                        riskWindowEnd=366,
+                                                                        addExposureDaysToEnd=F)
+        population_out <- population_out[population_out$outcomeCount!=0,]
+        #join
+        population <- rbind(population_out, population_non)
+
         if(!dir.exists(file.path(workFolder, 'Populations'))){dir.create(file.path(workFolder, 'Populations'))}
         write.csv(population, file=file.path(workFolder, 'populations',oid))
     }
