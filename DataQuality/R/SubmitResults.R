@@ -29,8 +29,8 @@
 #' TRUE if the upload was successful.
 #'
 #' @export
-submitResults <- function(exportFolder, studyBucketName, key, secret) {
-  zipName <- file.path(exportFolder, "StudyResults.zip")
+submitResults <- function(exportFolder, dbName, studyBucketName, key, secret) {
+  zipName <- file.path(exportFolder, paste0(dbName,"-StudyResults.zip"))
   if (!file.exists(zipName)) {
     stop(paste("Cannot find file", zipName))
   }

@@ -47,7 +47,7 @@ generateAllPopulations <- function(workFolder, verbosity=INFO){
     for(oid in outcomeIds){
         # add log message to state oid population being created...
 
-        # get all the non outcome people with 365 days observation
+              # get all the non outcome people with 365 days observation
         population_non <- PatientLevelPrediction::createStudyPopulation(plpData, outcomeId=oid,
                                                                         requireTimeAtRisk=T,
                                                                         minTimeAtRisk = 365,
@@ -68,7 +68,7 @@ generateAllPopulations <- function(workFolder, verbosity=INFO){
         #join
         population <- rbind(population_out, population_non)
 
-        if(!dir.exists(file.path(workFolder, 'Populations'))){dir.create(file.path(workFolder, 'Populations'))}
+                if(!dir.exists(file.path(workFolder, 'Populations'))){dir.create(file.path(workFolder, 'Populations'))}
         write.csv(population, file=file.path(workFolder, 'populations',oid))
     }
 

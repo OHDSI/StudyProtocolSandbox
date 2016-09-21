@@ -18,9 +18,7 @@
 
 library(LargeScalePopEst)
 options('fftempdir' = 'R:/fftemp')
-
-
-### Don't forget to remove excludeCovariateIds from analysis settings!
+#options('fftempdir' = 'S:/fftemp')
 
 pw <- NULL
 dbms <- "pdw"
@@ -33,18 +31,8 @@ studyCohortTable <- "mschuemie_depression_cohorts_mdcd"
 exposureCohortSummaryTable <- "mschuemie_depression_exposure_summary_mdcd"
 port <- 17001
 workFolder <- "R:/PopEstDepression_Mdcd"
+#workFolder <- "S:/PopEstDepression_Mdcd"
 maxCores <- 20
-# Excluding these pairs:
-#
-# Nortriptyline vs phychotherapy because nortriptyline users appear to take the drug for headache-related conditions and have no
-# Psychiatric or mental disorders in the recent past (30 days)
-#
-# Amitriptyline vs citalopram because amitriptyline appears to be only used as a second-line therapy, and always appears together with
-# another antidepressant
-#
-# Amitriptyline vs phychotherapy because Amitriptyline users have no
-# Psychiatric or mental disorders diagnose in the recent past (30 days)
-excludePairs <- data.frame(targetId = c(721724, 710062, 710062), comparatorId = c(4327941, 797617, 4327941))
 
 pw <- NULL
 dbms <- "pdw"
@@ -57,13 +45,59 @@ studyCohortTable <- "mschuemie_depression_cohorts_ccae"
 exposureCohortSummaryTable <- "mschuemie_t2dm_exposure_summary_ccae"
 port <- 17001
 workFolder <- "R:/PopEstDepression_Ccae"
-excludePairs <- NULL
+maxCores <- 24
+
+pw <- NULL
+dbms <- "pdw"
+user <- NULL
+server <- "JRDUSAPSCTL01"
+cdmDatabaseSchema <- "CDM_Truven_MDCR_V445.dbo"
+oracleTempSchema <- NULL
+workDatabaseSchema <- "scratch.dbo"
+studyCohortTable <- "mschuemie_depression_cohorts_mdcr"
+exposureCohortSummaryTable <- "mschuemie_t2dm_exposure_summary_mdcr"
+port <- 17001
+workFolder <- "r:/PopEstDepression_Mdcr"
+maxCores <- 20
+
+pw <- NULL
+dbms <- "pdw"
+user <- NULL
+server <- "JRDUSAPSCTL01"
+cdmDatabaseSchema <- "cdm_optum_extended_ses_v458.dbo"
+oracleTempSchema <- NULL
+workDatabaseSchema <- "scratch.dbo"
+studyCohortTable <- "mschuemie_depression_cohorts_optum"
+exposureCohortSummaryTable <- "mschuemie_t2dm_exposure_summary_optum"
+port <- 17001
+workFolder <- "r:/PopEstDepression_Optum"
+maxCores <- 10
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
                                                                 user = user,
                                                                 password = pw,
                                                                 port = port)
+
+execute(connectionDetails = connectionDetails,
+        cdmDatabaseSchema = cdmDatabaseSchema,
+        oracleTempSchema = oracleTempSchema,
+        workDatabaseSchema = workDatabaseSchema,
+        studyCohortTable = studyCohortTable,
+        exposureCohortSummaryTable = exposureCohortSummaryTable,
+        workFolder = workFolder,
+        maxCores = maxCores,
+        createCohorts = FALSE,
+        fetchAllDataFromServer = FALSE,
+        injectSignals = FALSE,
+        generateAllCohortMethodDataObjects = FALSE,
+        runCohortMethod = TRUE)
+
+analysePsDistributions(workFolder)
+
+plotControlDistributions(workFolder)
+
+calibrateEstimatesAndPvalues(workFolder)
 
 createCohorts(connectionDetails = connectionDetails,
               cdmDatabaseSchema = cdmDatabaseSchema,
@@ -92,11 +126,9 @@ injectSignals(connectionDetails = connectionDetails,
 
 generateAllCohortMethodDataObjects(workFolder)
 
-runCohortMethod(workFolder,
-                excludePairs = excludePairs,
-                maxCores = maxCores)
+runCohortMethod(workFolder, maxCores = maxCores)
 
-plotAllPsDistributions(workFolder)
+analysePsDistributions(workFolder)
 
 CohortMethod::plotPs(ps)
 

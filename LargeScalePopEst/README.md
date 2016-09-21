@@ -1,7 +1,7 @@
-OHDSI Population-Level Evidence Generation for Type 2 Diabetes Melitus
+OHDSI Population-Level Evidence Generation for Depression
 ======================================================================
 
-This study aims to generate population-level evidence on all drugs used in the treatment of Type 2 Diabetes Melitues
+This study aims to generate population-level evidence on treatments used for major depressive disorder.
 
 How to run
 ==========
@@ -13,25 +13,24 @@ How to run
 	install.packages("devtools")
 	library(devtools)
 	install_github("ohdsi/OhdsiRTools") 
-	install_github("ohdsi/SqlRender")
 	install_github("ohdsi/DatabaseConnector")
-	install_github("ohdsi/Cyclops")
 	install_github("ohdsi/FeatureExtraction") 
 	install_github("ohdsi/CohortMethod")
 	install_github("ohdsi/OhdsiSharing")
-	install_github("ohdsi/StudyProtocolSandbox/PopEstT2Dm")
+	install_github("ohdsi/MethodEvaluation")
+	install_github("ohdsi/StudyProtocolSandbox/LargeScalePopEst")
 	```
 
 3. Once installed, you can execute the study by modifying and using the following code:
 
 	```r
-	library(PopEstT2Dm)
+	library(LargeScalePopEst)
 
 	connectionDetails <- createConnectionDetails(dbms = "postgresql",
 												 user = "joe",
 												 password = "secret",
 												 server = "myserver")
-    workFolder <- "s:/temp/PopEstT2Dm"
+    workFolder <- "s:/temp/LargeScalePopEst"
 
 	# To-do: complete
 	```

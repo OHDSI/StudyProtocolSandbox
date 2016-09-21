@@ -4,33 +4,61 @@ This is an informatics study that focuses on data quality (rather than a clinica
 
 #How to execute the study (old)
 
+##Step 1
+Execute the latest version of Achilles
 
-Step 1 is to execute latest version of Achilles. Step 2 is to execute the R code below:
+##Step 2.
+Install the package DataQuality. The --no-multiarch eliminates errors on some Windows computers (it is not always necessar). 
+
+```R
+install.packages("devtools")
+library(devtools)
+install_github("ohdsi/StudyProtocolSandbox/DataQuality",args="--no-multiarch")
+library(DataQuality)
+
+```
+
+##Step 3. 
+Execute the following code:
 
 ```R
 #use your previous connectionDetails object with username and psw for database
 #or get it from an external file 
 source('c:/r/conn.R')  #
 
-
 library(DataQuality)
 
-workFolder <- 'c:/temp/DQ'  #folder must exist (use forward slashes)
+
+workFolder <- 'c:/temp/DQStudy-dataset1'  #ideally, use one workFolder per database
+dir.create(workFolder) 
 
 #populate database parameters
 cdmDatabaseSchema <-'ccae'
 resultsDatabaseSchema <-'ccae' #at most sites this likely will not be the same as cdmDatabaseSchema
 
 
-executeDQ(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseSchema,workFolder = workFolder)
+executeDQ(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseSchema,
+          resultsDatabaseSchema = resultsDatabaseSchema,workFolder = workFolder)
 
-packageResults(connectionDetails,cdmDatabaseSchema,workFolder)
 
+#decide on a name under which you want to report results
+dbName='myDatabase43'
+
+#generate the zip file
+packageResults(connectionDetails,cdmDatabaseSchema,workFolder,dbName)
+
+#to see what is being used, inspect the zip file (or simply all files in the  export sub-folder of the workFolder (this  data subset is being submitted to the study team as a zip file)
 ```
-To submit results, use the following command (study is using OHDSI bucket mechanism (Amazon S3 technology) 
+
+##Step 4
+Email the zip file to the study coordinator or use the OHDSI data submission mechanism described below. 
+To use OHDSI mechanism for data submission, ask the study PI (Vojtech Huser) via email to provide you studyKey and  studySecret keys to allow you to upload the data to an OHDSI protected study cloud bucket.
+
+To submit results, use R code below 
 
 ```R
 submitResults(exportFolder =file.path(workFolder,'export'),
+              dbName = dbName,
               studyBucketName = 'ohdsi-study-dataquality',
               key=studyKey,
               secret =studySecret
@@ -38,6 +66,10 @@ submitResults(exportFolder =file.path(workFolder,'export'),
 
 
 ```
+
+##Step 5
+
+If your site has more than one CDM-shaped datasets (databases) that you want to include in the overal study, repeat the process using a new workFolder and picking a different name (dbName) for the next dataset (database)
 
 
 #Use of output data
@@ -52,55 +84,4 @@ This principle was used in the initial study of Achilles Heel output. (precursor
 
 
 #Additional tools
-The tool relies on new computations done via Achilles. Using Achilles version >1.2 is required
-
-#How to execute the study (old)
-
-The study is fully contained in the existing Achilles package and only extracts are used in this study.
-
-Step 1 is to execute latest version of Achilles. Step 2 is to execute the R code below:
-
-```R
-#use your previous connectionDetails object with username and psw for database
-
-# use this for single dataset Iris ZIP file generation
- dataLinks=c('mdcr_v5');resultsLinks=c('nih')
-
-
-#use this for multiple datasets ZIP file process (modify the strings)
- dataLinks=c('ccae_v5','mdcr_v5','mdcd_v5')
- resultsLinks=c('ccae_v5_results','mdcr_v5_results','mdcd_v5_results')
-      #ignore this line resultsLinks=c('nih','nih','nih')
-
-
-
-#make sure you have the lastest Achilles
-library(Achilles)
-
-for (i in seq_along(dataLinks)){
- print(dataLinks[i])
-
- cdmDatabaseSchema=dataLinks[i];resultsDatabaseSchema=resultsLinks[i]
- 
- 
-  #get Heel output 
-  heelRes<-Achilles:::fetchAchillesHeelResults(connectionDetails,resultsDatabaseSchema)
-
-  #get Derived Measures  (this function will be rewritten to not use Iris package at all)
-  heelDerivedMeasuresTable<-Iris::fetchResultsTable(connectionDetails,resultsDatabaseSchema,'achilles_results_derived')
-  
-  #optionaly include Heel Derived measures output
-  write.csv(heelDerivedMeasuresTable,paste0(connectionDetails$schema,'-iris_part-',99,'.csv'),na='',row.names=F)
-
-
-  #optionaly include Heel output
-  write.csv(heelRes,paste0(connectionDetails$schema,'-iris_part-',0,'.csv'),na='',row.names=F)
-
-
-}
-
-zip('iris-export.zip',files='*iris_part*.csv')
-#inspect the zip file to see what is being exported
-
-```
-
+The tool relies on new computations done via Achilles. Using Achilles version >=1.3 is required
