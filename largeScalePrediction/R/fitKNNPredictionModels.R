@@ -41,7 +41,7 @@ fitKNNPredictionModels <- function(workFolder){
             attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
             attr(population, "metaData")$outcomeId <- oid
 
-            modelSettings <- PatientLevelPrediction::setKNN(k=10000, file.path(workFolder, 'knn'))
+            modelSettings <- PatientLevelPrediction::setKNN(k=10000, file.path(workFolder,'models', 'knnModels', 'knn'))
             trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
                                                            modelSettings,
                                                            testSplit='time',
