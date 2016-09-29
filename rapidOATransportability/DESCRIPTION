@@ -1,0 +1,20 @@
+Package: rapidOATransportability
+Title: Investigating simple vs complex models
+Version: 0.0.1
+Author: Jenna M. Reps[aut, cre]
+Maintainer: Jenna M. Reps <jreps@its.jnj.com>
+Description: This study generates prediction models for rapid OA development and compares the transportability of complex vs simple models
+Depends:
+    R (>= 3.1),
+    DatabaseConnector (>= 1.2.1)
+Imports:
+    RJDBC,
+    FeatureExtraction,
+    PatientLevelPrediction,
+    OhdsiSharing,
+    futile.logger
+Suggests:
+    testthat
+License: Apache License 2.0
+LazyData: true
+RoxygenNote: 5.0.1

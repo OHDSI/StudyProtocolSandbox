@@ -35,7 +35,11 @@ fitRFPredictionModels <- function(workFolder){
 
     plpData <- PatientLevelPrediction::loadPlpData(file.path(workFolder, 'data'))
 
-    outcomeIds <- plpData$metaData$call$outcomeIds
+    #outcomeIds <- plpData$metaData$call$outcomeIds
+    outcomes <- system.file("settings", "OutcomesOfInterest.csv", package = "LargeScalePrediction")
+    outcomes <- read.csv(outcomes)
+    outcomeIds <- outcomes$cohortDefinitionId
+
     for(oid in outcomeIds){
         tryCatch({
             population <-read.csv(file.path(workFolder, 'Populations',oid))[,-1]
@@ -45,7 +49,7 @@ fitRFPredictionModels <- function(workFolder){
             modelSettings <- PatientLevelPrediction::setRandomForest(ntrees=c(50,500,1000),
                                                                      mtries = c(-1,50,500),
                                                                      max_depth=c(4,10,17),
-                                                                     varImp=c(T,F))
+                                                                     varImp=T)#c(T,F))
             trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
                                                            modelSettings,
                                                            testSplit='time',
