@@ -122,7 +122,7 @@ doSelectiveExport <- function(connectionDetails,
   connectionDetails$schema=resultsDatabaseSchema
   conn <- DatabaseConnector::connect(connectionDetails)
   
-  #get query
+  #1 derived measures 
   
   
   sql <- "select * from @results_database_schema.achilles_results_derived where measure_id not like '%PersonCnt%' order by measure_id,stratum_1"
@@ -150,7 +150,7 @@ doSelectiveExport <- function(connectionDetails,
   
   
   
-  #------dist results table section
+  #2 ------dist results table section
 
   
   sql <- "select d.analysis_id, stratum_1, stratum_2,count_value,avg_value, median_value, a.analysis_name,
@@ -174,7 +174,7 @@ doSelectiveExport <- function(connectionDetails,
   
   
   
-  #------Heel results  table section
+  #3 ------Heel results  table section
   
   
   sql <- "select * from  @results_database_schema.achilles_heel_results a"
@@ -196,27 +196,62 @@ doSelectiveExport <- function(connectionDetails,
   
   
   
-  #------Achilles  results  table section (selected measures)
+  #4 ------Achilles  results  table section (selected measures)
   
   
-  sql <- "select * from  @results_database_schema.achilles_heel_results a"
+  sql <- "select analysis_id,stratum_1,count_value from @results_database_schema.achilles_results a where analysis_id in (1,2,4,5,109,113,200,505)"
   
   
   sql <- SqlRender::renderSql(sql,results_database_schema = resultsDatabaseSchema)$sql
   sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
   data <- DatabaseConnector::querySql(conn, sql)
   
-  
-  #process the data 
-  #make sure the names are the same case accross different DB engines
-  names(data) <- tolower(names(data))
+  # ok so I will use upper case all the time  names(data) <- tolower(names(data))
   
   
-  write.csv(data,file = file.path(exportFolder,'HeelOutput.csv'),row.names = F)
+  #get person count
+  persons<-data$COUNT_VALUE[data$ANALYSIS_ID == 1]
+  
+  #create fuzzy count
+  if (persons > 100000000) personsFuzzy<-'>100M'  
+  if (persons < 100000000) personsFuzzy<-'<100M'  
+  if (persons < 40000000) personsFuzzy<-'<40M'  
+  if (persons < 20000000) personsFuzzy<-'<20M'  
+  if (persons < 10000000) personsFuzzy<-'<10M'  
+  if (persons < 50000000) personsFuzzy<-'<5M'  
+  if (persons < 1000000) personsFuzzy<-'<1M'
+  if (persons < 100000) personsFuzzy<-'<100k'
+  if (persons < 10000)  personsFuzzy<-'<10k'
+  
+  newrow<-data.frame(ANALYSIS_ID = 99,STRATUM_1='',COUNT_VALUE=0,VALUE=as.character(personsFuzzy))
+  data$VALUE<-''
+  data<-rbind(data,newrow)
   
   
   
   
+  data$PCT_VALUE <- data$COUNT_VALUE/persons
+  #drop actual counts
+  data$COUNT_VALUE <- NULL
+  
+  write.csv(data,file = file.path(exportFolder,'SelectedAchillesResultsMeasuresPerc.csv'),row.names = F)
+  
+  
+  #5 ------Achilles  results  table section (not person dependent)
+  
+  
+  sql <- "select analysis_id,stratum_1,count_value from @results_database_schema.achilles_results a where analysis_id in (201)"
+  
+  
+  sql <- SqlRender::renderSql(sql,results_database_schema = resultsDatabaseSchema)$sql
+  sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+  data <- DatabaseConnector::querySql(conn, sql)
+  
+  # ok so I will use upper case all the time  names(data) <- tolower(names(data))
+  
+  
+
+  write.csv(data,file = file.path(exportFolder,'SelectedAchillesResultsMeasuresOther.csv'),row.names = F)
   
   
   
