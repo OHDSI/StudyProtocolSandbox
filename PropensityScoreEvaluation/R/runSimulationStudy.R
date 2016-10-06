@@ -32,6 +32,10 @@
 runSimulationStudy <- function(cohortMethodData, confoundingScheme = 0, confoundingProportion = 0.3, n = 10,
                                trueBeta = NULL, outcomePrevalence = NULL, crossValidate = TRUE, hdpsFeatures = FALSE,
                                ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE) {
+  # Save ff state
+  saveFfState <- options("fffinalizer")$ffinalizer
+  options("fffinalizer" = "delete")
+  
   estimatesLasso = NULL
   estimatesExpHdps = NULL
   estimatesBiasHdps = NULL
@@ -167,6 +171,9 @@ runSimulationStudy <- function(cohortMethodData, confoundingScheme = 0, confound
   }
   psBiasPermanent$propensityScore = psBiasPermanent$propensityScore / n
   psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore / n
+  
+  # Restore ff state
+  options("fffinalizer" = saveFfState)
   
   return(list(trueOutcomeModel = simulationProfile$sOutcomeModel$outcomeModelCoefficients,
               trueEffectSize = coef(simulationProfile$sOutcomeModel),

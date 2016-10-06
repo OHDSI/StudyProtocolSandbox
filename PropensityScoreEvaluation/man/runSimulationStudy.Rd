@@ -31,7 +31,7 @@ runSimulationStudy(cohortMethodData, confoundingScheme = 0,
 \item{ignoreCensoringCovariates}{Ignore covariates effects on censoring process; only uses baseline function}
 }
 \value{
-Returns the following: \describe {
+Returns the following: \describe{
 \item{trueOutcomeModel}{coefficients used for true outcome model}
 \item{trueEffectSize}{coefficient for exposure effect}
 \item{estimatesLasso}{logRr, bound, and sd for LASSO estimate for each simulation}

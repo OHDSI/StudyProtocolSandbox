@@ -41,9 +41,7 @@ example.
 
 Run simulation
 
-    options("fffinalizer" = "delete")
     simulationStudy <- runSimulationStudy(cohortMethodData, hdpsFeatures = TRUE, outcomePrevalence = 0.05)
-    options("fffinalizer" = NULL)
 
 Look at results
 
