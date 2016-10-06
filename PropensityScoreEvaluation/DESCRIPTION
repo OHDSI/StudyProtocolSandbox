@@ -1,0 +1,21 @@
+Package: PropensityScoreEvaluation
+Title: Propensity Score Evluation
+Version: 0.1
+Authors@R: "Yuxi Tian <ytian13@ucla.edu> [aut, cre]"
+Description: This study compares propensity score methods.
+Depends:
+    R (>= 3.1),
+    DatabaseConnector (>= 1.2.1),
+    Cyclops (>= 1.2.0),
+    FeatureExtraction  (>= 1.0.0),
+    CohortMethod (>= 2.0.0)
+Imports:
+    SqlRender,
+    DBI,
+    mailR,
+    ffbase
+Suggests:
+    testthat
+License: Apache License 2.0
+LazyData: true
+RoxygenNote: 5.0.1
