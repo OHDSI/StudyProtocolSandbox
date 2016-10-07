@@ -32,9 +32,12 @@
 runSimulationStudy <- function(simulationProfile, studyPop, confoundingScheme = 0, confoundingProportion = 0.3, n = 10,
                                trueEffectSize = NULL, outcomePrevalence = NULL, crossValidate = TRUE, hdpsFeatures = FALSE,
                                ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE) {
+  # Save ff state
+  saveFfState <- options("fffinalizer")$ffinalizer
+  options("fffinalizer" = "delete")
   
   partialCMD = simulationProfile$partialCMD
-  
+
   estimatesLasso = NULL
   estimatesExpHdps = NULL
   estimatesBiasHdps = NULL
@@ -154,7 +157,11 @@ runSimulationStudy <- function(simulationProfile, studyPop, confoundingScheme = 
   psBiasPermanent$propensityScore = psBiasPermanent$propensityScore / n
   psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore / n
   
-  return(list(trueEffectSize = trueEffectSize,
+  # Restore ff state
+  options("fffinalizer" = saveFfState)
+  
+  return(list(trueOutcomeModel = simulationProfile$sOutcomeModel$outcomeModelCoefficients,
+              trueEffectSize = coef(simulationProfile$sOutcomeModel),
               estimatesLasso = estimatesLasso,
               estimatesExpHdps = estimatesExpHdps,
               estimatesBiasHdps = estimatesBiasHdps,
