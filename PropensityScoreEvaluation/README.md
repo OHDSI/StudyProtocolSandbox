@@ -13,8 +13,8 @@ methods.
     install_github("ohdsi/FeatureExtraction")
     install_github("ohdsi/CohortMethod", ref = "hdps_clean")
 
-Now do some stuff. Using CohortMethod single studies vignette as an
-example.
+Obtain a CohortMethodData object. Calls functions in CohortMethod.
+Currently uses single studies vignette as an example.
 
     library(PropensityScoreEvaluation)
     connectionDetails <- createConnectionDetails(dbms = "postgresql",
@@ -26,8 +26,10 @@ example.
     exposureTable = "coxibVsNonselVsGiBleed"
     outcomeTable = "coxibVsNonselVsGiBleed"
     cdmVersion <- "4"
-    cdmDatabaseSchema <- "cdm4_sim"
+    cdmDatabaseSchema <- "my_schema"
     resultsDatabaseSchema <- "my_results"
+
+    # use HDPS covariates or regular FeatureExtraction covariates
     hdpsCovariates = TRUE
 
     cohortMethodData <- createCohortMethodData(connectionDetails = connectionDetails,
@@ -39,16 +41,51 @@ example.
                                                resultsDatabaseSchema = resultsDatabaseSchema,
                                                hdpsCovariates = hdpsCovariates)
 
-Run simulation
+Create study population and simulation profile
+
+    # for testing purposes can turn off cross-validation to get things running faster in 
+    # createCMDSimulationProfileand runSimulationStudy by setting crossValidate = FALSE
+
+    studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
+                                      outcomeId = 3,
+                                      firstExposureOnly = FALSE,
+                                      washoutPeriod = 0,
+                                      removeDuplicateSubjects = FALSE,
+                                      removeSubjectsWithPriorOutcome = TRUE,
+                                      minDaysAtRisk = 1,
+                                      riskWindowStart = 0,
+                                      addExposureDaysToStart = FALSE,
+                                      riskWindowEnd = 30,
+                                      addExposureDaysToEnd = TRUE)
+
+    simulationProfile = createCMDSimulationProfile(cohortMethodData, studyPop)
+
+Run the simulation for given specifications (TO DO create list of
+speficiations and automate)
 
     options("fffinalizer" = "delete")
-    simulationStudy <- runSimulationStudy(cohortMethodData, hdpsFeatures = TRUE, outcomePrevalence = 0.05)
+
+    # Default runs is n = 10; can be changed
+    # Currently matching 1-1 on propensity score (strata = matchOnPs(ps))
+
+    # Vanilla parameters: no unmeasured confounding, no replacing observed effect size, no replacing outcome prevalence
+    simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates)
+
+    # Specify effect size
+    simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, trueEffectSize = 1.0)
+
+    # Specify outcome prevalence
+    simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, outcomePrevalence = .05)
+
+    # Remove demographics to simulate unmeasured confounding in propensity score
+    simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, confoundingScheme = 1)
+
+    # Remove random covariates to simulate unmeasured confounding in propensity score; here removes 25%
+    simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, confoundingScheme = 2, confoundingProportion = 0.25)
+
     options("fffinalizer" = NULL)
 
 Look at results
-
-    # View coefficients used in true outcome model
-    trueOutcomeModel = simulationStudy$trueOutcomeModel
 
     # View true effect size used in simulation
     trueEffectSize = simulationStudy$trueEffectSize

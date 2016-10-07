@@ -4,13 +4,15 @@
 \alias{runSimulationStudy}
 \title{Runs Simulation Study}
 \usage{
-runSimulationStudy(cohortMethodData, confoundingScheme = 0,
-  confoundingProportion = 0.3, n = 10, trueBeta = NULL,
+runSimulationStudy(simulationProfile, studyPop, confoundingScheme = 0,
+  confoundingProportion = 0.3, n = 10, trueEffectSize = NULL,
   outcomePrevalence = NULL, crossValidate = TRUE, hdpsFeatures = FALSE,
   ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE)
 }
 \arguments{
-\item{cohortMethodData}{cohortMethodData object}
+\item{simulationProfile}{simulationProfile object created by createCMDSimulationProfile function}
+
+\item{studyPop}{Study population created by createStudyPopulation function}
 
 \item{confoundingScheme}{Type of unmeasured confounding to use for PS (0 = none; 1 = demographics; 2 = random proportion; 3 = demographics and random proportion)}
 
@@ -18,9 +20,9 @@ runSimulationStudy(cohortMethodData, confoundingScheme = 0,
 
 \item{n}{Number of simulations to run (1 simulation = reroll outcomes)}
 
-\item{trueBeta}{True effect size for exposure to simulate}
+\item{trueEffectSize}{True effect size for exposure to simulate. If set to NULL keeps observed effect size from simulation profile}
 
-\item{outcomePrevalence}{Outcome prevalence to simulate; adjusts outcome baseline survival function to achieve}
+\item{outcomePrevalence}{Outcome prevalence to simulate; adjusts outcome baseline survival function to achieve. If null keeps observed}
 
 \item{crossValidate}{Can turn off cross validation when fitting outcome models in beginning and fitting LASSO propensity score}
 
@@ -32,7 +34,6 @@ runSimulationStudy(cohortMethodData, confoundingScheme = 0,
 }
 \value{
 Returns the following: \describe {
-\item{trueOutcomeModel}{coefficients used for true outcome model}
 \item{trueEffectSize}{coefficient for exposure effect}
 \item{estimatesLasso}{logRr, bound, and sd for LASSO estimate for each simulation}
 \item{estimatesExpHdps}{logRr, bound, and sd for exposure based hdps}
@@ -43,7 +44,7 @@ Returns the following: \describe {
 \item{psLasso}{propensity scores for subjects in study population for LASSO}
 \item{psExp}{propensity scores for subjects in study population for exposure based hdps}
 \item{psBias}{propensity scores for subjects in study population for bias based hdps; propensity and preference scores are averaged over simulation runs}
-\item{originalOutcomePrevalence}{original outcome prevalence before adjustment to desired outcome prevalence}}
+\item{outcomePrevalence}{outcome prevalence of simulation}}
 }
 \description{
 This function runs a simulation to compare LASSO, exposure based hdps, and bias based hdps as propensity score methods
