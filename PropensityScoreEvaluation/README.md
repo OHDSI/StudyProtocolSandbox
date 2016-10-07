@@ -58,7 +58,7 @@ Create study population and simulation profile
                                       riskWindowEnd = 30,
                                       addExposureDaysToEnd = TRUE)
 
-    simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop, crossValidate = FALSE)
+    simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop)
 
 Run the simulation for given specifications (TO DO create list of
 speficiations and automate)
@@ -69,7 +69,7 @@ speficiations and automate)
     # Currently matching 1-1 on propensity score (strata = matchOnPs(ps))
 
     # Vanilla parameters: no unmeasured confounding, no replacing observed effect size, no replacing outcome prevalence
-    simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, crossValidate = FALSE)
+    simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates)
 
     # Specify effect size
     simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, trueEffectSize = 1.0)
