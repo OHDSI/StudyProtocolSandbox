@@ -12,7 +12,6 @@ Depends:
 Imports:
     SqlRender,
     DBI,
-    mailR,
     ffbase
 Suggests:
     testthat
