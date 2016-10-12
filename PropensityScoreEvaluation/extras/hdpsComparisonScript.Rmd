@@ -1,0 +1,185 @@
+---
+title: "hdpsComparisonScript"
+author: "Yuxi Tian"
+date: "September 18, 2016"
+output: pdf_document
+---
+
+Install packages
+```
+install.packages("devtools")
+library(devtools)
+install_github("ohdsi/OhdsiRTools")
+install_github("ohdsi/SqlRender")
+install_github("ohdsi/DatabaseConnector")
+install_github("ohdsi/Cyclops", ref="HDPS")
+install_github("ohdsi/FeatureExtraction")
+install_github("ohdsi/CohortMethod", ref = "hdps_clean")
+library(CohortMethod)
+
+```
+
+For each exposure/comparator/outcome combination, prepare the cohort tables, as in the Single Studies vignette.
+
+Next prepare the feature sets. Put in relevant inclusion/exclusion conceptIds. As an example, cohortMethodData1 will be the HDPS feature set; cohortMethodData2 will be the FeatureExtraction feature set.
+```{r, eval=FALSE}
+covarSettings1 = createHdpsCovariateSettings(useCovariateCohortIdIs1 = FALSE,
+                                             useCovariateDemographics = TRUE, 
+                                             useCovariateDemographicsGender = TRUE,
+                                             useCovariateDemographicsRace = TRUE,
+                                             useCovariateDemographicsEthnicity = TRUE,
+                                             useCovariateDemographicsAge = TRUE, 
+                                             useCovariateDemographicsYear = TRUE,
+                                             useCovariateDemographicsMonth = TRUE,
+                                             useCovariateConditionOccurrence = TRUE,
+                                             useCovariate3DigitIcd9Inpatient180d = TRUE,
+                                             useCovariate3DigitIcd9Inpatient180dMedF = TRUE,
+                                             useCovariate3DigitIcd9Inpatient180d75F = TRUE,
+                                             useCovariate3DigitIcd9Ambulatory180d = TRUE,
+                                             useCovariate3DigitIcd9Ambulatory180dMedF = TRUE,
+                                             useCovariate3DigitIcd9Ambulatory180d75F = TRUE,
+                                             useCovariateDrugExposure = TRUE,
+                                             useCovariateIngredientExposure180d = TRUE,
+                                             useCovariateIngredientExposure180dMedF = TRUE,
+                                             useCovariateIngredientExposure180d75F = TRUE,
+                                             useCovariateProcedureOccurrence = TRUE,
+                                             useCovariateProcedureOccurrenceInpatient180d = TRUE,
+                                             useCovariateProcedureOccurrenceInpatient180dMedF = TRUE,
+                                             useCovariateProcedureOccurrenceInpatient180d75F = TRUE,
+                                             useCovariateProcedureOccurrenceAmbulatory180d = TRUE,
+                                             useCovariateProcedureOccurrenceAmbulatory180dMedF = TRUE,
+                                             useCovariateProcedureOccurrenceAmbulatory180d75F = TRUE,
+                                             excludedCovariateConceptIds = excludedCovariateConceptIds, 
+                                             includedCovariateConceptIds = c(),
+                                             deleteCovariatesSmallCount = 5)
+
+covariateSettings1 <- createCovariateSettings(useCovariateDemographics = TRUE,
+                                              useCovariateDemographicsAge = TRUE,
+                                              useCovariateDemographicsGender = TRUE,
+                                              useCovariateDemographicsRace = TRUE,
+                                              useCovariateDemographicsEthnicity = TRUE,
+                                              useCovariateDemographicsYear = TRUE,
+                                              useCovariateDemographicsMonth = TRUE,
+                                              useCovariateConditionOccurrence = TRUE,
+                                              useCovariateConditionOccurrence365d = TRUE,
+                                              useCovariateConditionOccurrence30d = TRUE,
+                                              useCovariateConditionOccurrenceInpt180d = TRUE,
+                                              useCovariateConditionEra = TRUE,
+                                              useCovariateConditionEraEver = TRUE,
+                                              useCovariateConditionEraOverlap = TRUE,
+                                              useCovariateConditionGroup = TRUE,
+                                              useCovariateDrugExposure = TRUE,
+                                              useCovariateDrugExposure365d = TRUE,
+                                              useCovariateDrugExposure30d = TRUE,
+                                              useCovariateDrugEra = TRUE,
+                                              useCovariateDrugEra365d = TRUE,
+                                              useCovariateDrugEra30d = TRUE,
+                                              useCovariateDrugEraEver = TRUE,
+                                              useCovariateDrugEraOverlap = TRUE,
+                                              useCovariateDrugGroup = TRUE,
+                                              useCovariateProcedureOccurrence = TRUE,
+                                              useCovariateProcedureOccurrence365d = TRUE,
+                                              useCovariateProcedureOccurrence30d = TRUE,
+                                              useCovariateProcedureGroup = TRUE,
+                                              useCovariateObservation = FALSE,
+                                              useCovariateObservation365d = FALSE,
+                                              useCovariateObservation30d = FALSE,
+                                              useCovariateObservationCount365d = FALSE,
+                                              useCovariateMeasurement365d = FALSE,
+                                              useCovariateMeasurement30d = FALSE,
+                                              useCovariateMeasurementCount365d = FALSE,
+                                              useCovariateMeasurementBelow = FALSE,
+                                              useCovariateMeasurementAbove = FALSE,
+                                              useCovariateConceptCounts = FALSE,
+                                              useCovariateRiskScores = FALSE,
+                                              useCovariateRiskScoresCharlson = FALSE,
+                                              useCovariateRiskScoresDCSI = FALSE,
+                                              useCovariateRiskScoresCHADS2 = FALSE,
+                                              useCovariateInteractionYear = FALSE,
+                                              useCovariateInteractionMonth = FALSE,
+                                              excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                              includedCovariateConceptIds = c(),
+                                              deleteCovariatesSmallCount = 5)
+```
+
+Run the sql script to get the four relevant cohortMethodData objects:
+```{r, eval=FALSE}
+cohortMethodData1 = getDbCohortMethodData(blahblah,
+                                          covariateSettings = covarSettings1)
+
+cohortMethodData2 = getDbCohortMethodData(blahblah,
+                                          covariateSettings = covarSettings2)
+```
+
+
+The following code runs a simulation study. Refer to the documentation for runSimulationStudy for descriptions of parameters. Note the global option fffinalizer is changed so as to not run out of disk space.
+```{r,eval=FALSE}
+options("fffinalizer" = "delete")
+
+#runSimulationStudy <- function(cohortMethodData, confoundingScheme = 0, confoundingProportion = 0.3, n = 10,
+                               # trueBeta = NULL, outcomePrevalence = NULL, crossValidate = TRUE, hdpsFeatures = FALSE,
+                               # ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE) {
+
+# Default runs is n = 10; can be changed
+# Currently matching 1-1 on propensity score (strata = matchOnPs(ps))
+# To make things run faster just for testing purposes, can set crossValidate = FALSE, won't crossValidate for fitting original data and fitting LASSO propensity score
+
+# Vanilla parameters: no unmeasured confounding, no replacing observed effect size, no replacing observed outcome prevalence
+simulationStudy1 <- runSimulationStudy(cohortMethodData1, hdpsFeatures = TRUE)
+simulationStudy2 <- runSimulationStudy(cohortMethodData2, hdpsFeatures = FALSE)
+
+# Specify true effect size
+simulationStudy1 <- runSimulationStudy(cohortMethodData1, hdpsFeatures = TRUE, trueBeta = 1.0)
+simulationStudy2 <- runSimulationStudy(cohortMethodData2, hdpsFeatures = FALSE, trueBeta = 1.0)
+
+# Specify outcome prevalence
+simulationStudy1 <- runSimulationStudy(cohortMethodData1, hdpsFeatures = TRUE, outcomePrevalence = .05)
+simulationStudy2 <- runSimulationStudy(cohortMethodData2, hdpsFeatures = FALSE, outcomePrevalence = .05)
+
+# Remove demographics to simulate unmeasured confounding in propensity score
+simulationStudy1 <- runSimulationStudy(cohortMethodData1, hdpsFeatures = TRUE, confoundingScheme = 1)
+simulationStudy2 <- runSimulationStudy(cohortMethodData2, hdpsFeatures = FALSE, confoundingScheme = 1)
+
+# Remove random covariates to simulate unmeasured confounding in propensity score; here removes 25%
+simulationStudy1 <- runSimulationStudy(cohortMethodData1, hdpsFeatures = TRUE, confoundingScheme = 2, confoundingProportion = 0.25)
+simulationStudy2 <- runSimulationStudy(cohortMethodData2, hdpsFeatures = FALSE, confoundingScheme = 2, confoundingProportion = 0.25)
+
+options("fffinalizer" = NULL)
+
+```
+
+The following code demonstrates some of the return values of runSimulationStudy
+```{r,eval=FALSE}
+
+# View coefficients used in true outcome model
+trueOutcomeModel = simulationStudy1$trueOutcomeModel
+
+# View true effect size used in simulation
+trueEffectSize = simulationStudy1$trueEffectSize
+
+# View estimates generated via different propensity scores
+logRRLasso = simulationStudy1$estimatesLasso$logRr
+logRRExposure = simulationStudy1$estimatesExpHdps$logRr
+logRRBias = simulationStudy1$estimatesBiasHdps$logRr
+mean(logRRLasso)
+sd(logRRLasso)
+mean(logRRExposure)
+sd(logRRExposure)
+mean(logRRBias)
+sd(logRRBias)
+
+# View auc
+aucLasso = simulationStudy1$aucLasso
+aucExpHdps = simulationStudy1$aucExpHdps
+aucBiasHdps = simulationStudy1$aucBiasHdps
+
+# View propensity scores for each method
+psLasso = simulationStudy1$psLasso
+psExp = simulationStudy1$psExp
+psBias = simulationStudy1$psBias
+
+# Do things with the propensity scores to assess balance
+strataLasso = matchOnPs(psLasso)
+balance = computeCovariateBalance(strataLasso, cohortMethodData1)
+
+```
