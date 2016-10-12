@@ -120,3 +120,20 @@ psBias <- simulationStudy$psBias
 strataLasso <- matchOnPs(psLasso)
 balance <- computeCovariateBalance(strataLasso, cohortMethodData)
 ```
+
+We can create a list of confounding schemes, true effect sizes, and outcome prevalences and run all combination of them. For example, the following code performs two confounding schemes (none and remove 25% of covariates), uses two true effect sizes, and uses two outcome prevalences. hdpsFeatures should be set to the appropriate boolean.
+
+The resultant simulations can be accessed via a nested list, with the first index for confounding, second for effect size, third for outcome prevalence.
+
+```{r}
+confoundingSchemeList <- c(0,2)
+confoundingProportionList <- c(NA, 0.25)
+trueEffectSizeList <- c(-1, 1)
+outcomePrevalenceList <- c(0.01, 0.05)
+hdpsFeatures = TRUE
+
+simulationStudies <- runSimulationStudies(simulationProfile, studyPop, n = 10, confoundingSchemeList, confoundingProportionList,
+                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures = hdpsFeatures) {)
+
+simulationStudy <- simulationStudies[[1]][[1]][[1]]
+```

@@ -29,8 +29,8 @@
 #' \item{psBias}{propensity scores for subjects in study population for bias based hdps; propensity and preference scores are averaged over simulation runs}
 #' \item{outcomePrevalence}{outcome prevalence of simulation}}
 #' @export
-runSimulationStudy <- function(simulationProfile, studyPop, confoundingScheme = 0, confoundingProportion = 0.3, n = 10,
-                               trueEffectSize = NULL, outcomePrevalence = NULL, crossValidate = TRUE, hdpsFeatures = FALSE,
+runSimulationStudy <- function(simulationProfile, studyPop, n = 10, confoundingScheme = 0, confoundingProportion = 0.3, 
+                               trueEffectSize = NULL, outcomePrevalence = NULL, crossValidate = TRUE, hdpsFeatures,
                                ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
@@ -160,8 +160,8 @@ runSimulationStudy <- function(simulationProfile, studyPop, confoundingScheme = 
   # Restore ff state
   options("fffinalizer" = saveFfState)
   
-  return(list(trueOutcomeModel = simulationProfile$sOutcomeModel$outcomeModelCoefficients,
-              trueEffectSize = coef(simulationProfile$sOutcomeModel),
+  return(list(trueOutcomeModel = simulationProfile$sOutcomeModelCoefficients,
+              trueEffectSize = trueEffectSize,
               estimatesLasso = estimatesLasso,
               estimatesExpHdps = estimatesExpHdps,
               estimatesBiasHdps = estimatesBiasHdps,
@@ -173,3 +173,21 @@ runSimulationStudy <- function(simulationProfile, studyPop, confoundingScheme = 
               psBias = psBiasPermanent,
               outcomePrevalence = outcomePrevalence))
 }
+
+#' @export
+runSimulationStudies <- function(simulationProfile, studyPop, n = 10, confoundingSchemeList, confoundingProportionList,
+                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures) {
+  results = rep(list(rep(list(rep(list(NA), length(outcomePrevalenceList))), length(trueEffectSizeList))), length(confoundingSchemeList))
+  for (i in 1:length(confoundingSchemeList)) {
+    for (j in 1:length(trueEffectSizeList)) {
+      for (k in 1:length(outcomePrevalenceList)) {
+        results[[i]][[j]][[k]] = runSimulationStudy(simulationProfile, studyPop, n = n, confoundingScheme = confoundingSchemeList[[i]],
+                                                    confoundingProportion = confoundingProportionList[[i]], trueEffectSize = trueEffectSizeList[[j]],
+                                                    outcomePrevalence = outcomePrevalenceList[[k]], crossValidate = crossValidate, hdpsFeatures = hdpsFeatures)
+      }
+    }
+  }
+  return(results)
+}
+
+
