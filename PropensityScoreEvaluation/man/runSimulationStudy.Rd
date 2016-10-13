@@ -33,7 +33,8 @@ runSimulationStudy(simulationProfile, studyPop, n = 10,
 \item{ignoreCensoringCovariates}{Ignore covariates effects on censoring process; only uses baseline function}
 }
 \value{
-Returns the following: \describe {
+Returns the following: \describe{
+\item{trueOutcomeModel}{the non-exposure oefficients used in the outcome generating model}
 \item{trueEffectSize}{coefficient for exposure effect}
 \item{estimatesLasso}{logRr, bound, and sd for LASSO estimate for each simulation}
 \item{estimatesExpHdps}{logRr, bound, and sd for exposure based hdps}

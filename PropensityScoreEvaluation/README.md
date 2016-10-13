@@ -65,8 +65,15 @@ addExposureDaysToEnd = TRUE)
 simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop)
 ```
 
-Run the simulation for given specifications (TO DO create list of
-speficiations and automate)
+We can save and load this simulation profile. If we load the simulation profile, we can re-create a studyPop using cohortMethodData = simulationProfile$partialCMD. The parameters should be the same as those that went into the studyPop that we created the simulationProfile with.
+
+```{r}
+saveSimulationProfile(simulationProfile, file = file)
+
+simulationProfile <- loadSimulationProfile(file = file)
+```
+
+Run the simulation for given specifications
 
 ```{r}
 # Default runs is n = 10; can be changed
@@ -123,7 +130,7 @@ balance <- computeCovariateBalance(strataLasso, cohortMethodData)
 
 We can create a list of confounding schemes, true effect sizes, and outcome prevalences and run all combination of them. For example, the following code performs two confounding schemes (none and remove 25% of covariates), uses two true effect sizes, and uses two outcome prevalences. hdpsFeatures should be set to the appropriate boolean.
 
-The resultant simulations can be accessed via a nested list, with the first index for confounding, second for effect size, third for outcome prevalence.
+The resultant simulations can be accessed via a nested list, with the first index for confounding, second for effect size, third for outcome prevalence. Right now this is just done through a giant for-loop in R.
 
 ```{r}
 confoundingSchemeList <- c(0,2)
@@ -133,7 +140,7 @@ outcomePrevalenceList <- c(0.01, 0.05)
 hdpsFeatures = TRUE
 
 simulationStudies <- runSimulationStudies(simulationProfile, studyPop, n = 10, confoundingSchemeList, confoundingProportionList,
-                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures = hdpsFeatures) {)
+                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures = hdpsFeatures)
 
 simulationStudy <- simulationStudies[[1]][[1]][[1]]
 ```
