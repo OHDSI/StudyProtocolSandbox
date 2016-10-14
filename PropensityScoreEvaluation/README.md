@@ -125,7 +125,10 @@ psBias <- simulationStudy$psBias
 
 # Do things with the propensity scores to assess balance
 strataLasso <- matchOnPs(psLasso)
-balance <- computeCovariateBalance(strataLasso, cohortMethodData)
+balance <- computeCovariateBalance(strataLasso, simulationProfile$partialCMD)
+
+# View several of these metrics together, including coverage of true value by logRr confidence interval, and proportion of std diff above a threshold before and after matching
+calculateMetrics=(simulationStudy, simulationProfile$partialCMD, stdDiffThreshold = .05)
 ```
 
 We can create a list of confounding schemes, true effect sizes, and outcome prevalences and run all combination of them. For example, the following code performs two confounding schemes (none and remove 25% of covariates), uses two true effect sizes, and uses two outcome prevalences. hdpsFeatures should be set to the appropriate boolean.
