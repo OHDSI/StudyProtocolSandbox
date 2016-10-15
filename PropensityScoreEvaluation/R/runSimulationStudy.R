@@ -116,13 +116,9 @@ runSimulationStudy <- function(simulationProfile, studyPop, n = 10, confoundingS
     }
     
     studyPopNew = studyPop
-    studyPopNew$outcomeCount = 0
-    studyPopNew$survivalTime = studyPopNew$timeAtRisk
-    
-    t = match(cmd$outcomes$rowId, studyPopNew$rowId)
-    studyPopNew$outcomeCount[t] = 1
-    studyPopNew$daysToEvent[t] = cmd$outcomes$daysToEvent
-    studyPopNew$survivalTime[t] = cmd$outcomes$daysToEvent+1
+    studyPopNew$daysToEvent = cmd$cohorts$newDaysToEvent[match(studyPopNew$rowId, cmd$cohorts$rowId)]
+    studyPopNew$outcomeCount = cmd$cohorts$newOutcomeCount[match(studyPopNew$rowId, cmd$cohorts$rowId)]
+    studyPopNew$survivalTime = cmd$cohorts$newSurvivalTime[match(studyPopNew$rowId, cmd$cohorts$rowId)]
     
     psBias = createPs(cohortMethodData = removeCovariates(hdpsBias, covariatesToDiscard), population = studyPopNew, prior = createPrior(priorType = "none"),
                       control = createControl(maxIterations = 10000))
