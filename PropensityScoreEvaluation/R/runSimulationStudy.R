@@ -154,20 +154,23 @@ runSimulationStudy <- function(simulationProfile, studyPop, n = 10, confoundingS
   psBiasPermanent$propensityScore = psBiasPermanent$propensityScore / n
   psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore / n
   
+  ps = data.frame(rowId = psLasso$rowId, treatment = psLasso$treatment, lassoPropensityScore = psLasso$propensityScore,
+                  expHdpsPropensityScore = psExp$propensityScore, biasHdpsPropensityScore = psBiasPermanent$propensityScore)
+  
   # Restore ff state
   options("fffinalizer" = saveFfState)
   
-  return(list(trueOutcomeModel = simulationProfile$sOutcomeModelCoefficients,
-              trueEffectSize = trueEffectSize,
+  return(list(trueEffectSize = trueEffectSize,
               estimatesLasso = estimatesLasso,
               estimatesExpHdps = estimatesExpHdps,
               estimatesBiasHdps = estimatesBiasHdps,
-              aucLasso = aucLasso,
-              aucExpHdps = aucExpHdps,
-              aucBiasHdps = mean(aucBiasHdps),
-              psLasso = psLasso,
-              psExp = psExp,
-              psBias = psBiasPermanent,
+              #               aucLasso = aucLasso,
+              #               aucExpHdps = aucExpHdps,
+              #               aucBiasHdps = mean(aucBiasHdps),
+              #               psLasso = psLasso,
+              #               psExp = psExp,
+              #               psBias = psBiasPermanent
+              ps = ps,
               outcomePrevalence = outcomePrevalence))
 }
 

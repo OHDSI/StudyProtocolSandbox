@@ -118,10 +118,8 @@ aucLasso <- simulationStudy$aucLasso
 aucExpHdps <- simulationStudy$aucExpHdps
 aucBiasHdps <- simulationStudy$aucBiasHdps
 
-# View propensity scores for each method
-psLasso <- simulationStudy$psLasso
-psExp <- simulationStudy$psExp
-psBias <- simulationStudy$psBias
+# View propensity scores 
+ps <- simulationStudy$ps
 
 # Do things with the propensity scores to assess balance
 strataLasso <- matchOnPs(psLasso)
