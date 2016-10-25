@@ -189,17 +189,22 @@ doSelectiveExport <- function(connectionDetails,
   #make sure the names are the same case accross different DB engines
   names(data) <- tolower(names(data))
   
+  #mask rows that have <10 pts  TODO
   
+  #export
   write.csv(data,file = file.path(exportFolder,'HeelOutput.csv'),row.names = F)
   
   
   
   
   
-  #4 ------Achilles  results  table section (selected measures)
+  #4 ------Achilles  results  table section (selected measures) (recomputed as percentages of all patients)
   
-  
-  sql <- "select analysis_id,stratum_1,count_value from @results_database_schema.achilles_results a where analysis_id in (1,2,4,5,109,113,200,505)"
+  #treshold on patient count was added (in addition to achilles default filtering)
+  sql <- "select analysis_id,stratum_1,count_value from @results_database_schema.achilles_results a 
+    where analysis_id in (1,2,4,5,10,11,12,109,113,200,505)
+    and count_value >10
+    "
   
   
   sql <- SqlRender::renderSql(sql,results_database_schema = resultsDatabaseSchema)$sql
