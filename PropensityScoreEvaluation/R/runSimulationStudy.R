@@ -7,7 +7,7 @@
 #' @param studyPop Study population created by createStudyPopulation function
 #' @param confoundingScheme Type of unmeasured confounding to use for PS (0 = none; 1 = demographics; 2 = random proportion; 3 = demographics and random proportion)
 #' @param confoundingProportion Proportion of covariates to hide from propensity score as unmeasured confounding
-#' @param n Number of simulations to run (1 simulation = reroll outcomes)
+#' @param simulationRuns Number of simulations to run (1 simulation = reroll outcomes)
 #' @param trueEffectSize True effect size for exposure to simulate. If set to NULL keeps observed effect size from simulation profile
 #' @param outcomePrevalence Outcome prevalence to simulate; adjusts outcome baseline survival function to achieve. If null keeps observed
 #' @param crossValidate Can turn off cross validation when fitting outcome models in beginning and fitting LASSO propensity score
@@ -30,7 +30,7 @@
 #' \item{psBias}{propensity scores for subjects in study population for bias based hdps; propensity and preference scores are averaged over simulation runs}
 #' \item{outcomePrevalence}{outcome prevalence of simulation}}
 #' @export
-runSimulationStudy <- function(simulationProfile, studyPop, n = 10, confoundingScheme = 0, confoundingProportion = 0.3, 
+runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10, confoundingScheme = 0, confoundingProportion = NULL, 
                                trueEffectSize = NULL, outcomePrevalence = NULL, crossValidate = TRUE, hdpsFeatures,
                                ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE) {
   # Save ff state
@@ -106,7 +106,7 @@ runSimulationStudy <- function(simulationProfile, studyPop, n = 10, confoundingS
   psBiasPermanent$preferenceScore = 0
 
   
-  for (i in 1:n) {
+  for (i in 1:simulationRuns) {
     cmd = simulateCMD(partialCMD, sData, cData)
     if (is.null(cmd$outcomes)) next
     if (hdpsFeatures == TRUE) {
@@ -151,37 +151,37 @@ runSimulationStudy <- function(simulationProfile, studyPop, n = 10, confoundingS
     psBiasPermanent$propensityScore = psBiasPermanent$propensityScore + psBias$propensityScore
     psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore + psBias$preferenceScore
   }
-  psBiasPermanent$propensityScore = psBiasPermanent$propensityScore / n
-  psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore / n
+  psBiasPermanent$propensityScore = psBiasPermanent$propensityScore / simulationRuns
+  psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore / simulationRuns
   
   ps = data.frame(rowId = psLasso$rowId, treatment = psLasso$treatment, lassoPropensityScore = psLasso$propensityScore,
                   expHdpsPropensityScore = psExp$propensityScore, biasHdpsPropensityScore = psBiasPermanent$propensityScore)
   
+  settings = list(trueEffectSize = trueEffectSize,
+                  outcomePrevalence = outcomePrevalence,
+                  confoundingScheme = confoundingScheme,
+                  confoundingProportion = confoundingProportion,
+                  simulationRuns = simulationRuns,
+                  hdpsFeatures = hdpsFeatures)
+  
   # Restore ff state
   options("fffinalizer" = saveFfState)
   
-  return(list(trueEffectSize = trueEffectSize,
+  return(list(settings = settings,
               estimatesLasso = estimatesLasso,
               estimatesExpHdps = estimatesExpHdps,
               estimatesBiasHdps = estimatesBiasHdps,
-              #               aucLasso = aucLasso,
-              #               aucExpHdps = aucExpHdps,
-              #               aucBiasHdps = mean(aucBiasHdps),
-              #               psLasso = psLasso,
-              #               psExp = psExp,
-              #               psBias = psBiasPermanent
-              ps = ps,
-              outcomePrevalence = outcomePrevalence))
+              ps = ps))
 }
 
 #' @export
-runSimulationStudies <- function(simulationProfile, studyPop, n = 10, confoundingSchemeList, confoundingProportionList,
+runSimulationStudies <- function(simulationProfile, studyPop, simulationRuns = 10, confoundingSchemeList, confoundingProportionList,
                                  trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures) {
   results = rep(list(rep(list(rep(list(NA), length(outcomePrevalenceList))), length(trueEffectSizeList))), length(confoundingSchemeList))
   for (i in 1:length(confoundingSchemeList)) {
     for (j in 1:length(trueEffectSizeList)) {
       for (k in 1:length(outcomePrevalenceList)) {
-        results[[i]][[j]][[k]] = runSimulationStudy(simulationProfile, studyPop, n = n, confoundingScheme = confoundingSchemeList[[i]],
+        results[[i]][[j]][[k]] = runSimulationStudy(simulationProfile, studyPop, simulationRuns = simulationRuns, confoundingScheme = confoundingSchemeList[[i]],
                                                     confoundingProportion = confoundingProportionList[[i]], trueEffectSize = trueEffectSizeList[[j]],
                                                     outcomePrevalence = outcomePrevalenceList[[k]], crossValidate = crossValidate, hdpsFeatures = hdpsFeatures)
       }
@@ -190,4 +190,36 @@ runSimulationStudies <- function(simulationProfile, studyPop, n = 10, confoundin
   return(results)
 }
 
+#' @export
+saveSimulationStudy <- function(simulationStudy, file) {
+  if (missing(simulationStudy))
+    stop("Must specify simulationStudy")
+  if (missing(file))
+    stop("Must specify file")
+  if (!file.exists(file)) dir.create(file)
+  saveRDS(simulationStudy$settings, file = file.path(file, "settings.rds"))
+  saveRDS(simulationStudy$estimatesLasso, file = file.path(file, "estimatesLasso.rds"))
+  saveRDS(simulationStudy$estimatesExpHdps, file = file.path(file, "estimatesExpHdps.rds"))
+  saveRDS(simulationStudy$estimatesBiasHdps, file = file.path(file, "estimatesBiasHdps.rds"))
+  saveRDS(simulationStudy$ps, file = file.path(file, "ps.rds"))
+}
+
+#' @export
+loadSimulationStudy <- function(file, readOnly = TRUE) {
+  if (!file.exists(file))
+    stop(paste("Cannot find folder", file))
+  if (!file.info(file)$isdir)
+    stop(paste("Not a folder", file))
+  settings = readRDS(file.path(file, "settings.rds"))
+  estimatesLasso = readRDS(file.path(file, "estimatesLasso.rds"))
+  estimatesExpHdps = readRDS(file.path(file, "estimatesExpHdps.rds"))
+  estimatesBiasHdps = readRDS(file.path(file, "estimatesBiasHdps.rds"))
+  ps = readRDS(file.path(file, "ps.rds"))
+  result = list(settings = settings,
+                estimatesLasso = estimatesLasso,
+                estimatesExpHdps = estimatesExpHdps,
+                estimatesBiasHdps = estimatesBiasHdps,
+                ps = ps)
+  return(result)
+}
 

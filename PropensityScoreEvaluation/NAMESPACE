@@ -2,5 +2,7 @@
 
 export(calculateMetrics)
 export(createCohortMethodData)
+export(loadSimulationStudy)
 export(runSimulationStudies)
 export(runSimulationStudy)
+export(saveSimulationStudy)

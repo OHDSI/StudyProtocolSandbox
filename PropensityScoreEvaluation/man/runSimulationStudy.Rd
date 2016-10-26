@@ -4,8 +4,8 @@
 \alias{runSimulationStudy}
 \title{Runs Simulation Study}
 \usage{
-runSimulationStudy(simulationProfile, studyPop, n = 10,
-  confoundingScheme = 0, confoundingProportion = 0.3,
+runSimulationStudy(simulationProfile, studyPop, simulationRuns = 10,
+  confoundingScheme = 0, confoundingProportion = NULL,
   trueEffectSize = NULL, outcomePrevalence = NULL, crossValidate = TRUE,
   hdpsFeatures, ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE)
 }
@@ -14,7 +14,7 @@ runSimulationStudy(simulationProfile, studyPop, n = 10,
 
 \item{studyPop}{Study population created by createStudyPopulation function}
 
-\item{n}{Number of simulations to run (1 simulation = reroll outcomes)}
+\item{simulationRuns}{Number of simulations to run (1 simulation = reroll outcomes)}
 
 \item{confoundingScheme}{Type of unmeasured confounding to use for PS (0 = none; 1 = demographics; 2 = random proportion; 3 = demographics and random proportion)}
 
