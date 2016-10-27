@@ -73,10 +73,10 @@ saveSimulationProfile(simulationProfile, file = file)
 simulationProfile <- loadSimulationProfile(file = file)
 ```
 
-Run the simulation for given specifications
+Run the simulation for given specifications (set crossValidate = FALSE to run faster for testing)
 
 ```{r}
-# Default runs is n = 10; can be changed
+# Default runs is simulationRuns = 10; can be changed
 # Currently matching 1-1 on propensity score (strata = matchOnPs(ps))
 
 # Vanilla parameters: no unmeasured confounding, no replacing observed effect size, no replacing outcome prevalence
@@ -95,53 +95,47 @@ simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures 
 simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, confoundingScheme = 2, confoundingProportion = 0.25)
 
 ```
+Each simulationStudy can be saved and loaded:
+```{r}
+saveSimulationStudy(simulationStudy, file)
+
+simulationStudy <- loadSimulationStudy(file)
+```
 
 Look at results
 
 ```{r}
-# View true effect size used in simulation
-trueEffectSize <- simulationStudy$trueEffectSize
+# View settings used in simulation
+simulationStudy$settings
 
-# View estimates generated via different propensity scores
-logRRLasso <- simulationStudy$estimatesLasso$logRr
-logRRExposure <- simulationStudy$estimatesExpHdps$logRr
-logRRBias <- simulationStudy$estimatesBiasHdps$logRr
-mean(logRRLasso)
-sd(logRRLasso)
-mean(logRRExposure)
-sd(logRRExposure)
-mean(logRRBias)
-sd(logRRBias)
-
-# View auc
-aucLasso <- simulationStudy$aucLasso
-aucExpHdps <- simulationStudy$aucExpHdps
-aucBiasHdps <- simulationStudy$aucBiasHdps
-
-# View propensity scores 
-ps <- simulationStudy$ps
-
-# Do things with the propensity scores to assess balance
-strataLasso <- matchOnPs(psLasso)
-balance <- computeCovariateBalance(strataLasso, simulationProfile$partialCMD)
-
-# View several of these metrics together, including coverage of true value by logRr confidence interval, and proportion of std diff above a threshold before and after matching
+# Calculate set of metrics for simulation
 metrics <- calculateMetrics(simulationStudy, simulationProfile$partialCMD, stdDiffThreshold = .05)
 ```
 
-We can create a list of confounding schemes, true effect sizes, and outcome prevalences and run all combination of them. For example, the following code performs two confounding schemes (none and remove 25% of covariates), uses two true effect sizes, and uses two outcome prevalences. hdpsFeatures should be set to the appropriate boolean.
+We can create a list of confounding schemes, true effect sizes, and outcome prevalences and run all combinations of them. For example, the following code performs two confounding schemes (none and remove 25% of covariates), uses two true effect sizes, and uses two outcome prevalences. hdpsFeatures should be set to the appropriate boolean.
 
-The resultant simulations can be accessed via a nested list, with the first index for confounding, second for effect size, third for outcome prevalence. Right now this is just done through a giant for-loop in R.
+The resultant simulations are saved to a specified outputFolder, which can be loaded. The individual simulations can be accessed via a nested list, with the first index for confounding, second for effect size, third for outcome prevalence. Right now the many simulations are just done through a giant for-loop in R.
 
 ```{r}
 confoundingSchemeList <- c(0,2)
 confoundingProportionList <- c(NA, 0.25)
 trueEffectSizeList <- c(-1, 1)
 outcomePrevalenceList <- c(0.01, 0.05)
-hdpsFeatures = TRUE
+hdpsFeatures <- TRUE
+outputFolder <- outputFolder
 
-simulationStudies <- runSimulationStudies(simulationProfile, studyPop, n = 10, confoundingSchemeList, confoundingProportionList,
-                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures = hdpsFeatures)
-
+simulationStudies <- runSimulationStudies(simulationProfile, studyPop, simulationRuns = 10,
+                                          confoundingSchemeList, confoundingProportionList,
+                                          trueEffectSizeList, outcomePrevalenceList,
+                                          hdpsFeatures = hdpsFeatures,
+                                          outputFolder = outputFolder)
+                                          
+simulationStudies <- loadSimulationStudies(outputFolder)
 simulationStudy <- simulationStudies[[1]][[1]][[1]]
+```
+We can also obtain the metrics for every simulation study in a simulation studies list. The returned object is in the same nested loop structure.
+
+```{r}
+metricsList <- calculateMetricsList(simulationStudies, cohortMethodData, stdDiffThreshold = .05)
+metricsList[[1]][[1]][[1]]
 ```

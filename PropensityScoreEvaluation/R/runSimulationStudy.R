@@ -176,18 +176,52 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
 
 #' @export
 runSimulationStudies <- function(simulationProfile, studyPop, simulationRuns = 10, confoundingSchemeList, confoundingProportionList,
-                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures) {
-  results = rep(list(rep(list(rep(list(NA), length(outcomePrevalenceList))), length(trueEffectSizeList))), length(confoundingSchemeList))
+                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures, outputFolder) {
+  if (!file.exists(outputFolder)) dir.create(outputFolder)
+  settings = list(confoundingSchemeList = confoundingSchemeList,
+                  confoundingProportionList = confoundingProportionList,
+                  trueEffectSizeList = trueEffectSizeList,
+                  outcomePrevalenceList = outcomePrevalenceList)
+  
+  results = list(settings = settings, simulationStudies = rep(list(rep(list(rep(list(NA), length(outcomePrevalenceList))), length(trueEffectSizeList))), length(confoundingSchemeList)))
   for (i in 1:length(confoundingSchemeList)) {
     for (j in 1:length(trueEffectSizeList)) {
       for (k in 1:length(outcomePrevalenceList)) {
-        results[[i]][[j]][[k]] = runSimulationStudy(simulationProfile, studyPop, simulationRuns = simulationRuns, confoundingScheme = confoundingSchemeList[[i]],
-                                                    confoundingProportion = confoundingProportionList[[i]], trueEffectSize = trueEffectSizeList[[j]],
-                                                    outcomePrevalence = outcomePrevalenceList[[k]], crossValidate = crossValidate, hdpsFeatures = hdpsFeatures)
+        temp = runSimulationStudy(simulationProfile, studyPop, simulationRuns = simulationRuns, confoundingScheme = confoundingSchemeList[[i]],
+                                  confoundingProportion = confoundingProportionList[[i]], trueEffectSize = trueEffectSizeList[[j]],
+                                  outcomePrevalence = outcomePrevalenceList[[k]], crossValidate = crossValidate, hdpsFeatures = hdpsFeatures)
+        results$simulationStudies[[i]][[j]][[k]] = temp
+        saveSimulationStudy(temp, file = file.path(outputFolder, paste("c", i, "_t", j, "_o", k, ".rds", sep="")))
       }
     }
   }
+  saveRDS(settings, file = file.path(outputFolder, "settings.rds"))
   return(results)
+}
+
+#' @export
+loadSimulationStudies <- function(file) {
+  if (!file.exists(file))
+    stop(paste("Cannot find folder", file))
+  if (!file.info(file)$isdir)
+    stop(paste("Not a folder", file))
+  settings = readRDS(file.path(file, "settings.rds"))
+  I = length(settings$confoundingSchemeList)
+  J = length(settings$trueEffectSizeList)
+  K = length(settings$outcomePrevalenceList)
+  
+  simulationStudies = rep(list(rep(list(rep(list(NA), K)), J)), I)
+  
+  for (i in 1:I) {
+    for (j in 1:J) {
+      for (k in 1:K) {
+        simulationStudies[[i]][[j]][[k]] = loadSimulationStudy(file = file.path(file, paste("c", i, "_t", j, "_o", k, ".rds", sep="")))
+      }
+    }
+  }
+  
+  return(list(settings = settings,
+              simulationStudies = simulationStudies))
 }
 
 #' @export

@@ -1,6 +1,6 @@
 #' @export
 calculateMetrics <- function(simulationResults, cohortMethodData, stdDiffThreshold = .05) {
-  trueEffectSize = simulationResults$trueEffectSize
+  trueEffectSize = simulationResults$settings$trueEffectSize
   psLasso = psExpHdps = psBiasHdps = simulationResults$ps[c("rowId", "treatment")]
   psLasso$propensityScore = simulationResults$ps$lassoPropensityScore
   psExpHdps$propensityScore = simulationResults$ps$expHdpsPropensityScore
@@ -22,4 +22,23 @@ calculateMetricsHelper <- function(estimates, cohortMethodData, trueEffectSize, 
   afterHighStdDiff = length(which(abs(balance$afterMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
   auc = computePsAuc(ps)
   return(list(bias = bias, sd = sd, rmse = rmse, coverage = coverage, auc = auc, beforeHighStdDiff = beforeHighStdDiff, afterHighStdDiff = afterHighStdDiff))
+}
+
+#' @export
+calculateMetricsList <- function(simulationStudies, cohortMethodData, stdDiffThreshold = .05) {
+  settings = simulationStudies$settings
+  I = length(settings$confoundingSchemeList)
+  J = length(settings$trueEffectSizeList)
+  K = length(settings$outcomePrevalenceList)
+  result = rep(list(rep(list(rep(list(NA), K)), J)), I)
+  for (i in 1:I) {
+    for (j in 1:J) {
+      for (k in 1:K) {
+        result[[i]][[j]][[k]] = calculateMetrics(simulationStudies$simulationStudies[[i]][[j]][[k]],
+                                                 cohortMethodData,
+                                                 stdDiffThreshold = .05)
+      }
+    }
+  }
+  return(result)
 }
