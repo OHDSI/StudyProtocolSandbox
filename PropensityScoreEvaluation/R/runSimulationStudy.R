@@ -14,6 +14,7 @@
 #' @param hdpsFeatures TRUE = using HDPS features; FALSE = using FeatureExtraction features
 #' @param ignoreCensoring Ignore censoring altogether; sets censoring process baseline survival function to 1
 #' @param ignoreCensoringCovariates Ignore covariates effects on censoring process; only uses baseline function
+#' @param threads Number of parallel threads to use
 #'
 #' @return
 #' Returns the following: \describe{
@@ -32,7 +33,7 @@
 #' @export
 runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10, confoundingScheme = 0, confoundingProportion = NULL, 
                                trueEffectSize = NULL, outcomePrevalence = NULL, crossValidate = TRUE, hdpsFeatures,
-                               ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE) {
+                               ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE, threads = 10) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
   options("fffinalizer" = "delete")
@@ -79,8 +80,15 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
   }
   
   # create lasso PS
-  psLasso = createPs(cohortMethodData = removeCovariates(partialCMD, covariatesToDiscard), studyPop, 
-                     prior = Cyclops::createPrior("laplace", exclude = c(), useCrossValidation = crossValidate))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
+  psLasso = createPs(cohortMethodData = removeCovariates(partialCMD, covariatesToDiscard), 
+                     population = studyPop, 
+                     prior = Cyclops::createPrior("laplace", exclude = c(), useCrossValidation = crossValidate),
+                     control = createControl(noiseLevel = "silent",
+                                             cvType = "auto", 
+                                             tolerance = 2e-07, 
+                                             cvRepetitions = 10, 
+                                             startingVariance = 0.01,
+                                             threads = threads))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
   aucLasso = computePsAuc(psLasso)
   strataLasso = matchOnPs(psLasso)
   # strataLasso = stratifyByPs(psLasso)
@@ -95,13 +103,13 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
     hdpsBias = runHdps1(cmd, useExpRank = FALSE)
   }
   psExp = createPs = createPs(cohortMethodData = removeCovariates(hdpsExp, covariatesToDiscard), population = studyPop, prior = createPrior(priorType = "none"),
-                              control = createControl(maxIterations = 10000))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
+                              control = createControl(maxIterations = 10000, threads = threads))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
   aucExpHdps = computePsAuc(psExp)
   strataExp = matchOnPs(psExp)
   # strataExp = stratifyByPs(psExp)
   
   psBiasPermanent = createPs(cohortMethodData = removeCovariates(hdpsBias, covariatesToDiscard), population = studyPop, prior = createPrior(priorType = "none"),
-                             control = createControl(maxIterations = 10000))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
+                             control = createControl(maxIterations = 10000, threads = threads))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
   psBiasPermanent$propensityScore = 0
   psBiasPermanent$preferenceScore = 0
 
@@ -121,7 +129,7 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
     studyPopNew$survivalTime = cmd$cohorts$newSurvivalTime[match(studyPopNew$rowId, cmd$cohorts$rowId)]
     
     psBias = createPs(cohortMethodData = removeCovariates(hdpsBias, covariatesToDiscard), population = studyPopNew, prior = createPrior(priorType = "none"),
-                      control = createControl(maxIterations = 10000))
+                      control = createControl(maxIterations = 10000, threads = threads))
     
     popLasso = merge(studyPopNew, strataLasso[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
     popExp = merge(studyPopNew, strataExp[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
@@ -176,7 +184,7 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
 
 #' @export
 runSimulationStudies <- function(simulationProfile, studyPop, simulationRuns = 10, confoundingSchemeList, confoundingProportionList,
-                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures, outputFolder) {
+                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures, outputFolder, threads = 10) {
   if (!file.exists(outputFolder)) dir.create(outputFolder)
   settings = list(confoundingSchemeList = confoundingSchemeList,
                   confoundingProportionList = confoundingProportionList,
@@ -189,7 +197,7 @@ runSimulationStudies <- function(simulationProfile, studyPop, simulationRuns = 1
       for (k in 1:length(outcomePrevalenceList)) {
         temp = runSimulationStudy(simulationProfile, studyPop, simulationRuns = simulationRuns, confoundingScheme = confoundingSchemeList[[i]],
                                   confoundingProportion = confoundingProportionList[[i]], trueEffectSize = trueEffectSizeList[[j]],
-                                  outcomePrevalence = outcomePrevalenceList[[k]], crossValidate = crossValidate, hdpsFeatures = hdpsFeatures)
+                                  outcomePrevalence = outcomePrevalenceList[[k]], crossValidate = crossValidate, hdpsFeatures = hdpsFeatures, threads = threads)
         results$simulationStudies[[i]][[j]][[k]] = temp
         saveSimulationStudy(temp, file = file.path(outputFolder, paste("c", i, "_t", j, "_o", k, ".rds", sep="")))
       }

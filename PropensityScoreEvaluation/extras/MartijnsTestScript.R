@@ -24,6 +24,7 @@ cdmVersion <- "5"
 extraSettings <- NULL
 file = "inst/sql/sql_server/coxibVsNonselVsGiBleed.sql"
 workFolder <- "s:/temp/Yuxi"
+threads <- 30
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
@@ -31,18 +32,20 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 password = pw,
                                                                 port = port,
                                                                 extraSettings = extraSettings)
-hdpsCovariates = TRUE
 
 connection <- DatabaseConnector::connect(connectionDetails)
 
+
 sql <- "SELECT concept_id FROM @cdmDatabaseSchema.concept_ancestor INNER JOIN @cdmDatabaseSchema.concept ON descendant_concept_id = concept_id WHERE ancestor_concept_id = 21603933"
 sql <- SqlRender::renderSql(sql, cdmDatabaseSchema = cdmDatabaseSchema)$sql
-sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql 
 nsaids <- DatabaseConnector::querySql(connection, sql)
 nsaids <- nsaids$CONCEPT_ID
 
 dbDisconnect(connection)
 
+# use HDPS covariates or regular FeatureExtraction covariates
+hdpsCovariates = TRUE
 
 cohortMethodData <- createCohortMethodData(connectionDetails = connectionDetails,
                                            file = file,
@@ -53,7 +56,6 @@ cohortMethodData <- createCohortMethodData(connectionDetails = connectionDetails
                                            resultsDatabaseSchema = resultsDatabaseSchema,
                                            hdpsCovariates = hdpsCovariates,
                                            excludedCovariateConceptIds = nsaids)
-
 
 saveCohortMethodData(cohortMethodData = cohortMethodData, file = file.path(workFolder, "cmData_hdps"))
 
@@ -71,13 +73,31 @@ studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
                                   riskWindowEnd = 30,
                                   addExposureDaysToEnd = TRUE)
 
-simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop, threads = 30)
+simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop, threads = threads)
 
-# Default runs is n = 10; can be changed
-# Currently matching 1-1 on propensity score (strata = matchOnPs(ps))
+saveSimulationProfile(simulationProfile, file = file.path(workFolder, "simulationProfile"))
 
-# Vanilla parameters: no unmeasured confounding, no replacing observed effect size, no replacing outcome prevalence
-hdpsCovariates <- TRUE
-simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates)
+#simulationProfile <- loadSimulationProfile(file = file.path(workFolder, "simulationProfile"))
 
-saveRDS(simulationStudy, "s:/temp/simulationStudy.rds")
+
+
+confoundingSchemeList <- c(0,2)
+confoundingProportionList <- c(NA, 0.25)
+trueEffectSizeList <- c(-1, 1)
+outcomePrevalenceList <- c(0.01, 0.05)
+hdpsFeatures <- TRUE
+outputFolder <- file.path(workFolder, "similations")
+if (!file.exists(outputFolder)) {
+  dir.create(outputFolder)
+}
+
+simulationStudies <- runSimulationStudies(simulationProfile, studyPop, simulationRuns = 10,
+                                          confoundingSchemeList, confoundingProportionList,
+                                          trueEffectSizeList, outcomePrevalenceList,
+                                          hdpsFeatures = hdpsFeatures,
+                                          outputFolder = outputFolder)
+
+simulationStudies <- loadSimulationStudies(outputFolder)
+simulationStudy <- simulationStudies[[1]][[1]][[1]]
+
+
