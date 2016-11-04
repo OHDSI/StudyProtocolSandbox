@@ -48,7 +48,7 @@ Create study population and simulation profile
 
 ```{r}
 # for testing purposes can turn off cross-validation to get things running faster in 
-# createCMDSimulationProfileand runSimulationStudy by setting crossValidate = FALSE
+# createCMDSimulationProfile and setUpSimulation by setting useCrossValidation = FALSE
 
 studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
 outcomeId = 3,
@@ -62,47 +62,60 @@ addExposureDaysToStart = FALSE,
 riskWindowEnd = 30,
 addExposureDaysToEnd = TRUE)
 
-simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop)
-```
-
-We can save and load this simulation profile. If we load the simulation profile, we can re-create a studyPop using cohortMethodData = simulationProfile$partialCMD. The parameters should be the same as those that went into the studyPop that we created the simulationProfile with.
-
-```{r}
+simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop, useCrossValidation = TRUE)
 saveSimulationProfile(simulationProfile, file = file)
-
 simulationProfile <- loadSimulationProfile(file = file)
 ```
 
-Run the simulation for given specifications (set crossValidate = FALSE to run faster for testing)
+The simulation is divided into two steps: a simulation setup step and a run simulation step. The simulation setup calculates the LASSO-regularized propensity score for the specific confounding scheme and sample size desired. The run simulation setup performs the simulation over given values of the true effect size and outcome prevalence. The reason these are separated is because of the high run time of the cross validated propensity score. We save the propensity score so as to calculate it again unnecessarily. 
+
+Confounding schemes (hiding covariates from propensity score models): 0 - no confounding ; 1 - discard demographics ; 2 - discard fraction of covariates ; 3 - discard demographics and fraction of covariates
+
+Confounding proportion: NA - confounding schemes 0 and 1 ; otherwise (schemes 2, 3) a number between 0 and 1
+  
+Sample size: NA - use full cohort ; otherwise - use given size (should be smaller than size of full cohort)
 
 ```{r}
-# Default runs is simulationRuns = 10; can be changed
-# Currently matching 1-1 on propensity score (strata = matchOnPs(ps))
+simulationSetup <- setUpSimulation(simulationProfile, useCrossValidation = TRUE, confoundingScheme = 0,
+                                    confoundingProportion = NA, sampleSize = NA)
 
-# Vanilla parameters: no unmeasured confounding, no replacing observed effect size, no replacing outcome prevalence
-simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates)
-
-# Specify effect size
-simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, trueEffectSize = 1.0)
-
-# Specify outcome prevalence
-simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, outcomePrevalence = .05)
-
-# Remove demographics to simulate unmeasured confounding in propensity score
-simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, confoundingScheme = 1)
-
-# Remove random covariates to simulate unmeasured confounding in propensity score; here removes 25%
-simulationStudy <- runSimulationStudy(simulationProfile, studyPop, hdpsFeatures = hdpsCovariates, confoundingScheme = 2, confoundingProportion = 0.25)
-
+saveSimulationSetup(simulationSetup, file = file)
+loadSimulationSetup(file = file)
 ```
-Each simulationStudy can be saved and loaded:
+
+We can create simulation setups en masse:
+
 ```{r}
-saveSimulationStudy(simulationStudy, file)
+confoundingSchemeList <- c(0,2)
+confoundingProportionList <- c(NA, 0.25)
+sampleSizeList <- c(NA, 5000)
+outputFolder <- outputFolder
 
-simulationStudy <- loadSimulationStudy(file)
+setUpSimulations(simulationProfile, confoundingSchemeList, confoundingProportionList,
+                  useCrossValidation = TRUE, sampleSizeList, outputFolder)
+```
+For each simulation setup, we can run simulations for given true effect size and outcome prevalence.
+
+For each simulation setup, we can also run a combination of effect sizes and outcome prevalences with runSimulationStudies. Note that in this case only one of simulationSetup or simulationSetupFolder should be given. It will either use the given setup or load from file.
+
+``` {r}
+
+simulationStudy <- runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, simulationRuns = 10, 
+                                      trueEffectSize = 1.0, outcomePrevalence = 0.05, hdpsFeatures = hdpsFeatures)
+                                      
+trueEffectSizeList <- c(exp(-1), exp(0), exp(1))
+outcomePrevalenceList <- c(0.001, 0.01, 0.05)
+simulationSetupFolder <- simulationSetupFolder
+outputFolder <- outputFolder
+
+simulationStudies <- runSimulationStudies(simulationProfile, simulationSetup = NULL, simulationRuns = 10,
+                                          trueEffectSizeList, outcomePrevalenceList, hdpsFeatures,
+                                          simulationSetupFolder = simulationSetupFolder, outputFolder)
+
+simulationStudies <- loadSimulationStudies(outputFolder)
 ```
 
-Look at results
+Look at results. The calculateMetrics function takes a simulationStudy output and returns the bias, sd, rmse, coverage of true effect size, auc, and the number of covariates with std diff greater than a given threshold before and after matching based on PS method
 
 ```{r}
 # View settings used in simulation
@@ -110,32 +123,8 @@ simulationStudy$settings
 
 # Calculate set of metrics for simulation
 metrics <- calculateMetrics(simulationStudy, simulationProfile$partialCMD, stdDiffThreshold = .05)
-```
 
-We can create a list of confounding schemes, true effect sizes, and outcome prevalences and run all combinations of them. For example, the following code performs two confounding schemes (none and remove 25% of covariates), uses two true effect sizes, and uses two outcome prevalences. hdpsFeatures should be set to the appropriate boolean.
-
-The resultant simulations are saved to a specified outputFolder, which can be loaded. The individual simulations can be accessed via a nested list, with the first index for confounding, second for effect size, third for outcome prevalence. Right now the many simulations are just done through a giant for-loop in R.
-
-```{r}
-confoundingSchemeList <- c(0,2)
-confoundingProportionList <- c(NA, 0.25)
-trueEffectSizeList <- c(-1, 1)
-outcomePrevalenceList <- c(0.01, 0.05)
-hdpsFeatures <- TRUE
-outputFolder <- outputFolder
-
-simulationStudies <- runSimulationStudies(simulationProfile, studyPop, simulationRuns = 10,
-                                          confoundingSchemeList, confoundingProportionList,
-                                          trueEffectSizeList, outcomePrevalenceList,
-                                          hdpsFeatures = hdpsFeatures,
-                                          outputFolder = outputFolder)
-                                          
-simulationStudies <- loadSimulationStudies(outputFolder)
-simulationStudy <- simulationStudies[[1]][[1]][[1]]
-```
-We can also obtain the metrics for every simulation study in a simulation studies list. The returned object is in the same nested loop structure.
-
-```{r}
+# Calculate set of metrics for simulation studies (nested list of different effect sizes and outcome prevalences)
 metricsList <- calculateMetricsList(simulationStudies, cohortMethodData, stdDiffThreshold = .05)
-metricsList[[1]][[1]][[1]]
+metricsList[[1]][[1]]
 ```

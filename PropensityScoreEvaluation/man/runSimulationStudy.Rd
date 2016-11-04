@@ -4,33 +4,30 @@
 \alias{runSimulationStudy}
 \title{Runs Simulation Study}
 \usage{
-runSimulationStudy(simulationProfile, studyPop, simulationRuns = 10,
-  confoundingScheme = 0, confoundingProportion = NULL,
-  trueEffectSize = NULL, outcomePrevalence = NULL, crossValidate = TRUE,
-  hdpsFeatures, ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE)
+runSimulationStudy(simulationProfile, simulationSetup, simulationRuns = 10,
+  trueEffectSize = NULL, outcomePrevalence = NULL, hdpsFeatures,
+  ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE)
 }
 \arguments{
 \item{simulationProfile}{simulationProfile object created by createCMDSimulationProfile function}
 
-\item{studyPop}{Study population created by createStudyPopulation function}
-
 \item{simulationRuns}{Number of simulations to run (1 simulation = reroll outcomes)}
-
-\item{confoundingScheme}{Type of unmeasured confounding to use for PS (0 = none; 1 = demographics; 2 = random proportion; 3 = demographics and random proportion)}
-
-\item{confoundingProportion}{Proportion of covariates to hide from propensity score as unmeasured confounding}
 
 \item{trueEffectSize}{True effect size for exposure to simulate. If set to NULL keeps observed effect size from simulation profile}
 
 \item{outcomePrevalence}{Outcome prevalence to simulate; adjusts outcome baseline survival function to achieve. If null keeps observed}
-
-\item{crossValidate}{Can turn off cross validation when fitting outcome models in beginning and fitting LASSO propensity score}
 
 \item{hdpsFeatures}{TRUE = using HDPS features; FALSE = using FeatureExtraction features}
 
 \item{ignoreCensoring}{Ignore censoring altogether; sets censoring process baseline survival function to 1}
 
 \item{ignoreCensoringCovariates}{Ignore covariates effects on censoring process; only uses baseline function}
+
+\item{studyPop}{Study population created by createStudyPopulation function}
+
+\item{confoundingScheme}{Type of unmeasured confounding to use for PS (0 = none; 1 = demographics; 2 = random proportion; 3 = demographics and random proportion)}
+
+\item{confoundingProportion}{Proportion of covariates to hide from propensity score as unmeasured confounding}
 }
 \value{
 Returns the following: \describe{

@@ -10,7 +10,6 @@
 #' @param simulationRuns Number of simulations to run (1 simulation = reroll outcomes)
 #' @param trueEffectSize True effect size for exposure to simulate. If set to NULL keeps observed effect size from simulation profile
 #' @param outcomePrevalence Outcome prevalence to simulate; adjusts outcome baseline survival function to achieve. If null keeps observed
-#' @param crossValidate Can turn off cross validation when fitting outcome models in beginning and fitting LASSO propensity score
 #' @param hdpsFeatures TRUE = using HDPS features; FALSE = using FeatureExtraction features
 #' @param ignoreCensoring Ignore censoring altogether; sets censoring process baseline survival function to 1
 #' @param ignoreCensoringCovariates Ignore covariates effects on censoring process; only uses baseline function
@@ -30,14 +29,22 @@
 #' \item{psBias}{propensity scores for subjects in study population for bias based hdps; propensity and preference scores are averaged over simulation runs}
 #' \item{outcomePrevalence}{outcome prevalence of simulation}}
 #' @export
-runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10, confoundingScheme = 0, confoundingProportion = NULL, 
-                               trueEffectSize = NULL, outcomePrevalence = NULL, crossValidate = TRUE, hdpsFeatures,
+runSimulationStudy <- function(simulationProfile, simulationSetup, simulationRuns = 10,  
+                               trueEffectSize = NULL, outcomePrevalence = NULL, hdpsFeatures,
                                ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
   options("fffinalizer" = "delete")
   
   partialCMD = simulationProfile$partialCMD
+  covariatesToDiscard = simulationSetup$settings$covariatesToDiscard
+  sampleRowIds = simulationSetup$settings$sampleRowIds
+  
+  studyPop = simulationProfile$studyPop
+  
+  if (!is.null(sampleRowIds)) {
+    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+  }
 
   estimatesLasso = NULL
   estimatesExpHdps = NULL
@@ -45,7 +52,12 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
   aucLasso = NULL
   aucExpHdps = NULL
   aucBiasHdps = NULL
-
+  
+  psLasso = simulationSetup$psLasso
+  aucLasso = computePsAuc(psLasso)
+  strataLasso = matchOnPs(psLasso)
+  # strataLasso = stratifyByPs(psLasso)
+  
   if (is.null(trueEffectSize)) trueEffectSize = simulationProfile$observedEffectSize
   
   sData = simulationProfile$sData
@@ -53,7 +65,7 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
   cData = simulationProfile$cData
   if (ignoreCensoring) cData$baseline = ff::as.ff(rep(1, length(cData$baseline)))
   if (ignoreCensoringCovariates) cData$XB$exb = ff::as.ff(rep(1, nrow(cData$XB)))
-
+  
   # set new outcome prevalence
   if (!is.null(outcomePrevalence)) {
     fun <- function(d) {return(findOutcomePrevalence(sData, cData, d) - outcomePrevalence)}
@@ -62,28 +74,6 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
   } else {
     outcomePrevalence = findOutcomePrevalence(sData, cData)
   }
-  
-  covariatesToDiscard = NULL
-  if (confoundingScheme == 0) {
-    covariatesToDiscard = NULL
-  }
-  if (confoundingScheme == 1) {
-    covariatesToDiscard = partialCMD$covariateRef$covariateId[in.ff(partialCMD$covariateRef$analysisId, ff::as.ff(c(2,3,5,6)))]
-  }
-  if (confoundingScheme == 2) {
-    covariatesToDiscard = ff::as.ff(sample(partialCMD$covariateRef$covariateId[], round(nrow(partialCMD$covariateRef)*(confoundingProportion))))
-  }
-  if (confoundingScheme == 3) {
-    covariatesToDiscard = ff::as.ff(unique(c(partialCMD$covariateRef$covariateId[in.ff(partialCMD$covariateRef$analysisId, ff::as.ff(c(2,3,5,6)))],
-                                             ff::as.ff(sample(partialCMD$covariateRef$covariateId[], round(nrow(partialCMD$covariateRef)*(confoundingProportion)))))))
-  }
-  
-  # create lasso PS
-  psLasso = createPs(cohortMethodData = removeCovariates(partialCMD, covariatesToDiscard), studyPop, 
-                     prior = Cyclops::createPrior("laplace", exclude = c(), useCrossValidation = crossValidate))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
-  aucLasso = computePsAuc(psLasso)
-  strataLasso = matchOnPs(psLasso)
-  # strataLasso = stratifyByPs(psLasso)
   
   # create hdps PS
   cmd = simulateCMD(partialCMD, sData, cData)
@@ -157,12 +147,11 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
   ps = data.frame(rowId = psLasso$rowId, treatment = psLasso$treatment, lassoPropensityScore = psLasso$propensityScore,
                   expHdpsPropensityScore = psExp$propensityScore, biasHdpsPropensityScore = psBiasPermanent$propensityScore)
   
-  settings = list(trueEffectSize = trueEffectSize,
-                  outcomePrevalence = outcomePrevalence,
-                  confoundingScheme = confoundingScheme,
-                  confoundingProportion = confoundingProportion,
-                  simulationRuns = simulationRuns,
-                  hdpsFeatures = hdpsFeatures)
+  settings = simulationSetup$settings
+  settings$trueEffectSize = trueEffectSize
+  settings$outcomePrevalence = settings$outcomePrevalence
+  settings$simulationRuns = simulationRuns
+  settings$hdpsFeatures = hdpsFeatures
   
   # Restore ff state
   options("fffinalizer" = saveFfState)
@@ -175,27 +164,112 @@ runSimulationStudy <- function(simulationProfile, studyPop, simulationRuns = 10,
 }
 
 #' @export
-runSimulationStudies <- function(simulationProfile, studyPop, simulationRuns = 10, confoundingSchemeList, confoundingProportionList,
-                                 trueEffectSizeList, outcomePrevalenceList, crossValidate = TRUE, hdpsFeatures, outputFolder) {
+setUpSimulation <- function(simulationProfile, useCrossValidation = TRUE, confoundingScheme = 0, confoundingProportion = NA, sampleSize = NA) {
+  partialCMD = simulationProfile$partialCMD
+  studyPop = simulationProfile$studyPop
+  
+  sampleRowIds = NULL
+  if (!is.na(sampleSize)) {
+    sampleRowIds = sample(studyPop$rowId, sampleSize)
+    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+  }
+  
+  covariatesToDiscard = NULL
+  if (confoundingScheme == 0) {
+    covariatesToDiscard = NULL
+  }
+  if (confoundingScheme == 1) {
+    covariatesToDiscard = partialCMD$covariateRef$covariateId[in.ff(partialCMD$covariateRef$analysisId, ff::as.ff(c(2,3,5,6)))]
+  }
+  if (confoundingScheme == 2) {
+    covariatesToDiscard = ff::as.ff(sample(partialCMD$covariateRef$covariateId[], round(nrow(partialCMD$covariateRef)*(confoundingProportion))))
+  }
+  if (confoundingScheme == 3) {
+    covariatesToDiscard = ff::as.ff(unique(c(partialCMD$covariateRef$covariateId[in.ff(partialCMD$covariateRef$analysisId, ff::as.ff(c(2,3,5,6)))],
+                                             ff::as.ff(sample(partialCMD$covariateRef$covariateId[], round(nrow(partialCMD$covariateRef)*(confoundingProportion)))))))
+  }
+  
+  # create lasso PS
+  psLasso = createPs(cohortMethodData = removeCovariates(partialCMD, covariatesToDiscard), studyPop, 
+                     prior = Cyclops::createPrior("laplace", exclude = c(), useCrossValidation = useCrossValidation))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
+  
+  settings = list(confoundingScheme = confoundingScheme,
+                  confoundingProportion = confoundingProportion,
+                  covariatesToDiscard = covariatesToDiscard,
+                  sampleSize = sampleSize,
+                  sampleRowIds = sampleRowIds)
+  
+  return(list(settings = settings,
+              psLasso = psLasso))
+}
+
+#' @export
+setUpSimulations <- function(simulationProfile, confoundingSchemeList, confoundingProportionList, 
+                             useCrossValidation = TRUE, sampleSizeList, outputFolder) {
   if (!file.exists(outputFolder)) dir.create(outputFolder)
   settings = list(confoundingSchemeList = confoundingSchemeList,
                   confoundingProportionList = confoundingProportionList,
-                  trueEffectSizeList = trueEffectSizeList,
-                  outcomePrevalenceList = outcomePrevalenceList)
+                  sampleSizeList = sampleSizeList)
+  saveRDS(settings, file = file.path(outputFolder, "settings.rds"))
   
-  results = list(settings = settings, simulationStudies = rep(list(rep(list(rep(list(NA), length(outcomePrevalenceList))), length(trueEffectSizeList))), length(confoundingSchemeList)))
+  #results = list(settings = settings, simulationSetups = rep(list(rep(list(NA), length(trueEffectSizeList))), length(confoundingSchemeList)))
   for (i in 1:length(confoundingSchemeList)) {
-    for (j in 1:length(trueEffectSizeList)) {
-      for (k in 1:length(outcomePrevalenceList)) {
-        temp = runSimulationStudy(simulationProfile, studyPop, simulationRuns = simulationRuns, confoundingScheme = confoundingSchemeList[[i]],
-                                  confoundingProportion = confoundingProportionList[[i]], trueEffectSize = trueEffectSizeList[[j]],
-                                  outcomePrevalence = outcomePrevalenceList[[k]], crossValidate = crossValidate, hdpsFeatures = hdpsFeatures)
-        results$simulationStudies[[i]][[j]][[k]] = temp
-        saveSimulationStudy(temp, file = file.path(outputFolder, paste("c", i, "_t", j, "_o", k, ".rds", sep="")))
-      }
+    for (j in 1:length(sampleSizeList)) {
+      temp = setUpSimulation(simulationProfile, confoundingScheme = confoundingSchemeList[[i]],
+                             confoundingProportion = confoundingProportionList[[i]],
+                             useCrossValidation = useCrossValidation, sampleSize = sampleSizeList[[j]])
+      #results$simulationStudies[[i]][[j]][[k]] = temp
+      saveSimulationSetup(temp, file = file.path(outputFolder, paste("c", i, "_s", j, sep="")))
     }
   }
+}
+
+#' @export
+saveSimulationSetup <- function(simulationSetup, file) {
+  if (missing(simulationSetup))
+    stop("Must specify simulationSetup")
+  if (missing(file))
+    stop("Must specify file")
+  if (!file.exists(file)) dir.create(file)
+  saveRDS(simulationSetup$settings, file = file.path(file, "settings.rds"))
+  saveRDS(simulationSetup$psLasso, file = file.path(file, "psLasso.rds"))
+}
+
+#' @export
+loadSimulationSetup <- function(file) {
+  if (!file.exists(file))
+    stop(paste("Cannot find folder", file))
+  if (!file.info(file)$isdir)
+    stop(paste("Not a folder", file))
+  settings = readRDS(file.path(file, "settings.rds"))
+  psLasso = readRDS(file.path(file, "psLasso.rds"))
+  return(list(settings = settings,
+              psLasso = psLasso))
+}
+
+#' @export
+runSimulationStudies <- function(simulationProfile, simulationSetup = NULL, simulationRuns = 10, trueEffectSizeList, 
+                                 outcomePrevalenceList, hdpsFeatures, simulationSetupFolder = NULL, outputFolder) {
+  if (!file.exists(outputFolder)) dir.create(outputFolder)
+  if (is.null(simulationSetup)) simulationSetup = loadSimulationSetup(simulationSetupFolder)
+  settings = simulationSetup$settings
+  settings$trueEffectSizeList = trueEffectSizeList
+  settings$outcomePrevalenceList = outcomePrevalenceList
+  
+  outputFolder = paste(outputFolder, "/", basename(simulationSetupFolder), sep = "")
+  if (!file.exists(outputFolder)) dir.create(outputFolder)
+  
   saveRDS(settings, file = file.path(outputFolder, "settings.rds"))
+  
+  results = list(settings = settings, simulationStudies = rep(list(rep(list(NA), length(outcomePrevalenceList))), length(trueEffectSizeList)))
+  for (i in 1:length(trueEffectSizeList)) {
+    for (j in 1:length(outcomePrevalenceList)) {
+        temp = runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, simulationRuns = simulationRuns, 
+                                  trueEffectSize = trueEffectSizeList[[i]], outcomePrevalence = outcomePrevalenceList[[j]], hdpsFeatures = hdpsFeatures)
+        results$simulationStudies[[i]][[j]] = temp
+        saveSimulationStudy(temp, file = file.path(outputFolder, paste(basename(simulationSetupFolder), "_t", i, "_o", j, sep="")))
+      }
+  }
   return(results)
 }
 
@@ -206,17 +280,14 @@ loadSimulationStudies <- function(file) {
   if (!file.info(file)$isdir)
     stop(paste("Not a folder", file))
   settings = readRDS(file.path(file, "settings.rds"))
-  I = length(settings$confoundingSchemeList)
-  J = length(settings$trueEffectSizeList)
-  K = length(settings$outcomePrevalenceList)
+  I = length(settings$trueEffectSizeList)
+  J = length(settings$outcomePrevalenceList)
   
-  simulationStudies = rep(list(rep(list(rep(list(NA), K)), J)), I)
+  simulationStudies = rep(list(rep(list(NA), J)), I)
   
   for (i in 1:I) {
     for (j in 1:J) {
-      for (k in 1:K) {
-        simulationStudies[[i]][[j]][[k]] = loadSimulationStudy(file = file.path(file, paste("c", i, "_t", j, "_o", k, ".rds", sep="")))
-      }
+      simulationStudies[[i]][[j]] = loadSimulationStudy(file = file.path(file, paste(basename(file), "_t", i, "_o", j, ".rds", sep="")))
     }
   }
   
