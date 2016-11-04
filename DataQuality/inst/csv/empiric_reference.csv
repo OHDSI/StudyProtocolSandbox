@@ -1,0 +1,14 @@
+measure_id,measure_name,perc50,perc10
+403,Number of distinct condition occurrence concepts per person,11,3.8
+603,Number of distinct procedure occurrence concepts per person,11.5,2.9
+703,Number of distinct drug exposure concepts per person,9.5,6
+903,Number of distinct drug era concepts per person,9,6
+1003,Number of distinct condition era concepts per person,11,11
+ach_2000:Percentage,NA,64.1433350066091,24.438551876488
+ach_2001:Percentage,NA,74.5174631078513,43.7762248292043
+ach_2002:Percentage,NA,54.3732198986947,22.4875639380137
+ach_2003:Percentage,NA,87.6181077721352,63.2999933282703
+DrugEra:ConceptCnt,NA,1679,890.1
+DrugExposure:ConceptCnt,NA,10982.5,1723.8
+Provider:PatientProviderRatio,NA,17.6586835427111,4.20333153061173
+Provider:SpeciatlyCnt,NA,55.5,2.8

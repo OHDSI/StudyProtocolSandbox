@@ -22,7 +22,9 @@ resultsDatabaseSchema <- "scratch.dbo"
 port <- 17001
 cdmVersion <- "5"
 extraSettings <- NULL
+file = "inst/sql/sql_server/coxibVsNonselVsGiBleed.sql"
 workFolder <- "s:/temp/Yuxi"
+threads <- 30
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
@@ -30,152 +32,72 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 password = pw,
                                                                 port = port,
                                                                 extraSettings = extraSettings)
+
 connection <- DatabaseConnector::connect(connectionDetails)
 
-sql <- loadRenderTranslateSql("coxibVsNonselVsGiBleed.sql",
-                              packageName = "PropensityScoreEvaluation",
-                              dbms = dbms,
-                              cdmDatabaseSchema = cdmDatabaseSchema,
-                              resultsDatabaseSchema = resultsDatabaseSchema)
-DatabaseConnector::executeSql(connection, sql)
 
-# Check number of subjects per cohort:
-sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @resultsDatabaseSchema.coxibVsNonselVsGiBleed GROUP BY cohort_definition_id"
-sql <- SqlRender::renderSql(sql, resultsDatabaseSchema = resultsDatabaseSchema)$sql
-sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-DatabaseConnector::querySql(connection, sql)
-
-# Get all NSAIDs:
 sql <- "SELECT concept_id FROM @cdmDatabaseSchema.concept_ancestor INNER JOIN @cdmDatabaseSchema.concept ON descendant_concept_id = concept_id WHERE ancestor_concept_id = 21603933"
 sql <- SqlRender::renderSql(sql, cdmDatabaseSchema = cdmDatabaseSchema)$sql
-sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql 
 nsaids <- DatabaseConnector::querySql(connection, sql)
 nsaids <- nsaids$CONCEPT_ID
 
 dbDisconnect(connection)
 
+# use HDPS covariates or regular FeatureExtraction covariates
+hdpsCovariates = TRUE
 
-covariateSettings1 = createHdpsCovariateSettings(useCovariateCohortIdIs1 = FALSE,
-                                             useCovariateDemographics = TRUE, 
-                                             useCovariateDemographicsGender = TRUE,
-                                             useCovariateDemographicsRace = TRUE,
-                                             useCovariateDemographicsEthnicity = TRUE,
-                                             useCovariateDemographicsAge = TRUE, 
-                                             useCovariateDemographicsYear = TRUE,
-                                             useCovariateDemographicsMonth = TRUE,
-                                             useCovariateConditionOccurrence = TRUE,
-                                             useCovariate3DigitIcd9Inpatient180d = TRUE,
-                                             useCovariate3DigitIcd9Inpatient180dMedF = TRUE,
-                                             useCovariate3DigitIcd9Inpatient180d75F = TRUE,
-                                             useCovariate3DigitIcd9Ambulatory180d = TRUE,
-                                             useCovariate3DigitIcd9Ambulatory180dMedF = TRUE,
-                                             useCovariate3DigitIcd9Ambulatory180d75F = TRUE,
-                                             useCovariateDrugExposure = TRUE,
-                                             useCovariateIngredientExposure180d = TRUE,
-                                             useCovariateIngredientExposure180dMedF = TRUE,
-                                             useCovariateIngredientExposure180d75F = TRUE,
-                                             useCovariateProcedureOccurrence = TRUE,
-                                             useCovariateProcedureOccurrenceInpatient180d = TRUE,
-                                             useCovariateProcedureOccurrenceInpatient180dMedF = TRUE,
-                                             useCovariateProcedureOccurrenceInpatient180d75F = TRUE,
-                                             useCovariateProcedureOccurrenceAmbulatory180d = TRUE,
-                                             useCovariateProcedureOccurrenceAmbulatory180dMedF = TRUE,
-                                             useCovariateProcedureOccurrenceAmbulatory180d75F = TRUE,
-                                             excludedCovariateConceptIds = nsaids, 
-                                             includedCovariateConceptIds = c(),
-                                             deleteCovariatesSmallCount = 5)
-
-covariateSettings2 <- createCovariateSettings(useCovariateDemographics = TRUE,
-                                              useCovariateDemographicsAge = TRUE,
-                                              useCovariateDemographicsGender = TRUE,
-                                              useCovariateDemographicsRace = TRUE,
-                                              useCovariateDemographicsEthnicity = TRUE,
-                                              useCovariateDemographicsYear = TRUE,
-                                              useCovariateDemographicsMonth = TRUE,
-                                              useCovariateConditionOccurrence = TRUE,
-                                              useCovariateConditionOccurrence365d = TRUE,
-                                              useCovariateConditionOccurrence30d = TRUE,
-                                              useCovariateConditionOccurrenceInpt180d = TRUE,
-                                              useCovariateConditionEra = TRUE,
-                                              useCovariateConditionEraEver = TRUE,
-                                              useCovariateConditionEraOverlap = TRUE,
-                                              useCovariateConditionGroup = TRUE,
-                                              useCovariateDrugExposure = TRUE,
-                                              useCovariateDrugExposure365d = TRUE,
-                                              useCovariateDrugExposure30d = TRUE,
-                                              useCovariateDrugEra = TRUE,
-                                              useCovariateDrugEra365d = TRUE,
-                                              useCovariateDrugEra30d = TRUE,
-                                              useCovariateDrugEraEver = TRUE,
-                                              useCovariateDrugEraOverlap = TRUE,
-                                              useCovariateDrugGroup = TRUE,
-                                              useCovariateProcedureOccurrence = TRUE,
-                                              useCovariateProcedureOccurrence365d = TRUE,
-                                              useCovariateProcedureOccurrence30d = TRUE,
-                                              useCovariateProcedureGroup = TRUE,
-                                              useCovariateObservation = FALSE,
-                                              useCovariateObservation365d = FALSE,
-                                              useCovariateObservation30d = FALSE,
-                                              useCovariateObservationCount365d = FALSE,
-                                              useCovariateMeasurement365d = FALSE,
-                                              useCovariateMeasurement30d = FALSE,
-                                              useCovariateMeasurementCount365d = FALSE,
-                                              useCovariateMeasurementBelow = FALSE,
-                                              useCovariateMeasurementAbove = FALSE,
-                                              useCovariateConceptCounts = FALSE,
-                                              useCovariateRiskScores = FALSE,
-                                              useCovariateRiskScoresCharlson = FALSE,
-                                              useCovariateRiskScoresDCSI = FALSE,
-                                              useCovariateRiskScoresCHADS2 = FALSE,
-                                              useCovariateInteractionYear = FALSE,
-                                              useCovariateInteractionMonth = FALSE,
-                                              excludedCovariateConceptIds = nsaids,
-                                              includedCovariateConceptIds = c(),
-                                              deleteCovariatesSmallCount = 5)
-
-cohortMethodData1 <- getDbCohortMethodData(connectionDetails = connectionDetails,
-                                          cdmDatabaseSchema = cdmDatabaseSchema,
-                                          oracleTempSchema = resultsDatabaseSchema,
-                                          targetId = 1,
-                                          comparatorId = 2,
-                                          outcomeIds = 3,
-                                          studyStartDate = "",
-                                          studyEndDate = "",
-                                          exposureDatabaseSchema = resultsDatabaseSchema,
-                                          exposureTable = "coxibVsNonselVsGiBleed",
-                                          outcomeDatabaseSchema = resultsDatabaseSchema,
-                                          outcomeTable = "coxibVsNonselVsGiBleed",
-                                          cdmVersion = cdmVersion,
-                                          excludeDrugsFromCovariates = FALSE,
-                                          firstExposureOnly = TRUE,
-                                          removeDuplicateSubjects = TRUE,
-                                          washoutPeriod = 180,
-                                          covariateSettings = covariateSettings1)
-
-saveCohortMethodData(cohortMethodData = cohortMethodData1, file = file.path(workFolder, "cmData1"))
-
-cohortMethodData2 <- getDbCohortMethodData(connectionDetails = connectionDetails,
-                                           cdmDatabaseSchema = cdmDatabaseSchema,
-                                           oracleTempSchema = resultsDatabaseSchema,
-                                           targetId = 1,
-                                           comparatorId = 2,
-                                           outcomeIds = 3,
-                                           studyStartDate = "",
-                                           studyEndDate = "",
-                                           exposureDatabaseSchema = resultsDatabaseSchema,
+cohortMethodData <- createCohortMethodData(connectionDetails = connectionDetails,
+                                           file = file,
                                            exposureTable = "coxibVsNonselVsGiBleed",
-                                           outcomeDatabaseSchema = resultsDatabaseSchema,
                                            outcomeTable = "coxibVsNonselVsGiBleed",
                                            cdmVersion = cdmVersion,
-                                           excludeDrugsFromCovariates = FALSE,
-                                           firstExposureOnly = TRUE,
-                                           removeDuplicateSubjects = TRUE,
-                                           washoutPeriod = 180,
-                                           covariateSettings = covariateSettings2)
+                                           cdmDatabaseSchema = cdmDatabaseSchema,
+                                           resultsDatabaseSchema = resultsDatabaseSchema,
+                                           hdpsCovariates = hdpsCovariates,
+                                           excludedCovariateConceptIds = nsaids)
 
-saveCohortMethodData(cohortMethodData = cohortMethodData2, file = file.path(workFolder, "cmData2"))
+saveCohortMethodData(cohortMethodData = cohortMethodData, file = file.path(workFolder, "cmData_hdps"))
 
-options("fffinalizer" = "delete")
+# cohortMethodData <- loadCohortMethodData(file.path(workFolder, "cmData_hdps"))
 
-simulationStudy1 <- runSimulationStudy(cohortMethodData1, hdpsFeatures = TRUE)
-simulationStudy2 <- runSimulationStudy(cohortMethodData2, hdpsFeatures = FALSE)
+studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
+                                  outcomeId = 3,
+                                  firstExposureOnly = FALSE,
+                                  washoutPeriod = 0,
+                                  removeDuplicateSubjects = FALSE,
+                                  removeSubjectsWithPriorOutcome = TRUE,
+                                  minDaysAtRisk = 1,
+                                  riskWindowStart = 0,
+                                  addExposureDaysToStart = FALSE,
+                                  riskWindowEnd = 30,
+                                  addExposureDaysToEnd = TRUE)
+
+simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop, threads = threads)
+
+saveSimulationProfile(simulationProfile, file = file.path(workFolder, "simulationProfile"))
+
+#simulationProfile <- loadSimulationProfile(file = file.path(workFolder, "simulationProfile"))
+
+
+
+confoundingSchemeList <- c(0,2)
+confoundingProportionList <- c(NA, 0.25)
+trueEffectSizeList <- c(-1, 1)
+outcomePrevalenceList <- c(0.01, 0.05)
+hdpsFeatures <- TRUE
+outputFolder <- file.path(workFolder, "similations")
+if (!file.exists(outputFolder)) {
+  dir.create(outputFolder)
+}
+
+simulationStudies <- runSimulationStudies(simulationProfile, studyPop, simulationRuns = 10,
+                                          confoundingSchemeList, confoundingProportionList,
+                                          trueEffectSizeList, outcomePrevalenceList,
+                                          hdpsFeatures = hdpsFeatures,
+                                          outputFolder = outputFolder)
+
+simulationStudies <- loadSimulationStudies(outputFolder)
+simulationStudy <- simulationStudies[[1]][[1]][[1]]
+
+

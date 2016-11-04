@@ -1,0 +1,14 @@
+measure_id,direction,message_grade,empiric_rule_type,empiric_threshold_value,score_weight
+ach_2000:Percentage,>,notification,empiric:percentile,10,-1
+ach_2000:Percentage,>,high_quality,empiric:percentile,50,1
+ach_2000:Percentage,=,ultimate_quality,absolute:value,100,2
+DrugExposure:ConceptCnt,>,notification,empiric:percentile,10,-1
+DrugEra:ConceptCnt,>,notification,empiric:percentile,10,-1
+Provider:SpecialtyCnt,>,notification,empiric:percentile,10,-1
+ach_2001:Percentage,>,notification,empiric:percentile,10,-1
+ach_2001:Percentage,>,high_quality,empiric:percentile,50,1
+ach_2002:Percentage,>,notification,empiric:percentile,10,-1
+ach_2002:Percentage,>,high_quality,empiric:percentile,50,1
+ach_2003:Percentage,>,notification,empiric:percentile,10,-1
+ach_2003:Percentage,>,high_quality,empiric:percentile,50,1
+Provider:SpecialtyCnt,<,notification,absolute:vocabulary_query,select count(concept_id) from concept where domain_id = 'Provider Specialty',-1
