@@ -259,7 +259,11 @@ loadSimulationSetup <- function(file) {
 runSimulationStudies <- function(simulationProfile, simulationSetup = NULL, simulationRuns = 10, trueEffectSizeList, 
                                  outcomePrevalenceList, hdpsFeatures, simulationSetupFolder = NULL, outputFolder) {
   if (!file.exists(outputFolder)) dir.create(outputFolder)
-  if (is.null(simulationSetup)) simulationSetup = loadSimulationSetup(simulationSetupFolder)
+  if (is.null(simulationSetup)) {
+    simulationSetup = loadSimulationSetup(simulationSetupFolder)
+  } else {
+    simulationSetupFolder = ""
+  }
   settings = simulationSetup$settings
   settings$trueEffectSizeList = trueEffectSizeList
   settings$outcomePrevalenceList = outcomePrevalenceList

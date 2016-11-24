@@ -27,17 +27,14 @@ calculateMetricsHelper <- function(estimates, cohortMethodData, trueEffectSize, 
 #' @export
 calculateMetricsList <- function(simulationStudies, cohortMethodData, stdDiffThreshold = .05) {
   settings = simulationStudies$settings
-  I = length(settings$confoundingSchemeList)
-  J = length(settings$trueEffectSizeList)
-  K = length(settings$outcomePrevalenceList)
-  result = rep(list(rep(list(rep(list(NA), K)), J)), I)
+  I = length(settings$trueEffectSizeList)
+  J = length(settings$outcomePrevalenceList)
+  result = rep(list(rep(list(NA), J)), I)
   for (i in 1:I) {
     for (j in 1:J) {
-      for (k in 1:K) {
-        result[[i]][[j]][[k]] = calculateMetrics(simulationStudies$simulationStudies[[i]][[j]][[k]],
-                                                 cohortMethodData,
-                                                 stdDiffThreshold = .05)
-      }
+        result[[i]][[j]] = calculateMetrics(simulationStudies$simulationStudies[[i]][[j]],
+                                            cohortMethodData,
+                                            stdDiffThreshold = .05)
     }
   }
   return(result)
