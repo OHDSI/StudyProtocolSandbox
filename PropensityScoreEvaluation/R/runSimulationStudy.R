@@ -30,14 +30,15 @@
 #' \item{psBias}{propensity scores for subjects in study population for bias based hdps; propensity and preference scores are averaged over simulation runs}
 #' \item{outcomePrevalence}{outcome prevalence of simulation}}
 #' @export
-runSimulationStudy <- function(simulationProfile, simulationSetup, simulationRuns = 10,  
+runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodData, simulationRuns = 10,  
                                trueEffectSize = NULL, outcomePrevalence = NULL, hdpsFeatures,
                                ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE, threads = 10) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
   options("fffinalizer" = "delete")
   
-  partialCMD = simulationProfile$partialCMD
+  partialCMD = cohortMethodData
+  outcomeId = simulationProfile$outcomeId
   covariatesToDiscard = simulationSetup$settings$covariatesToDiscard
   sampleRowIds = simulationSetup$settings$sampleRowIds
   
@@ -77,13 +78,13 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, simulationRun
   }
 
   # create hdps PS
-  cmd = simulateCMD(partialCMD, sData, cData)
+  cmd = simulateCMD(partialCMD, sData, cData, outcomeId)
   if (hdpsFeatures == TRUE) {
-    hdpsExp = runHdps(cmd, useExpRank = TRUE)
-    hdpsBias = runHdps(cmd, useExpRank = FALSE)
+    hdpsExp = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE)
+    hdpsBias = runHdps(cmd, outcomeId = outcomeId, useExpRank = FALSE)
   } else {
-    hdpsExp = runHdps1(cmd, useExpRank = TRUE)
-    hdpsBias = runHdps1(cmd, useExpRank = FALSE)
+    hdpsExp = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE)
+    hdpsBias = runHdps1(cmd, outcomeId = outcomeId, useExpRank = FALSE)
   }
   psExp = createPs = createPs(cohortMethodData = removeCovariates(hdpsExp, covariatesToDiscard), population = studyPop, prior = createPrior(priorType = "none"),
                               control = createControl(maxIterations = 10000, threads = threads))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
@@ -98,12 +99,12 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, simulationRun
 
   
   for (i in 1:simulationRuns) {
-    cmd = simulateCMD(partialCMD, sData, cData)
+    cmd = simulateCMD(partialCMD, sData, cData, outcomeId = outcomeId)
     if (is.null(cmd$outcomes)) next
     if (hdpsFeatures == TRUE) {
-      hdpsBias = runHdps(cmd, useExpRank = FALSE)
+      hdpsBias = runHdps(cmd, outcomeId = outcomeId, useExpRank = FALSE)
     } else {
-      hdpsBias = runHdps1(cmd, useExpRank = FALSE)
+      hdpsBias = runHdps1(cmd, outcomeId = outcomeId, useExpRank = FALSE)
     }
     
     studyPopNew = studyPop
@@ -165,8 +166,8 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, simulationRun
 }
 
 #' @export
-setUpSimulation <- function(simulationProfile, useCrossValidation = TRUE, confoundingScheme = 0, confoundingProportion = NA, sampleSize = NA, threads = 10) {
-  partialCMD = simulationProfile$partialCMD
+setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidation = TRUE, confoundingScheme = 0, confoundingProportion = NA, sampleSize = NA, threads = 10) {
+  partialCMD = cohortMethodData
   studyPop = simulationProfile$studyPop
   
   sampleRowIds = NULL
@@ -205,14 +206,15 @@ setUpSimulation <- function(simulationProfile, useCrossValidation = TRUE, confou
                   confoundingProportion = confoundingProportion,
                   covariatesToDiscard = covariatesToDiscard,
                   sampleSize = sampleSize,
-                  sampleRowIds = sampleRowIds)
+                  sampleRowIds = sampleRowIds,
+                  outcomeId = simulationProfile$outcomeId)
   
   return(list(settings = settings,
               psLasso = psLasso))
 }
 
 #' @export
-setUpSimulations <- function(simulationProfile, confoundingSchemeList, confoundingProportionList, 
+setUpSimulations <- function(simulationProfile, cohortMethodData, confoundingSchemeList, confoundingProportionList, 
                              useCrossValidation = TRUE, sampleSizeList, outputFolder, threads = 10) {
   if (!file.exists(outputFolder)) dir.create(outputFolder)
   settings = list(confoundingSchemeList = confoundingSchemeList,
@@ -223,7 +225,7 @@ setUpSimulations <- function(simulationProfile, confoundingSchemeList, confoundi
   #results = list(settings = settings, simulationSetups = rep(list(rep(list(NA), length(trueEffectSizeList))), length(confoundingSchemeList)))
   for (i in 1:length(confoundingSchemeList)) {
     for (j in 1:length(sampleSizeList)) {
-      temp = setUpSimulation(simulationProfile, confoundingScheme = confoundingSchemeList[[i]],
+      temp = setUpSimulation(simulationProfile, cohortMethodData, confoundingScheme = confoundingSchemeList[[i]],
                              confoundingProportion = confoundingProportionList[[i]],
                              useCrossValidation = useCrossValidation, sampleSize = sampleSizeList[[j]], threads = threads)
       #results$simulationStudies[[i]][[j]][[k]] = temp
@@ -256,7 +258,7 @@ loadSimulationSetup <- function(file) {
 }
 
 #' @export
-runSimulationStudies <- function(simulationProfile, simulationSetup = NULL, simulationRuns = 10, trueEffectSizeList, 
+runSimulationStudies <- function(simulationProfile, cohortMethodData, simulationSetup = NULL, simulationRuns = 10, trueEffectSizeList, 
                                  outcomePrevalenceList, hdpsFeatures, simulationSetupFolder = NULL, outputFolder) {
   if (!file.exists(outputFolder)) dir.create(outputFolder)
   if (is.null(simulationSetup)) {
@@ -276,7 +278,7 @@ runSimulationStudies <- function(simulationProfile, simulationSetup = NULL, simu
   results = list(settings = settings, simulationStudies = rep(list(rep(list(NA), length(outcomePrevalenceList))), length(trueEffectSizeList)))
   for (i in 1:length(trueEffectSizeList)) {
     for (j in 1:length(outcomePrevalenceList)) {
-        temp = runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, simulationRuns = simulationRuns, 
+        temp = runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, cohortMethodData = cohortMethodData, simulationRuns = simulationRuns, 
                                   trueEffectSize = trueEffectSizeList[[i]], outcomePrevalence = outcomePrevalenceList[[j]], hdpsFeatures = hdpsFeatures)
         results$simulationStudies[[i]][[j]] = temp
         saveSimulationStudy(temp, file = file.path(outputFolder, paste(basename(simulationSetupFolder), "_t", i, "_o", j, sep="")))

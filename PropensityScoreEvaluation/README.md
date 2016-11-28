@@ -51,7 +51,7 @@ Create study population and simulation profile
 # createCMDSimulationProfile and setUpSimulation by setting useCrossValidation = FALSE
 
 studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
-outcomeId = 3,
+outcomeId = outcomeId,
 firstExposureOnly = FALSE,
 washoutPeriod = 0,
 removeDuplicateSubjects = FALSE,
@@ -62,7 +62,7 @@ addExposureDaysToStart = FALSE,
 riskWindowEnd = 30,
 addExposureDaysToEnd = TRUE)
 
-simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop, useCrossValidation = TRUE)
+simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop = studyPop, outcomeId = outcomeId, useCrossValidation = TRUE)
 saveSimulationProfile(simulationProfile, file = file)
 simulationProfile <- loadSimulationProfile(file = file)
 ```
@@ -76,7 +76,7 @@ Confounding proportion: NA - confounding schemes 0 and 1 ; otherwise (schemes 2,
 Sample size: NA - use full cohort ; otherwise - use given size (should be smaller than size of full cohort)
 
 ```{r}
-simulationSetup <- setUpSimulation(simulationProfile, useCrossValidation = TRUE, confoundingScheme = 0,
+simulationSetup <- setUpSimulation(simulationProfile, cohortMethodData, useCrossValidation = TRUE, confoundingScheme = 0,
                                     confoundingProportion = NA, sampleSize = NA)
 
 saveSimulationSetup(simulationSetup, file = file)
@@ -91,7 +91,7 @@ confoundingProportionList <- c(NA, 0.25)
 sampleSizeList <- c(NA, 5000)
 outputFolder <- outputFolder
 
-setUpSimulations(simulationProfile, confoundingSchemeList, confoundingProportionList,
+setUpSimulations(simulationProfile, cohortMethodData, confoundingSchemeList, confoundingProportionList,
                   useCrossValidation = TRUE, sampleSizeList, outputFolder)
 ```
 For each simulation setup, we can run simulations for given true effect size and outcome prevalence.
@@ -100,7 +100,7 @@ For each simulation setup, we can also run a combination of effect sizes and out
 
 ``` {r}
 
-simulationStudy <- runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, simulationRuns = 10, 
+simulationStudy <- runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, cohortMethodData = cohortMethodData, simulationRuns = 10, 
                                       trueEffectSize = 1.0, outcomePrevalence = 0.05, hdpsFeatures = hdpsFeatures)
                                       
 trueEffectSizeList <- c(exp(-1), exp(0), exp(1))
