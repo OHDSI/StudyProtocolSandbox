@@ -201,8 +201,8 @@ doSelectiveExport <- function(connectionDetails,
   #4 ------Achilles  results  table section (selected measures) (recomputed as percentages of all patients)
   
   #treshold on patient count was added (in addition to achilles default filtering)
-  sql <- "select analysis_id,stratum_1,count_value from @results_database_schema.achilles_results a 
-    where analysis_id in (1,2,4,5,10,11,12,109,113,200,505)
+  sql <- "select analysis_id,stratum_1,stratum_2,stratum_3,count_value from @results_database_schema.achilles_results a 
+    where analysis_id in (0,1,2,4,5,10,11,12,109,113,212,200,505)
     and count_value >10
     "
   
@@ -228,7 +228,7 @@ doSelectiveExport <- function(connectionDetails,
   if (persons < 100000) personsFuzzy<-'<100k'
   if (persons < 10000)  personsFuzzy<-'<10k'
   
-  newrow<-data.frame(ANALYSIS_ID = 99,STRATUM_1='',COUNT_VALUE=0,VALUE=as.character(personsFuzzy))
+  newrow<-data.frame(ANALYSIS_ID = 99,STRATUM_1='',STRATUM_2='',STRATUM_3='',COUNT_VALUE=0,VALUE=as.character(personsFuzzy))
   data$VALUE<-''
   data<-rbind(data,newrow)
   
@@ -241,6 +241,21 @@ doSelectiveExport <- function(connectionDetails,
   
   write.csv(data,file = file.path(exportFolder,'SelectedAchillesResultsMeasuresPerc.csv'),row.names = F)
   
+  #generate graph for 212
+  
+  visits<-data[data$ANALYSIS_ID == 212,] #only analysis 212
+  #eliminate the gender stratum from the graph
+  
+  if (nrow(visits) >0) {
+    temp<-dplyr::summarize(dplyr::group_by(visits,STRATUM_1,STRATUM_3),PCT_VALUE=sum(PCT_VALUE))
+    
+    
+    
+    ggplot2::ggplot(data=temp, ggplot2::aes(x=STRATUM_1, y=STRATUM_3,size=PCT_VALUE)) + ggplot2::geom_point() + 
+      ggplot2::labs(x='year',y='decile') 
+    ggplot2::ggsave(file.path(exportFolder, "VisitsByDecileDotPlot.png"), width = 9, height = 9, dpi= 200)
+    
+  }
   
   #5 ------Achilles  results  table section (not person dependent)
   
