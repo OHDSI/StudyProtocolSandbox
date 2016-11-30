@@ -108,7 +108,7 @@ outcomePrevalenceList <- c(0.001, 0.01, 0.05)
 simulationSetupFolder <- simulationSetupFolder
 outputFolder <- outputFolder
 
-simulationStudies <- runSimulationStudies(simulationProfile, cohortMethodData, simulationSetup = NULL, simulationRuns = 10,
+simulationStudies <- runSimulationStudies(simulationProfile, cohortMethodData, simulationSetup = NULL, simulationRuns = 100,
                                           trueEffectSizeList, outcomePrevalenceList, hdpsFeatures,
                                           simulationSetupFolder = simulationSetupFolder, outputFolder)
 

@@ -22,9 +22,28 @@ resultsDatabaseSchema <- "scratch.dbo"
 port <- 17001
 cdmVersion <- "5"
 extraSettings <- NULL
-file = "inst/sql/sql_server/coxibVsNonselVsGiBleed.sql"
 workFolder <- "s:/temp/Yuxi"
 threads <- 30
+
+#########################################################
+# Constructing CohortMethodData Object
+#########################################################
+
+# specify file and tables to use
+file <- "inst/sql/sql_server/coxibVsNonselVsGiBleed.sql"
+exposureTable <- "coxibVsNonselVsGiBleed"
+outcomeTable <- "coxibVsNonselVsGiBleed"
+
+# specify targetId, comparatorId, outcomeId constructed in the file
+targetId <- 1
+comparatorId <- 2
+outcomeId <- 3
+
+# use HDPS covariates or regular FeatureExtraction covariates
+hdpsCovariates <- TRUE
+
+# what covariate cutoff to use
+deleteCovariatesSmallCount <- deleteCovariatesSmallCount
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
@@ -35,34 +54,41 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
 
 connection <- DatabaseConnector::connect(connectionDetails)
 
-
+# specify any exclusion criteria; currently geared towards coxibVsNonselVsGiBleed example
 sql <- "SELECT concept_id FROM @cdmDatabaseSchema.concept_ancestor INNER JOIN @cdmDatabaseSchema.concept ON descendant_concept_id = concept_id WHERE ancestor_concept_id = 21603933"
 sql <- SqlRender::renderSql(sql, cdmDatabaseSchema = cdmDatabaseSchema)$sql
 sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql 
 nsaids <- DatabaseConnector::querySql(connection, sql)
 nsaids <- nsaids$CONCEPT_ID
+excludedCovariateConceptIds <- nsaids
 
 dbDisconnect(connection)
 
-# use HDPS covariates or regular FeatureExtraction covariates
-hdpsCovariates = TRUE
-
+# create cohortMethodData object
 cohortMethodData <- createCohortMethodData(connectionDetails = connectionDetails,
                                            file = file,
-                                           exposureTable = "coxibVsNonselVsGiBleed",
-                                           outcomeTable = "coxibVsNonselVsGiBleed",
+                                           exposureTable = exposureTable,
+                                           outcomeTable = outcomeTable,
                                            cdmVersion = cdmVersion,
                                            cdmDatabaseSchema = cdmDatabaseSchema,
                                            resultsDatabaseSchema = resultsDatabaseSchema,
                                            hdpsCovariates = hdpsCovariates,
-                                           excludedCovariateConceptIds = nsaids)
+                                           targetId = targetId,
+                                           comparatorId = comparatorId,
+                                           outcomeId = outcomeId,
+                                           excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                           deleteCovariatesSmallCount = deleteCovariatesSmallCount)
 
 saveCohortMethodData(cohortMethodData = cohortMethodData, file = file.path(workFolder, "cmData_hdps"))
 
 # cohortMethodData <- loadCohortMethodData(file.path(workFolder, "cmData_hdps"))
 
+#########################################################
+# Create Study Population 
+#########################################################
+
 studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
-                                  outcomeId = 3,
+                                  outcomeId = outcomeId,
                                   firstExposureOnly = FALSE,
                                   washoutPeriod = 0,
                                   removeDuplicateSubjects = FALSE,
@@ -73,31 +99,65 @@ studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
                                   riskWindowEnd = 30,
                                   addExposureDaysToEnd = TRUE)
 
-simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop, threads = threads)
+#########################################################
+# Setup and Run Simulation 
+#########################################################
 
-saveSimulationProfile(simulationProfile, file = file.path(workFolder, "simulationProfile"))
+# for each of the four cohortMethodData objects, specify "cmd1", "cmd2", "cmd3", or "cmd4"
+workSubFolder <- file.path(workFolder, "cmd1")
 
-#simulationProfile <- loadSimulationProfile(file = file.path(workFolder, "simulationProfile"))
+# create and save simulation profile
+simulationProfile <- createCMDSimulationProfile(cohortMethodData, outcomeId = outcomeId, studyPop = studyPop, threads = threads)
+saveSimulationProfile(simulationProfile, file = file.path(workSubFolder, "simulationProfile"))
+#simulationProfile <- loadSimulationProfile(file = file.path(workSubFolder, "simulationProfile"))
 
+# set up simulation (calculates lasso propensity score for confounding / sample size combinations)
+confoundingSchemeList <- c(0,2,2)
+confoundingProportionList <- c(NA,0.1,0.5)
+sampleSizeList <- c(2000, 5000, 20000, NA)
 
+setUpSimulations(simulationProfile, cohortMethodData,
+                 confoundingSchemeList = confoundingSchemeList,
+                 confoundingProportionList = confoundingProportionList, 
+                 sampleSizeList = sampleSizeList,
+                 outputFolder = file.path(workSubFolder, "simulationSetups"), 
+                 threads = threads)
 
-confoundingSchemeList <- c(0,2)
-confoundingProportionList <- c(NA, 0.25)
-trueEffectSizeList <- c(-1, 1)
-outcomePrevalenceList <- c(0.01, 0.05)
-hdpsFeatures <- TRUE
-outputFolder <- file.path(workFolder, "similations")
-if (!file.exists(outputFolder)) {
-  dir.create(outputFolder)
+# run simulations
+trueEffectSizeList <- c(log(1), log(1.5), log(2), log(4))
+outcomePrevalenceList <- c(0.005, 0.02, 0.05)
+hdpsFeatures <- hdpsFeatures
+simulationRuns <- 100
+simulationSetupsLocation <- file.path(workSubFolder, "simulationSetups")
+simulationStudiesFolder <- file.path(workSubFolder, "simulationStudies")
+
+# run simulations for single confounding / sample size pair, for example the first confounding/size pair
+simulationSetupFolder <- file.path(simulationSetupsLocation, "c1_s1")
+
+simulationStudies <- runSimulationStudies(simulationProfile, cohortMethodData, simulationSetup = NULL, 
+                                          simulationRuns = simulationRuns, 
+                                          trueEffectSizeList = trueEffectSizeList, 
+                                          outcomePrevalenceList = outcomePrevalenceList,
+                                          hdpsFeatures = hdpsFeatures,
+                                          simulationSetupFolder = simulationSetupFolder,
+                                          outputFolder = simulationStudiesFolder)
+
+# OR run simulations for all confounding / sample size pairs
+for (i in 1:length(confoundingSchemeList)) {
+  for (j in 1:length(sampleSizeList)) {
+    simulationSetupFolder <- file.path(simulationSetupsLocation, paste("c", i, "_s", j, sep = ""))
+    simulationStudies <- runSimulationStudies(simulationProfile, cohortMethodData, simulationSetup = NULL, 
+                                              simulationRuns = simulationRuns, 
+                                              trueEffectSizeList = trueEffectSizeList, 
+                                              outcomePrevalenceList = outcomePrevalenceList,
+                                              hdpsFeatures = hdpsFeatures,
+                                              simulationSetupFolder = simulationSetupFolder,
+                                              outputFolder = simulationStudiesFolder)
+  }
 }
 
-simulationStudies <- runSimulationStudies(simulationProfile, studyPop, simulationRuns = 10,
-                                          confoundingSchemeList, confoundingProportionList,
-                                          trueEffectSizeList, outcomePrevalenceList,
-                                          hdpsFeatures = hdpsFeatures,
-                                          outputFolder = outputFolder)
-
+# view a simulation study
 simulationStudies <- loadSimulationStudies(outputFolder)
-simulationStudy <- simulationStudies[[1]][[1]][[1]]
+simulationStudy <- simulationStudies[[1]][[1]]
 
 
