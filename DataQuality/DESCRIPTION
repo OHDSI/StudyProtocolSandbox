@@ -1,14 +1,18 @@
 Package: DataQuality
-Title: Data Quality study in OHDSI
-Version: 0.2
+Title: Data Quality study in OHDSI and data quality evaluation
+Version: 2.0
 Authors@R: "Vojtech Huser <vojtech.huser@nih.gov> [aut, cre]"
-Description: This study focuses on Data Quality. It tries to determine thresholds. Heel evaluation was a precursor to this study.
+Description: This package has 2 functions. First, it supports the OHDSI Data Quality. 
+    Second, it allows Data Quality evaluation (even after closure of the formal study). 
+    The study tries to determine thresholds. 
+    Heel evaluation was a precursor to this study.
 Depends:
     R (>= 3.2.2),
     DatabaseConnector (>= 1.4.0)
 Imports:
     SqlRender,
-    ggplot2
+    ggplot2,
+    dplyr
 License: Apache License 2.0
 LazyData: true
 RoxygenNote: 5.0.1

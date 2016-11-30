@@ -4,9 +4,10 @@
 \alias{runSimulationStudy}
 \title{Runs Simulation Study}
 \usage{
-runSimulationStudy(simulationProfile, simulationSetup, simulationRuns = 10,
-  trueEffectSize = NULL, outcomePrevalence = NULL, hdpsFeatures,
-  ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE)
+runSimulationStudy(simulationProfile, simulationSetup, cohortMethodData,
+  simulationRuns = 10, trueEffectSize = NULL, outcomePrevalence = NULL,
+  hdpsFeatures, ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE,
+  threads = 10)
 }
 \arguments{
 \item{simulationProfile}{simulationProfile object created by createCMDSimulationProfile function}
@@ -22,6 +23,8 @@ runSimulationStudy(simulationProfile, simulationSetup, simulationRuns = 10,
 \item{ignoreCensoring}{Ignore censoring altogether; sets censoring process baseline survival function to 1}
 
 \item{ignoreCensoringCovariates}{Ignore covariates effects on censoring process; only uses baseline function}
+
+\item{threads}{Number of parallel threads to use}
 
 \item{studyPop}{Study population created by createStudyPopulation function}
 
