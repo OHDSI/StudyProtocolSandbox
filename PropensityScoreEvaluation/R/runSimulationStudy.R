@@ -32,7 +32,7 @@
 #' @export
 runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodData, simulationRuns = 10,  
                                trueEffectSize = NULL, outcomePrevalence = NULL, hdpsFeatures,
-                               ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE, threads = 10) {
+                               ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE, threads = 10, fudge = .001) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
   options("fffinalizer" = "delete")
@@ -82,9 +82,9 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   # create hdps PS
   cmd = simulateCMD(partialCMD, sData, cData, outcomeId)
   if (hdpsFeatures == TRUE) {
-    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE)
+    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = fudge)
   } else {
-    hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE)
+    hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = fudge)
   }
   
   psExpConverge = TRUE
@@ -110,9 +110,9 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
     cmd = simulateCMD(partialCMD, sData, cData, outcomeId = outcomeId)
     if (is.null(cmd$outcomes)) next
     if (hdpsFeatures == TRUE) {
-      hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
+      hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE, fudge = fudge)
     } else {
-      hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE)
+      hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE, fudge = fudge)
     }
     
     studyPopNew = studyPop
