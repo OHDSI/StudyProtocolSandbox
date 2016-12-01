@@ -103,7 +103,7 @@ For each simulation setup, we can also run a combination of effect sizes and out
 simulationStudy <- runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, cohortMethodData = cohortMethodData, simulationRuns = 10, 
                                       trueEffectSize = 1.0, outcomePrevalence = 0.05, hdpsFeatures = hdpsFeatures)
                                       
-trueEffectSizeList <- c(1, 1.5, 2, 4)
+trueEffectSizeList <- c(log(1), log(1.5), log(2), log(4))
 outcomePrevalenceList <- c(0.001, 0.01, 0.05)
 simulationSetupFolder <- simulationSetupFolder
 outputFolder <- outputFolder

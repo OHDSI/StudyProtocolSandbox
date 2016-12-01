@@ -110,9 +110,9 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
     cmd = simulateCMD(partialCMD, sData, cData, outcomeId = outcomeId)
     if (is.null(cmd$outcomes)) next
     if (hdpsFeatures == TRUE) {
-      hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE, fudge = fudge)
+      hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
     } else {
-      hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE, fudge = fudge)
+      hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE)
     }
     
     studyPopNew = studyPop

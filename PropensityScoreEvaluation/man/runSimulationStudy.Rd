@@ -7,7 +7,7 @@
 runSimulationStudy(simulationProfile, simulationSetup, cohortMethodData,
   simulationRuns = 10, trueEffectSize = NULL, outcomePrevalence = NULL,
   hdpsFeatures, ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE,
-  threads = 10)
+  threads = 10, fudge = 0.001)
 }
 \arguments{
 \item{simulationProfile}{simulationProfile object created by createCMDSimulationProfile function}
