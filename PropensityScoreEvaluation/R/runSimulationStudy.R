@@ -56,6 +56,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   aucBiasHdps = NULL
   
   psLasso = simulationSetup$psLasso
+  if (!is.null(sampleRowIds)) psLasso = psLasso[match(sampleRowIds, psLasso$rowId),]
   aucLasso = computePsAuc(psLasso)
   strataLasso = matchOnPs(psLasso)
   # strataLasso = stratifyByPs(psLasso)
@@ -88,12 +89,17 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   }
   
   psExpConverge = TRUE
-  psExp = tryCatch({createPs(cohortMethodData = removeCovariates(hdps0$cmd, covariatesToDiscard), population = studyPop, prior = createPrior(priorType = "none"),
-                             control = createControl(maxIterations = 10000, threads = threads))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]},
-                   error = function(err) {
-                     print(paste("ERROR: ",err))
-                     psExpConverge = FALSE
-                   })
+  psExp = createPs(cohortMethodData = removeCovariates(hdps0$cmd, covariatesToDiscard), population = studyPop, prior = createPrior(priorType = "none"),
+                             control = createControl(maxIterations = 10000, threads = threads),
+                             stopOnError = FALSE)
+  if(is.null(attr(psExp, "metaData")$psError)){
+    psExp = psExp[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
+  } else {
+    writeLines(paste("exposure based hdps propensity score error:", attr(psExp, "metaData")$psError))
+    psExp = psExp[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
+    psExp$propensityScore <- NA
+    psExpConverge = FALSE
+  } 
   if(psExpConverge) {
     aucExpHdps = computePsAuc(psExp)
     strataExp = matchOnPs(psExp)
@@ -103,12 +109,18 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   psBiasPermanent = psLasso
   psBiasPermanent$propensityScore = 0
   psBiasPermanent$preferenceScore = 0
+  biasErrorCount = 0
+  noOutcomeCount = 0
 
   for (i in 1:simulationRuns) {
     start <- Sys.time()
     writeLines(paste("Simulation: ", i))
     cmd = simulateCMD(partialCMD, sData, cData, outcomeId = outcomeId)
-    if (is.null(cmd$outcomes)) next
+    if (is.null(cmd$outcomes)) {
+      noOutcomeCount = noOutcomeCount+1
+      writeLines("error: no outcomes simulated")
+      next
+    }
     if (hdpsFeatures == TRUE) {
       hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
     } else {
@@ -130,6 +142,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
     estimatesLasso = rbind(outcomeModelLasso$outcomeModelTreatmentEstimate, estimatesLasso)
     
     # calculate outcomes for exp hdps
+    if(psExpConverge) {
     popExp = merge(studyPopNew, strataExp[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
     outcomeModelExp <- fitOutcomeModel(population = popExp,
                                        cohortMethodData = cmd,
@@ -137,32 +150,40 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
                                        stratified = TRUE,
                                        useCovariates = FALSE)
     estimatesExpHdps = rbind(outcomeModelExp$outcomeModelTreatmentEstimate, estimatesExpHdps)
+    }
     
     # calculate outcomes for bias hdps
-    psBias = tryCatch({createPs(cohortMethodData = removeCovariates(hdpsBias, covariatesToDiscard), population = studyPopNew, prior = createPrior(priorType = "none"),
-                      control = createControl(maxIterations = 10000, threads = threads))},
-                      error = function(err) {
-                        print(paste("ERROR: ",err))
-                        next
-                      })
+    psBias = createPs(cohortMethodData = removeCovariates(hdpsBias, covariatesToDiscard), population = studyPopNew, prior = createPrior(priorType = "none"),
+                      control = createControl(maxIterations = 10000, threads = threads),
+                      stopOnError = FALSE)
     
-    popBias = matchOnPs(psBias)
-    # popBias = stratifyByPs(psBias)
-    outcomeModelBias <- fitOutcomeModel(population = popBias,
-                                        cohortMethodData = cmd,
-                                        modelType = "cox",
-                                        stratified = TRUE,
-                                        useCovariates = FALSE)
-    estimatesBiasHdps = rbind(outcomeModelBias$outcomeModelTreatmentEstimate, estimatesBiasHdps)
-    
-    aucBiasHdps = c(computePsAuc(psBias), aucBiasHdps)
-    psBiasPermanent$propensityScore = psBiasPermanent$propensityScore + psBias$propensityScore
-    psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore + psBias$preferenceScore
+    if(is.null(attr(psBias, "metaData")$psError)){
+      popBias = matchOnPs(psBias)
+      # popBias = stratifyByPs(psBias)
+      outcomeModelBias  <- fitOutcomeModel(population = popBias,
+                                          cohortMethodData = cmd,
+                                          modelType = "cox",
+                                          stratified = TRUE,
+                                          useCovariates = FALSE)
+      estimatesBiasHdps = rbind(outcomeModelBias$outcomeModelTreatmentEstimate, estimatesBiasHdps)
+      
+      aucBiasHdps = c(computePsAuc(psBias), aucBiasHdps)
+      psBiasPermanent$propensityScore = psBiasPermanent$propensityScore + psBias$propensityScore
+      psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore + psBias$preferenceScore
+    } else {
+      writeLines(paste("bias based hdps propensity score error:", attr(psBias, "metaData")$psError))
+      biasErrorCount = biasErrorCount+1
+    }
     delta <- Sys.time() - start
     writeLines(paste("run took", signif(delta, 3), attr(delta, "units")))
   }
-  psBiasPermanent$propensityScore = psBiasPermanent$propensityScore / nrow(estimatesBiasHdps)
-  psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore / nrow(estimatesBiasHdps)
+  
+  if (is.null(estimatesBiasHdps)) {
+    psBiasPermanent$propensityScore <- NA
+  } else {
+    psBiasPermanent$propensityScore = psBiasPermanent$propensityScore / nrow(estimatesBiasHdps)
+    psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore / nrow(estimatesBiasHdps)
+  }
   
   ps = data.frame(rowId = psLasso$rowId, treatment = psLasso$treatment, lassoPropensityScore = psLasso$propensityScore,
                   expHdpsPropensityScore = psExp$propensityScore, biasHdpsPropensityScore = psBiasPermanent$propensityScore)
@@ -180,6 +201,9 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
               estimatesLasso = estimatesLasso,
               estimatesExpHdps = estimatesExpHdps,
               estimatesBiasHdps = estimatesBiasHdps,
+              psExpConverge = psExpConverge,
+              biasErrorCount = biasErrorCount,
+              noOutcomeCount = noOutcomeCount,
               ps = ps))
 }
 
@@ -191,6 +215,7 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
   sampleRowIds = NULL
   if (!is.na(sampleSize)) {
     sampleRowIds = sample(studyPop$rowId, sampleSize)
+    sampleRowIds = sampleRowIds[order(sampleRowIds)]
     studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
   }
   
@@ -338,6 +363,9 @@ saveSimulationStudy <- function(simulationStudy, file) {
   saveRDS(simulationStudy$estimatesLasso, file = file.path(file, "estimatesLasso.rds"))
   saveRDS(simulationStudy$estimatesExpHdps, file = file.path(file, "estimatesExpHdps.rds"))
   saveRDS(simulationStudy$estimatesBiasHdps, file = file.path(file, "estimatesBiasHdps.rds"))
+  saveRDS(simulationStudy$psExpConverge, file = file.path(file, "psExpConverge.rds"))
+  saveRDS(simulationStudy$biasErrorCount, file = file.path(file, "biasErrorCount.rds"))
+  saveRDS(simulationStudy$noOutcomeCount, file = file.path(file, "noOutcomeCount.rds"))
   saveRDS(simulationStudy$ps, file = file.path(file, "ps.rds"))
 }
 
@@ -351,11 +379,17 @@ loadSimulationStudy <- function(file, readOnly = TRUE) {
   estimatesLasso = readRDS(file.path(file, "estimatesLasso.rds"))
   estimatesExpHdps = readRDS(file.path(file, "estimatesExpHdps.rds"))
   estimatesBiasHdps = readRDS(file.path(file, "estimatesBiasHdps.rds"))
+  psExpConverge = readRDS(file.path(file, "psExpConverge.rds"))
+  biasErrorCount = readRDS(file.path(file, "biasErrorCount.rds"))
+  noOutcomeCount = readRDS(file.path(file, "noOutcomeCount.rds"))
   ps = readRDS(file.path(file, "ps.rds"))
   result = list(settings = settings,
                 estimatesLasso = estimatesLasso,
                 estimatesExpHdps = estimatesExpHdps,
                 estimatesBiasHdps = estimatesBiasHdps,
+                psExpConverge = psExpConverge,
+                biasErrorCount = biasErrorCount,
+                noOutcomeCount = noOutcomeCount,
                 ps = ps)
   return(result)
 }

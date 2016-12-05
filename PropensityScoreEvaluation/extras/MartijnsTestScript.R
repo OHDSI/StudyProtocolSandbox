@@ -65,6 +65,7 @@ excludedCovariateConceptIds <- nsaids
 dbDisconnect(connection)
 
 # create cohortMethodData object
+# maybe we go with existing tutorial cohorts instead?
 cohortMethodData <- createCohortMethodData(connectionDetails = connectionDetails,
                                            file = file,
                                            exposureTable = exposureTable,
@@ -87,16 +88,31 @@ saveCohortMethodData(cohortMethodData = cohortMethodData, file = file.path(workF
 # Create Study Population 
 #########################################################
 
+# taken from tutorials
+
+# Garbe
 studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
-                                  outcomeId = outcomeId,
+                                  outcomeId = 2729,
                                   firstExposureOnly = FALSE,
                                   washoutPeriod = 0,
-                                  removeDuplicateSubjects = FALSE,
-                                  removeSubjectsWithPriorOutcome = TRUE,
-                                  minDaysAtRisk = 1,
+                                  removeDuplicateSubjects = TRUE,
+                                  removeSubjectsWithPriorOutcome = FALSE,
+                                  minDaysAtRisk = 0,
                                   riskWindowStart = 0,
                                   addExposureDaysToStart = FALSE,
-                                  riskWindowEnd = 30,
+                                  riskWindowEnd = 0,
+                                  addExposureDaysToEnd = TRUE)
+
+
+
+# Graham - need to pick one of three outcomes
+studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
+                                  outcomeId = 2652,
+                                  removeSubjectsWithPriorOutcome = TRUE,
+                                  minDaysAtRisk = 1,
+                                  riskWindowStart = 1,
+                                  addExposureDaysToStart = FALSE,
+                                  riskWindowEnd = 0,
                                   addExposureDaysToEnd = TRUE)
 
 #########################################################
@@ -114,7 +130,7 @@ saveSimulationProfile(simulationProfile, file = file.path(workSubFolder, "simula
 # set up simulation (calculates lasso propensity score for confounding / sample size combinations)
 confoundingSchemeList <- c(0,2,2)
 confoundingProportionList <- c(NA,0.1,0.5)
-sampleSizeList <- c(2000, 5000, 20000, NA)
+sampleSizeList <- c(5000, 10000, NA)
 
 setUpSimulations(simulationProfile, cohortMethodData,
                  confoundingSchemeList = confoundingSchemeList,
@@ -125,7 +141,7 @@ setUpSimulations(simulationProfile, cohortMethodData,
 
 # run simulations
 trueEffectSizeList <- c(log(1), log(1.5), log(2), log(4))
-outcomePrevalenceList <- c(0.005, 0.02, 0.05)
+outcomePrevalenceList <- c(0.005, 0.01, 0.05, 0.1)
 hdpsFeatures <- hdpsFeatures
 simulationRuns <- 100
 simulationSetupsLocation <- file.path(workSubFolder, "simulationSetups")
