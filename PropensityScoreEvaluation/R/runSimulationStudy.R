@@ -40,6 +40,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   partialCMD = cohortMethodData
   outcomeId = simulationProfile$outcomeId
   covariatesToDiscard = simulationSetup$settings$covariatesToDiscard
+  if(!is.null(covariatesToDiscard)) covariatesToDiscard = ff::as.ff(covariatesToDiscard)
   sampleRowIds = simulationSetup$settings$sampleRowIds
   
   studyPop = simulationProfile$studyPop
@@ -247,7 +248,7 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
   
   settings = list(confoundingScheme = confoundingScheme,
                   confoundingProportion = confoundingProportion,
-                  covariatesToDiscard = covariatesToDiscard,
+                  covariatesToDiscard = covariatesToDiscard[],
                   sampleSize = sampleSize,
                   sampleRowIds = sampleRowIds,
                   outcomeId = simulationProfile$outcomeId)
