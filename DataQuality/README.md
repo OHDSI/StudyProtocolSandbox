@@ -2,7 +2,8 @@
 
 This is an informatics study that focuses on data quality (rather than a clinical question).
 
-#How to execute the study (old)
+
+#Participate on DataQuality study
 
 ##Step 1
 Execute the latest version of Achilles
@@ -71,17 +72,26 @@ submitResults(exportFolder =file.path(workFolder,'export'),
 
 If your site has more than one CDM-shaped datasets (databases) that you want to include in the overal study, repeat the process using a new workFolder and picking a different name (dbName) for the next dataset (database)
 
+#Only run DataQuality locally
+
+Generate local report (not shared with anyone, creates a local .DOCX file)
+
+```R
+exportFolder<-file.path(workFolder,'export')
+writeReport(exportFolder = exportFolder,outputFile = file.path(workFolder,'report.docx'))
+```
+
 
 #Use of output data
 
-If any site requires a formal Data Use Agreement between the your site and the Data Quality Study Principal Investigator please fill in the  Data Use Agreement template (see  the extras folder) and email it to the DQ study PI (for second signature for data recipient).
+If any site requires a formal Data Use Agreement between your site and the Data Quality Study Principal Investigator please fill in the  Data Use Agreement template (see  the extras folder) and email it to the DQ study PI (for second signature for data recipient).
 
 We plan to compare several sites on how they use Achilles, however the final manuscript or any of its apendices will not expose publically any details about any given site.
 
 If you share your site's data with the DataQuality study principal investigator or the study team, it will be only for the purpose of comparison. All compared sites will be refered to under meaningless site ID. All results will be pooled together so that any site or dataset will be hidden in a crowd of several sites/datasets.
 
-This principle was used in the initial study of Achilles Heel output. (precursor to this study)
+This principle was used in the initial study of Achilles Heel evaluation. (precursor to this study)
 
 
 #Additional tools
-The tool relies on new computations done via Achilles. Using Achilles version >=1.3 is required
+The tool relies on new computations done by the Achilles tool. Using Achilles version >=1.4 is required

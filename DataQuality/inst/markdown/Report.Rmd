@@ -1,0 +1,28 @@
+---
+title: "DQ Report"
+output: 
+    word_document:
+        fig_caption: yes
+        toc: yes
+params: 
+    exportFolder: c:/temp
+---
+
+```{r, echo = FALSE, message = FALSE}
+exportFolder <- params$exportFolder
+# exportFolder
+# results <- read.csv(file.path(exportFolder, "tablesAndFigures", "EmpiricalCalibration.csv"))
+#     analysisIds <- unique(results$analysisId)
+#     analysisIds <- analysisIds[order(analysisIds)]
+#     hois <- 3
+```
+
+
+
+### Plot
+
+```{r, echo = FALSE, fig.width = 5, fig.height= 4, fig.cap = "demographic plot"}
+knitr::include_graphics(file.path(exportFolder, "DemogrPyramidFigure.png"))
+```
+
+

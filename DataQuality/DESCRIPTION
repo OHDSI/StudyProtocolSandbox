@@ -12,7 +12,8 @@ Depends:
 Imports:
     SqlRender,
     ggplot2,
-    dplyr
+    dplyr,
+    rmarkdown
 License: Apache License 2.0
 LazyData: true
 RoxygenNote: 5.0.1
