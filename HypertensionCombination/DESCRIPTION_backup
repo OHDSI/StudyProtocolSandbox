@@ -10,8 +10,15 @@ Description: This study will be a retrospective, observational, new-user cohort 
 	The treatment and comparator cohort will be patients initating dual antihypertensive medications because of hypertension.
 	Direct head-to-head comparison will be conducted for the major advance cardiocerebral events.
 	Adjustment for baseline confounders will be done by propensity model.
-Depends: R (>= 3.3.1)
+Depends: R (>= 3.3.1),
+	DatabaseConnector (>= 1.4.0),
 Imports: 
+	SqlRender (>= 1.1.3),
+	FeatureExtraction (>= 1.0.0),
+	CohortMethod (>= 2.0.2),
+	EmpiricalCalibration,
+	Cyclops,
+	RJDBC
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
