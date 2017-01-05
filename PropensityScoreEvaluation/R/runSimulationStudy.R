@@ -244,7 +244,7 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
                                              tolerance = 2e-07, 
                                              cvRepetitions = 10, 
                                              startingVariance = 0.01,
-                                             threads = threads))[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
+                                             threads = threads))#[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
   
   settings = list(confoundingScheme = confoundingScheme,
                   confoundingProportion = confoundingProportion,
