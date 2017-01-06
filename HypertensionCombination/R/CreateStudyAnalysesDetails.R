@@ -11,12 +11,70 @@ createAnalysesDetails <- function(outputFolder) {
                     AC=13,
                     BD=24,
                     AD=14)
+  comparatorset <- list(BC=23,
+                        AC=13)
   outcomeset <- c(124)
-  dcos <- CohortMethod::createDrugComparatorOutcomes(targetId = cohortset,
-                                                     comparatorId = cohortset,
+  dcos1 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
+                                                     comparatorId = 13,
                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                      outcomeIds = outcomeset)
-  drugComparatorOutcomesList <- list(dcos)
+  dcos2 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
+                                                     comparatorId = 14,
+                                                     excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                     outcomeIds = outcomeset)
+  dcos3 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
+                                                      comparatorId = 23,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos4 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
+                                                      comparatorId = 24,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos5 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
+                                                      comparatorId = 34,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos6 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
+                                                      comparatorId = 14,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos7 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
+                                                      comparatorId = 23,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos8 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
+                                                      comparatorId = 24,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos9 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
+                                                      comparatorId = 34,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos10 <- CohortMethod::createDrugComparatorOutcomes(targetId = 14,
+                                                      comparatorId = 23,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos11 <- CohortMethod::createDrugComparatorOutcomes(targetId = 14,
+                                                      comparatorId = 24,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos12 <- CohortMethod::createDrugComparatorOutcomes(targetId = 14,
+                                                      comparatorId = 34,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos13 <- CohortMethod::createDrugComparatorOutcomes(targetId = 23,
+                                                      comparatorId = 24,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos14 <- CohortMethod::createDrugComparatorOutcomes(targetId = 23,
+                                                      comparatorId = 34,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos15 <- CohortMethod::createDrugComparatorOutcomes(targetId = 24,
+                                                      comparatorId = 34,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  drugComparatorOutcomesList <- list(dcos1,dcos2,dcos3,dcos4,dcos5,dcos6,dcos7,dcos8,dcos9,dcos10,dcos11,dcos12,dcos13,dcos14,dcos15)
   
   covarSettings <- FeatureExtraction::createCovariateSettings(useCovariateDemographics = TRUE,
                                                               useCovariateDemographicsGender = TRUE,
@@ -113,9 +171,9 @@ createAnalysesDetails <- function(outputFolder) {
 
 
   cmAnalysis1 <- CohortMethod::createCmAnalysis(analysisId = 1,
-                                                description = "CD vs BC",
-                                                targetType = "CD",
-                                                comparatorType = "BC",
+                                                description = "Hypertension Combination",
+                                                #targetType = 34,
+                                                #comparatorType = "BC",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
                                                 createStudyPopArgs = createStudyPopArgs1,
                                                 createPs = TRUE,
@@ -252,17 +310,17 @@ createAnalysesDetails <- function(outputFolder) {
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
   
-#  cmAnalysisList <- list(cmAnalysis1)
-  cmAnalysisList <- list(cmAnalysis1,
-                         cmAnalysis2,
-                         cmAnalysis3,
-                         cmAnalysis4,
-                         cmAnalysis5,
-                         cmAnalysis6,
-                         cmAnalysis7,
-                         cmAnalysis8,
-                         cmAnalysis9,
-                         cmAnalysis10)
+  cmAnalysisList <- list(cmAnalysis1)
+#  cmAnalysisList <- list(cmAnalysis1,
+#                         cmAnalysis2,
+#                         cmAnalysis3,
+#                         cmAnalysis4,
+#                         cmAnalysis5,
+#                         cmAnalysis6,
+#                         cmAnalysis7,
+#                         cmAnalysis8,
+#                         cmAnalysis9,
+#                         cmAnalysis10)
 
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(outputFolder, "cmAnalysisList.txt"))
   CohortMethod::saveDrugComparatorOutcomesList(drugComparatorOutcomesList,

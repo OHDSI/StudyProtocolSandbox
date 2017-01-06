@@ -57,12 +57,12 @@ execute<-function(connectionDetails,
                                 refitPsForEveryOutcome = FALSE,
                                 getDbCohortMethodDataThreads = 1,
                                 createPsThreads = 1,
-                                psCvThreads = 1,
-                                createStudyPopThreads = 1,
-                                trimMatchStratifyThreads = 1,
-                                computeCovarBalThreads = 1,
-                                fitOutcomeModelThreads = 1,
-                                outcomeCvThreads = 1)
+                                psCvThreads = min(16, maxCores),
+                                createStudyPopThreads = min(3, maxCores),
+                                trimMatchStratifyThreads = min(10, maxCores),
+                                computeCovarBalThreads = min(3, maxCores),
+                                fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                outcomeCvThreads = min(4, maxCores))
     writeLines("")
   }
   
