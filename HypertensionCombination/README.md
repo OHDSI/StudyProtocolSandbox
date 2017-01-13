@@ -36,13 +36,14 @@ Execute the following code:
 ```R
 library(HypertensionCombination)
 
-connectionDetails<-DatabaseConnector::createConnectionDetails(dbms="DBMS",
-                                                              server="SERVER IP",
-                                                              user="ID",
-                                                              password="PW")
-
 cdmDatabaseSchema<-"OMOP CDM DATABASE SCHEMA"
 resultsDatabaseSchema<-"RESULT DATABASE SCHEMA"
+
+connectionDetails<-DatabaseConnector::createConnectionDetails(dbms="DBMS",
+                                                              server="SERVER IP",
+															  schema=resultsDatabaseSchema,
+                                                              user="ID",
+                                                              password="PW")
 
 execute(connectionDetails,
 	cdmDatabaseSchema = cdmDatabaseSchema,
