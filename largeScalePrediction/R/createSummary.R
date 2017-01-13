@@ -32,35 +32,42 @@
 #' @export
 createSummary <- function(workFolder){
     # find all the models
-    locations <- list.dirs(workFolder)[grep('evaluation', list.dirs(workFolder))]
+    locations <- list.dirs(workFolder, full.names = FALSE)[grep('/model$', list.dirs(workFolder))]
+    locations <- gsub('/model','', locations)
 
     # for each outcome extract the testEvaluationStatistics and trainEvaluationStatistics
     # from the evaluation folder
 
     getDetails<- function(location){
-        sepVals <- strsplit(location,'/')[[1]]
-        result <- c(model = sepVals[length(sepVals)-3],
-                    outcomeId = sepVals[length(sepVals)-2],
-                    analysisId = as.double(sepVals[length(sepVals)-1]))
+        result <- PatientLevelPrediction::loadPlpResult(location)
+        trainRes <- result$performanceEvaluation$evaluationStatistics[result$performanceEvaluation$evaluationStatistics[, 'Eval']=='train','Value']
+        if(sum(names(trainRes)%in%c('AUC.auc_lb95ci'))<1)
+            trainRes$AUC.auc_lb95ci <- NULL
+        if(sum(names(trainRes)%in%c('AUC.auc_lb95ci.1'))<1)
+            trainRes$'AUC.auc_lb95ci.1' <- NULL
+        names(trainRes) <- paste0('train_',names(trainRes))
+        testRes <- result$performanceEvaluation$evaluationStatistics[result$performanceEvaluation$evaluationStatistics[, 'Eval']=='test','Value']
+        if(sum(names(testRes)%in%c('AUC.auc_lb95ci'))<1)
+            testRes$AUC.auc_lb95ci <- NULL
+        if(sum(names(testRes)%in%c('AUC.auc_lb95ci.1'))<1)
+            testRes$'AUC.auc_lb95ci.1' <- NULL
+        names(testRes) <- paste0('test_',names(testRes))
 
-        test <- read.csv(file.path(location,"testEvaluationStatistics.csv"))
-        colnames(test)[-1] <- paste0(colnames(test[-1]), 'Test')
-        train <- read.csv(file.path(location,"trainEvaluationStatistics.csv"))
-        colnames(train)[-1] <- paste0(colnames(train[-1]), 'Train')
-        result <- unlist(c(result, test[-1], train[-1]))
+        result <- c(model = result$inputSetting$modelSettings$model,
+          outcomeId = result$inputSetting$populationSettings$outcomeId,
+          trainRes, testRes)
 
         return(result)
     }
 
 
-    completeSummary <- t(sapply(locations, getDetails))
+    completeSummary <- t(sapply(file.path(workFolder,locations), getDetails))
     outcomes <- system.file("settings", "OutcomesOfInterest.csv", package = "LargeScalePrediction")
     outcomes <- read.csv(outcomes)
     completeSummary <- merge(outcomes, completeSummary, by.x='cohortDefinitionId',
                              by.y='outcomeId')
 
     write.csv(completeSummary, file.path(workFolder, 'summary.csv'))
-
 
     return(TRUE)
 }

@@ -38,9 +38,9 @@ fitGBMPredictionModels <- function(workFolder){
     outcomeIds <- plpData$metaData$call$outcomeIds
     for(oid in outcomeIds){
         tryCatch({
-            population <-read.csv(file.path(workFolder, 'Populations',oid))[,-1]
-            attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
-            attr(population, "metaData")$outcomeId <- oid
+            population <- readRDS(file.path(workFolder, 'Populations',paste0(oid,'.rds')))
+            #attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
+            #attr(population, "metaData")$outcomeId <- oid
 
             modelSettings <- PatientLevelPrediction::setGradientBoostingMachine(ntrees=c(50,100,250),
                                                                                 max_depth = c(4,7,16),
@@ -50,8 +50,9 @@ fitGBMPredictionModels <- function(workFolder){
                                                            testSplit='time',
                                                            testFraction=0.25,
                                                            nfold=3,
-                                                           save=file.path(workFolder,'models', 'gbmModels',oid)
-            )
+                                                           save=NULL)
+
+            PatientLevelPrediction::savePlpResult(trainedModel, file.path(workFolder,'models', 'gbmModels',oid))
 
             PatientLevelPrediction::plotPlp(trainedModel, file.path(workFolder,'models', 'gbmModels',oid))
         },error = function(e) {

@@ -47,29 +47,18 @@ generateAllPopulations <- function(workFolder, verbosity=INFO){
     for(oid in outcomeIds){
         # add log message to state oid population being created...
 
-              # get all the non outcome people with 365 days observation
-        population_non <- PatientLevelPrediction::createStudyPopulation(plpData, outcomeId=oid,
-                                                                        requireTimeAtRisk=T,
-                                                                        minTimeAtRisk = 365,
-                                                                        riskWindowStart=1,
-                                                                        addExposureDaysToStart=F,
-                                                                        riskWindowEnd=366,
-                                                                        addExposureDaysToEnd=F)
-        population_non <- population_non[population_non$outcomeCount==0,]
-        # get all the outcomes (even if only partially observed)
-        population_out <- PatientLevelPrediction::createStudyPopulation(plpData, outcomeId=oid,
-                                                                        requireTimeAtRisk=T,
-                                                                        minTimeAtRisk = 1,
-                                                                        riskWindowStart=1,
-                                                                        addExposureDaysToStart=F,
-                                                                        riskWindowEnd=366,
-                                                                        addExposureDaysToEnd=F)
-        population_out <- population_out[population_out$outcomeCount!=0,]
-        #join
-        population <- rbind(population_out, population_non)
+        population <- PatientLevelPrediction::createStudyPopulation(plpData, outcomeId=oid,
+                                                                    includeAllOutcomes = T,
+                                                                    requireTimeAtRisk=T,
+                                                                    minTimeAtRisk = 365,
+                                                                    riskWindowStart=1,
+                                                                    addExposureDaysToStart=F,
+                                                                    riskWindowEnd=366,
+                                                                    addExposureDaysToEnd=F)
+
 
                 if(!dir.exists(file.path(workFolder, 'Populations'))){dir.create(file.path(workFolder, 'Populations'))}
-        write.csv(population, file=file.path(workFolder, 'populations',oid))
+        saveRDS(population, file=file.path(workFolder, 'populations',paste0(oid,'.rds')))
     }
 
     # add logging to say the popualtions are created

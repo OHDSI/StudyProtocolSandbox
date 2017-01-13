@@ -50,6 +50,8 @@ How to run
     generateAllPopulations(workFolder)
 
     fitAllPredictionModels(workFolder)
+    
+    createSummary(workFolder)
 	```
 
 	* For details on how to configure```createConnectionDetails``` in your environment type this for help:

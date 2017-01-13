@@ -42,9 +42,7 @@ fitRFPredictionModels <- function(workFolder){
 
     for(oid in outcomeIds){
         tryCatch({
-            population <-read.csv(file.path(workFolder, 'Populations',oid))[,-1]
-            attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
-            attr(population, "metaData")$outcomeId <- oid
+            population <- readRDS(file.path(workFolder, 'Populations',paste0(oid,'.rds')))
 
             modelSettings <- PatientLevelPrediction::setRandomForest(ntrees=c(50,500,1000),
                                                                      mtries = c(-1,50,500),
@@ -55,8 +53,11 @@ fitRFPredictionModels <- function(workFolder){
                                                            testSplit='time',
                                                            testFraction=0.25,
                                                            nfold=3,
-                                                           save=file.path(workFolder,'models', 'rfModels',oid)
+                                                           save=NULL
             )
+
+            PatientLevelPrediction::savePlpResult(trainedModel, file.path(workFolder,'models', 'rfModels',oid))
+
 
             PatientLevelPrediction::plotPlp(trainedModel, file.path(workFolder,'models', 'rfModels',oid))
 

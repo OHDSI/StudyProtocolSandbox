@@ -19,18 +19,18 @@
 library(LargeScalePrediction)
 options('fftempdir' = 's:/fftemp')
 
-workFolder <- "t:/temp/LargeScalePrediction"
+workFolder <- "t:/temp2/LargeScalePrediction/CCAE"
 
 pw <- NULL
 dbms <- "pdw"
 user <- NULL
-server <- "JRDUSAPSCTL01"
-cdmDatabaseSchema <- "CDM_Truven_MDCD_V446.dbo"
+server <- Sys.getenv('server')
+cdmDatabaseSchema <- Sys.getenv('ccae')
 oracleTempSchema <- NULL
-workDatabaseSchema <- "scratch.dbo"
+workDatabaseSchema <- Sys.getenv('work') # must have write access
 studyCohortTable <- "sbsTest_depression_cohort"
 exposureCohortSummaryTable <- "sbsTest_depression_summary"
-port <- 17001
+port <- Sys.getenv('port')
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
@@ -49,3 +49,11 @@ fetchAllDataFromServer(connectionDetails = connectionDetails,
 generateAllPopulations(workFolder)
 
 fitAllPredictionModels(workFolder)
+
+#fitGBMPredictionModels(workFolder)
+#fitLassoPredictionModels(workFolder)
+#fitRFPredictionModels(workFolder)
+#fitNaiveBayesPredictionModels(workFolder)
+#fitKNNPredictionModels(workFolder)
+
+createSummary(workFolder)

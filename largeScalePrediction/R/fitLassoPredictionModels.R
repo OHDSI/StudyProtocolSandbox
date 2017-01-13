@@ -38,9 +38,8 @@ fitLassoPredictionModels <- function(workFolder){
     outcomeIds <- plpData$metaData$call$outcomeIds
     for(oid in outcomeIds){
       tryCatch({
-          population <- read.csv(file.path(workFolder, 'Populations',oid))[,-1]
-          attr(population, "metaData")$cohortId <- plpData$metaData$call$cohortId
-          attr(population, "metaData")$outcomeId <- oid
+          population <- readRDS(file.path(workFolder, 'Populations',paste0(oid,'.rds')))
+
 
           modelSettings <- PatientLevelPrediction::setLassoLogisticRegression()
           trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
@@ -48,8 +47,11 @@ fitLassoPredictionModels <- function(workFolder){
                                                          testSplit='time',
                                                          testFraction=0.25,
                                                          nfold=3,
-                                                         save=file.path(workFolder,'models', 'lrModels',oid)
+                                                         save=NULL
           )
+
+          PatientLevelPrediction::savePlpResult(trainedModel, file.path(workFolder,'models', 'lrModels',oid))
+
 
           # do plots and save in plot subdirectory...
           PatientLevelPrediction::plotPlp(trainedModel, file.path(workFolder,'models', 'lrModels',oid))
