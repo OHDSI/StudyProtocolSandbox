@@ -1,0 +1,29 @@
+measure_id,measure_name,perc50,perc10,dset_cnt
+203,Number of distinct visit occurrence concepts per person,1.5,1.0,10
+403,Number of distinct condition occurrence concepts per person,11.0,3.8,10
+511,Distribution of time from death to last condition,-3.0,-56.800000000000026,10
+515,Distribution of time from death to last observation,-3.5,-61.90000000000001,10
+603,Number of distinct procedure occurrence concepts per person,11.5,2.9,10
+703,Number of distinct drug exposure concepts per person,9.5,6.0,10
+903,Number of distinct drug era concepts per person,9.0,6.0,9
+1003,Number of distinct condition era concepts per person,11.0,9.5,6
+1803,Number of distinct observation occurrence concepts per person,12.5,7.699999999999999,10
+ach_2000:Percentage,NA,64.1433350066091,24.43855187648798,10
+ach_2001:Percentage,NA,74.5174631078513,43.77622482920426,10
+ach_2002:Percentage,NA,54.37321989869475,22.487563938013743,10
+ach_2003:Percentage,NA,87.6181077721352,63.29999332827032,10
+Condition:ConceptCnt,NA,9178.0,8990.800000000001,3
+Death:DeathCause:ConceptCnt,NA,1842.0,1608.3999999999999,3
+Death:DeathType:ConceptCnt,NA,2.0,2.0,3
+Device:ConceptCnt,NA,0.0,0.0,3
+DrugEra:ConceptCnt,NA,1679.0,890.0999999999999,10
+DrugExposure:ConceptCnt,NA,10982.5,1723.8,10
+Measurement:ConceptCnt,NA,5257.0,2238.6,3
+Note:ConceptCnt,NA,0.0,0.0,3
+Observation:ConceptCnt,NA,2422.0,2287.6,3
+Person:Ethnicity:ConceptCnt,NA,1.0,1.0,3
+Person:Race:ConceptCnt,NA,1.0,1.0,3
+Procedure:ConceptCnt,NA,13687.0,13318.2,3
+Provider:PatientProviderRatio,NA,14.7843234034423,4.284358181603916,9
+Provider:SpeciatlyCnt,NA,55.5,2.8,10
+Visit:ConceptCnt,NA,3.0,3.0,3

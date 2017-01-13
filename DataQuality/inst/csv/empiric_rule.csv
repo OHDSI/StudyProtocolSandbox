@@ -1,0 +1,22 @@
+measure_id,direction,message_grade,empiric_rule_type,empiric_threshold_value,score_weight
+ach_2000:Percentage,<,notification,empiric:percentile,perc10,-1
+ach_2000:Percentage,>,high_quality,empiric:percentile,perc50,1
+DrugExposure:ConceptCnt,<,notification,empiric:percentile,perc10,-1
+DrugEra:ConceptCnt,<,notification,empiric:percentile,perc10,-1
+Observation:ConceptCnt,<,notification,empiric:percentile,perc10,-1
+Condition:ConceptCnt,<,notification,empiric:percentile,perc10,-1
+Provider:SpecialtyCnt,<,notification,empiric:percentile,perc10,-1
+203,<,notification,empiric:percentile,perc10,-1
+403,<,notification,empiric:percentile,perc10,-1
+603,<,notification,empiric:percentile,perc10,-1
+703,<,notification,empiric:percentile,perc10,-1
+903,<,notification,empiric:percentile,perc10,-1
+1003,<,notification,empiric:percentile,perc10,-1
+1803,<,notification,empiric:percentile,perc10,-1
+ach_2001:Percentage,<,notification,empiric:percentile,perc10,-1
+ach_2001:Percentage,>,high_quality,empiric:percentile,perc50,1
+ach_2002:Percentage,>,notification,empiric:percentile,perc10,-1
+ach_2002:Percentage,>,high_quality,empiric:percentile,perc50,1
+ach_2003:Percentage,>,notification,empiric:percentile,perc10,-1
+ach_2003:Percentage,>,high_quality,empiric:percentile,perc50,1
+Provider:SpecialtyCnt,<,notification,absolute:vocabulary_query,select count(concept_id) from concept where domain_id = 'Provider Specialty',-1

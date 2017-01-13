@@ -1,9 +1,17 @@
 Package: HypertensionCombination
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Title: OHDSI Comparision of combination treatment in hypertension
+Version: 0.1
+Author: Sungjae Jung [aut, cre],
+	Seng Chan You [aut],
+	Sungha Park [aut],
+	Rae Woong Park [aut]
+Maintainer: Sungjae Jung <sungjae.2425@gmail.com>
+Description: This study will be a retrospective, observational, new-user cohort study.
+	The treatment and comparator cohort will be patients initating dual antihypertensive medications because of hypertension.
+	Direct head-to-head comparison will be conducted for the major advance cardiocerebral events.
+	Adjustment for baseline confounders will be done by propensity model.
 Depends: R (>= 3.3.1)
-License: What license is it under?
+Imports: 
+License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
