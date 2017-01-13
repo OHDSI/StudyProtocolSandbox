@@ -41,7 +41,6 @@ resultsDatabaseSchema<-"RESULT DATABASE SCHEMA"
 
 connectionDetails<-DatabaseConnector::createConnectionDetails(dbms="DBMS",
                                                               server="SERVER IP",
-															  schema=resultsDatabaseSchema,
                                                               user="ID",
                                                               password="PW")
 
@@ -57,6 +56,18 @@ execute(connectionDetails,
 	packageResults = TRUE,
 	maxCores = 4)
 ```
+
++ ```cdmDatabaseSchema``` specify the schema name where your data in OMOP CDM format resides.
++ ```resultsDatabaseSchema``` specify the schema name where intermediate results can be stored.
++ ```exposureTable``` specify the name of table that will be created in the results database schema where the exposure and comparator cohorts will be stored.
++ ```outcomeTable``` specify the name of table that will be created in the results database schema where the outcome cohorts will be stored.
++ ```cdmVersion``` specify the version of OMOP CDM. now only available v5
++ ```outputFolder``` specify the path of result files will be stored.
++ ```createCohorts``` set TRUE to create cohorts into results database schema. 
++ ```runAnalyses``` set TRUE to run multiple analysis. outcome of createCohorts will be used.
++ ```packageResults``` set TRUE to package the result files as ```export/StudyResults.zip```. 
++ ```maxCores``` is the number of cores that are available for parallel processing.
+
 ##Step 4.
 E-mail to Seng Chan You (applegna@gmail.com) with ```StudyResults.zip```
 
