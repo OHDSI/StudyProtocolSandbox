@@ -35,21 +35,23 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   ps<-list()
   for(i in 1:length(psFileName)){
     ps[[i]] <- readRDS(psFileName[i])
-    CohortMethod::plotPs(ps[[i]], scale = "preference", fileName = file.path(exportFolder, paste0("PsPrefScale",i,".png")))
-    CohortMethod::plotPs(ps[[i]], scale = "propensity", fileName = file.path(exportFolder, paste0("Ps",i,".png")))
+    idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
+    CohortMethod::plotPs(ps[[i]], scale = "preference", fileName = file.path(exportFolder, paste0("PsPrefScale",idx,".png")))
+    CohortMethod::plotPs(ps[[i]], scale = "propensity", fileName = file.path(exportFolder, paste0("Ps",idx,".png")))
   }
   
   strataFile <- outcomeReference$strataFile
   for(i in 1:length(strataFile)){
     strata <- readRDS(strataFile[i])
+    idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
     CohortMethod::plotPs(strata,
                          unfilteredData = ps[[i]],
                          scale = "preference",
-                         fileName = file.path(exportFolder, paste0("PsAfterVarRatioMatchingPrefScale",i,".png")))
+                         fileName = file.path(exportFolder, paste0("PsAfterVarRatioMatchingPrefScale",idx,".png")))
     CohortMethod::plotPs(strata,
                          unfilteredData = ps[[i]],
                          scale = "propensity",
-                         fileName = file.path(exportFolder, paste0("PsAfterVarRatioMatching",i,".png")))
+                         fileName = file.path(exportFolder, paste0("PsAfterVarRatioMatching",idx,".png")))
   }
   
   ### Propensity model ###
@@ -112,9 +114,6 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
       write.csv(model, file.path(exportFolder, paste0("OutcomeModel",idx,".csv")), row.names = FALSE)
     }
   }
-  
-  ### create Tables and Figures
-  HypertensionCombination::createTableAndFigures(exportFolder)
   
   ### Add all to zip file ###
   zipName <- file.path(exportFolder, "StudyResults.zip")
