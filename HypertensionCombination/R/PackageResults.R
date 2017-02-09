@@ -115,6 +115,9 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     }
   }
   
+  ### create Tables and Figures
+  HypertensionCombination::createTableAndFigures(exportFolder, cmOutputFolder)
+  
   ### Add all to zip file ###
   zipName <- file.path(exportFolder, "StudyResults.zip")
   OhdsiSharing::compressFolder(exportFolder, zipName)
