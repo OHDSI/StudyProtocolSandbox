@@ -6,7 +6,8 @@
 \usage{
 runSimulationStudy(simulationProfile, simulationSetup, cohortMethodData,
   simulationRuns = 10, trueEffectSize = NULL, outcomePrevalence = NULL,
-  hdpsFeatures, ignoreCensoring = FALSE, ignoreCensoringCovariates = TRUE,
+  hdpsFeatures, stratify = FALSE, discrete = FALSE,
+  ignoreCensoring = FALSE, ignoreCensoringCovariates = FALSE,
   threads = 10, fudge = 0.001)
 }
 \arguments{
