@@ -23,13 +23,13 @@ calculateMetricsHelper <- function(estimates, cohortMethodData, trueEffectSize, 
   rmse = sqrt(bias^2+sd^2)
   coverage = length(which((estimates$logLb95[good] <= trueEffectSize) & (estimates$logUb95[good] >= trueEffectSize))) / n
   population = matchOnPs(ps)
-  #balance = computeCovariateBalance(population, cohortMethodData)
-  #beforeHighStdDiff = length(which(abs(balance$beforeMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
-  #afterHighStdDiff = length(which(abs(balance$afterMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
+  balance = computeCovariateBalance(population, cohortMethodData)
+  beforeHighStdDiff = length(which(abs(balance$beforeMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
+  afterHighStdDiff = length(which(abs(balance$afterMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
   auc = computePsAuc(ps)
-  return(list(bias = bias, sd = sd, rmse = rmse, coverage = coverage, auc = auc))#,
-              #beforeHighStdDiff = beforeHighStdDiff,
-              #afterHighStdDiff = afterHighStdDiff))
+  return(list(bias = bias, sd = sd, rmse = rmse, coverage = coverage, auc = auc,
+              beforeHighStdDiff = beforeHighStdDiff,
+              afterHighStdDiff = afterHighStdDiff))
 }
 
 #' @export

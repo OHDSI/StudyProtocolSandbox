@@ -88,6 +88,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   }
 
   # create hdps PS
+  partialCMD = removeCovariates(partialCMD, covariatesToDiscard)
   cmd = simulateCMD(partialCMD, sData, cData, outcomeId, discrete = discrete)
   if (hdpsFeatures == TRUE) {
     hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = fudge)
@@ -96,7 +97,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   }
   
   psExpConverge = TRUE
-  psExp = createPs(cohortMethodData = removeCovariates(hdps0$cmd, covariatesToDiscard), population = studyPop, prior = createPrior(priorType = "none"), stopOnError = FALSE)
+  psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop, prior = createPrior(priorType = "none"), stopOnError = FALSE)
   if(is.null(attr(psExp, "metaData")$psError)){
     psExp = psExp[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
   } else {
@@ -167,7 +168,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
     }
     
     # calculate outcomes for bias hdps
-    psBias = createPs(cohortMethodData = removeCovariates(hdpsBias, covariatesToDiscard), population = studyPopNew, prior = createPrior(priorType = "none"), stopOnError = FALSE)
+    psBias = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = createPrior(priorType = "none"), stopOnError = FALSE)
     
     if(is.null(attr(psBias, "metaData")$psError)){
       if (stratify) popBias=stratifyByPs(psBias,10) else popBias=matchOnPs(psBias)
@@ -315,7 +316,7 @@ loadSimulationSetup <- function(file) {
 
 #' @export
 runSimulationStudies <- function(simulationProfile, cohortMethodData, simulationSetup = NULL, simulationRuns = 10, trueEffectSizeList, 
-                                 outcomePrevalenceList, hdpsFeatures, simulationSetupFolder = NULL, outputFolder) {
+                                 outcomePrevalenceList, hdpsFeatures, stratify=FALSE, discrete=FALSE, simulationSetupFolder = NULL, outputFolder) {
   if (!file.exists(outputFolder)) dir.create(outputFolder)
   if (is.null(simulationSetup)) {
     simulationSetup = loadSimulationSetup(simulationSetupFolder)
@@ -335,7 +336,8 @@ runSimulationStudies <- function(simulationProfile, cohortMethodData, simulation
   for (i in 1:length(trueEffectSizeList)) {
     for (j in 1:length(outcomePrevalenceList)) {
         temp = runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, cohortMethodData = cohortMethodData, simulationRuns = simulationRuns, 
-                                  trueEffectSize = trueEffectSizeList[[i]], outcomePrevalence = outcomePrevalenceList[[j]], hdpsFeatures = hdpsFeatures)
+                                  trueEffectSize = trueEffectSizeList[[i]], outcomePrevalence = outcomePrevalenceList[[j]], hdpsFeatures = hdpsFeatures,
+                                  stratify = stratify, discrete = discrete)
         results$simulationStudies[[i]][[j]] = temp
         saveSimulationStudy(temp, file = file.path(outputFolder, paste(basename(simulationSetupFolder), "_t", i, "_o", j, sep="")))
       }
@@ -376,6 +378,7 @@ saveSimulationStudy <- function(simulationStudy, file) {
   saveRDS(simulationStudy$estimatesLasso, file = file.path(file, "estimatesLasso.rds"))
   saveRDS(simulationStudy$estimatesExpHdps, file = file.path(file, "estimatesExpHdps.rds"))
   saveRDS(simulationStudy$estimatesBiasHdps, file = file.path(file, "estimatesBiasHdps.rds"))
+  saveRDS(simulationStudy$estimatesRandom, file = file.path(file, "estimatesRandom.rds"))
   saveRDS(simulationStudy$psExpConverge, file = file.path(file, "psExpConverge.rds"))
   saveRDS(simulationStudy$biasErrorCount, file = file.path(file, "biasErrorCount.rds"))
   saveRDS(simulationStudy$noOutcomeCount, file = file.path(file, "noOutcomeCount.rds"))
@@ -392,6 +395,7 @@ loadSimulationStudy <- function(file, readOnly = TRUE) {
   estimatesLasso = readRDS(file.path(file, "estimatesLasso.rds"))
   estimatesExpHdps = readRDS(file.path(file, "estimatesExpHdps.rds"))
   estimatesBiasHdps = readRDS(file.path(file, "estimatesBiasHdps.rds"))
+  estimatesRandom = readRDS(file.path(file, "estimatesRandom.rds"))
   psExpConverge = readRDS(file.path(file, "psExpConverge.rds"))
   biasErrorCount = readRDS(file.path(file, "biasErrorCount.rds"))
   noOutcomeCount = readRDS(file.path(file, "noOutcomeCount.rds"))
@@ -400,6 +404,7 @@ loadSimulationStudy <- function(file, readOnly = TRUE) {
                 estimatesLasso = estimatesLasso,
                 estimatesExpHdps = estimatesExpHdps,
                 estimatesBiasHdps = estimatesBiasHdps,
+                estimatesRandom = estimatesRandom,
                 psExpConverge = psExpConverge,
                 biasErrorCount = biasErrorCount,
                 noOutcomeCount = noOutcomeCount,
