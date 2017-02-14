@@ -64,16 +64,13 @@ fetchAllDataFromServer <- function(connectionDetails = connectionDetails,
                  error = stop, finally = flog.info('Connected')
     )
     flog.info('Checking work cohort table exists')
-    sql <- SqlRender::renderSql("select OBJECT_ID(N'@target_database_schema.@target_cohort_table', N'U')",
-                                target_database_schema=workDatabaseSchema,
-                                target_cohort_table=studyCohortTable)$sql
-    exists <- ftry(DatabaseConnector::querySql(conn, sql),
-                   error = stop, finally = flog.info('Tested cohort existance')
-    )
+
+    exists <- studyCohortTable%in%DatabaseConnector::getTableNames(conn, workDatabaseSchema)
+
     if(is.na(exists)){
         flog.info('Creating work cohort table')
         sql <- "create table @target_database_schema.@target_cohort_table(cohort_definition_id bigint, subject_id bigint, cohort_start_date datetime, cohort_end_date datetime)"
-        sql <- SqlRender::translateSql(sql, targetDialect = 'pdw')$sql
+        sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
         sql <- SqlRender::renderSql(sql,
                                     target_database_schema=workDatabaseSchema,
                                     target_cohort_table=studyCohortTable)$sql
