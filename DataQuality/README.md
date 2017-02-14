@@ -34,8 +34,8 @@ workFolder <- 'c:/temp/DQStudy-dataset1'  #ideally, use one workFolder per datab
 dir.create(workFolder) 
 
 #populate database parameters
-cdmDatabaseSchema <-'ccae'
-resultsDatabaseSchema <-'ccae' #at most sites this likely will not be the same as cdmDatabaseSchema
+cdmDatabaseSchema <-'datasetA'
+resultsDatabaseSchema <-'datasetAResults' 
 
 
 executeDQ(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseSchema,
