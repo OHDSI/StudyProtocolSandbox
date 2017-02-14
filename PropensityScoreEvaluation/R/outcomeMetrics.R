@@ -1,5 +1,5 @@
 #' @export
-calculateMetrics <- function(simulationResults, cohortMethodData, stdDiffThreshold = .05) {
+calculateMetrics <- function(simulationResults, cohortMethodData, stdDiffThreshold = .05, allBalance=TRUE) {
   trueEffectSize = simulationResults$settings$trueEffectSize
   psLasso = psExpHdps = psBiasHdps = psRandom = simulationResults$ps[c("rowId", "treatment")]
   psLasso$propensityScore = simulationResults$ps$lassoPropensityScore
@@ -7,13 +7,13 @@ calculateMetrics <- function(simulationResults, cohortMethodData, stdDiffThresho
   psBiasHdps$propensityScore = simulationResults$ps$biasHdpsPropensityScore
   psRandom$propensityScore = simulationResults$ps$randomPropensityScore
   
-  return(list(lasso = calculateMetricsHelper(simulationResults$estimatesLasso, cohortMethodData, trueEffectSize, psLasso, stdDiffThreshold),
-              expHdps = calculateMetricsHelper(simulationResults$estimatesExpHdps, cohortMethodData, trueEffectSize, psExpHdps, stdDiffThreshold),
-              biasHdps = calculateMetricsHelper(simulationResults$estimatesBiasHdps, cohortMethodData, trueEffectSize, psBiasHdps, stdDiffThreshold),
-              random = calculateMetricsHelper(simulationResults$estimatesRandom, cohortMethodData, trueEffectSize, psRandom, stdDiffThreshold)))
+  return(list(lasso = calculateMetricsHelper(simulationResults$estimatesLasso, cohortMethodData, trueEffectSize, psLasso, stdDiffThreshold, allBalance),
+              expHdps = calculateMetricsHelper(simulationResults$estimatesExpHdps, cohortMethodData, trueEffectSize, psExpHdps, stdDiffThreshold, allBalance),
+              biasHdps = calculateMetricsHelper(simulationResults$estimatesBiasHdps, cohortMethodData, trueEffectSize, psBiasHdps, stdDiffThreshold, TRUE),
+              random = calculateMetricsHelper(simulationResults$estimatesRandom, cohortMethodData, trueEffectSize, psRandom, stdDiffThreshold, allBalance)))
 }
 
-calculateMetricsHelper <- function(estimates, cohortMethodData, trueEffectSize, ps, stdDiffThreshold) {
+calculateMetricsHelper <- function(estimates, cohortMethodData, trueEffectSize, ps, stdDiffThreshold, doBalance) {
   if(is.null(estimates))return(NULL)
   good = which(abs(estimates$logRr)<10)
   n = length(good)
@@ -23,9 +23,13 @@ calculateMetricsHelper <- function(estimates, cohortMethodData, trueEffectSize, 
   rmse = sqrt(bias^2+sd^2)
   coverage = length(which((estimates$logLb95[good] <= trueEffectSize) & (estimates$logUb95[good] >= trueEffectSize))) / n
   population = matchOnPs(ps)
-  balance = computeCovariateBalance(population, cohortMethodData)
-  beforeHighStdDiff = length(which(abs(balance$beforeMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
-  afterHighStdDiff = length(which(abs(balance$afterMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
+  beforeHighStdDiff = -1
+  afterHighStdDiff = -1
+  if(doBalance) {
+    balance = computeCovariateBalance(population, cohortMethodData)
+    beforeHighStdDiff = length(which(abs(balance$beforeMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
+    afterHighStdDiff = length(which(abs(balance$afterMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
+  }
   auc = computePsAuc(ps)
   return(list(bias = bias, sd = sd, rmse = rmse, coverage = coverage, auc = auc,
               beforeHighStdDiff = beforeHighStdDiff,
@@ -59,8 +63,18 @@ calculateMetricsList1 <- function(inFolder, cohortMethodData, dimensions) {
         for (l in 1:dimensions[4]) {
           writeLines(paste("count:",counter))
           counter = counter+1
+          allBalance = k==1&l==1
           simulationStudy = loadSimulationStudy(file.path(inFolder, paste("c",i,"_s",j,"_t",k,"_o",l,sep="")))
-          result[[i]][[j]][[k]][[l]] = calculateMetrics(simulationStudy, cohortMethodData, stdDiffThreshold = .05)
+          metric = calculateMetrics(simulationStudy, cohortMethodData, stdDiffThreshold = .05, allBalance)
+          if (!allBalance) {
+            metric$lasso$beforeHighStdDiff = result[[i]][[j]][[1]][[1]]$lasso$beforeHighStdDiff
+            metric$lasso$afterHighStdDiff = result[[i]][[j]][[1]][[1]]$lasso$afterHighStdDiff
+            metric$expHdps$beforeHighStdDiff = result[[i]][[j]][[1]][[1]]$expHdps$beforeHighStdDiff
+            metric$expHdps$afterHighStdDiff = result[[i]][[j]][[1]][[1]]$expHdps$afterHighStdDiff
+            metric$random$beforeHighStdDiff = result[[i]][[j]][[1]][[1]]$random$beforeHighStdDiff
+            metric$random$afterHighStdDiff = result[[i]][[j]][[1]][[1]]$random$afterHighStdDiff
+          }
+          result[[i]][[j]][[k]][[l]] = metric
         }
       }
     }
@@ -72,13 +86,13 @@ graphMetrics <- function(metricsList, labels) {
   n = length(metricsList)
   f <- function(x)(combineFunction(x,function(x,y)c(x,y)))
   x = data.frame(
-    Method = rep(names(metricsList[[1]]), n),
+    Method = rep(names(metricsList[[1]])[1:3], n),
     RR = f(sapply(metricsList, function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias)))),
     sd = f(sapply(metricsList, function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd)))),
     rmse = f(sapply(metricsList, function(x)return(list(x$lasso$rmse, x$expHdps$rmse, x$biasHdps$rmse)))),
     coverage = f(sapply(metricsList, function(x)return(list(x$lasso$coverage, x$expHdps$coverage, x$biasHdps$coverage)))),
     auc = f(sapply(metricsList, function(x)return(list(x$lasso$auc, x$expHdps$auc, x$biasHdps$auc)))),
-    #afterHighStdDiff = f(sapply(metricsList, function(x)return(list(x$lasso$afterHighStdDiff, x$expHdps$afterHighStdDiff, x$biasHdps$afterHighStdDiff)))),
+    afterHighStdDiff = f(sapply(metricsList, function(x)return(list(x$lasso$afterHighStdDiff, x$expHdps$afterHighStdDiff, x$biasHdps$afterHighStdDiff)))),
     labels = f(sapply(labels, function(x)rep(x,3)))
   )
   g1 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)
@@ -132,3 +146,45 @@ overlap <- function(simulationProfile, cohortMethodData, trueEffectSize, outcome
          biasOverlap = length(which(features1 %in% features3))/length(features1)))
 }
 
+graphMetrics1 <- function(metrics, labels) {
+  n = 4
+  f <- function(x)(combineFunction(x,function(x,y)c(x,y)))
+  metricsList = list(metrics[[1]][[1]],metrics[[2]][[1]],metrics[[3]][[1]],metrics[[4]][[1]])
+  x = data.frame(
+    Method = rep(names(metricsList[[1]])[1:3], n),
+    RR = f(sapply(metricsList, function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias)))),
+    sd = f(sapply(metricsList, function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd)))),
+    labels = f(sapply(labels, function(x)rep(x,3)))
+  )
+  g1 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-.05, .05)
+  
+  metricsList = list(metrics[[1]][[2]],metrics[[2]][[2]],metrics[[3]][[2]],metrics[[4]][[2]])
+  x = data.frame(
+    Method = rep(names(metricsList[[1]])[1:3], n),
+    RR = f(sapply(metricsList, function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias)))),
+    sd = f(sapply(metricsList, function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd)))),
+    labels = f(sapply(labels, function(x)rep(x,3)))
+  )
+  g2 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-.05, .05)
+  
+  metricsList = list(metrics[[1]][[3]],metrics[[2]][[3]],metrics[[3]][[3]],metrics[[4]][[3]])
+  x = data.frame(
+    Method = rep(names(metricsList[[1]])[1:3], n),
+    RR = f(sapply(metricsList, function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias)))),
+    sd = f(sapply(metricsList, function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd)))),
+    labels = f(sapply(labels, function(x)rep(x,3)))
+  )
+  g3 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-.05, .05)
+  
+  
+  metricsList = list(metrics[[1]][[4]],metrics[[2]][[4]],metrics[[3]][[4]],metrics[[4]][[4]])
+  x = data.frame(
+    Method = rep(names(metricsList[[1]])[1:3], n),
+    RR = f(sapply(metricsList, function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias)))),
+    sd = f(sapply(metricsList, function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd)))),
+    labels = f(sapply(labels, function(x)rep(x,3)))
+  )
+  g4 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-.05, .05)
+  
+  gridExtra::grid.arrange(g1, g2, g3, g4, ncol=4)
+}
