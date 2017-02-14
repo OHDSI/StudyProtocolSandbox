@@ -283,6 +283,7 @@ doSelectiveExport <- function(connectionDetails,
 
   write.csv(data,file = file.path(exportFolder,'SelectedAchillesResultsMeasuresOther.csv'),row.names = F)
   
+  writeLines("Done with core part of DQ study. Export files were generated.")
   
   #-------------empiric rules -----------------------------------------------------------------------
   
