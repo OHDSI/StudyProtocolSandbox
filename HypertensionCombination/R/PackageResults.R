@@ -26,7 +26,8 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   for(i in 1:length(strataFile)){
     strata <- readRDS(strataFile[i])
     attrition <- CohortMethod::getAttritionTable(strata)
-    write.csv(attrition, file.path(exportFolder, paste0("AttritionTable",i,".csv")), row.names = FALSE)
+    idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
+    write.csv(attrition, file.path(exportFolder, paste0("AttritionTable",idx,".csv")), row.names = FALSE)
   }
   
   ### Main propensity score plots ###
@@ -34,21 +35,23 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   ps<-list()
   for(i in 1:length(psFileName)){
     ps[[i]] <- readRDS(psFileName[i])
-    CohortMethod::plotPs(ps[[i]], scale = "preference", fileName = file.path(exportFolder, paste0("PsPrefScale",i,".png")))
-    CohortMethod::plotPs(ps[[i]], scale = "propensity", fileName = file.path(exportFolder, paste0("Ps",i,".png")))
+    idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
+    CohortMethod::plotPs(ps[[i]], scale = "preference", fileName = file.path(exportFolder, paste0("PsPrefScale",idx,".png")))
+    CohortMethod::plotPs(ps[[i]], scale = "propensity", fileName = file.path(exportFolder, paste0("Ps",idx,".png")))
   }
   
   strataFile <- outcomeReference$strataFile
   for(i in 1:length(strataFile)){
     strata <- readRDS(strataFile[i])
+    idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
     CohortMethod::plotPs(strata,
                          unfilteredData = ps[[i]],
                          scale = "preference",
-                         fileName = file.path(exportFolder, paste0("PsAfterVarRatioMatchingPrefScale",i,".png")))
+                         fileName = file.path(exportFolder, paste0("PsAfterVarRatioMatchingPrefScale",idx,".png")))
     CohortMethod::plotPs(strata,
                          unfilteredData = ps[[i]],
                          scale = "propensity",
-                         fileName = file.path(exportFolder, paste0("PsAfterVarRatioMatching",i,".png")))
+                         fileName = file.path(exportFolder, paste0("PsAfterVarRatioMatching",idx,".png")))
   }
   
   ### Propensity model ###
@@ -56,7 +59,8 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   for(i in 1:length(psFileName)){
     ps <- readRDS(psFileName[i])
     psModel <- CohortMethod::getPsModel(ps, cohortMethodData[[i]])
-    write.csv(psModel, file.path(exportFolder, paste0("PsModel",i,".csv")), row.names = FALSE)
+    idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
+    write.csv(psModel, file.path(exportFolder, paste0("PsModel",idx,".csv")), row.names = FALSE)
   }
   
   ### Main balance tables ###
@@ -76,7 +80,8 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     idx <- balance$afterMatchingSumComparator < minCellCount
     balance$afterMatchingSumComparator[idx] <- NA
     balance$afterMatchingMeanComparator[idx] <- NA
-    write.csv(balance, file.path(exportFolder, paste0("Balance",i,".csv")), row.names = FALSE)
+    idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
+    write.csv(balance, file.path(exportFolder, paste0("Balance",idx,".csv")), row.names = FALSE)
   }
   
   ### Removed (redunant) covariates ###
@@ -84,7 +89,8 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     if (!is.null(cohortMethodData[[i]]$metaData$deletedCovariateIds)) {
       idx <- is.na(ffbase::ffmatch(cohortMethodData[[i]]$covariateRef$covariateId, ff::as.ff(cohortMethodData[[i]]$metaData$deletedCovariateIds)))
       removedCovars <- ff::as.ram(cohortMethodData[[i]]$covariateRef[ffbase::ffwhich(idx, idx == FALSE), ])
-      write.csv(removedCovars, file.path(exportFolder, paste0("RemovedCovars",i,".csv")), row.names = FALSE)
+      idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
+      write.csv(removedCovars, file.path(exportFolder, paste0("RemovedCovars",idx,".csv")), row.names = FALSE)
     }
   }
   
@@ -92,9 +98,10 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   strataFile <- outcomeReference$strataFile
   for(i in 1:length(strataFile)){
     strata <- readRDS(strataFile[i])
+    idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
     CohortMethod::plotKaplanMeier(strata,
                                   includeZero = FALSE,
-                                  fileName = file.path(exportFolder, paste0("KaplanMeier",i,".png")))
+                                  fileName = file.path(exportFolder, paste0("KaplanMeier",idx,".png")))
   }
   
   ### Main outcome models ###
@@ -103,12 +110,13 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     outcomeModel <- readRDS(outcomeModelFile[i])
     if (outcomeModel$outcomeModelStatus == "OK") {
       model <- CohortMethod::getOutcomeModel(outcomeModel, cohortMethodData[[i]])
-      write.csv(model, file.path(exportFolder, paste0("OutcomeModel",i,".csv")), row.names = FALSE)
+      idx<-paste0("t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
+      write.csv(model, file.path(exportFolder, paste0("OutcomeModel",idx,".csv")), row.names = FALSE)
     }
   }
   
   ### create Tables and Figures
-  HypertensionCombination::createTableAndFigures(exportFolder)
+  HypertensionCombination::createTableAndFigures(exportFolder, cmOutputFolder)
   
   ### Add all to zip file ###
   zipName <- file.path(exportFolder, "StudyResults.zip")

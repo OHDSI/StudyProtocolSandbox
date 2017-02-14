@@ -13,68 +13,86 @@ createAnalysesDetails <- function(outputFolder) {
                     AD=14)
   comparatorset <- list(BC=23,
                         AC=13)
-  outcomeset <- c(124)
+  
+  outcomeset <- c(4320,4321, 420, 421, 0,1,2,3,4) 
+  #composite + any death / composite + cardiocerebral death / stroke+MI+any death / stroke+MI+cc death/ any death/ cc death/MI/HF/STROKE
+  
   dcos1 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
                                                      comparatorId = 13,
                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                      outcomeIds = outcomeset)
+  dcos1<-list(dcos1)
   dcos2 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
                                                      comparatorId = 14,
                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                      outcomeIds = outcomeset)
+  dcos2<-list(dcos2)
   dcos3 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
                                                       comparatorId = 23,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos3<-list(dcos3)
   dcos4 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
                                                       comparatorId = 24,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos4<-list(dcos4)
   dcos5 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
                                                       comparatorId = 34,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos5<-list(dcos5)
   dcos6 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
                                                       comparatorId = 14,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos6<-list(dcos6)
   dcos7 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
                                                       comparatorId = 23,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos7<-list(dcos7)
   dcos8 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
                                                       comparatorId = 24,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos8<-list(dcos8)
   dcos9 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
                                                       comparatorId = 34,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos9<-list(dcos9)
   dcos10 <- CohortMethod::createDrugComparatorOutcomes(targetId = 14,
                                                       comparatorId = 23,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos10<-list(dcos10)
   dcos11 <- CohortMethod::createDrugComparatorOutcomes(targetId = 14,
                                                       comparatorId = 24,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos11<-list(dcos11)
   dcos12 <- CohortMethod::createDrugComparatorOutcomes(targetId = 14,
                                                       comparatorId = 34,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos12<-list(dcos12)
   dcos13 <- CohortMethod::createDrugComparatorOutcomes(targetId = 23,
                                                       comparatorId = 24,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos13<-list(dcos13)
   dcos14 <- CohortMethod::createDrugComparatorOutcomes(targetId = 23,
                                                       comparatorId = 34,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
+  dcos14<-list(dcos14)
   dcos15 <- CohortMethod::createDrugComparatorOutcomes(targetId = 24,
                                                       comparatorId = 34,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
-  drugComparatorOutcomesList <- list(dcos1,dcos2,dcos3,dcos4,dcos5,dcos6,dcos7,dcos8,dcos9,dcos10,dcos11,dcos12,dcos13,dcos14,dcos15)
+  dcos15<-list(dcos15)
+  drugComparatorOutcomesList <- c(dcos1,dcos2,dcos3,dcos4,dcos5,dcos6,dcos7,dcos8,dcos9,dcos10,dcos11,dcos12,dcos13,dcos14,dcos15)
   
   covarSettings <- FeatureExtraction::createCovariateSettings(useCovariateDemographics = TRUE,
                                                               useCovariateDemographicsGender = TRUE,
@@ -92,14 +110,14 @@ createAnalysesDetails <- function(outputFolder) {
                                                               useCovariateConditionEraOverlap = FALSE,
                                                               useCovariateConditionGroup = TRUE,
                                                               useCovariateConditionGroupMeddra = TRUE,
-                                                              useCovariateConditionGroupSnomed = FALSE,
+                                                              useCovariateConditionGroupSnomed = TRUE,
                                                               useCovariateDrugExposure = TRUE, 
                                                               useCovariateDrugExposure365d = TRUE,
                                                               useCovariateDrugExposure30d = TRUE, 
                                                               useCovariateDrugEra = TRUE,
-                                                              useCovariateDrugEra365d = FALSE, 
-                                                              useCovariateDrugEra30d = FALSE,
-                                                              useCovariateDrugEraOverlap = FALSE, 
+                                                              useCovariateDrugEra365d = TRUE, 
+                                                              useCovariateDrugEra30d = TRUE,
+                                                              useCovariateDrugEraOverlap = TRUE, 
                                                               useCovariateDrugEraEver = TRUE,
                                                               useCovariateDrugGroup = TRUE, 
                                                               useCovariateProcedureOccurrence = TRUE,
@@ -157,7 +175,7 @@ createAnalysesDetails <- function(outputFolder) {
                                                                                     startingVariance = 0.01,
                                                                                     threads = 1))
 
-  matchOnPsArgs1 <- CohortMethod::createMatchOnPsArgs(caliper = 0.01,
+  matchOnPsArgs1 <- CohortMethod::createMatchOnPsArgs(caliper = 0.25,
                                                       caliperScale = "standardized",
                                                       maxRatio = 1.0)
 

@@ -5171,7 +5171,7 @@ GROUP BY SUBJECT_ID;
 @outcome_precohort_table
 
 @target_cohort_id
-0 (cardio-cerebral death)
+0 (any death)
 */
 
 select row_number() over (order by P.person_id, P.start_date) as event_id, P.person_id, P.start_date, P.end_date, OP.observation_period_start_date as op_start_date, OP.observation_period_end_date as op_end_date
@@ -5909,11 +5909,23 @@ DROP TABLE #codesets;
 --IF OBJECT_ID('@resultsDatabaseSchema.@outcomeTable', 'U') IS NULL
 CREATE TABLE @resultsDatabaseSchema.@outcomeTable(cohort_definition_id INT, subject_id INT, cohort_start_date DATE, cohort_end_date DATE);
 
---HF+MI+STROKE+DEATH : 1234
-DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 1234;
+--HF+MI+STROKE+Any DEATH : 4320
+DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 4320;
 
 INSERT INTO @resultsDatabaseSchema.@outcomeTable
-SELECT 1234 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
+SELECT 4320 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
+FROM #precohort
+	WHERE COHORT_DEFINITION_ID = 0
+	   OR COHORT_DEFINITION_ID = 2
+	   OR COHORT_DEFINITION_ID = 3
+	   OR COHORT_DEFINITION_ID = 4
+GROUP BY SUBJECT_ID;
+
+--HF+MI+STROKE+Cardiovascular DEATH : 4321
+DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 4321;
+
+INSERT INTO @resultsDatabaseSchema.@outcomeTable
+SELECT 4321 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
 FROM #precohort
 	WHERE COHORT_DEFINITION_ID = 1
 	   OR COHORT_DEFINITION_ID = 2
@@ -5921,25 +5933,77 @@ FROM #precohort
 	   OR COHORT_DEFINITION_ID = 4
 GROUP BY SUBJECT_ID;
 
-DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 124;
---MI+STROKE+cardio cerebral DEATH : 240
+
+
+--MI+STROKE+any DEATH : 420
+DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 420
+
 INSERT INTO @resultsDatabaseSchema.@outcomeTable
-SELECT 240 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
+SELECT 420 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
 FROM #precohort
 	WHERE COHORT_DEFINITION_ID = 0
 	   OR COHORT_DEFINITION_ID = 2
 	   OR COHORT_DEFINITION_ID = 4
 GROUP BY SUBJECT_ID;
 
---MI+STROKE+cardio cerebral DEATH : 124
+--MI+STROKE+cardio cerebral DEATH : 421
+DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 421
+
 INSERT INTO @resultsDatabaseSchema.@outcomeTable
-SELECT 124 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
+SELECT 421 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
 FROM #precohort
 	WHERE COHORT_DEFINITION_ID = 1
 	   OR COHORT_DEFINITION_ID = 2
 	   OR COHORT_DEFINITION_ID = 4
 GROUP BY SUBJECT_ID;
 
+--Any death : 0
+DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 0
+
+INSERT INTO @resultsDatabaseSchema.@outcomeTable
+SELECT 0 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
+FROM #precohort
+	WHERE COHORT_DEFINITION_ID = 0
+GROUP BY SUBJECT_ID;
+
+--Cardio-cerebral death : 1
+DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 1
+
+INSERT INTO @resultsDatabaseSchema.@outcomeTable
+SELECT 1 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
+FROM #precohort
+	WHERE COHORT_DEFINITION_ID = 1
+GROUP BY SUBJECT_ID;
+
+
+--MI : 2
+DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 2
+
+INSERT INTO @resultsDatabaseSchema.@outcomeTable
+SELECT 2 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
+FROM #precohort
+	WHERE COHORT_DEFINITION_ID = 2
+GROUP BY SUBJECT_ID;
+
+--HF : 3
+DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 3
+
+INSERT INTO @resultsDatabaseSchema.@outcomeTable
+SELECT 3 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
+FROM #precohort
+	WHERE COHORT_DEFINITION_ID = 3
+GROUP BY SUBJECT_ID;
+
+--STROKE : 4
+DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 4
+
+INSERT INTO @resultsDatabaseSchema.@outcomeTable
+SELECT 4 AS cohort_definition_id, subject_id, min(cohort_start_date) as cohort_start_date, max(cohort_end_date) as cohort_end_date
+FROM #precohort
+	WHERE COHORT_DEFINITION_ID = 4
+GROUP BY SUBJECT_ID;
+
 
 TRUNCATE TABLE #precohort;
 DROP TABLE #precohort;
+
