@@ -67,7 +67,7 @@ fetchAllDataFromServer <- function(connectionDetails = connectionDetails,
 
     exists <- studyCohortTable%in%DatabaseConnector::getTableNames(conn, workDatabaseSchema)
 
-    if(is.na(exists)){
+    if(!exists){
         flog.info('Creating work cohort table')
         sql <- "create table @target_database_schema.@target_cohort_table(cohort_definition_id bigint, subject_id bigint, cohort_start_date datetime, cohort_end_date datetime)"
         sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
