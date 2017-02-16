@@ -73,6 +73,6 @@ How to run
 
 5. Upload the file ```export/<dbName>-studyResult.zip``` in the export folder to the study coordinator:
     ```r
-    submitResults("c:/temp/study_results/export", dbName = "<name>", key = "<key>", secret = "<secret>")
+    submitResults(workFolder, dbName = "<name>", key = "<key>", secret = "<secret>")
     ```
     Where ```dbName``` is the name of your database, ```key``` and ```secret``` are the credentials provided to you personally by the study coordinator.
