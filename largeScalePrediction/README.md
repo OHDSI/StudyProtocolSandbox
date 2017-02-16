@@ -52,8 +52,14 @@ How to run
     fitAllPredictionModels(workFolder)
     
     createSummary(workFolder)
+    
+    * The results can be zipped using the following comment:
+    
+    packageResults(workFolder = workFolder.
+                   dbName="<name>")
 	```
-
+	* ```dbName``` is added to name of the zipfile.
+	
 	* For details on how to configure```createConnectionDetails``` in your environment type this for help:
 	```r
 	?createConnectionDetails
@@ -65,8 +71,8 @@ How to run
 
 	* ```cdmVersion``` is the version of the CDM. Can be "4" or "5".
 
-5. Upload the file ```export/studyResult.zip``` in the output folder to the study coordinator:
+5. Upload the file ```export/<dbName>-studyResult.zip``` in the export folder to the study coordinator:
     ```r
-    submitResults("c:/temp/study_results/export", key = "<key>", secret = "<secret>")
+    submitResults("c:/temp/study_results/export", dbName = "<name>", key = "<key>", secret = "<secret>")
     ```
-    Where ```key``` and ```secret``` are the credentials provided to you personally by the study coordinator.
+    Where ```dbName``` is the name of your database, ```key``` and ```secret``` are the credentials provided to you personally by the study coordinator.

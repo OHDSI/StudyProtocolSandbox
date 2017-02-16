@@ -21,4 +21,3 @@ For each outcome the population of people who fit the prediction criteria are fo
 and the people who have the outcome during the year after the 'at risk' cohort are
 identified
 }
-

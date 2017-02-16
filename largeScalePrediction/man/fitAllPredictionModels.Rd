@@ -20,4 +20,3 @@ This function creates the models for each classifier for all outcomes
 The patient level prediction RunPlp function is called for each outcome to train
 each classifier
 }
-

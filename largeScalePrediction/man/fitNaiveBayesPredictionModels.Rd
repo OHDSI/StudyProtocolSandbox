@@ -20,4 +20,3 @@ This function creates the naive bayes models for all outcomes
 The patient level prediction RunPlp function is called for each outcome to train
 a naive bayes model
 }
-

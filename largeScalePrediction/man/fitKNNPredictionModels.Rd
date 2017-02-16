@@ -20,4 +20,3 @@ This function creates the K-nearest neighbours models for all outcomes
 The patient level prediction RunPlp function is called for each outcome to train
 a K-nearest neighbours model
 }
-

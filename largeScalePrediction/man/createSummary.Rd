@@ -19,4 +19,3 @@ This function creates a csv summarising all the model results
 \details{
 Searching through the directory to extract the model evaluation for each model
 }
-

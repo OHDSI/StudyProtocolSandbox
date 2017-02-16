@@ -20,4 +20,3 @@ This function creates the lasso regularised logistic models for all outcomes
 The patient level prediction RunPlp function is called for each outcome to train
 a lasso regularised logistic regression model
 }
-

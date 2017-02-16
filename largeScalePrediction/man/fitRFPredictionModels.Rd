@@ -20,4 +20,3 @@ This function creates the random forest models for all outcomes
 The patient level prediction RunPlp function is called for each outcome to train
 a random forest model
 }
-

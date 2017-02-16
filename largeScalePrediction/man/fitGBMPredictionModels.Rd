@@ -20,4 +20,3 @@ This function creates the gradient boosting machine models for all outcomes
 The patient level prediction RunPlp function is called for each outcome to train
 a gradient boosting machine model
 }
-

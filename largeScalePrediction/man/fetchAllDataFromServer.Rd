@@ -45,4 +45,3 @@ This function creates the 'at risk' and 'outcome' cohorts using files saved in t
  workDatabaseSchema database in the studyCohortTable table and then extracts the plpData
  using these cohorts.
 }
-
