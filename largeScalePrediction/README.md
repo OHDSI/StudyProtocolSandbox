@@ -53,7 +53,7 @@ How to run
     
     createSummary(workFolder)
     
-    * The results can be zipped using the following comment:
+    * The results can be zipped using the following command:
     
     packageResults(workFolder = workFolder.
                    dbName="<name>")
