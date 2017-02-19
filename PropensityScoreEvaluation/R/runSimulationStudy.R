@@ -32,23 +32,10 @@
 #' @export
 runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodData, simulationRuns = 10,  
                                trueEffectSize = NULL, outcomePrevalence = NULL, hdpsFeatures, stratify=FALSE, discrete=FALSE,
-                               ignoreCensoring = FALSE, ignoreCensoringCovariates = FALSE, threads = 10, fudge = .001) {
+                               ignoreCensoring = FALSE, threads = 10, fudge = .001) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
   options("fffinalizer" = "delete")
-  
-  partialCMD = cohortMethodData
-  outcomeId = simulationProfile$outcomeId
-  covariatesToDiscard = simulationSetup$settings$covariatesToDiscard
-  if(!is.null(covariatesToDiscard)) covariatesToDiscard = ff::as.ff(covariatesToDiscard)
-  sampleRowIds = simulationSetup$settings$sampleRowIds
-  
-  studyPop = simulationProfile$studyPop
-  
-  if (!is.null(sampleRowIds)) {
-    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
-  }
-
   estimatesLasso = NULL
   estimatesExpHdps = NULL
   estimatesBiasHdps = NULL
@@ -58,25 +45,30 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   aucBiasHdps = NULL
   aucRandom = NULL
   
-  psLasso = simulationSetup$psLasso
-  if (!is.null(sampleRowIds)) psLasso = psLasso[match(sampleRowIds, psLasso$rowId),]
-  aucLasso = computePsAuc(psLasso)
-  if (stratify) strataLasso=stratifyByPs(psLasso,10) else strataLasso=matchOnPs(psLasso)
-  
-  psRandom = psLasso
-  psRandom$propensityScore = runif(nrow(psRandom),0,1)
-  aucRandom = computePsAuc(psRandom)
-  if (stratify) strataRandom=stratifyByPs(psRandom,10) else strataRandom=matchOnPs(psRandom)
-  
-  if (is.null(trueEffectSize)) trueEffectSize = simulationProfile$observedEffectSize
-  
+  outcomeId = simulationProfile$outcomeId
   sData = simulationProfile$sData
-  if (!is.null(sampleRowIds)) sData$XB = sData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), sData$XB$rowId),]
-  sData$XB = insertEffectSize(sData$XB, trueEffectSize, ff::as.ffdf(partialCMD$cohorts))
   cData = simulationProfile$cData
-  if (!is.null(sampleRowIds)) cData$XB = cData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), cData$XB$rowId),]
+  covariatesToDiscard = simulationSetup$settings$covariatesToDiscard
+  sampleRowIds = simulationSetup$settings$sampleRowIds
+  studyPop = simulationProfile$studyPop
+  partialCMD = cohortMethodData
+  
+  # modify confounding and sample size
+  if(!is.null(covariatesToDiscard)) {
+    partialCMD = removeCovariates(partialCMD, ff::as.ff(covariatesToDiscard))
+  }
+  
+  if (!is.null(sampleRowIds)) {
+    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+    sData$XB = sData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), sData$XB$rowId),]
+    partialCMD = removeSubjects(partialCMD, sampleRowIds)
+  }
+
+  # insert true effect size
+  if (is.null(trueEffectSize)) trueEffectSize = simulationProfile$observedEffectSize
+  sData$XB = insertEffectSize(sData$XB, trueEffectSize, ff::as.ffdf(partialCMD$cohorts))
+  # ignore censoring
   if (ignoreCensoring) cData$baseline = ff::as.ff(rep(1, length(cData$baseline)))
-  if (ignoreCensoringCovariates) cData$XB$exb = ff::as.ff(rep(1, nrow(cData$XB)))
   
   # set new outcome prevalence
   if (!is.null(outcomePrevalence)) {
@@ -88,7 +80,6 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   }
 
   # create hdps PS
-  partialCMD = removeCovariates(partialCMD, covariatesToDiscard)
   cmd = simulateCMD(partialCMD, sData, cData, outcomeId, discrete = discrete)
   if (hdpsFeatures == TRUE) {
     hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = fudge)
@@ -96,22 +87,20 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
     hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = fudge)
   }
   
-  psExpConverge = TRUE
-  psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop, prior = createPrior(priorType = "none"), stopOnError = FALSE)
-  if(is.null(attr(psExp, "metaData")$psError)){
-    psExp = psExp[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
-  } else {
-    writeLines(paste("exposure based hdps propensity score error:", attr(psExp, "metaData")$psError))
-    psExp = psExp[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
-    psExp$propensityScore <- NA
-    psExpConverge = FALSE
-  } 
-  if(psExpConverge) {
-    aucExpHdps = computePsAuc(psExp)
-    if (stratify) strataExp=stratifyByPs(psExp,10) else strataExp=matchOnPs(psExp)
-  }
-  # strataExp = stratifyByPs(psExp)
+  # handle propensity scores
+  psLasso = simulationSetup$psLasso
+  aucLasso = computePsAuc(psLasso)
+  if (stratify) strataLasso=stratifyByPs(psLasso,10) else strataLasso=matchOnPs(psLasso)
   
+  psRandom = psLasso
+  psRandom$propensityScore = runif(nrow(psRandom),0,1)
+  aucRandom = computePsAuc(psRandom)
+  if (stratify) strataRandom=stratifyByPs(psRandom,10) else strataRandom=matchOnPs(psRandom)
+  
+  psExp = simulationSetup$psExp
+  aucExpHdps = computePsAuc(psExp)
+  if (stratify) strataExp=stratifyByPs(psExp,10) else strataExp=matchOnPs(psExp)
+
   psBiasPermanent = psLasso
   psBiasPermanent$propensityScore = 0
   psBiasPermanent$preferenceScore = 0
@@ -157,7 +146,6 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
     estimatesRandom = rbind(outcomeModelRandom$outcomeModelTreatmentEstimate, estimatesRandom)
     
     # calculate outcomes for exp hdps
-    if(psExpConverge) {
     popExp = merge(studyPopNew, strataExp[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
     outcomeModelExp <- fitOutcomeModel(population = popExp,
                                        cohortMethodData = cmd,
@@ -165,7 +153,6 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
                                        stratified = TRUE,
                                        useCovariates = FALSE)
     estimatesExpHdps = rbind(outcomeModelExp$outcomeModelTreatmentEstimate, estimatesExpHdps)
-    }
     
     # calculate outcomes for bias hdps
     psBias = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = createPrior(priorType = "none"), stopOnError = FALSE)
@@ -215,41 +202,37 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
               estimatesExpHdps = estimatesExpHdps,
               estimatesBiasHdps = estimatesBiasHdps,
               estimatesRandom = estimatesRandom,
-              psExpConverge = psExpConverge,
               biasErrorCount = biasErrorCount,
               noOutcomeCount = noOutcomeCount,
               ps = ps))
 }
 
 #' @export
-setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidation = TRUE, confoundingScheme = 0, confoundingProportion = NA, sampleSize = NA, threads = 10) {
-  partialCMD = cohortMethodData
+setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidation = TRUE, confoundingProportion = NA, sampleSize = NA, threads = 10, hdpsFeatures) {
   studyPop = simulationProfile$studyPop
   
-  sampleRowIds = NULL
-  if (!is.na(sampleSize)) {
-    sampleRowIds = sample(studyPop$rowId, sampleSize)
-    sampleRowIds = sampleRowIds[order(sampleRowIds)]
-    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
-  }
-  
+  expHdpsError = 1
+  biasHdpsError = 1
   covariatesToDiscard = NULL
-  if (confoundingScheme == 0) {
-    covariatesToDiscard = NULL
+  sampleRowIds = NULL
+  while((expHdpsError==1) | (biasHdpsError==1)) {
+    test = testConvergence(cohortMethodData=cohortMethodData, simulationProfile=simulationProfile,  
+                           confoundingProportion=confoundingProportion, sampleSize=sampleSize, hdpsFeatures=hdpsFeatures, runs = 1)
+    expHdpsError = test$expHdpsError
+    biasHdpsError = test$biasHdpsError
+    covariatesToDiscard = test$covariatesToDiscard
+    sampleRowIds = test$sampleRowIds
   }
-  if (confoundingScheme == 1) {
-    covariatesToDiscard = partialCMD$covariateRef$covariateId[in.ff(partialCMD$covariateRef$analysisId, ff::as.ff(c(2,3,5,6)))]
+  if (!is.null(sampleRowIds)) {
+    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+    cohortMethodData = removeSubjects(cohortMethodData, sampleRowIds)
   }
-  if (confoundingScheme == 2) {
-    covariatesToDiscard = ff::as.ff(sample(partialCMD$covariateRef$covariateId[], round(nrow(partialCMD$covariateRef)*(confoundingProportion))))
-  }
-  if (confoundingScheme == 3) {
-    covariatesToDiscard = ff::as.ff(unique(c(partialCMD$covariateRef$covariateId[in.ff(partialCMD$covariateRef$analysisId, ff::as.ff(c(2,3,5,6)))],
-                                             ff::as.ff(sample(partialCMD$covariateRef$covariateId[], round(nrow(partialCMD$covariateRef)*(confoundingProportion)))))))
+  if (!is.null(covariatesToDiscard)) {
+    cohortMethodData = removeCovariates(cohortMethodData, ff::as.ff(covariatesToDiscard))
   }
   
   # create lasso PS
-  psLasso = createPs(cohortMethodData = removeCovariates(partialCMD, covariatesToDiscard), 
+  psLasso = createPs(cohortMethodData = cohortMethodData, 
                      population = studyPop, 
                      prior = Cyclops::createPrior("laplace", exclude = c(), useCrossValidation = useCrossValidation),
                      control = createControl(noiseLevel = "silent",
@@ -259,32 +242,31 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
                                              startingVariance = 0.01,
                                              threads = threads))#[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
   
-  settings = list(confoundingScheme = confoundingScheme,
-                  confoundingProportion = confoundingProportion,
-                  covariatesToDiscard = covariatesToDiscard[],
+  settings = list(confoundingProportion = confoundingProportion,
+                  covariatesToDiscard = covariatesToDiscard,
                   sampleSize = sampleSize,
                   sampleRowIds = sampleRowIds,
                   outcomeId = simulationProfile$outcomeId)
   
   return(list(settings = settings,
-              psLasso = psLasso))
+              psLasso = psLasso,
+              psExp = test$psExp))
 }
 
 #' @export
-setUpSimulations <- function(simulationProfile, cohortMethodData, confoundingSchemeList, confoundingProportionList, 
-                             useCrossValidation = TRUE, sampleSizeList, outputFolder, threads = 10) {
+setUpSimulations <- function(simulationProfile, cohortMethodData, confoundingProportionList, 
+                             useCrossValidation = TRUE, sampleSizeList, outputFolder, threads = 10, hdpsFeatures) {
   if (!file.exists(outputFolder)) dir.create(outputFolder)
-  settings = list(confoundingSchemeList = confoundingSchemeList,
-                  confoundingProportionList = confoundingProportionList,
+  settings = list(confoundingProportionList = confoundingProportionList,
                   sampleSizeList = sampleSizeList)
   saveRDS(settings, file = file.path(outputFolder, "settings.rds"))
   
   #results = list(settings = settings, simulationSetups = rep(list(rep(list(NA), length(trueEffectSizeList))), length(confoundingSchemeList)))
-  for (i in 1:length(confoundingSchemeList)) {
+  for (i in 1:length(confoundingProportionList)) {
     for (j in 1:length(sampleSizeList)) {
-      temp = setUpSimulation(simulationProfile, cohortMethodData, confoundingScheme = confoundingSchemeList[[i]],
+      temp = setUpSimulation(simulationProfile, cohortMethodData,
                              confoundingProportion = confoundingProportionList[[i]],
-                             useCrossValidation = useCrossValidation, sampleSize = sampleSizeList[[j]], threads = threads)
+                             useCrossValidation = useCrossValidation, sampleSize = sampleSizeList[[j]], threads = threads, hdpsFeatures = hdpsFeatures)
       #results$simulationStudies[[i]][[j]][[k]] = temp
       saveSimulationSetup(temp, file = file.path(outputFolder, paste("c", i, "_s", j, sep="")))
     }
@@ -300,6 +282,7 @@ saveSimulationSetup <- function(simulationSetup, file) {
   if (!file.exists(file)) dir.create(file)
   saveRDS(simulationSetup$settings, file = file.path(file, "settings.rds"))
   saveRDS(simulationSetup$psLasso, file = file.path(file, "psLasso.rds"))
+  saveRDS(simulationSetup$psExp, file = file.path(file, "psExp.rds"))
 }
 
 #' @export
@@ -310,19 +293,18 @@ loadSimulationSetup <- function(file) {
     stop(paste("Not a folder", file))
   settings = readRDS(file.path(file, "settings.rds"))
   psLasso = readRDS(file.path(file, "psLasso.rds"))
+  psExp = readRDS(file.path(file, "psExp.rds"))
   return(list(settings = settings,
-              psLasso = psLasso))
+              psLasso = psLasso,
+              psExp = psExp))
 }
 
 #' @export
-runSimulationStudies <- function(simulationProfile, cohortMethodData, simulationSetup = NULL, simulationRuns = 10, trueEffectSizeList, 
-                                 outcomePrevalenceList, hdpsFeatures, stratify=FALSE, discrete=FALSE, simulationSetupFolder = NULL, outputFolder) {
+runSimulationStudies <- function(simulationProfile, cohortMethodData, simulationRuns = 10, trueEffectSizeList, 
+                                 outcomePrevalenceList, hdpsFeatures, stratify=FALSE, discrete=FALSE, simulationSetupFolder = NULL, outputFolder, threads=10) {
   if (!file.exists(outputFolder)) dir.create(outputFolder)
-  if (is.null(simulationSetup)) {
-    simulationSetup = loadSimulationSetup(simulationSetupFolder)
-  } else {
-    simulationSetupFolder = ""
-  }
+  simulationSetup = loadSimulationSetup(simulationSetupFolder)
+  
   settings = simulationSetup$settings
   settings$trueEffectSizeList = trueEffectSizeList
   settings$outcomePrevalenceList = outcomePrevalenceList
@@ -335,9 +317,9 @@ runSimulationStudies <- function(simulationProfile, cohortMethodData, simulation
   results = list(settings = settings, simulationStudies = rep(list(rep(list(NA), length(outcomePrevalenceList))), length(trueEffectSizeList)))
   for (i in 1:length(trueEffectSizeList)) {
     for (j in 1:length(outcomePrevalenceList)) {
-        temp = runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, cohortMethodData = cohortMethodData, simulationRuns = simulationRuns, 
+        temp = runSimulationStudy(simulationProfile = simulationProfile, simulationSetup = simulationSetup, cohortMethodData = cohortMethodData, simulationRuns = simulationRuns, 
                                   trueEffectSize = trueEffectSizeList[[i]], outcomePrevalence = outcomePrevalenceList[[j]], hdpsFeatures = hdpsFeatures,
-                                  stratify = stratify, discrete = discrete)
+                                  stratify = stratify, discrete = discrete, threads = threads)
         results$simulationStudies[[i]][[j]] = temp
         saveSimulationStudy(temp, file = file.path(outputFolder, paste(basename(simulationSetupFolder), "_t", i, "_o", j, sep="")))
       }
@@ -379,7 +361,6 @@ saveSimulationStudy <- function(simulationStudy, file) {
   saveRDS(simulationStudy$estimatesExpHdps, file = file.path(file, "estimatesExpHdps.rds"))
   saveRDS(simulationStudy$estimatesBiasHdps, file = file.path(file, "estimatesBiasHdps.rds"))
   saveRDS(simulationStudy$estimatesRandom, file = file.path(file, "estimatesRandom.rds"))
-  saveRDS(simulationStudy$psExpConverge, file = file.path(file, "psExpConverge.rds"))
   saveRDS(simulationStudy$biasErrorCount, file = file.path(file, "biasErrorCount.rds"))
   saveRDS(simulationStudy$noOutcomeCount, file = file.path(file, "noOutcomeCount.rds"))
   saveRDS(simulationStudy$ps, file = file.path(file, "ps.rds"))
@@ -396,7 +377,6 @@ loadSimulationStudy <- function(file, readOnly = TRUE) {
   estimatesExpHdps = readRDS(file.path(file, "estimatesExpHdps.rds"))
   estimatesBiasHdps = readRDS(file.path(file, "estimatesBiasHdps.rds"))
   estimatesRandom = readRDS(file.path(file, "estimatesRandom.rds"))
-  psExpConverge = readRDS(file.path(file, "psExpConverge.rds"))
   biasErrorCount = readRDS(file.path(file, "biasErrorCount.rds"))
   noOutcomeCount = readRDS(file.path(file, "noOutcomeCount.rds"))
   ps = readRDS(file.path(file, "ps.rds"))
@@ -405,10 +385,63 @@ loadSimulationStudy <- function(file, readOnly = TRUE) {
                 estimatesExpHdps = estimatesExpHdps,
                 estimatesBiasHdps = estimatesBiasHdps,
                 estimatesRandom = estimatesRandom,
-                psExpConverge = psExpConverge,
                 biasErrorCount = biasErrorCount,
                 noOutcomeCount = noOutcomeCount,
                 ps = ps)
   return(result)
+}
+
+#' @export
+testConvergence <- function(cohortMethodData, simulationProfile, confoundingProportion=NA, sampleSize=NA, hdpsFeatures, runs = 1) {
+  studyPop = simulationProfile$studyPop
+  outcomeId = simulationProfile$outcomeId
+  modelCovariates = as.numeric(names(simulationProfile$outcomeModelCoefficients))
+  zeroCovariates = modelCovariates[which(modelCovariates==0)]
+  nonzeroCovariates = modelCovariates[which(modelCovariates!=0)]
+  n = length(zeroCovariates)
+  m = length(nonzeroCovariates)
+  expHdpsError = 0
+  biasHdpsError = 0
+  sampleRowIds = NULL
+  covariatesToDiscard = NULL
+  
+  for (i in 1:runs) {
+    cmd = cohortMethodData
+    if (!is.na(sampleSize)) {
+      sampleRowIds = sample(studyPop$rowId, sampleSize)
+      sampleRowIds = sampleRowIds[order(sampleRowIds)]
+      studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+      cmd = removeSubjects(cohortMethodData, sampleRowIds)
+    }
+    if(!is.na(confoundingProportion)) {
+      covariatesToDiscard = c(sample(zeroCovariates, ceiling(n*confoundingProportion)), sample(nonzeroCovariates, ceiling(m*confoundingProportion)))
+      cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
+    }
+    
+    if (hdpsFeatures == TRUE) {
+      hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+      hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
+    } else {
+      hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+      hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE)
+    }
+    
+    psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop, prior = createPrior(priorType = "none"), stopOnError = FALSE)
+    if(!is.null(attr(psExp, "metaData")$psError)){
+      expHdpsError = expHdpsError+1
+    }
+    
+    psBias = createPs(cohortMethodData = hdpsBias, population = studyPop, prior = createPrior(priorType = "none"), stopOnError = FALSE)
+    if(!is.null(attr(psBias, "metaData")$psError)){
+      biasHdpsError = biasHdpsError+1
+    }
+  }
+  
+  return(list(expHdpsError = expHdpsError,
+              biasHdpsError = biasHdpsError,
+              covariatesToDiscard = covariatesToDiscard,
+              sampleRowIds = sampleRowIds,
+              psExp = psExp,
+              psBias = psBias))
 }
 

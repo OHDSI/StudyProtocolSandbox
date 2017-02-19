@@ -16,7 +16,7 @@ install_github("ohdsi/CohortMethod", ref = "hdps_clean")
 ```
 
 Obtain a CohortMethodData object. Calls functions in CohortMethod.
-Currently uses single studies vignette as an example.
+Currently uses single studies vignette as an example. Using any existing CohortMethodData object is ok as well.
 
 ```{r}
 library(PropensityScoreEvaluation)
@@ -47,8 +47,8 @@ hdpsCovariates = hdpsCovariates)
 Create study population and simulation profile
 
 ```{r}
-# for testing purposes can turn off cross-validation to get things running faster in 
-# createCMDSimulationProfile and setUpSimulation by setting useCrossValidation = FALSE
+# defaults to cross-validation to find Lasso hyperparameter with useCrossValidation = TRUE
+# set useCrossValidation = FALSE and specify a priorVariance to use a specific variance
 
 studyPop <- createStudyPopulation(cohortMethodData = cohortMethodData,
 outcomeId = outcomeId,
@@ -62,22 +62,21 @@ addExposureDaysToStart = FALSE,
 riskWindowEnd = 30,
 addExposureDaysToEnd = TRUE)
 
-simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop = studyPop, outcomeId = outcomeId, useCrossValidation = TRUE)
+simulationProfile <- createCMDSimulationProfile(cohortMethodData, studyPop = studyPop, outcomeId = outcomeId, useCrossValidation = FALSE, priorVariance = 1)
 saveSimulationProfile(simulationProfile, file = file)
 simulationProfile <- loadSimulationProfile(file = file)
 ```
 
-The simulation is divided into two steps: a simulation setup step and a run simulation step. The simulation setup calculates the LASSO-regularized propensity score for the specific confounding scheme and sample size desired. The run simulation setup performs the simulation over given values of the true effect size and outcome prevalence. The reason these are separated is because of the high run time of the cross validated propensity score. We save the propensity score so as to calculate it again unnecessarily. 
+The simulation is divided into two steps: a simulation setup step and a run simulation step. The simulation setup step selects unmeasured confounding covariates and a desired sample size, if specified. It also estimates the LASSO-regularized propensity score and exposure based hdPS. The run simulation step simulates event times and estimates propensity score adjusted outcome models.
 
-Confounding schemes (hiding covariates from propensity score models): 0 - no confounding ; 1 - discard demographics ; 2 - discard fraction of covariates ; 3 - discard demographics and fraction of covariates
-
-Confounding proportion: NA - confounding schemes 0 and 1 ; otherwise (schemes 2, 3) a number between 0 and 1
+Confounding proportion: a number between 0 and 1 of fraction of covariates to discard in propensity score estimation. Set NA for no confounding
   
 Sample size: NA - use full cohort ; otherwise - use given size (should be smaller than size of full cohort)
 
 ```{r}
-simulationSetup <- setUpSimulation(simulationProfile, cohortMethodData, useCrossValidation = TRUE, confoundingScheme = 0,
-                                    confoundingProportion = NA, sampleSize = NA)
+# can turn off cross validation to specify specific variance in L1 regularized propensity score
+simulationSetup <- setUpSimulation(simulationProfile, cohortMethodData, useCrossValidation = TRUE, 
+                                    confoundingProportion = NA, sampleSize = NA, hdpsFeatures = hdpsFeatures)
 
 saveSimulationSetup(simulationSetup, file = file)
 loadSimulationSetup(file = file)
@@ -86,21 +85,21 @@ loadSimulationSetup(file = file)
 We can create simulation setups en masse:
 
 ```{r}
-confoundingSchemeList <- c(0,2)
 confoundingProportionList <- c(NA, 0.25)
 sampleSizeList <- c(NA, 5000)
 outputFolder <- outputFolder
 
-setUpSimulations(simulationProfile, cohortMethodData, confoundingSchemeList, confoundingProportionList,
-                  useCrossValidation = TRUE, sampleSizeList, outputFolder)
+setUpSimulations(simulationProfile, cohortMethodData, confoundingProportionList,
+                  useCrossValidation = TRUE, sampleSizeList, outputFolder, hdpsFeatures = hdpsFeatures)
 ```
-For each simulation setup, we can run simulations for given true effect size and outcome prevalence.
+For each simulation setup, we can run simulations for given true effect size and outcome prevalence with `runSimulationStudy`.
 
-For each simulation setup, we can also run a combination of effect sizes and outcome prevalences with runSimulationStudies. Note that in this case only one of simulationSetup or simulationSetupFolder should be given. It will either use the given setup or load from file.
+For each simulation setup, we can also run a list of effect sizes and outcome prevalences with `runSimulationStudies`. This needs the folder name for a saved simulation setup.
 
 ``` {r}
-
-simulationStudy <- runSimulationStudy(simulationProfile, simulationSetup = simulationSetup, cohortMethodData = cohortMethodData, simulationRuns = 10, 
+# Defaults to 1-1 propensity score matching. Can use 10-fold stratification with `stratify = TRUE`
+# Defaults to smoothed baseline hazard estimators. Can use discrete baseline estimators with `discrete = TRUE`
+simulationStudy <- runSimulationStudy(simulationProfile = simulationProfile, simulationSetup = simulationSetup, cohortMethodData = cohortMethodData, simulationRuns = 10, 
                                       trueEffectSize = 1.0, outcomePrevalence = 0.05, hdpsFeatures = hdpsFeatures)
                                       
 trueEffectSizeList <- c(log(1), log(1.5), log(2), log(4))
@@ -108,9 +107,9 @@ outcomePrevalenceList <- c(0.001, 0.01, 0.05)
 simulationSetupFolder <- simulationSetupFolder
 outputFolder <- outputFolder
 
-simulationStudies <- runSimulationStudies(simulationProfile, cohortMethodData, simulationSetup = NULL, simulationRuns = 100,
-                                          trueEffectSizeList, outcomePrevalenceList, hdpsFeatures,
-                                          simulationSetupFolder = simulationSetupFolder, outputFolder)
+simulationStudies <- runSimulationStudies(simulationProfile, cohortMethodData, simulationRuns = 100,
+                                          trueEffectSizeList=trueEffectSizeList, outcomePrevalenceList=outcomePrevalenceList, hdpsFeatures=hdpsFeatures,
+                                          simulationSetupFolder = simulationSetupFolder, outputFolder=outputFolder)
 
 simulationStudies <- loadSimulationStudies(outputFolder)
 ```
