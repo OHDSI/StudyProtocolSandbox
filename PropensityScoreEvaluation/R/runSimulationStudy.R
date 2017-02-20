@@ -410,7 +410,7 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
     if (!is.na(sampleSize)) {
       sampleRowIds = sample(studyPop$rowId, sampleSize)
       sampleRowIds = sampleRowIds[order(sampleRowIds)]
-      studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+      studyPop1 = studyPop[match(sampleRowIds, studyPop$rowId),]
       cmd = removeSubjects(cohortMethodData, sampleRowIds)
     }
     if(!is.na(confoundingProportion)) {
@@ -426,12 +426,12 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
       hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE)
     }
     
-    psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop, prior = createPrior(priorType = "none"), stopOnError = FALSE)
+    psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop1, prior = createPrior(priorType = "none"), stopOnError = FALSE)
     if(!is.null(attr(psExp, "metaData")$psError)){
       expHdpsError = expHdpsError+1
     }
     
-    psBias = createPs(cohortMethodData = hdpsBias, population = studyPop, prior = createPrior(priorType = "none"), stopOnError = FALSE)
+    psBias = createPs(cohortMethodData = hdpsBias, population = studyPop1, prior = createPrior(priorType = "none"), stopOnError = FALSE)
     if(!is.null(attr(psBias, "metaData")$psError)){
       biasHdpsError = biasHdpsError+1
     }
