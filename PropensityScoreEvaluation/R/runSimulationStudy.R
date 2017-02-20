@@ -396,8 +396,8 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
   studyPop = simulationProfile$studyPop
   outcomeId = simulationProfile$outcomeId
   modelCovariates = as.numeric(names(simulationProfile$outcomeModelCoefficients))
-  zeroCovariates = modelCovariates[which(modelCovariates==0)]
-  nonzeroCovariates = modelCovariates[which(modelCovariates!=0)]
+  zeroCovariates = modelCovariates[which(simulationProfile$outcomeModelCoefficients==0)]
+  nonzeroCovariates = modelCovariates[which(simulationProfile$outcomeModelCoefficients!=0)]
   n = length(zeroCovariates)
   m = length(nonzeroCovariates)
   expHdpsError = 0
