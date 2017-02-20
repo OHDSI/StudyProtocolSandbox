@@ -412,6 +412,8 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
       sampleRowIds = sampleRowIds[order(sampleRowIds)]
       studyPop1 = studyPop[match(sampleRowIds, studyPop$rowId),]
       cmd = removeSubjects(cohortMethodData, sampleRowIds)
+    } else {
+      studyPop1 = studyPop
     }
     if(!is.na(confoundingProportion)) {
       covariatesToDiscard = c(sample(zeroCovariates, ceiling(n*confoundingProportion)), sample(nonzeroCovariates, ceiling(m*confoundingProportion)))
