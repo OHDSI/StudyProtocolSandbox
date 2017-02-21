@@ -15,14 +15,14 @@ calculateMetrics <- function(simulationResults, cohortMethodData, stdDiffThresho
 
 calculateMetricsHelper <- function(estimates, cohortMethodData, trueEffectSize, ps, stdDiffThreshold, doBalance) {
   if(is.null(estimates))return(NULL)
-  good = which(abs(estimates$logRr)<10)
+  good = which(!is.na(estimates$seLogRr))
   n = length(good)
   #bias = mean(estimates$logRr[good]) - trueEffectSize
   bias = exp(mean(estimates$logRr[good]))/exp(trueEffectSize) - 1
   sd = sd(estimates$logRr[good]) / sqrt(n)
   rmse = sqrt(bias^2+sd^2)
   coverage = length(which((estimates$logLb95[good] <= trueEffectSize) & (estimates$logUb95[good] >= trueEffectSize))) / n
-  population = matchOnPs(ps)
+  population = matchOnPs(ps, maxRatio = 0)
   beforeHighStdDiff = -1
   afterHighStdDiff = -1
   if(doBalance) {
@@ -82,8 +82,9 @@ calculateMetricsList1 <- function(inFolder, cohortMethodData, dimensions) {
   return(result)
 }
 
-graphMetrics <- function(metricsList, labels) {
-  n = length(metricsList)
+graphMetrics <- function(metrics, labels, o) {
+  metricsList = list(metrics[[1]][[o]],metrics[[2]][[o]],metrics[[3]][[o]],metrics[[4]][[o]])
+  n = 4
   f <- function(x)(combineFunction(x,function(x,y)c(x,y)))
   x = data.frame(
     Method = rep(names(metricsList[[1]])[1:3], n),
@@ -146,45 +147,65 @@ overlap <- function(simulationProfile, cohortMethodData, trueEffectSize, outcome
          biasOverlap = length(which(features1 %in% features3))/length(features1)))
 }
 
-graphMetrics1 <- function(metrics, labels) {
+graphMetrics1 <- function(metrics, labels, lim) {
   n = 4
   f <- function(x)(combineFunction(x,function(x,y)c(x,y)))
+  f1 <- function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias))
+  f2 <- function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd))
+  #f1 <- function(x)return(list(x$lasso$bias, -5, x$biasHdps$bias))
+  #f2 <- function(x)return(list(x$lasso$sd, 0, x$biasHdps$sd))
+  methods = c("lasso", "expHdps", "biasHdps")
   metricsList = list(metrics[[1]][[1]],metrics[[2]][[1]],metrics[[3]][[1]],metrics[[4]][[1]])
   x = data.frame(
-    Method = rep(names(metricsList[[1]])[1:3], n),
-    RR = f(sapply(metricsList, function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias)))),
-    sd = f(sapply(metricsList, function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd)))),
+    Method = rep(methods, n),
+    RR = f(sapply(metricsList, f1)),
+    sd = f(sapply(metricsList, f2)),
     labels = f(sapply(labels, function(x)rep(x,3)))
   )
-  g1 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-.05, .05)
+  g1 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-lim, lim)
   
   metricsList = list(metrics[[1]][[2]],metrics[[2]][[2]],metrics[[3]][[2]],metrics[[4]][[2]])
   x = data.frame(
-    Method = rep(names(metricsList[[1]])[1:3], n),
-    RR = f(sapply(metricsList, function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias)))),
-    sd = f(sapply(metricsList, function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd)))),
+    Method = rep(methods, n),
+    RR = f(sapply(metricsList, f1)),
+    sd = f(sapply(metricsList, f2)),
     labels = f(sapply(labels, function(x)rep(x,3)))
   )
-  g2 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-.05, .05)
+  g2 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-lim, lim)
   
   metricsList = list(metrics[[1]][[3]],metrics[[2]][[3]],metrics[[3]][[3]],metrics[[4]][[3]])
   x = data.frame(
-    Method = rep(names(metricsList[[1]])[1:3], n),
-    RR = f(sapply(metricsList, function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias)))),
-    sd = f(sapply(metricsList, function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd)))),
+    Method = rep(methods, n),
+    RR = f(sapply(metricsList, f1)),
+    sd = f(sapply(metricsList, f2)),
     labels = f(sapply(labels, function(x)rep(x,3)))
   )
-  g3 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-.05, .05)
+  g3 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-lim, lim)
   
   
   metricsList = list(metrics[[1]][[4]],metrics[[2]][[4]],metrics[[3]][[4]],metrics[[4]][[4]])
   x = data.frame(
-    Method = rep(names(metricsList[[1]])[1:3], n),
-    RR = f(sapply(metricsList, function(x)return(list(x$lasso$bias, x$expHdps$bias, x$biasHdps$bias)))),
-    sd = f(sapply(metricsList, function(x)return(list(x$lasso$sd, x$expHdps$sd, x$biasHdps$sd)))),
+    Method = rep(methods, n),
+    RR = f(sapply(metricsList, f1)),
+    sd = f(sapply(metricsList, f2)),
     labels = f(sapply(labels, function(x)rep(x,3)))
   )
-  g4 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-.05, .05)
+  g4 <- ggplot2::ggplot(x, ggplot2::aes(x = RR, xmin = RR-sd, xmax = RR+sd, y = Method))+ ggplot2::geom_point(size=3)+ ggplot2::geom_segment(ggplot2::aes(x = RR-sd, xend = RR+sd, y = Method, yend=Method))+ ggplot2::geom_vline(xintercept = 0.0)+ ggplot2::facet_wrap(~labels,ncol=1)+ xlim(-lim, lim)
   
   gridExtra::grid.arrange(g1, g2, g3, g4, ncol=4)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
