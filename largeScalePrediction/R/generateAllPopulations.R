@@ -58,7 +58,7 @@ generateAllPopulations <- function(workFolder, verbosity=INFO){
 
 
                 if(!dir.exists(file.path(workFolder, 'Populations'))){dir.create(file.path(workFolder, 'Populations'))}
-        saveRDS(population, file=file.path(workFolder, 'populations',paste0(oid,'.rds')))
+        saveRDS(population, file=file.path(workFolder, 'Populations',paste0(oid,'.rds')))
     }
 
     # add logging to say the popualtions are created
