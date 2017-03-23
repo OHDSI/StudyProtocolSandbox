@@ -4,3 +4,4 @@ Yohan Sumithipala, Vojtech Huser
 
 This package will analyze data measures (from Achilles that are also ackowledged by DQC collaborative)
 
+![pic1](extras/images/Cefdinir.JPG)
