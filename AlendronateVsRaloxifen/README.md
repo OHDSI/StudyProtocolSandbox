@@ -35,16 +35,16 @@ How to run
 	library(AlendronateVsRaloxifen)
 
 	connectionDetails <- createConnectionDetails(dbms = "postgresql",
-												 user = "joe",
-												 password = "secret",
-												 server = "myserver")
+	                                             user = "joe",
+						     password = "secret",
+						     server = "myserver")
 
 	assessFeasibility(connectionDetails,
-			cdmDatabaseSchema = "cdm_data",
-			workDatabaseSchema = "results",
-			studyCohortTable = "ohdsi_alendronate_raloxifen",
-			oracleTempSchema = NULL,
-			outputFolder = "c:/temp/study_results")
+			  cdmDatabaseSchema = "cdm_data",
+			  workDatabaseSchema = "results",
+			  studyCohortTable = "ohdsi_alendronate_raloxifen",
+			  oracleTempSchema = NULL,
+			  outputFolder = "c:/temp/study_results")
 	```
 
 	* For details on how to configure```createConnectionDetails``` in your environment type this for help:
