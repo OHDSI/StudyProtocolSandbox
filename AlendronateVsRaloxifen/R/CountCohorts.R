@@ -19,11 +19,10 @@ countCohorts <- function(connectionDetails,
                          workDatabaseSchema,
                          studyCohortTable = "ohdsi_alendronate_raloxifen",
                          oracleTempSchema,
-                         cdmVersion = 5,
                          outputFolder) {
   conn <- DatabaseConnector::connect(connectionDetails)
-
-
+  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "AlendronateVsRaloxifen")
+  cohortsToCreate <- read.csv(pathToCsv)
   sql <- SqlRender::loadRenderTranslateSql("GetCounts.sql",
                                            "AlendronateVsRaloxifen",
                                            dbms = connectionDetails$dbms,
@@ -31,7 +30,7 @@ countCohorts <- function(connectionDetails,
                                            cdm_database_schema = cdmDatabaseSchema,
                                            work_database_schema = workDatabaseSchema,
                                            study_cohort_table = studyCohortTable,
-                                           cohort_definition_ids = c(1,2,3))
+                                           cohort_definition_ids = cohortsToCreate$cohortId)
   counts <- DatabaseConnector::querySql(conn, sql)
   colnames(counts) <- SqlRender::snakeCaseToCamelCase(colnames(counts))
   counts <- addCohortNames(counts)

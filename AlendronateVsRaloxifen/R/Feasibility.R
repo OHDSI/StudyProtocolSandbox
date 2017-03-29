@@ -33,7 +33,6 @@
 #'                             study.
 #' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
 #'                             priviliges for storing temporary tables.
-#' @param cdmVersion           Version of the CDM. Can be "4" or "5"
 #' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
 #'                             (/). Do not use a folder on a network drive since this greatly impacts
 #'                             performance.
@@ -61,40 +60,31 @@ assessFeasibility <- function(connectionDetails,
                               workDatabaseSchema = cdmDatabaseSchema,
                               studyCohortTable = "ohdsi_alendronate_raloxifen",
                               oracleTempSchema = workDatabaseSchema,
-                              cdmVersion = 5,
                               outputFolder,
                               createCohorts = TRUE,
                               getCounts = TRUE) {
-
-  if (cdmVersion == 4) {
-    stop("CDM version 4 not supported")
-  }
-
   if (!file.exists(outputFolder))
     dir.create(outputFolder, recursive = TRUE)
 
   if (createCohorts) {
     writeLines("Creating exposure and outcome cohorts")
-    createCohorts(connectionDetails,
-                  cdmDatabaseSchema,
-                  workDatabaseSchema,
-                  studyCohortTable,
-                  oracleTempSchema,
-                  cdmVersion,
-                  outputFolder)
+    createCohorts(connectionDetails = connectionDetails,
+                  cdmDatabaseSchema = cdmDatabaseSchema,
+                  workDatabaseSchema = workDatabaseSchema,
+                  studyCohortTable = studyCohortTable,
+                  oracleTempSchema = oracleTempSchema,
+                  outputFolder = outputFolder)
     writeLines("")
   }
 
   if (getCounts) {
     writeLines("Counting cohorts")
-    countCohorts(connectionDetails,
-                  cdmDatabaseSchema,
-                  workDatabaseSchema,
-                  studyCohortTable,
-                  oracleTempSchema,
-                  cdmVersion,
-                  outputFolder)
-
+    countCohorts(connectionDetails = connectionDetails,
+                 cdmDatabaseSchema = cdmDatabaseSchema,
+                 workDatabaseSchema = workDatabaseSchema,
+                 studyCohortTable = studyCohortTable,
+                 oracleTempSchema = oracleTempSchema,
+                 outputFolder = outputFolder)
   }
   invisible(NULL)
 }

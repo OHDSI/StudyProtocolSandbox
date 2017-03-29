@@ -78,13 +78,12 @@ execute <- function(connectionDetails,
 
   if (createCohorts) {
     writeLines("Creating exposure and outcome cohorts")
-    createCohorts(connectionDetails,
-                  cdmDatabaseSchema,
-                  workDatabaseSchema,
-                  studyCohortTable,
-                  oracleTempSchema,
-                  cdmVersion,
-                  outputFolder)
+    createCohorts(connectionDetails = connectionDetails,
+                  cdmDatabaseSchema = cdmDatabaseSchema,
+                  workDatabaseSchema = workDatabaseSchema,
+                  studyCohortTable = studyCohortTable,
+                  oracleTempSchema = oracleTempSchema,
+                  outputFolder = outputFolder)
     writeLines("")
   }
 
@@ -92,11 +91,11 @@ execute <- function(connectionDetails,
     writeLines("Running analyses")
     cmAnalysisListFile <- system.file("settings",
                                       "cmAnalysisList.txt",
-                                      package = "KeppraAngioedema")
+                                      package = "AlendronateVsRaloxifen")
     cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
     drugComparatorOutcomesListFile <- system.file("settings",
                                                   "drugComparatorOutcomesList.txt",
-                                                  package = "KeppraAngioedema")
+                                                  package = "AlendronateVsRaloxifen")
     drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
     CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
                                 cdmDatabaseSchema = cdmDatabaseSchema,
@@ -107,7 +106,7 @@ execute <- function(connectionDetails,
                                 outputFolder = cmOutputFolder,
                                 oracleTempSchema = oracleTempSchema,
                                 cmAnalysisList = cmAnalysisList,
-                                cdmVersion = cdmVersion,
+                                cdmVersion = 5,
                                 drugComparatorOutcomesList = drugComparatorOutcomesList,
                                 getDbCohortMethodDataThreads = 1,
                                 createStudyPopThreads = min(3, maxCores),

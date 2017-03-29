@@ -1,6 +1,6 @@
-# Copyright 2016 Observational Health Data Sciences and Informatics
+# Copyright 2017 Observational Health Data Sciences and Informatics
 #
-# This file is part of CiCalibration
+# This file is part of AlendronateVsRaloxifen
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,12 +31,11 @@
 #' @export
 createAnalysesDetails <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
 
-  # Verbatim from ATLAS (except for explicit package refs -------------------------------------------
+  # Verbatim from ATLAS (except for explicit package refs and add. outcomes)---------------------------------
 
   targetCohortId <- 99321
   comparatorCohortId <- 99322
-  outcomeCohortId <- 99323
-  outcomeList <- c(outcomeCohortId)
+  outcomeList <- c(99323, 100791, 100792, 100793, 100794, 100795)
 
   # Default Prior & Control settings ----
   defaultPrior <- Cyclops::createPrior("laplace",
@@ -178,7 +177,6 @@ createAnalysesDetails <- function(connectionDetails, cdmDatabaseSchema, workFold
                                                                       riskWindowEnd = 9999,
                                                                       addExposureDaysToEnd = FALSE)
 
-
   fitOutcomeModelArgs1 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
                                                                   modelType = "cox",
                                                                   stratified = TRUE,
@@ -211,11 +209,10 @@ createAnalysesDetails <- function(connectionDetails, cdmDatabaseSchema, workFold
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
 
-
   cmAnalysisList <- list(cmAnalysis1)
 
   # Save settings to package ------------------------------------------------
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisList.txt"))
-  CohortMethod::saveDrugComparatorOutcomesList(drugComparatorOutcomesList, file.path(workFolder, "drugComparatorOutcomes.txt"))
+  CohortMethod::saveDrugComparatorOutcomesList(drugComparatorOutcomesList, file.path(workFolder, "drugComparatorOutcomesList.txt"))
 }
 

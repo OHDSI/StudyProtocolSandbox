@@ -34,7 +34,7 @@
 #'                             study.
 #' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
 #'                             priviliges for storing temporary tables.
-#' @param workFolder           Name of local folder to place results; make sure to use forward slashes
+#' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
 #'                             (/)
 #'
 #' @export
@@ -43,7 +43,7 @@ createCohorts <- function(connectionDetails,
                           workDatabaseSchema,
                           studyCohortTable = "ohdsi_alendronate_raloxifen",
                           oracleTempSchema,
-                          workFolder) {
+                          outputFolder) {
   conn <- DatabaseConnector::connect(connectionDetails)
 
   # Create study cohort table structure:
@@ -56,7 +56,6 @@ createCohorts <- function(connectionDetails,
 
   pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "AlendronateVsRaloxifen")
   cohortsToCreate <- read.csv(pathToCsv)
-  cohortsToCreate <- cohortsToCreate[cohortsToCreate$study == study, ]
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Creating cohort:", cohortsToCreate$name[i]))
     sql <- SqlRender::loadRenderTranslateSql(paste0(cohortsToCreate$name[i], ".sql"),
@@ -83,33 +82,50 @@ createCohorts <- function(connectionDetails,
                                            outcome_ids = negativeControls$conceptId)
   DatabaseConnector::executeSql(conn, sql)
 
-# Check number of subjects per cohort:
-sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @work_database_schema.@study_cohort_table GROUP BY cohort_definition_id"
-sql <- SqlRender::renderSql(sql,
-                            work_database_schema = workDatabaseSchema,
-                            study_cohort_table = studyCohortTable)$sql
-sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-counts <- DatabaseConnector::querySql(conn, sql)
-RJDBC::dbDisconnect(conn)
+  # Check number of subjects per cohort:
+  sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @work_database_schema.@study_cohort_table GROUP BY cohort_definition_id"
+  sql <- SqlRender::renderSql(sql,
+                              work_database_schema = workDatabaseSchema,
+                              study_cohort_table = studyCohortTable)$sql
+  sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+  counts <- DatabaseConnector::querySql(conn, sql)
+  RJDBC::dbDisconnect(conn)
 
-names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
-counts <- merge(counts,
-                cohortsToCreate[,
-                                c("cohortId", "name")],
-                by.x = "cohortDefinitionId",
-                by.y = "cohortId",
-                all.x = TRUE)
-counts <- merge(counts,
-                negativeControls[,
-                                 c("conceptId", "name")],
-                by.x = "cohortDefinitionId",
-                by.y = "conceptId",
-                all.x = TRUE)
-counts$cohortName <- as.character(counts$name.x)
-counts$cohortName[is.na(counts$name.x)] <- as.character(counts$name.y[is.na(counts$name.x)])
-counts$name.x <- NULL
-counts$name.y <- NULL
-write.csv(counts, file.path(workFolder,
-                            paste0("CohortCounts_", study, ".csv")), row.names = FALSE)
-print(counts)
+  names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
+  counts <- merge(counts,
+                  cohortsToCreate[, c("cohortId", "name")],
+                  by.x = "cohortDefinitionId",
+                  by.y = "cohortId",
+                  all.x = TRUE)
+  counts <- merge(counts,
+                  negativeControls[, c("conceptId", "name")],
+                  by.x = "cohortDefinitionId",
+                  by.y = "conceptId",
+                  all.x = TRUE)
+  counts$cohortName <- as.character(counts$name.x)
+  counts$cohortName[is.na(counts$name.x)] <- as.character(counts$name.y[is.na(counts$name.x)])
+  counts$name.x <- NULL
+  counts$name.y <- NULL
+  write.csv(counts, file.path(outputFolder, "SimpleCohortCounts.csv"), row.names = FALSE)
+  print(counts)
+}
+
+
+addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumnName = "cohortName") {
+  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "AlendronateVsRaloxifen")
+  cohortsToCreate <- read.csv(pathToCsv)
+  pathToCsv <- system.file("settings", "NegativeControls.csv", package = "AlendronateVsRaloxifen")
+  negativeControls <- read.csv(pathToCsv)
+
+  idToName <- data.frame(cohortId = c(cohortsToCreate$cohortId, negativeControls$conceptId),
+                         cohortName = c(as.character(cohortsToCreate$name), as.character(negativeControls$name)))
+  names(idToName)[1] <- IdColumnName
+  names(idToName)[2] <- nameColumnName
+  data <- merge(data, idToName, all.x = TRUE)
+  # Change order of columns:
+  idCol <- which(colnames(data) == IdColumnName)
+  if (idCol < ncol(data) - 1) {
+    data <- data[, c(1:idCol, ncol(data) , (idCol+1):(ncol(data)-1))]
+  }
+  return(data)
 }

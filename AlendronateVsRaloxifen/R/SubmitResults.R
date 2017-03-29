@@ -1,6 +1,6 @@
-# Copyright 2016 Observational Health Data Sciences and Informatics
+# Copyright 2017 Observational Health Data Sciences and Informatics
 #
-# This file is part of KeppraAngioedema
+# This file is part of AlendronateVsRaloxifen
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ submitResults <- function(exportFolder, key, secret) {
   }
   writeLines(paste0("Uploading file '", zipName, "' to study coordinating center"))
   result <- OhdsiSharing::putS3File(file = zipName,
-                                    bucket = "ohdsi-study-angioedema",
+                                    bucket = "ohdsi-study-bisphosponates",
                                     key = key,
                                     secret = secret)
   if (result) {

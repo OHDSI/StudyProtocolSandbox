@@ -1,6 +1,6 @@
-# Copyright 2016 Observational Health Data Sciences and Informatics
+# Copyright 2017 Observational Health Data Sciences and Informatics
 #
-# This file is part of KeppraAngioedema
+# This file is part of AlendronateVsRaloxifen
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,21 +44,18 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
     analysisSummary <- addAnalysisDescriptions(analysisSummary)
 
-    cohortMethodDataFolder <- outcomeReference$cohortMethodDataFolder[outcomeReference$analysisId ==
-                                                                          3 & outcomeReference$outcomeId == 3]
+    cohortMethodDataFolder <- outcomeReference$cohortMethodDataFolder[outcomeReference$outcomeId == 99323]
     cohortMethodData <- CohortMethod::loadCohortMethodData(cohortMethodDataFolder)
 
     ### Write results table ###
     write.csv(analysisSummary, file.path(exportFolder, "MainResults.csv"), row.names = FALSE)
 
     ### Main attrition table ###
-    strataFile <- outcomeReference$strataFile[outcomeReference$analysisId == 3 & outcomeReference$outcomeId ==
-                                                  3]
+    strataFile <- outcomeReference$strataFile[outcomeReference$outcomeId == 99323]
     strata <- readRDS(strataFile)
     attrition <- CohortMethod::getAttritionTable(strata)
     write.csv(attrition, file.path(exportFolder, "AttritionVarRatioMatching.csv"), row.names = FALSE)
-    strataFile <- outcomeReference$strataFile[outcomeReference$analysisId == 2 & outcomeReference$outcomeId ==
-                                                  3]
+    strataFile <- outcomeReference$strataFile[outcomeReference$outcomeId == 99323]
     strata <- readRDS(strataFile)
     attrition <- CohortMethod::getAttritionTable(strata)
     write.csv(attrition, file.path(exportFolder, "Attrition1On1Matching.csv"), row.names = FALSE)
@@ -68,8 +65,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     ps <- readRDS(psFileName)
     CohortMethod::plotPs(ps, fileName = file.path(exportFolder, "PsPrefScale.png"))
     CohortMethod::plotPs(ps, scale = "propensity", fileName = file.path(exportFolder, "Ps.png"))
-    strataFile <- outcomeReference$strataFile[outcomeReference$analysisId == 3 & outcomeReference$outcomeId ==
-                                                  3]
+    strataFile <- outcomeReference$strataFile[outcomeReference$outcomeId == 99323]
     strata <- readRDS(strataFile)
     CohortMethod::plotPs(strata,
                          unfilteredData = ps,
@@ -78,8 +74,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
                          unfilteredData = ps,
                          scale = "propensity",
                          fileName = file.path(exportFolder, "PsAfterVarRatioMatching.png"))
-    strataFile <- outcomeReference$strataFile[outcomeReference$analysisId == 2 & outcomeReference$outcomeId ==
-                                                  3]
+    strataFile <- outcomeReference$strataFile[outcomeReference$outcomeId == 99323]
     strata <- readRDS(strataFile)
     CohortMethod::plotPs(strata,
                          unfilteredData = ps,
@@ -96,8 +91,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     write.csv(psModel, file.path(exportFolder, "PsModel.csv"), row.names = FALSE)
 
     ### Main balance tables ###
-    strataFile <- outcomeReference$strataFile[outcomeReference$analysisId == 3 & outcomeReference$outcomeId ==
-                                                  3]
+    strataFile <- outcomeReference$strataFile[outcomeReference$outcomeId == 99323]
     strata <- readRDS(strataFile)
     balance <- CohortMethod::computeCovariateBalance(strata, cohortMethodData)
     idx <- balance$beforeMatchingSumTreated < minCellCount
@@ -140,30 +134,26 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     }
 
     ### Main Kaplan Meier plots ###
-    strataFile <- outcomeReference$strataFile[outcomeReference$analysisId == 2 & outcomeReference$outcomeId ==
-                                                  3]
+    strataFile <- outcomeReference$strataFile[outcomeReference$outcomeId == 99323]
     strata <- readRDS(strataFile)
     CohortMethod::plotKaplanMeier(strata,
                                   includeZero = FALSE,
                                   fileName = file.path(exportFolder, "KaplanMeierPerProtocol.png"))
-    strataFile <- outcomeReference$strataFile[outcomeReference$analysisId == 6 & outcomeReference$outcomeId ==
-                                                  3]
+    strataFile <- outcomeReference$strataFile[outcomeReference$outcomeId == 99323]
     strata <- readRDS(strataFile)
     CohortMethod::plotKaplanMeier(strata,
                                   includeZero = FALSE,
                                   fileName = file.path(exportFolder, "KaplanMeierIntentToTreat.png"))
 
     ### Main outcome models ###
-    outcomeModelFile <- outcomeReference$outcomeModelFile[outcomeReference$analysisId == 4 & outcomeReference$outcomeId ==
-                                                              3]
+    outcomeModelFile <- outcomeReference$outcomeModelFile[outcomeReference$outcomeId == 99323]
     outcomeModel <- readRDS(outcomeModelFile)
     if (outcomeModel$outcomeModelStatus == "OK") {
         model <- CohortMethod::getOutcomeModel(outcomeModel, cohortMethodData)
         write.csv(model, file.path(exportFolder, "OutcomeModelPerProtocol.csv"), row.names = FALSE)
     }
 
-    outcomeModelFile <- outcomeReference$outcomeModelFile[outcomeReference$analysisId == 8 & outcomeReference$outcomeId ==
-                                                              3]
+    outcomeModelFile <- outcomeReference$outcomeModelFile[outcomeReference$outcomeId == 99323]
     outcomeModel <- readRDS(outcomeModelFile)
     if (outcomeModel$outcomeModelStatus == "OK") {
         model <- CohortMethod::getOutcomeModel(outcomeModel, cohortMethodData)
@@ -209,13 +199,13 @@ createMetaData <- function(connectionDetails, cdmDatabaseSchema, exportFolder) {
     lines <- c(lines, paste("CohortMethod version", packageVersion("CohortMethod"), sep = ": "))
     lines <- c(lines, paste("OhdsiSharing version", packageVersion("OhdsiSharing"), sep = ": "))
     lines <- c(lines,
-               paste("KeppraAngioedema version", packageVersion("KeppraAngioedema"), sep = ": "))
+               paste("AlendronateVsRaloxifen version", packageVersion("AlendronateVsRaloxifen"), sep = ": "))
     write(lines, file.path(exportFolder, "MetaData.txt"))
     invisible(NULL)
 }
 
 addAnalysisDescriptions <- function(object) {
-    cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "KeppraAngioedema")
+    cmAnalysisListFile <- system.file("settings", "cmAnalysisList.txt", package = "AlendronateVsRaloxifen")
     cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
     # Add analysis description:
     for (i in 1:length(cmAnalysisList)) {

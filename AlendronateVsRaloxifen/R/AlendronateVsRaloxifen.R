@@ -19,5 +19,5 @@
 #' @docType package
 #' @name AlendronateVsRaloxifen
 #' @import DatabaseConnector
-#' @importFrom utils write.csv
+#' @importFrom utils write.csv packageVersion read.csv
 NULL

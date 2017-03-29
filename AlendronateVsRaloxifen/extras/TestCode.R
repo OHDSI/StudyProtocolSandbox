@@ -11,28 +11,28 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 user = user,
                                                                 password = pw,
                                                                 port = port)
-cdmDatabaseSchema <- "CDM_Truven_MDCD_V446.dbo"
+cdmDatabaseSchema <- "CDM_Truven_MDCD_V521.dbo"
 workDatabaseSchema <- "scratch.dbo"
 studyCohortTable <- "ohdsi_alendronate_raloxifen_mdcd"
 oracleTempSchema <- NULL
 cdmVersion <- "5"
 outputFolder <- "S:/temp/AlendronateVsRaloxifenMdcd"
 
-cdmDatabaseSchema <- "cdm_truven_ccae_v441.dbo"
+cdmDatabaseSchema <- "cdm_truven_ccae_v519.dbo"
 workDatabaseSchema <- "scratch.dbo"
 studyCohortTable <- "ohdsi_alendronate_raloxifen_ccae"
 oracleTempSchema <- NULL
 cdmVersion <- "5"
 outputFolder <- "S:/temp/AlendronateVsRaloxifenCcae"
 
-cdmDatabaseSchema <- "cdm_truven_mdcr_v445.dbo"
+cdmDatabaseSchema <- "cdm_truven_mdcr_v520.dbo"
 workDatabaseSchema <- "scratch.dbo"
 studyCohortTable <- "ohdsi_alendronate_raloxifen_mdcr"
 oracleTempSchema <- NULL
 cdmVersion <- "5"
 outputFolder <- "S:/temp/AlendronateVsRaloxifenMdcr"
 
-cdmDatabaseSchema <- "cdm_optum_extended_ses_v458.dbo"
+cdmDatabaseSchema <- "cdm_optum_extended_ses_v515.dbo"
 workDatabaseSchema <- "scratch.dbo"
 studyCohortTable <- "ohdsi_alendronate_raloxifen_optum"
 oracleTempSchema <- NULL
@@ -50,9 +50,21 @@ assessFeasibility(connectionDetails = connectionDetails,
                   workDatabaseSchema = workDatabaseSchema,
                   studyCohortTable = studyCohortTable,
                   oracleTempSchema = oracleTempSchema,
-                  cdmVersion = cdmVersion,
                   outputFolder = outputFolder,
                   createCohorts = FALSE,
                   getCounts = TRUE)
+
+execute(connectionDetails = connectionDetails,
+        cdmDatabaseSchema = cdmDatabaseSchema,
+        workDatabaseSchema = workDatabaseSchema,
+        studyCohortTable = studyCohortTable,
+        oracleTempSchema = oracleTempSchema,
+        outputFolder = outputFolder,
+        createCohorts = FALSE,
+        runAnalyses = TRUE,
+        packageResults = FALSE,
+        maxCores = 20)
+
+
 
 

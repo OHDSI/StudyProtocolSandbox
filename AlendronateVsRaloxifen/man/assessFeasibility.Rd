@@ -7,8 +7,8 @@
 assessFeasibility(connectionDetails, cdmDatabaseSchema,
   workDatabaseSchema = cdmDatabaseSchema,
   studyCohortTable = "ohdsi_alendronate_raloxifen",
-  oracleTempSchema = workDatabaseSchema, cdmVersion = 5, outputFolder,
-  createCohorts = TRUE, getCounts = TRUE)
+  oracleTempSchema = workDatabaseSchema, outputFolder, createCohorts = TRUE,
+  getCounts = TRUE)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -29,8 +29,6 @@ study.}
 
 \item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
 priviliges for storing temporary tables.}
-
-\item{cdmVersion}{Version of the CDM. Can be "4" or "5"}
 
 \item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
 (/). Do not use a folder on a network drive since this greatly impacts

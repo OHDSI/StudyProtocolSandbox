@@ -14,16 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Format and check code:
+# Format and check code ---------------------------------------------------
 OhdsiRTools::formatRFolder()
 OhdsiRTools::checkUsagePackage("AlendronateVsRaloxifen")
 OhdsiRTools::updateCopyrightYearFolder()
 
-# Create manual and vignettes:
+
+# Create manual and vignettes ---------------------------------------------
 shell("rm extras/AlendronateVsRaloxifen.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/AlendronateVsRaloxifen.pdf")
 
-# Insert cohort definitions from ATLAS into package:
+
+# Insert cohort definitions from ATLAS into package -----------------------
 pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "AlendronateVsRaloxifen")
 cohortsToCreate <- read.csv(pathToCsv)
 for (i in 1:nrow(cohortsToCreate)) {
@@ -31,7 +33,8 @@ for (i in 1:nrow(cohortsToCreate)) {
   OhdsiRTools::insertCohortDefinitionInPackage(cohortsToCreate$atlasId[i], cohortsToCreate$name[i], "http://api.ohdsi.org/WebAPI")
 }
 
-# Create analysis details
+
+# Create analysis details -------------------------------------------------
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
                                                                 server = "JRDUSAPSCTL01",
                                                                 user = NULL,
@@ -39,3 +42,7 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
                                                                 port = 17001)
 cdmDatabaseSchema <- "CDM_Truven_MDCD_V521.dbo"
 createAnalysesDetails(connectionDetails, cdmDatabaseSchema, "inst/settings/")
+
+
+# Store environment in which the study was executed -----------------------
+OhdsiRTools::insertEnvironmentSnapshotInPackage("AlendronateVsRaloxifen")
