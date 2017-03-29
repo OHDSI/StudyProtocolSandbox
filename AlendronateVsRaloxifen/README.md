@@ -35,7 +35,7 @@ How to run
 	install_github("ohdsi/EmpiricalCalibration")
 	install_github("ohdsi/AlendronateVsRaloxifen")
 	```
-4. Once installed, you can execute the feasibility assessment by modifying and using the following code:
+4. Once installed, you can execute the sutyd by modifying and using the following code:
 
 	```r
 	library(AlendronateVsRaloxifen)
@@ -53,17 +53,17 @@ How to run
                   oracleTempSchema = NULL,
                   outputFolder = "c:/temp/study_results")
 
-  # Run this to execute the full study:
-  execute(connectionDetails = connectionDetails,
-          cdmDatabaseSchema = "cdm_data",
-          workDatabaseSchema = "results",
-          studyCohortTable = "ohdsi_alendronate_raloxifen",
-          oracleTempSchema = NULL,
-          outputFolder = "c:/temp/study_results",
-          createCohorts = TRUE,
-          runAnalyses = TRUE,
-          packageResults = TRUE,
-          maxCores = 30)
+	# Alternatively, run this to execute the full study:
+	execute(connectionDetails = connectionDetails,
+		cdmDatabaseSchema = "cdm_data",
+		workDatabaseSchema = "results",
+		studyCohortTable = "ohdsi_alendronate_raloxifen",
+		oracleTempSchema = NULL,
+		outputFolder = "c:/temp/study_results",
+		createCohorts = TRUE,
+		runAnalyses = TRUE,
+		packageResults = TRUE,
+		maxCores = 30)
 	```
 
 	* For details on how to configure```createConnectionDetails``` in your environment type this for help:
