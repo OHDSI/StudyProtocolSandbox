@@ -23,4 +23,4 @@ Suggests:
     OhdsiRTools
 License: Apache License 2.0
 LazyData: TRUE
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

@@ -60,4 +60,3 @@ assessFeasibility(connectionDetails,
 }
 
 }
-
