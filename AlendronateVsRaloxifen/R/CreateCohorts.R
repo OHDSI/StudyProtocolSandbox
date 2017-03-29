@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 #' Create the exposure and outcome cohorts
 #'
 #' @details
@@ -35,9 +34,8 @@
 #'                             study.
 #' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
 #'                             priviliges for storing temporary tables.
-#' @param cdmVersion           Version of the CDM. Can be "4" or "5"
-#' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
-#'                             (/).
+#' @param workFolder           Name of local folder to place results; make sure to use forward slashes
+#'                             (/)
 #'
 #' @export
 createCohorts <- function(connectionDetails,
@@ -45,69 +43,73 @@ createCohorts <- function(connectionDetails,
                           workDatabaseSchema,
                           studyCohortTable = "ohdsi_alendronate_raloxifen",
                           oracleTempSchema,
-                          cdmVersion = 5,
-                          outputFolder) {
-    conn <- DatabaseConnector::connect(connectionDetails)
+                          workFolder) {
+  conn <- DatabaseConnector::connect(connectionDetails)
 
-    # Create study cohort table structure:
-    sql <- "IF OBJECT_ID('@work_database_schema.@study_cohort_table', 'U') IS NOT NULL\n  DROP TABLE @work_database_schema.@study_cohort_table;\n    CREATE TABLE @work_database_schema.@study_cohort_table (cohort_definition_id INT, subject_id BIGINT, cohort_start_date DATE, cohort_end_date DATE);"
-    sql <- SqlRender::renderSql(sql,
-                                work_database_schema = workDatabaseSchema,
-                                study_cohort_table = studyCohortTable)$sql
-    sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-    DatabaseConnector::executeSql(conn, sql, progressBar = FALSE, reportOverallTime = FALSE)
+  # Create study cohort table structure:
+  sql <- "IF OBJECT_ID('@work_database_schema.@study_cohort_table', 'U') IS NOT NULL\n  DROP TABLE @work_database_schema.@study_cohort_table;\n    CREATE TABLE @work_database_schema.@study_cohort_table (cohort_definition_id INT, subject_id BIGINT, cohort_start_date DATE, cohort_end_date DATE);"
+  sql <- SqlRender::renderSql(sql,
+                              work_database_schema = workDatabaseSchema,
+                              study_cohort_table = studyCohortTable)$sql
+  sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+  DatabaseConnector::executeSql(conn, sql, progressBar = FALSE, reportOverallTime = FALSE)
 
-    writeLines("- Creating treatment cohort")
-    sql <- SqlRender::loadRenderTranslateSql("Alendronate.sql",
+  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "AlendronateVsRaloxifen")
+  cohortsToCreate <- read.csv(pathToCsv)
+  cohortsToCreate <- cohortsToCreate[cohortsToCreate$study == study, ]
+  for (i in 1:nrow(cohortsToCreate)) {
+    writeLines(paste("Creating cohort:", cohortsToCreate$name[i]))
+    sql <- SqlRender::loadRenderTranslateSql(paste0(cohortsToCreate$name[i], ".sql"),
                                              "AlendronateVsRaloxifen",
                                              dbms = connectionDetails$dbms,
                                              oracleTempSchema = oracleTempSchema,
                                              cdm_database_schema = cdmDatabaseSchema,
                                              target_database_schema = workDatabaseSchema,
                                              target_cohort_table = studyCohortTable,
-                                             target_cohort_id = 1)
+                                             target_cohort_id = cohortsToCreate$cohortId[i])
     DatabaseConnector::executeSql(conn, sql)
-
-    writeLines("- Creating comparator cohort")
-    sql <- SqlRender::loadRenderTranslateSql("Raloxifen.sql",
-                                             "AlendronateVsRaloxifen",
-                                             dbms = connectionDetails$dbms,
-                                             oracleTempSchema = oracleTempSchema,
-                                             cdm_database_schema = cdmDatabaseSchema,
-                                             target_database_schema = workDatabaseSchema,
-                                             target_cohort_table = studyCohortTable,
-                                             target_cohort_id = 2)
-    DatabaseConnector::executeSql(conn, sql)
-
-    writeLines("- Creating angioedema cohort")
-    sql <- SqlRender::loadRenderTranslateSql("HipFracture.sql",
-                                             "AlendronateVsRaloxifen",
-                                             dbms = connectionDetails$dbms,
-                                             oracleTempSchema = oracleTempSchema,
-                                             cdm_database_schema = cdmDatabaseSchema,
-                                             target_database_schema = workDatabaseSchema,
-                                             target_cohort_table = studyCohortTable,
-                                             target_cohort_id = 3)
-    DatabaseConnector::executeSql(conn, sql)
-
-    RJDBC::dbDisconnect(conn)
-    invisible(NULL)
-}
-
-
-addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumnName = "cohortName") {
-  idToName <- data.frame(cohortId = c(1, 2, 3),
-                         cohortName = c("Alendronate",
-                                        "Raloxifen",
-                                        "Hip fracture"))
-  names(idToName)[1] <- IdColumnName
-  names(idToName)[2] <- nameColumnName
-  data <- merge(data, idToName, all.x = TRUE)
-  # Change order of columns:
-  idCol <- which(colnames(data) == IdColumnName)
-  if (idCol < ncol(data) - 1) {
-    data <- data[, c(1:idCol, ncol(data) , (idCol+1):(ncol(data)-1))]
   }
-  return(data)
-}
 
+  pathToCsv <- system.file("settings", "NegativeControls.csv", package = "AlendronateVsRaloxifen")
+  negativeControls <- read.csv(pathToCsv)
+  writeLines("- Creating negative control outcome cohorts")
+  sql <- SqlRender::loadRenderTranslateSql("NegativeControls.sql",
+                                           "AlendronateVsRaloxifen",
+                                           dbms = connectionDetails$dbms,
+                                           oracleTempSchema = oracleTempSchema,
+                                           cdm_database_schema = cdmDatabaseSchema,
+                                           target_database_schema = workDatabaseSchema,
+                                           target_cohort_table = studyCohortTable,
+                                           outcome_ids = negativeControls$conceptId)
+  DatabaseConnector::executeSql(conn, sql)
+
+# Check number of subjects per cohort:
+sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @work_database_schema.@study_cohort_table GROUP BY cohort_definition_id"
+sql <- SqlRender::renderSql(sql,
+                            work_database_schema = workDatabaseSchema,
+                            study_cohort_table = studyCohortTable)$sql
+sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+counts <- DatabaseConnector::querySql(conn, sql)
+RJDBC::dbDisconnect(conn)
+
+names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
+counts <- merge(counts,
+                cohortsToCreate[,
+                                c("cohortId", "name")],
+                by.x = "cohortDefinitionId",
+                by.y = "cohortId",
+                all.x = TRUE)
+counts <- merge(counts,
+                negativeControls[,
+                                 c("conceptId", "name")],
+                by.x = "cohortDefinitionId",
+                by.y = "conceptId",
+                all.x = TRUE)
+counts$cohortName <- as.character(counts$name.x)
+counts$cohortName[is.na(counts$name.x)] <- as.character(counts$name.y[is.na(counts$name.x)])
+counts$name.x <- NULL
+counts$name.y <- NULL
+write.csv(counts, file.path(workFolder,
+                            paste0("CohortCounts_", study, ".csv")), row.names = FALSE)
+print(counts)
+}

@@ -7,59 +7,11 @@ CREATE TABLE #Codesets (
 INSERT INTO #Codesets (codeset_id, concept_id)
 SELECT 0 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (1557272)and invalid_reason is null
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4230399)and invalid_reason is null
 UNION  select c.concept_id
   from @cdm_database_schema.CONCEPT c
   join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (1557272)
-  and c.invalid_reason is null
-
-) I
-) C;
-INSERT INTO #Codesets (codeset_id, concept_id)
-SELECT 1 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
-( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (1513103)and invalid_reason is null
-UNION  select c.concept_id
-  from @cdm_database_schema.CONCEPT c
-  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (1513103)
-  and c.invalid_reason is null
-
-) I
-) C;
-INSERT INTO #Codesets (codeset_id, concept_id)
-SELECT 2 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
-( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (80502)and invalid_reason is null
-UNION  select c.concept_id
-  from @cdm_database_schema.CONCEPT c
-  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (80502)
-  and c.invalid_reason is null
-
-) I
-) C;
-INSERT INTO #Codesets (codeset_id, concept_id)
-SELECT 3 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
-( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4300192,433856)and invalid_reason is null
-UNION  select c.concept_id
-  from @cdm_database_schema.CONCEPT c
-  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (4300192,433856)
-  and c.invalid_reason is null
-
-) I
-) C;
-INSERT INTO #Codesets (codeset_id, concept_id)
-SELECT 4 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
-( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (2104836,4142076,4079259,2005891,4001859,4162099,4010119,4203771,4207955,4297365,2005902,4266062,4197231)and invalid_reason is null
-UNION  select c.concept_id
-  from @cdm_database_schema.CONCEPT c
-  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (2104836,4142076,4079259,2005891,4001859,4162099,4010119,4203771,4207955,4297365,2005902,4266062,4197231)
+  and ca.ancestor_concept_id in (4230399)
   and c.invalid_reason is null
 
 ) I
@@ -81,7 +33,7 @@ FROM
 (
   SELECT co.*, ROW_NUMBER() over (PARTITION BY co.person_id ORDER BY co.condition_start_date, co.condition_occurrence_id) as ordinal
   FROM @cdm_database_schema.CONDITION_OCCURRENCE co
-  where co.condition_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 3)
+  where co.condition_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 0)
 ) C
 
 WHERE C.ordinal = 1
@@ -139,85 +91,7 @@ select event_id, person_id, op_end_date as end_date
 into #cohort_ends
 from #included_events;
 
--- Custom Era Strategy
-INSERT INTO #cohort_ends (event_id,  person_id, end_date)
-select et.event_id, et.person_id, ERAS.era_end_date as end_date
-from #included_events et
-JOIN 
-(
-  select ENDS.person_id, min(drug_exposure_start_date) as era_start_date, DATEADD(day,0, ENDS.era_end_date) as era_end_date
-  from
-  (
-    select de.person_id, de.drug_exposure_start_date, MIN(e.END_DATE) as era_end_date
-    FROM (
-      -- cteDrugTarget
-       select de.PERSON_ID, DRUG_EXPOSURE_START_DATE, 
-        COALESCE(DRUG_EXPOSURE_END_DATE, DATEADD(day,DAYS_SUPPLY,DRUG_EXPOSURE_START_DATE), DATEADD(day,1,DRUG_EXPOSURE_START_DATE)) as DRUG_EXPOSURE_END_DATE 
-      FROM @cdm_database_schema.DRUG_EXPOSURE de
-      JOIN #included_events et on de.PERSON_ID = et.PERSON_ID
-      WHERE de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 3)
-    ) DE
-    JOIN 
-    (
-      --cteEndDates
-      select PERSON_ID, DATEADD(day,-1 * 90,EVENT_DATE) as END_DATE -- unpad the end date by 90
-      FROM
-      (
-        select E1.PERSON_ID, E1.EVENT_DATE, COALESCE(E1.START_ORDINAL,MAX(E2.START_ORDINAL)) START_ORDINAL, E1.OVERALL_ORD 
-        FROM 
-        (
-          select PERSON_ID, EVENT_DATE, EVENT_TYPE, 
-          START_ORDINAL,
-          ROW_NUMBER() OVER (PARTITION BY PERSON_ID ORDER BY EVENT_DATE, EVENT_TYPE) AS OVERALL_ORD -- this re-numbers the inner UNION so all rows are numbered ordered by the event date
-          from
-          (
-            -- select the start dates, assigning a row number to each
-            Select PERSON_ID, DRUG_EXPOSURE_START_DATE AS EVENT_DATE, 0 as EVENT_TYPE, ROW_NUMBER() OVER (PARTITION BY PERSON_ID ORDER BY DRUG_EXPOSURE_START_DATE) as START_ORDINAL
-            from (
-              -- cteDrugTarget
-               select de.PERSON_ID, DRUG_EXPOSURE_START_DATE, 
-                COALESCE(DRUG_EXPOSURE_END_DATE, DATEADD(day,DAYS_SUPPLY,DRUG_EXPOSURE_START_DATE), DATEADD(day,1,DRUG_EXPOSURE_START_DATE)) as DRUG_EXPOSURE_END_DATE 
-              FROM @cdm_database_schema.DRUG_EXPOSURE de
-              JOIN #included_events et on de.PERSON_ID = et.PERSON_ID
-              WHERE de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 3)
-            ) D
 
-            UNION ALL
-
-            -- add the end dates with NULL as the row number, padding the end dates by 90 to allow a grace period for overlapping ranges.
-            select PERSON_ID, DATEADD(day,90,DRUG_EXPOSURE_END_DATE), 1 as EVENT_TYPE, NULL
-            FROM (
-              -- cteDrugTarget
-               select de.PERSON_ID, DRUG_EXPOSURE_START_DATE, 
-                COALESCE(DRUG_EXPOSURE_END_DATE, DATEADD(day,DAYS_SUPPLY,DRUG_EXPOSURE_START_DATE), DATEADD(day,1,DRUG_EXPOSURE_START_DATE)) as DRUG_EXPOSURE_END_DATE 
-              FROM @cdm_database_schema.DRUG_EXPOSURE de
-              JOIN #included_events et on de.PERSON_ID = et.PERSON_ID
-              WHERE de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 3)
-            ) D
-          ) RAWDATA
-        ) E1
-        LEFT JOIN (
-          Select PERSON_ID, DRUG_EXPOSURE_START_DATE AS EVENT_DATE, ROW_NUMBER() OVER (PARTITION BY PERSON_ID ORDER BY DRUG_EXPOSURE_START_DATE) as START_ORDINAL
-          from (
-            -- cteDrugTarget
-             select de.PERSON_ID, DRUG_EXPOSURE_START_DATE, 
-              COALESCE(DRUG_EXPOSURE_END_DATE, DATEADD(day,DAYS_SUPPLY,DRUG_EXPOSURE_START_DATE), DATEADD(day,1,DRUG_EXPOSURE_START_DATE)) as DRUG_EXPOSURE_END_DATE 
-            FROM @cdm_database_schema.DRUG_EXPOSURE de
-            JOIN #included_events et on de.PERSON_ID = et.PERSON_ID
-            WHERE de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 3)
-          ) D
-        ) E2 ON E1.PERSON_ID = E2.PERSON_ID AND E2.EVENT_DATE <= E1.EVENT_DATE
-        GROUP BY E1.PERSON_ID, E1.EVENT_DATE, E1.START_ORDINAL, E1.OVERALL_ORD
-      ) E
-      WHERE 2 * E.START_ORDINAL - E.OVERALL_ORD = 0
-    ) E on DE.PERSON_ID = E.PERSON_ID and E.END_DATE >= DE.DRUG_EXPOSURE_START_DATE
-    GROUP BY de.person_id, de.drug_exposure_start_date
-  ) ENDS
-  GROUP BY ENDS.person_id, ENDS.era_end_date
-) ERAS on ERAS.person_id = et.person_id 
-WHERE et.start_date between ERAS.era_start_date and ERAS.era_end_date
-
-;
 
 
 
