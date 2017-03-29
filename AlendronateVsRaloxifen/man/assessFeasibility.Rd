@@ -7,8 +7,7 @@
 assessFeasibility(connectionDetails, cdmDatabaseSchema,
   workDatabaseSchema = cdmDatabaseSchema,
   studyCohortTable = "ohdsi_alendronate_raloxifen",
-  oracleTempSchema = workDatabaseSchema, outputFolder, createCohorts = TRUE,
-  getCounts = TRUE)
+  oracleTempSchema = workDatabaseSchema, outputFolder)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -33,10 +32,6 @@ priviliges for storing temporary tables.}
 \item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
 (/). Do not use a folder on a network drive since this greatly impacts
 performance.}
-
-\item{createCohorts}{Create the studyCohortTable table with the exposure and outcome cohorts?}
-
-\item{getCounts}{Get the cohort counts?}
 }
 \description{
 Execute OHDSI Alendronate Vs Raloxifen study feasibility assessment

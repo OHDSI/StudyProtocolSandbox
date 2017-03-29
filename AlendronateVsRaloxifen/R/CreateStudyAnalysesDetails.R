@@ -31,7 +31,7 @@
 #' @export
 createAnalysesDetails <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
 
-  # Verbatim from ATLAS (except for explicit package refs and add. outcomes)---------------------------------
+  # Verbatim from ATLAS (except for explicit package refs,add. outcomes, and no balance)-----------------
 
   targetCohortId <- 99321
   comparatorCohortId <- 99322
@@ -205,7 +205,7 @@ createAnalysesDetails <- function(connectionDetails, cdmDatabaseSchema, workFold
                                                 matchOnPsArgs = matchOnPsArgs1,
                                                 stratifyByPs = TRUE,
                                                 stratifyByPsArgs = stratifyByPsArgs1,
-                                                computeCovariateBalance = TRUE,
+                                                computeCovariateBalance = FALSE,
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
 

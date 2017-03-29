@@ -36,8 +36,6 @@
 #' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
 #'                             (/). Do not use a folder on a network drive since this greatly impacts
 #'                             performance.
-#' @param createCohorts        Create the studyCohortTable table with the exposure and outcome cohorts?
-#' @param getCounts            Get the cohort counts?
 #'
 #' @examples
 #' \dontrun{
@@ -60,31 +58,17 @@ assessFeasibility <- function(connectionDetails,
                               workDatabaseSchema = cdmDatabaseSchema,
                               studyCohortTable = "ohdsi_alendronate_raloxifen",
                               oracleTempSchema = workDatabaseSchema,
-                              outputFolder,
-                              createCohorts = TRUE,
-                              getCounts = TRUE) {
+                              outputFolder) {
   if (!file.exists(outputFolder))
     dir.create(outputFolder, recursive = TRUE)
 
-  if (createCohorts) {
-    writeLines("Creating exposure and outcome cohorts")
-    createCohorts(connectionDetails = connectionDetails,
-                  cdmDatabaseSchema = cdmDatabaseSchema,
-                  workDatabaseSchema = workDatabaseSchema,
-                  studyCohortTable = studyCohortTable,
-                  oracleTempSchema = oracleTempSchema,
-                  outputFolder = outputFolder)
-    writeLines("")
-  }
+  writeLines("Creating exposure and outcome cohorts")
+  createCohorts(connectionDetails = connectionDetails,
+                cdmDatabaseSchema = cdmDatabaseSchema,
+                workDatabaseSchema = workDatabaseSchema,
+                studyCohortTable = studyCohortTable,
+                oracleTempSchema = oracleTempSchema,
+                outputFolder = outputFolder)
 
-  if (getCounts) {
-    writeLines("Counting cohorts")
-    countCohorts(connectionDetails = connectionDetails,
-                 cdmDatabaseSchema = cdmDatabaseSchema,
-                 workDatabaseSchema = workDatabaseSchema,
-                 studyCohortTable = studyCohortTable,
-                 oracleTempSchema = oracleTempSchema,
-                 outputFolder = outputFolder)
-  }
   invisible(NULL)
 }

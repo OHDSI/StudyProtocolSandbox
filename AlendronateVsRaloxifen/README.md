@@ -26,7 +26,13 @@ How to run
 
 3. In `R`, use the following code to install the study package and its dependencies:
 	```r
+	install_github("ohdsi/SqlRender")
 	install_github("ohdsi/DatabaseConnector")
+	install_github("ohdsi/OhdsiRTools")
+	install_github("ohdsi/OhdsiSharing")
+	install_github("ohdsi/FeatureExtraction")
+	install_github("ohdsi/CohortMethod")
+	install_github("ohdsi/EmpiricalCalibration")
 	install_github("ohdsi/AlendronateVsRaloxifen")
 	```
 4. Once installed, you can execute the feasibility assessment by modifying and using the following code:
@@ -38,13 +44,26 @@ How to run
 	                                             user = "joe",
 						     password = "secret",
 						     server = "myserver")
+						     
+	# Run this to only perform a feasibility analysis, counting the number of subjects per cohort:
+	assessFeasibility(connectionDetails = connectionDetails,
+                  cdmDatabaseSchema = "cdm_data",
+                  workDatabaseSchema = "results",
+                  studyCohortTable = "ohdsi_alendronate_raloxifen",
+                  oracleTempSchema = NULL,
+                  outputFolder = "c:/temp/study_results")
 
-	assessFeasibility(connectionDetails,
-			  cdmDatabaseSchema = "cdm_data",
-			  workDatabaseSchema = "results",
-			  studyCohortTable = "ohdsi_alendronate_raloxifen",
-			  oracleTempSchema = NULL,
-			  outputFolder = "c:/temp/study_results")
+  # Run this to execute the full study:
+  execute(connectionDetails = connectionDetails,
+          cdmDatabaseSchema = "cdm_data",
+          workDatabaseSchema = "results",
+          studyCohortTable = "ohdsi_alendronate_raloxifen",
+          oracleTempSchema = NULL,
+          outputFolder = "c:/temp/study_results",
+          createCohorts = TRUE,
+          runAnalyses = TRUE,
+          packageResults = TRUE,
+          maxCores = 30)
 	```
 
 	* For details on how to configure```createConnectionDetails``` in your environment type this for help:
@@ -62,7 +81,22 @@ How to run
 	
 	* ```outputFolder``` a location in your local file system where results can be written. Make sure to use forward slashes (/). Do not use a folder on a network drive since this greatly impacts performance. 
 
-5. E-mail the `CohortCounts.csv` file to the study coordinator.
+	* ```maxCores``` is the number of cores that are available for parallel processing. If more cores are made available this can speed up the analyses. Preferrably, this should be set the number of cores available in the machine.
+	
+5. Upload the file ```export/studyResult.zip``` in the output folder to the study coordinator:
+    ```r
+    submitResults("c:/temp/study_results/export", key = "<key>", secret = "<secret>")
+    ```
+    Where ```key``` and ```secret``` are the credentials provided to you personally by the study coordinator.
+
+6. If you want, you can generate the figures, tables, and report locally using:
+
+    ```r
+    createTableAndFigures("c:/temp/study_results/export")
+    
+    writeReport("c:/temp/study_results/export", "c:/temp/study_results/report.docx")
+    ```
+    This will create a subfolder called ```tablesAndFigures``` in the ```export``` folder containing several tables and figures, as well as a Word document summarizing the main results of the study/
 
 Getting Involved
 ================

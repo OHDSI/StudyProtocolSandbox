@@ -83,31 +83,13 @@ createCohorts <- function(connectionDetails,
   DatabaseConnector::executeSql(conn, sql)
 
   # Check number of subjects per cohort:
-  sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @work_database_schema.@study_cohort_table GROUP BY cohort_definition_id"
-  sql <- SqlRender::renderSql(sql,
-                              work_database_schema = workDatabaseSchema,
-                              study_cohort_table = studyCohortTable)$sql
-  sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-  counts <- DatabaseConnector::querySql(conn, sql)
-  RJDBC::dbDisconnect(conn)
-
-  names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
-  counts <- merge(counts,
-                  cohortsToCreate[, c("cohortId", "name")],
-                  by.x = "cohortDefinitionId",
-                  by.y = "cohortId",
-                  all.x = TRUE)
-  counts <- merge(counts,
-                  negativeControls[, c("conceptId", "name")],
-                  by.x = "cohortDefinitionId",
-                  by.y = "conceptId",
-                  all.x = TRUE)
-  counts$cohortName <- as.character(counts$name.x)
-  counts$cohortName[is.na(counts$name.x)] <- as.character(counts$name.y[is.na(counts$name.x)])
-  counts$name.x <- NULL
-  counts$name.y <- NULL
-  write.csv(counts, file.path(outputFolder, "SimpleCohortCounts.csv"), row.names = FALSE)
-  print(counts)
+  writeLines("Counting cohorts")
+  countCohorts(connectionDetails = connectionDetails,
+               cdmDatabaseSchema = cdmDatabaseSchema,
+               workDatabaseSchema = workDatabaseSchema,
+               studyCohortTable = studyCohortTable,
+               oracleTempSchema = oracleTempSchema,
+               outputFolder = outputFolder)
 }
 
 

@@ -50,9 +50,7 @@ assessFeasibility(connectionDetails = connectionDetails,
                   workDatabaseSchema = workDatabaseSchema,
                   studyCohortTable = studyCohortTable,
                   oracleTempSchema = oracleTempSchema,
-                  outputFolder = outputFolder,
-                  createCohorts = FALSE,
-                  getCounts = TRUE)
+                  outputFolder = outputFolder)
 
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
@@ -60,11 +58,14 @@ execute(connectionDetails = connectionDetails,
         studyCohortTable = studyCohortTable,
         oracleTempSchema = oracleTempSchema,
         outputFolder = outputFolder,
-        createCohorts = FALSE,
+        createCohorts = TRUE,
         runAnalyses = TRUE,
-        packageResults = FALSE,
-        maxCores = 20)
+        packageResults = TRUE,
+        maxCores = 30)
 
+createTableAndFigures(file.path(outputFolder, "export"))
+
+writeReport(file.path(outputFolder, "export"), file.path(outputFolder, "export", "report.docx"))
 
 
 

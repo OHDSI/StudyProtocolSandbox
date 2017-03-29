@@ -130,7 +130,7 @@
       "attr_class": "args"
     },
     "stratifyByPsAndCovariates": false,
-    "computeCovariateBalance": true,
+    "computeCovariateBalance": false,
     "fitOutcomeModel": true,
     "fitOutcomeModelArgs": {
       "modelType": "cox",
