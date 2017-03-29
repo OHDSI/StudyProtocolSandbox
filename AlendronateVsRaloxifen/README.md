@@ -113,6 +113,6 @@ Development
 ===========
 AlendronateVsRaloxifen was developed in R Studio.
 
-###Development status
+### Development status
 
 Beta
