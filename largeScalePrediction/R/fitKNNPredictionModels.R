@@ -22,7 +22,7 @@
 #' This function creates the K-nearest neighbours models for all outcomes
 #'
 #' @details
-#' The patient level prediction RunPlp function is called for each outcome to train
+#' The patient level prediction runPlp function is called for each outcome to train
 #' a K-nearest neighbours model
 #'
 #' @param workFolder                   The directory where the plpData and population are saved to
@@ -41,7 +41,7 @@ fitKNNPredictionModels <- function(workFolder){
 
             modelSettings <- PatientLevelPrediction::setKNN(k=10000, file.path(workFolder,'models', 'knnModels', 'knn'))
 
-            trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
+            trainedModel <- PatientLevelPrediction::runPlp(population,plpData,
                                                            modelSettings,
                                                            testSplit='time',
                                                            testFraction=0.25,

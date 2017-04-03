@@ -17,6 +17,6 @@ in the subdirectory named lrModels
 This function creates the lasso regularised logistic models for all outcomes
 }
 \details{
-The patient level prediction RunPlp function is called for each outcome to train
+The patient level prediction runPlp function is called for each outcome to train
 a lasso regularised logistic regression model
 }

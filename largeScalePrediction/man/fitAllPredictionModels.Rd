@@ -17,6 +17,6 @@ in the subdirectory named models
 This function creates the models for each classifier for all outcomes
 }
 \details{
-The patient level prediction RunPlp function is called for each outcome to train
+The patient level prediction runPlp function is called for each outcome to train
 each classifier
 }
