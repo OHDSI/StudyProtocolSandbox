@@ -22,7 +22,7 @@
 #' This function creates the naive bayes models for all outcomes
 #'
 #' @details
-#' The patient level prediction RunPlp function is called for each outcome to train
+#' The patient level prediction runPlp function is called for each outcome to train
 #' a naive bayes model
 #'
 #' @param workFolder                   The directory where the plpData and population are saved to
@@ -40,7 +40,7 @@ fitNaiveBayesPredictionModels <- function(workFolder){
             population <- readRDS(file.path(workFolder, 'Populations',paste0(oid,'.rds')))
 
             modelSettings <- PatientLevelPrediction::setNaiveBayes()
-            trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
+            trainedModel <- PatientLevelPrediction::runPlp(population,plpData,
                                                            modelSettings,
                                                            testSplit='time',
                                                            testFraction=0.25,

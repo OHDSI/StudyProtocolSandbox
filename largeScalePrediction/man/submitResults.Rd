@@ -4,10 +4,12 @@
 \alias{submitResults}
 \title{Submit the study results to the study coordinating center}
 \usage{
-submitResults(exportFolder, key, secret)
+submitResults(exportFolder, dbName, key, secret)
 }
 \arguments{
 \item{exportFolder}{The path to the folder containing the \code{StudyResults.zip} file.}
+
+\item{dbName}{Database name used in the zipName}
 
 \item{key}{The key string as provided by the study coordinator}
 

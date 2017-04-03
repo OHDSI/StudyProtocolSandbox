@@ -17,6 +17,6 @@ in the subdirectory named nbModels
 This function creates the naive bayes models for all outcomes
 }
 \details{
-The patient level prediction RunPlp function is called for each outcome to train
+The patient level prediction runPlp function is called for each outcome to train
 a naive bayes model
 }

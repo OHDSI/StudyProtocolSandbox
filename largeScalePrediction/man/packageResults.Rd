@@ -4,11 +4,16 @@
 \alias{packageResults}
 \title{Package the results for sharing with OHDSI researchers}
 \usage{
-packageResults(workFolder, dbName)
+packageResults(workFolder, dbName, N = NULL, localFolder = NULL)
 }
 \arguments{
-\item{workFolder}{Name of local folder to place results; make sure to use forward slashes subfolder export will be created there
-(/)}
+\item{workFolder}{Name of local folder to place results}
+
+\item{dbName}{Database name used in the zipName}
+
+\item{N}{The minimum count size for summary data to be exported for data sensitivity}
+
+\item{localFolder}{Name of the folder where sensitive data gets moved}
 }
 \description{
 Package the results for sharing with OHDSI researchers
