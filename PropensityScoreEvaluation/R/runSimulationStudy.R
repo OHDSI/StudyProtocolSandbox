@@ -31,7 +31,7 @@
 #' \item{outcomePrevalence}{outcome prevalence of simulation}}
 #' @export
 runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodData, simulationRuns = 10,  
-                               trueEffectSize = NULL, outcomePrevalence = NULL, hdpsFeatures, stratify=FALSE, discrete=FALSE,
+                               trueEffectSize = NA, outcomePrevalence = NA, hdpsFeatures, stratify=FALSE, discrete=FALSE,
                                ignoreCensoring = FALSE, threads = 10, fudge = .001, prior = NULL) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
@@ -44,6 +44,8 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   aucExpHdps = NULL
   aucBiasHdps = NULL
   aucRandom = NULL
+  nonZeroOverlaps = NULL
+  allOverlaps = NULL
   
   outcomeId = simulationProfile$outcomeId
   sData = simulationProfile$sData
@@ -52,6 +54,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   sampleRowIds = simulationSetup$settings$sampleRowIds
   studyPop = simulationProfile$studyPop
   partialCMD = cohortMethodData
+  covariates0 = as.numeric(names(simulationProfile$outcomeModelCoefficients[simulationProfile$outcomeModelCoefficients!=0]))
   if (is.null(prior)) prior = createPrior(priorType = "none")
   
   # modify confounding and sample size
@@ -66,13 +69,13 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   }
 
   # insert true effect size
-  if (is.null(trueEffectSize)) trueEffectSize = simulationProfile$observedEffectSize
+  if (is.na(trueEffectSize)) trueEffectSize = simulationProfile$observedEffectSize
   sData$XB = insertEffectSize(sData$XB, trueEffectSize, ff::as.ffdf(partialCMD$cohorts))
   # ignore censoring
   if (ignoreCensoring) cData$baseline = ff::as.ff(rep(1, length(cData$baseline)))
   
   # set new outcome prevalence
-  if (!is.null(outcomePrevalence)) {
+  if (!is.na(outcomePrevalence)) {
     fun <- function(d) {return(findOutcomePrevalence(sData, cData, d) - outcomePrevalence)}
     delta <- uniroot(fun, lower = 0, upper = 10000)$root
     sData$baseline = sData$baseline^delta
@@ -107,7 +110,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   psBiasPermanent$preferenceScore = 0
   biasErrorCount = 0
   noOutcomeCount = 0
-
+  
   for (i in 1:simulationRuns) {
     start <- Sys.time()
     writeLines(paste("Simulation: ", i))
@@ -131,6 +134,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
       if (!is.null(attr(psBias, "metaData")$psError)) next
       else {
         if (stratify) popBias=stratifyByPs(psBias,10) else popBias=matchOnPs(psBias,maxRatio = 0)
+        # bias
         outcomeModelBias  <- fitOutcomeModel(population = popBias,
                                              cohortMethodData = cmd,
                                              modelType = "cox",
@@ -141,6 +145,19 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
         aucBiasHdps = c(computePsAuc(psBias), aucBiasHdps)
         psBiasPermanent$propensityScore = psBiasPermanent$propensityScore + psBias$propensityScore
         psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore + psBias$preferenceScore
+        
+        # overlap
+        covariatesBias = attributes(psBias)$metaData$psModelCoef
+        covariatesBias = as.numeric(names(covariatesBias[covariatesBias!=0]))
+        covariatesBias = covariatesBias[!is.na(covariatesBias)]
+        t = match(covariates0, covariatesBias)
+        nonZeroOverlaps = c(nonZeroOverlaps, length(which(!is.na(t))))
+        
+        covariatesBias = attributes(psBias)$metaData$psModelCoef
+        covariatesBias = as.numeric(names(covariatesBias))
+        covariatesBias = covariatesBias[!is.na(covariatesBias)]
+        t = match(covariates0, covariatesBias)
+        allOverlaps = c(allOverlaps, length(which(!is.na(t))))
         break
       }
     }
@@ -193,6 +210,22 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   settings$simulationRuns = simulationRuns
   settings$hdpsFeatures = hdpsFeatures
   
+  # overlap stuff
+  covariatesLasso = attributes(psLasso)$metaData$psModelCoef
+  covariatesLasso = as.numeric(names(covariatesLasso[covariatesLasso!=0]))
+  covariatesLasso = covariatesLasso[!is.na(covariatesLasso)]
+  t = match(covariates0, covariatesLasso)
+  overlapLasso = length(which(!is.na(t)))/length(covariates0)
+  
+  covariatesExp = attributes(psExp)$metaData$psModelCoef
+  covariatesExp = as.numeric(names(covariatesExp[covariatesExp!=0]))
+  covariatesExp = covariatesExp[!is.na(covariatesExp)]
+  t = match(covariates0, covariatesExp)
+  overlapExp = length(which(!is.na(t)))/length(covariates0)
+  
+  overlapBias = mean(nonZeroOverlaps)/length(covariates0)
+  # overlapBiasAll = mean(allOverlaps)/length(covariates0)
+
   # Restore ff state
   options("fffinalizer" = saveFfState)
   
@@ -201,36 +234,41 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
               estimatesExpHdps = estimatesExpHdps,
               estimatesBiasHdps = estimatesBiasHdps,
               estimatesRandom = estimatesRandom,
+              overlaps = list(overlapLasso = overlapLasso, overlapExp = overlapExp,
+                              overlapBias = overlapBias, overlapRandom = 0),
               ps = ps))
 }
 
 #' @export
-setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidation = TRUE, confoundingProportion = NA, sampleSize = NA, threads = 10, hdpsFeatures, prior = NULL) {
+setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidation = TRUE, confoundingProportion = NA, 
+                            sampleSize = NA, threads = 10, hdpsFeatures, prior = NULL, outcomePrevalence = NA,
+                            sampleRowIds = NA, covariatesToDiscard = NA) {
   studyPop = simulationProfile$studyPop
-  
-  expHdpsError = 1
-  biasHdpsError = 1
-  covariatesToDiscard = NULL
-  sampleRowIds = NULL
+  outcomeId = simulationProfile$outcomeId
+  preset = !is.na(covariatesToDiscard) || !is.na(sampleRowIds)
   if (is.null(prior)) prior = createPrior(priorType = "none")
-  while((expHdpsError==1) | (biasHdpsError==1)) {
-    test = testConvergence(cohortMethodData=cohortMethodData, simulationProfile=simulationProfile,  
-                           confoundingProportion=confoundingProportion, sampleSize=sampleSize, hdpsFeatures=hdpsFeatures, runs = 1, prior = prior)
-    expHdpsError = test$expHdpsError
-    biasHdpsError = test$biasHdpsError
-    covariatesToDiscard = test$covariatesToDiscard
-    sampleRowIds = test$sampleRowIds
+  
+  if (!preset) {
+    while(TRUE) {
+      test = testConvergence(cohortMethodData=cohortMethodData, simulationProfile=simulationProfile,  
+                             confoundingProportion=confoundingProportion, sampleSize=sampleSize, 
+                             hdpsFeatures=hdpsFeatures, runs = 1, prior = prior, outcomePrevalence = outcomePrevalence)
+      covariatesToDiscard = test$covariatesToDiscard
+      sampleRowIds = test$sampleRowIds
+      if (!test$anyError) break
+    }
   }
-  if (!is.null(sampleRowIds)) {
+  cmd = cohortMethodData
+  if (!is.na(sampleRowIds)) {
     studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
-    cohortMethodData = removeSubjects(cohortMethodData, sampleRowIds)
+    cmd = removeSubjects(cmd, sampleRowIds)
   }
-  if (!is.null(covariatesToDiscard)) {
-    cohortMethodData = removeCovariates(cohortMethodData, ff::as.ff(covariatesToDiscard))
+  if (!is.na(covariatesToDiscard)) {
+    cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
   }
   
   # create lasso PS
-  psLasso = createPs(cohortMethodData = cohortMethodData, 
+  psLasso = createPs(cohortMethodData = cmd, 
                      population = studyPop, 
                      prior = Cyclops::createPrior("laplace", exclude = c(), useCrossValidation = useCrossValidation),
                      control = createControl(noiseLevel = "silent",
@@ -240,6 +278,14 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
                                              startingVariance = 0.01,
                                              threads = threads))#[c("rowId", "subjectId", "treatment", "propensityScore", "preferenceScore")]
   
+  # create exposure hdps
+  if (hdpsFeatures == TRUE) {
+    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+  } else {
+    hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+  }
+  psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop, prior = prior, stopOnError = FALSE)
+  
   settings = list(confoundingProportion = confoundingProportion,
                   covariatesToDiscard = covariatesToDiscard,
                   sampleSize = sampleSize,
@@ -248,7 +294,76 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
   
   return(list(settings = settings,
               psLasso = psLasso,
-              psExp = test$psExp))
+              psExp = psExp))
+}
+
+#' @export
+nestedSetups <- function(simulationProfile, cohortMethodData, confoundingProportionList, sampleSizeList, hdpsFeatures, prior = NULL) {
+  outcomeId = simulationProfile$outcomeId
+  studyPop = simulationProfile$studyPop
+  allRowIds = studyPop$rowId
+  modelCovariates = as.numeric(names(simulationProfile$outcomeModelCoefficients))
+  zeroCovariates = modelCovariates[which(simulationProfile$outcomeModelCoefficients==0)]
+  nonzeroCovariates = modelCovariates[which(simulationProfile$outcomeModelCoefficients!=0)]
+  n = length(zeroCovariates)
+  m = length(nonzeroCovariates)
+  
+  sampleSizeList = sampleSizeList[order(sampleSizeList)]
+  confoundingProportionList = confoundingProportionList[order(confoundingProportionList)]
+  iSS = 0
+  iCP = 0
+  
+  if (length(sampleSizeList[!is.na(sampleSizeList)])>0) iSS = which(sampleSizeList == max(sampleSizeList[!is.na(sampleSizeList)]))
+  if (length(confoundingProportionList[!is.na(confoundingProportionList)])>0) iCP = which(confoundingProportionList == max(confoundingProportionList[!is.na(confoundingProportionList)]))
+  
+  sampleRowIdsList = rep(list(NA),length(sampleSizeList))
+  covariatesToDiscardList = rep(list(NA),length(confoundingProportionList))
+  covariatesToDiscardList1 = rep(list(NA),length(confoundingProportionList))
+  
+  while(TRUE) {
+    if (iSS>0) {
+      sampleRowIdsList[[iSS]] = sample(allRowIds, sampleSizeList[iSS])
+      if (iSS>1) {
+        for (i in (iSS-1):1) {
+          sampleRowIdsList[[i]] = sample(sampleRowIdsList[[i+1]], sampleSizeList[i])
+        }
+      }
+    }
+    if (iCP>0) {
+      p = confoundingProportionList[iCP]
+      covariatesToDiscardList[[iCP]] = sample(zeroCovariates, ceiling(n*p))
+      covariatesToDiscardList1[[iCP]] = sample(nonzeroCovariates, ceiling(m*p))
+      if (iCP>1) {
+        for (i in (iCP-1):1) {
+          p = confoundingProportionList[i]
+          covariatesToDiscardList[[i]] = sample(covariatesToDiscardList[[i+1]], ceiling(n*p))
+          covariatesToDiscardList1[[i]] = sample(covariatesToDiscardList1[[i+1]], ceiling(m*p))
+        }
+      }
+      for (i in 1:iCP) {
+        covariatesToDiscardList[[i]] = c(covariatesToDiscardList[[i]],covariatesToDiscardList1[[i]])
+      }
+    }
+    success = TRUE
+    for (i in 0:(length(sampleSizeList)*length(confoundingProportionList)-1)) {
+      writeLines(paste(i))
+      j = i%/%length(sampleSizeList)+1
+      k = i%%length(sampleSizeList)+1
+      test = testConvergence(cohortMethodData=cohortMethodData, simulationProfile=simulationProfile,  
+                             hdpsFeatures=hdpsFeatures, runs = 1, prior = prior,
+                             covariatesToDiscard = covariatesToDiscardList[[j]], sampleRowIds = sampleRowIdsList[[k]])
+      if (test$anyError) {
+        success = FALSE
+        break
+      }
+    }
+    if (success) break
+  }
+  
+  return(list(covariatesToDiscardList = covariatesToDiscardList,
+              sampleRowIdsList = sampleRowIdsList,
+              confoundingProportionList = confoundingProportionList,
+              sampleSizeList = sampleSizeList))
 }
 
 #' @export
@@ -359,6 +474,7 @@ saveSimulationStudy <- function(simulationStudy, file) {
   saveRDS(simulationStudy$estimatesExpHdps, file = file.path(file, "estimatesExpHdps.rds"))
   saveRDS(simulationStudy$estimatesBiasHdps, file = file.path(file, "estimatesBiasHdps.rds"))
   saveRDS(simulationStudy$estimatesRandom, file = file.path(file, "estimatesRandom.rds"))
+  saveRDS(simulationStudy$overlaps, file = file.path(file, "overlaps.rds"))
   saveRDS(simulationStudy$ps, file = file.path(file, "ps.rds"))
 }
 
@@ -373,18 +489,21 @@ loadSimulationStudy <- function(file, readOnly = TRUE) {
   estimatesExpHdps = readRDS(file.path(file, "estimatesExpHdps.rds"))
   estimatesBiasHdps = readRDS(file.path(file, "estimatesBiasHdps.rds"))
   estimatesRandom = readRDS(file.path(file, "estimatesRandom.rds"))
+  overlaps = readRDS(file.path(file, "overlaps.rds"))
   ps = readRDS(file.path(file, "ps.rds"))
   result = list(settings = settings,
                 estimatesLasso = estimatesLasso,
                 estimatesExpHdps = estimatesExpHdps,
                 estimatesBiasHdps = estimatesBiasHdps,
                 estimatesRandom = estimatesRandom,
+                overlaps = overlaps,
                 ps = ps)
   return(result)
 }
 
 #' @export
-testConvergence <- function(cohortMethodData, simulationProfile, confoundingProportion=NA, sampleSize=NA, hdpsFeatures, runs = 1, prior = NULL) {
+testConvergence <- function(cohortMethodData, simulationProfile, confoundingProportion=NA, sampleSize=NA, hdpsFeatures, 
+                            runs = 1, prior = NULL, outcomePrevalence = NA, covariatesToDiscard = NA, sampleRowIds = NA) {
   studyPop = simulationProfile$studyPop
   outcomeId = simulationProfile$outcomeId
   modelCovariates = as.numeric(names(simulationProfile$outcomeModelCoefficients))
@@ -394,24 +513,36 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
   m = length(nonzeroCovariates)
   expHdpsError = 0
   biasHdpsError = 0
-  sampleRowIds = NULL
-  covariatesToDiscard = NULL
+  preset = !is.na(covariatesToDiscard) || !is.na(sampleRowIds)
   if(is.null(prior)) prior = createPrior(priorType = "none")
+  
+  if (!is.na(outcomePrevalence)) {
+    sData = simulationProfile$sData
+    cData = simulationProfile$cData
+    fun <- function(d) {return(findOutcomePrevalence(sData, cData, d) - outcomePrevalence)}
+    delta <- uniroot(fun, lower = 0, upper = 10000)$root
+    sData$baseline = sData$baseline^delta
+    cohortMethodData = simulateCMD(cohortMethodData, sData, cData, outcomeId)
+  }
   
   for (i in 1:runs) {
     cmd = cohortMethodData
-    if (!is.na(sampleSize)) {
-      sampleRowIds = sample(studyPop$rowId, sampleSize)
-      sampleRowIds = sampleRowIds[order(sampleRowIds)]
+    if (!preset) {
+      if (!is.na(sampleSize)) {
+        sampleRowIds = sample(studyPop$rowId, sampleSize)
+        sampleRowIds = sampleRowIds[order(sampleRowIds)]
+      }
+      if(!is.na(confoundingProportion)) {
+        covariatesToDiscard = c(sample(zeroCovariates, ceiling(n*confoundingProportion)), sample(nonzeroCovariates, ceiling(m*confoundingProportion)))
+      }
+    }
+    
+    studyPop1 = studyPop
+    if (!is.na(sampleRowIds)) {
       studyPop1 = studyPop[match(sampleRowIds, studyPop$rowId),]
       cmd = removeSubjects(cohortMethodData, sampleRowIds)
-    } else {
-      studyPop1 = studyPop
     }
-    if(!is.na(confoundingProportion)) {
-      covariatesToDiscard = c(sample(zeroCovariates, ceiling(n*confoundingProportion)), sample(nonzeroCovariates, ceiling(m*confoundingProportion)))
-      cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
-    }
+    if (!is.na(covariatesToDiscard)) cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
     
     if (hdpsFeatures == TRUE) {
       hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
@@ -437,6 +568,7 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
               covariatesToDiscard = covariatesToDiscard,
               sampleRowIds = sampleRowIds,
               psExp = psExp,
-              psBias = psBias))
+              psBias = psBias,
+              anyError = !(expHdpsError==0 & biasHdpsError==0)))
 }
 

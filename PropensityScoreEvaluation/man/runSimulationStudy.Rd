@@ -5,9 +5,9 @@
 \title{Runs Simulation Study}
 \usage{
 runSimulationStudy(simulationProfile, simulationSetup, cohortMethodData,
-  simulationRuns = 10, trueEffectSize = NULL, outcomePrevalence = NULL,
+  simulationRuns = 10, trueEffectSize = NA, outcomePrevalence = NA,
   hdpsFeatures, stratify = FALSE, discrete = FALSE,
-  ignoreCensoring = FALSE, threads = 10, fudge = 0.001)
+  ignoreCensoring = FALSE, threads = 10, fudge = 0.001, prior = NULL)
 }
 \arguments{
 \item{simulationProfile}{simulationProfile object created by createCMDSimulationProfile function}
