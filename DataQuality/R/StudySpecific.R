@@ -371,5 +371,10 @@ doSelectiveExport <- function(connectionDetails,
 }
 
 
-
+# assessFeasibility(connectionDetails = connectionDetails,
+#                   cdmDatabaseSchema = "cdm_data",
+#                   workDatabaseSchema = "results",
+#                   studyCohortTable = "ohdsi_alendronate_raloxifene",
+#                   oracleTempSchema = NULL,
+#                   outputFolder = "c:/temp/study_results")
 
