@@ -1,14 +1,14 @@
-#Data quality
+# Data quality
 
 This is an informatics study that focuses on data quality (rather than a clinical question).
 
 
-#Participate on DataQuality study
+# Participate on DataQuality study
 
-##Step 1
+## Step 1
 Execute the latest version of Achilles
 
-##Step 2.
+## Step 2.
 Install the package DataQuality. The --no-multiarch eliminates errors on some Windows computers (it is not always necessar). 
 
 ```R
@@ -19,7 +19,7 @@ library(DataQuality)
 
 ```
 
-##Step 3. 
+## Step 3. 
 Execute the following code:
 
 ```R
@@ -51,7 +51,7 @@ packageResults(connectionDetails,cdmDatabaseSchema,workFolder,dbName)
 #to see what is being used, inspect the zip file (or simply all files in the  export sub-folder of the workFolder (this  data subset is being submitted to the study team as a zip file)
 ```
 
-##Step 4
+## Step 4
 Email the zip file to the study coordinator or use the OHDSI data submission mechanism described below. 
 To use OHDSI mechanism for data submission, ask the study PI (Vojtech Huser) via email to provide you studyKey and  studySecret keys to allow you to upload the data to an OHDSI protected study cloud bucket.
 
@@ -68,7 +68,7 @@ submitResults(exportFolder =file.path(workFolder,'export'),
 
 ```
 
-##Step 5
+## Step 5
 
 If your site has more than one CDM-shaped datasets (databases) that you want to include in the overal study, repeat the process using a new workFolder and picking a different name (dbName) for the next dataset (database)
 
@@ -82,7 +82,7 @@ writeReport(exportFolder = exportFolder,outputFile = file.path(workFolder,'repor
 ```
 
 
-#Use of output data
+# Use of output data
 
 If any site requires a formal Data Use Agreement between your site and the Data Quality Study Principal Investigator please fill in the  Data Use Agreement template (see  the extras folder) and email it to the DQ study PI (for second signature for data recipient).
 
@@ -93,5 +93,5 @@ If you share your site's data with the DataQuality study principal investigator 
 This principle was used in the initial study of Achilles Heel evaluation. (precursor to this study)
 
 
-#Additional tools
+# Additional tools
 The tool relies on new computations done by the Achilles tool. Using Achilles version >=1.4 is required
