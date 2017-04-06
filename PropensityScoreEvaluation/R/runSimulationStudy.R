@@ -58,11 +58,11 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   if (is.null(prior)) prior = createPrior(priorType = "none")
   
   # modify confounding and sample size
-  if(!is.null(covariatesToDiscard)) {
+  if(!is.na(covariatesToDiscard)) {
     partialCMD = removeCovariates(partialCMD, ff::as.ff(covariatesToDiscard))
   }
   
-  if (!is.null(sampleRowIds)) {
+  if (!is.na(sampleRowIds)) {
     studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
     sData$XB = sData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), sData$XB$rowId),]
     partialCMD = removeSubjects(partialCMD, sampleRowIds)
@@ -350,7 +350,7 @@ nestedSetups <- function(simulationProfile, cohortMethodData, confoundingProport
       j = i%/%length(sampleSizeList)+1
       k = i%%length(sampleSizeList)+1
       test = testConvergence(cohortMethodData=cohortMethodData, simulationProfile=simulationProfile,  
-                             hdpsFeatures=hdpsFeatures, runs = 1, prior = prior,
+                             hdpsFeatures=hdpsFeatures, runs = 2, prior = prior, outcomePrevalence = .1,
                              covariatesToDiscard = covariatesToDiscardList[[j]], sampleRowIds = sampleRowIdsList[[k]])
       if (test$anyError) {
         success = FALSE
@@ -358,6 +358,14 @@ nestedSetups <- function(simulationProfile, cohortMethodData, confoundingProport
       }
     }
     if (success) break
+  }
+  if (is.na(confoundingProportionList[length(confoundingProportionList)]&length(confoundingProportionList>0))) {
+    for (i in (length(confoundingProportionList)-1):1) {
+      confoundingProportionList[i+1] = confoundingProportionList[i]
+      covariatesToDiscardList[[i+1]] = covariatesToDiscardList[[i]]
+    }
+    confoundingProportionList[1] = NA
+    covariatesToDiscardList[[1]] = NA
   }
   
   return(list(covariatesToDiscardList = covariatesToDiscardList,
