@@ -1,9 +1,19 @@
-#' Level one data about dataset
+#' Level one data about dataset MIAD stands for minimum information about a dataset
+#' percentage measures are used that hide exact patient counts
 #' @export
 createMIADLevelOne <- function(connectionDetails,
                                cdmDatabaseSchema,
                                workDatabaseSchema = cdmDatabaseSchema,
                                outputFolder) {
+  
+  #assumption  outputFolder is where study output is (and exists)
+  #assumption outputFolder has subfolder export 
+  
+  #assuming that result database would be added to packageresults
+  #workDatabaseSchema = "results" and the same wordDatabaseSchema happens to also have
+  #achilles results data
+  #the function above requires knowing workDatabaseSchema (currently package data does not have that)
+  #so either would have to be added or executed during study execution or feasibility
   
   
   
@@ -36,7 +46,7 @@ createMIADLevelOne <- function(connectionDetails,
     #1 derived measures 
     
     
-    sql <- "select * from @results_database_schema.achilles_results_derived where measure_id not like '%PersonCnt%' order by measure_id,stratum_1"
+    sql <- "select measure_id, stratum_1,stratum_2, statistic_value as value from @results_database_schema.achilles_results_derived where measure_id not like '%PersonCnt%' order by measure_id,stratum_1"
     
     #old query (smaller was)
     # select * from @results_database_schema.achilles_results_derived r where measure_id in ('ach_2000:Percentage',
@@ -64,12 +74,8 @@ createMIADLevelOne <- function(connectionDetails,
     dataDist <- DatabaseConnector::querySql(conn, sql)
     
     
-    #process the data 
-    #make sure the names are the same case accross different DB engines
-    names(dataDist) <- tolower(names(dataDist))
     
-    
-    write.csv(dataDist,file = file.path(exportFolder,'SelectedAchillesResultsDistMeasures.csv'),row.names = F)
+    # write.csv(dataDist,file = file.path(exportFolder,'SelectedAchillesResultsDistMeasures.csv'),row.names = F)
     
     
     
@@ -77,8 +83,8 @@ createMIADLevelOne <- function(connectionDetails,
     #4 ------Achilles  results  table section (selected measures) (recomputed as percentages of all patients)
     
     #treshold on patient count was added (in addition to achilles default filtering)
-    sql <- "select analysis_id,stratum_1,stratum_2,stratum_3,count_value from @results_database_schema.achilles_results a 
-    where analysis_id in (0,1)
+    sql <- "select analysis_id as measure_id,stratum_1,stratum_2,stratum_3,count_value from @results_database_schema.achilles_results a 
+    where analysis_id in (0,1,2,4,5,10,11,12,109,113,212,200,505)
     and count_value >10
     "
     
@@ -88,11 +94,14 @@ createMIADLevelOne <- function(connectionDetails,
     sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
     data <- DatabaseConnector::querySql(conn, sql)
     
-    # ok so I will use upper case all the time  names(data) <- tolower(names(data))
+    
     
     
     #get person count
-    persons<-data$COUNT_VALUE[data$ANALYSIS_ID == 1]
+    persons<-data$COUNT_VALUE[data$MEASURE_ID == 1]
+    
+    data$VALUE <- data$COUNT_VALUE/persons
+    data$COUNT_VALUE <- NULL
     
     #create fuzzy count
     if (persons > 100000000) personsFuzzy<-'>100M'  
@@ -105,18 +114,18 @@ createMIADLevelOne <- function(connectionDetails,
     if (persons < 100000) personsFuzzy<-'10-100k'
     if (persons < 10000)  personsFuzzy<-'<10k'
     
-    newrow<-data.frame(ANALYSIS_ID = 99,STRATUM_1='',STRATUM_2='',STRATUM_3='',COUNT_VALUE=0,VALUE=as.character(personsFuzzy))
-    data$VALUE<-''
+    #binned size of dataset
+    newrow<-data.frame(MEASURE_ID = 99,STRATUM_1='',STRATUM_2='',STRATUM_3='',VALUE=as.character(personsFuzzy))
+    
     data<-rbind(data,newrow)
     
     
     
     
-    data$PCT_VALUE <- data$COUNT_VALUE/persons
-    #drop actual counts
-    data$COUNT_VALUE <- NULL
     
-    write.csv(data,file = file.path(exportFolder,'SelectedAchillesResultsMeasuresPerc.csv'),row.names = F)
+    
+    
+    # write.csv(data,file = file.path(exportFolder,'SelectedAchillesResultsMeasuresPerc.csv'),row.names = F)
     
     
     #5 ------Achilles  results  table section (not person dependent)
@@ -127,22 +136,31 @@ createMIADLevelOne <- function(connectionDetails,
     
     sql <- SqlRender::renderSql(sql,results_database_schema = workDatabaseSchema)$sql
     sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-    data <- DatabaseConnector::querySql(conn, sql)
+    dataAchillesResults <- DatabaseConnector::querySql(conn, sql)
     
     
     
     
+    #combine data from variouse streams
+    dataDerived2<-data.frame(MEASURE_ID=dataDerived$MEASURE_ID,STRATUM_1=dataDerived$STRATUM_1,STRATUM_2=dataDerived$STRATUM_2,STRATUM_3=NA,VALUE=dataDerived$VALUE)
+    export<-rbind(data,dataDerived2)
+    
+    
+    #further prune the measures
+      #no proning done at this point
     
     
     #export data
-    write.csv(data,file = file.path(exportFolder,'DatasetMetadata.csv'),row.names = F)
+    write.csv(export,file = file.path(exportFolder,'DatasetMetadata.csv'),row.names = F)
     
     # Clean up
     RJDBC::dbDisconnect(conn)
     
     
+    
   }
-  
+  #return value
+  invisible(NULL)
 }
 
 
