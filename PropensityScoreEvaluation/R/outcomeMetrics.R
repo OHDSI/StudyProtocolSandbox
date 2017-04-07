@@ -11,10 +11,10 @@ calculateMetrics <- function(simulationResults, cohortMethodData, simulationProf
                 expHdps = calculateMetricsHelper(simulationResults$estimatesExpHdps, cohortMethodData, trueEffectSize, psExpHdps, stdDiffThreshold, computeAll),
                 biasHdps = calculateMetricsHelper(simulationResults$estimatesBiasHdps, cohortMethodData, trueEffectSize, psBiasHdps, stdDiffThreshold, TRUE),
                 random = calculateMetricsHelper(simulationResults$estimatesRandom, cohortMethodData, trueEffectSize, psRandom, stdDiffThreshold, computeAll))
-  result$lasso$overlap = study$overlaps$overlapLasso
-  result$expHdps$overlap = study$overlaps$overlapExp
-  result$biasHdps$overlap = study$overlaps$overlapBias
-  result$random$overlap = study$overlaps$overlapRandom
+  result$lasso$overlap = simulationResults$overlaps$overlapLasso
+  result$expHdps$overlap = simulationResults$overlaps$overlapExp
+  result$biasHdps$overlap = simulationResults$overlaps$overlapBias
+  result$random$overlap = simulationResults$overlaps$overlapRandom
   return(result)
 }
 
@@ -60,7 +60,8 @@ calculateMetricsList1 <- function(inFolder, cohortMethodData, simulationProfile,
           writeLines(paste("count:",counter))
           counter = counter+1
           computeAll = k==1&l==1
-          simulationStudy = loadSimulationStudy(file.path(inFolder, paste("c",i,"_s",j,"_t",k,"_o",l,sep="")))
+          #simulationStudy = loadSimulationStudy(file.path(inFolder, paste("c",i,"_s",j,"_t",k,"_o",l,sep="")))
+          simulationStudy = readRDS(file.path(inFolder, paste("c",i,"_s",j,"_t",k,"_o",l,".rds",sep="")))
           metric = calculateMetrics(simulationStudy, cohortMethodData, simulationProfile, stdDiffThreshold = .05, computeAll)
           if (!computeAll) {
             metric$lasso$beforeHighStdDiff = result[[i]][[j]][[1]][[1]]$lasso$beforeHighStdDiff
@@ -72,6 +73,11 @@ calculateMetricsList1 <- function(inFolder, cohortMethodData, simulationProfile,
             metric$expHdps$afterHighStdDiff = result[[i]][[j]][[1]][[1]]$expHdps$afterHighStdDiff
             metric$expHdps$xbMean = result[[i]][[j]][[1]][[1]]$expHdps$xbMean
             metric$expHdps$xbSD = result[[i]][[j]][[1]][[1]]$expHdps$xbSD
+            
+            metric$random$beforeHighStdDiff = result[[i]][[j]][[1]][[1]]$random$beforeHighStdDiff
+            metric$random$afterHighStdDiff = result[[i]][[j]][[1]][[1]]$random$afterHighStdDiff
+            metric$random$xbMean = result[[i]][[j]][[1]][[1]]$random$xbMean
+            metric$random$xbSD = result[[i]][[j]][[1]][[1]]$random$xbSD
           }
           result[[i]][[j]][[k]][[l]] = metric
         }
