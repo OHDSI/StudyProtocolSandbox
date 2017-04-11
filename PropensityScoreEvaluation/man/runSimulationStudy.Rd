@@ -7,7 +7,8 @@
 runSimulationStudy(simulationProfile, simulationSetup, cohortMethodData,
   simulationRuns = 10, trueEffectSize = NA, outcomePrevalence = NA,
   hdpsFeatures, stratify = FALSE, discrete = FALSE,
-  ignoreCensoring = FALSE, threads = 10, fudge = 0.001, prior = NULL)
+  ignoreCensoring = FALSE, threads = 10, fudge = 0.001, prior = NULL,
+  maxRatio = 0, numStrata = 10, useCovariates = FALSE)
 }
 \arguments{
 \item{simulationProfile}{simulationProfile object created by createCMDSimulationProfile function}

@@ -1,16 +1,16 @@
  #' @export
 calculateMetrics <- function(simulationResults, cohortMethodData, simulationProfile, stdDiffThreshold = .05, computeAll = TRUE) {
-  trueEffectSize = simulationResults$settings$trueEffectSize
+  settings = simulationResults$settings
   psLasso = psExpHdps = psBiasHdps = psRandom = merge(simulationResults$ps[c("rowId", "treatment")], simulationProfile$sData$XB[])
   psLasso$propensityScore = simulationResults$ps$lassoPropensityScore
   psExpHdps$propensityScore = simulationResults$ps$expHdpsPropensityScore
   psBiasHdps$propensityScore = simulationResults$ps$biasHdpsPropensityScore
   psRandom$propensityScore = simulationResults$ps$randomPropensityScore
   
-  result = list(lasso = calculateMetricsHelper(simulationResults$estimatesLasso, cohortMethodData, trueEffectSize, psLasso, stdDiffThreshold, computeAll),
-                expHdps = calculateMetricsHelper(simulationResults$estimatesExpHdps, cohortMethodData, trueEffectSize, psExpHdps, stdDiffThreshold, computeAll),
-                biasHdps = calculateMetricsHelper(simulationResults$estimatesBiasHdps, cohortMethodData, trueEffectSize, psBiasHdps, stdDiffThreshold, TRUE),
-                random = calculateMetricsHelper(simulationResults$estimatesRandom, cohortMethodData, trueEffectSize, psRandom, stdDiffThreshold, computeAll))
+  result = list(lasso = calculateMetricsHelper(simulationResults$estimatesLasso, cohortMethodData, settings, psLasso, stdDiffThreshold, computeAll),
+                expHdps = calculateMetricsHelper(simulationResults$estimatesExpHdps, cohortMethodData, settings, psExpHdps, stdDiffThreshold, computeAll),
+                biasHdps = calculateMetricsHelper(simulationResults$estimatesBiasHdps, cohortMethodData, settings, psBiasHdps, stdDiffThreshold, TRUE),
+                random = calculateMetricsHelper(simulationResults$estimatesRandom, cohortMethodData, settings, psRandom, stdDiffThreshold, computeAll))
   result$lasso$overlap = simulationResults$overlaps$overlapLasso
   result$expHdps$overlap = simulationResults$overlaps$overlapExp
   result$biasHdps$overlap = simulationResults$overlaps$overlapBias
@@ -18,8 +18,9 @@ calculateMetrics <- function(simulationResults, cohortMethodData, simulationProf
   return(result)
 }
 
-calculateMetricsHelper <- function(estimates, cohortMethodData, trueEffectSize, ps, stdDiffThreshold, computeAll) {
+calculateMetricsHelper <- function(estimates, cohortMethodData, settings, ps, stdDiffThreshold, computeAll) {
   if(is.null(estimates))return(NULL)
+  trueEffectSize = settings$trueEffectSize
   good = which(!is.na(estimates$seLogRr))
   n = length(good)
   bias = mean(estimates$logRr[good]) - trueEffectSize
@@ -27,7 +28,8 @@ calculateMetricsHelper <- function(estimates, cohortMethodData, trueEffectSize, 
   sd = sd(estimates$logRr[good]) / sqrt(n)
   rmse = sqrt(bias^2+sd^2)
   coverage = length(which((estimates$logLb95[good] <= trueEffectSize) & (estimates$logUb95[good] >= trueEffectSize))) / n
-  population = matchOnPs(ps, maxRatio = 0)
+  if (settings$stratify) population = stratifyByPs(ps, numberOfStrata = settings$numStrata)
+  else population = matchOnPs(ps, maxRatio = settings$maxRatio)
   beforeHighStdDiff = -1
   afterHighStdDiff = -1
   xbMean = -1
@@ -170,6 +172,7 @@ graphMetrics2 <- function(metrics, id) {
   f7 <- function(x)return(list(x$lasso$xbMean, x$expHdps$xbMean, x$biasHdps$xbMean))
   f8 <- function(x)return(list(x$lasso$xbSD, x$expHdps$xbSD ,x$biasHdps$xbSD))
   f9 <- function(x)return(list(sqrt(x$lasso$xbMean^2+x$lasso$xbSD^2), sqrt(x$expHdps$xbMean^2+x$expHdps$xbSD^2), sqrt(x$biasHdps$xbMean^2+x$biasHdps$xbSD^2)))
+  f10 <- function(x)return(list(x$lasso$overlap, x$expHdps$overlap, x$biasHdps$overlap))
   
   params = f(sapply(c(1:16),function(x)return(list(x-0.15,x,x+0.15))))
   method = c("lasso","exp","bias")
@@ -193,6 +196,7 @@ graphMetrics2 <- function(metrics, id) {
                       xbMean = f(sapply(x,f7)),
                       xbSD = f(sapply(x,f8)),
                       xbRmse = f(sapply(x,f9)),
+                      overlap = f(sapply(x,f10)),
                       method = rep(method,16)))
   }
   
@@ -234,6 +238,10 @@ graphMetrics2 <- function(metrics, id) {
     return(ggplot(df,aes(x=xbRmse,y=params))+geom_point(aes(shape = method,color=method))+scale_y_continuous(breaks=c(1:16),labels=ylabels))
   }
   
+  plot9 <- function(df) {
+    return(ggplot(df,aes(x=overlap,y=params))+geom_point(aes(shape = method,color=method))+scale_y_continuous(breaks=c(1:16),labels=ylabels)+xlim(0,1))
+  }
+  
   if (id==1) plotFunc = plot1
   if (id==2) plotFunc = plot2
   if (id==3) plotFunc = plot3
@@ -242,9 +250,10 @@ graphMetrics2 <- function(metrics, id) {
   if (id==6) plotFunc = plot6
   if (id==7) plotFunc = plot7
   if (id==8) plotFunc = plot8
+  if (id==9) plotFunc = plot9
   
   x = createX(metrics[[1]][[1]])
-  g1 <- plotFunc(x) + ggplot2::ggtitle(titles[1])+theme(legend.position="none")#theme(legend.justification=c(1,1), legend.position=c(1,1))
+  g1 <- plotFunc(x) + ggplot2::ggtitle(titles[1])+theme(legend.position="none")+theme(legend.justification=c(1,1), legend.position=c(1,1))
   x = createX(metrics[[1]][[2]])
   g2 <- plotFunc(x) + ggplot2::ggtitle(titles[2])+theme(legend.position="none")
   x = createX(metrics[[1]][[3]])

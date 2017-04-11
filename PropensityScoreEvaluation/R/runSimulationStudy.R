@@ -32,18 +32,19 @@
 #' @export
 runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodData, simulationRuns = 10,  
                                trueEffectSize = NA, outcomePrevalence = NA, hdpsFeatures, stratify=FALSE, discrete=FALSE,
-                               ignoreCensoring = FALSE, threads = 10, fudge = .001, prior = NULL) {
+                               ignoreCensoring = FALSE, threads = 10, fudge = .001, prior = NULL, maxRatio = 1, numStrata = 10,
+                               useCovariates = FALSE) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
   options("fffinalizer" = "delete")
   estimatesLasso = NULL
   estimatesExpHdps = NULL
   estimatesBiasHdps = NULL
-  estimatesRandom = NULL
+  # estimatesRandom = NULL
   aucLasso = NULL
   aucExpHdps = NULL
   aucBiasHdps = NULL
-  aucRandom = NULL
+  # aucRandom = NULL
   nonZeroOverlaps = NULL
   allOverlaps = NULL
   
@@ -94,16 +95,16 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   # handle propensity scores
   psLasso = simulationSetup$psLasso
   aucLasso = computePsAuc(psLasso)
-  if (stratify) strataLasso=stratifyByPs(psLasso,10) else strataLasso=matchOnPs(psLasso, maxRatio = 0)
+  if (stratify) strataLasso=stratifyByPs(psLasso,numStrata) else strataLasso=matchOnPs(psLasso, maxRatio = maxRatio)
   
-  psRandom = psLasso
-  psRandom$propensityScore = runif(nrow(psRandom),0,1)
-  aucRandom = computePsAuc(psRandom)
-  if (stratify) strataRandom=stratifyByPs(psRandom,10) else strataRandom=matchOnPs(psRandom, maxRatio = 0)
+  # psRandom = psLasso
+  # psRandom$propensityScore = runif(nrow(psRandom),0,1)
+  # aucRandom = computePsAuc(psRandom)
+  # if (stratify) strataRandom=stratifyByPs(psRandom,numStrata) else strataRandom=matchOnPs(psRandom, maxRatio = maxRatio)
   
   psExp = simulationSetup$psExp
   aucExpHdps = computePsAuc(psExp)
-  if (stratify) strataExp=stratifyByPs(psExp,10) else strataExp=matchOnPs(psExp, maxRatio = 0)
+  if (stratify) strataExp=stratifyByPs(psExp,numStrata) else strataExp=matchOnPs(psExp, maxRatio = maxRatio)
 
   psBiasPermanent = psLasso
   psBiasPermanent$propensityScore = 0
@@ -133,13 +134,13 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
       psBias = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = prior, stopOnError = FALSE)
       if (!is.null(attr(psBias, "metaData")$psError)) next
       else {
-        if (stratify) popBias=stratifyByPs(psBias,10) else popBias=matchOnPs(psBias,maxRatio = 0)
+        if (stratify) popBias=stratifyByPs(psBias,numStrata) else popBias=matchOnPs(psBias,maxRatio = maxRatio)
         # bias
         outcomeModelBias  <- fitOutcomeModel(population = popBias,
                                              cohortMethodData = cmd,
                                              modelType = "cox",
                                              stratified = TRUE,
-                                             useCovariates = FALSE)
+                                             useCovariates = useCovariates)
         estimatesBiasHdps = rbind(outcomeModelBias$outcomeModelTreatmentEstimate, estimatesBiasHdps)
         
         aucBiasHdps = c(computePsAuc(psBias), aucBiasHdps)
@@ -168,17 +169,17 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
                                          cohortMethodData = cmd,
                                          modelType = "cox",
                                          stratified = TRUE,
-                                         useCovariates = FALSE)
+                                         useCovariates = useCovariates)
     estimatesLasso = rbind(outcomeModelLasso$outcomeModelTreatmentEstimate, estimatesLasso)
     
     # calculate outcomes for random
-    popRandom = merge(studyPopNew, strataRandom[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
-    outcomeModelRandom <- fitOutcomeModel(population = popRandom,
-                                          cohortMethodData = cmd,
-                                          modelType = "cox",
-                                          stratified = TRUE,
-                                          useCovariates = FALSE)
-    estimatesRandom = rbind(outcomeModelRandom$outcomeModelTreatmentEstimate, estimatesRandom)
+    # popRandom = merge(studyPopNew, strataRandom[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+    # outcomeModelRandom <- fitOutcomeModel(population = popRandom,
+    #                                       cohortMethodData = cmd,
+    #                                       modelType = "cox",
+    #                                       stratified = TRUE,
+    #                                       useCovariates = useCovariates)
+    # estimatesRandom = rbind(outcomeModelRandom$outcomeModelTreatmentEstimate, estimatesRandom)
     
     # calculate outcomes for exp hdps
     popExp = merge(studyPopNew, strataExp[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
@@ -186,7 +187,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
                                        cohortMethodData = cmd,
                                        modelType = "cox",
                                        stratified = TRUE,
-                                       useCovariates = FALSE)
+                                       useCovariates = useCovariates)
     estimatesExpHdps = rbind(outcomeModelExp$outcomeModelTreatmentEstimate, estimatesExpHdps)
     
     delta <- Sys.time() - start
@@ -201,14 +202,18 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   }
   
   ps = data.frame(rowId = psLasso$rowId, treatment = psLasso$treatment, lassoPropensityScore = psLasso$propensityScore,
-                  expHdpsPropensityScore = psExp$propensityScore, biasHdpsPropensityScore = psBiasPermanent$propensityScore,
-                  randomPropensityScore = psRandom$propensityScore)
+                  expHdpsPropensityScore = psExp$propensityScore, biasHdpsPropensityScore = psBiasPermanent$propensityScore)
+  # , randomPropensityScore = psRandom$propensityScore)
   
   settings = simulationSetup$settings
   settings$trueEffectSize = trueEffectSize
   settings$outcomePrevalence = outcomePrevalence
   settings$simulationRuns = simulationRuns
   settings$hdpsFeatures = hdpsFeatures
+  settings$stratify = stratify
+  settings$maxRatio = maxRatio
+  settings$numStrata = numStrata
+  settings$useCovariates = useCovariates
   
   # overlap stuff
   covariatesLasso = attributes(psLasso)$metaData$psModelCoef
@@ -233,7 +238,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
               estimatesLasso = estimatesLasso,
               estimatesExpHdps = estimatesExpHdps,
               estimatesBiasHdps = estimatesBiasHdps,
-              estimatesRandom = estimatesRandom,
+              # estimatesRandom = estimatesRandom,
               overlaps = list(overlapLasso = overlapLasso, overlapExp = overlapExp,
                               overlapBias = overlapBias, overlapRandom = 0),
               ps = ps))
