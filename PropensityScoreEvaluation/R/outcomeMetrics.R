@@ -39,10 +39,9 @@ calculateMetricsHelper <- function(estimates, cohortMethodData, settings, ps, st
     balance = computeCovariateBalance(population, cohortMethodData)
     beforeHighStdDiff = length(which(abs(balance$beforeMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
     afterHighStdDiff = length(which(abs(balance$afterMatchingStdDiff) >= stdDiffThreshold))/nrow(balance)
-    strata = matchOnPs(ps, maxRatio = 0)
-    strata = aggregate(strata, by = list(strata$stratumId, strata$treatment), FUN = mean)
-    strata = strata[order(strata$stratumId,strata$treatment),]
-    xbDiff = strata[strata$treatment==1,]$xb - strata[strata$treatment==0,]$xb
+    population = aggregate(population, by = list(population$stratumId, population$treatment), FUN = mean)
+    population = population[order(population$stratumId,population$treatment),]
+    xbDiff = population[population$treatment==1,]$xb - population[population$treatment==0,]$xb
     xbMean = mean(xbDiff)
     xbSD = sd(xbDiff)
   }
