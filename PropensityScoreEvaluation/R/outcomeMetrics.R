@@ -43,6 +43,7 @@ calculateMetricsHelper <- function(estimates, cohortMethodData, settings, ps, st
     population = population[order(population$stratumId,population$treatment),]
     xbDiff = population[population$treatment==1,]$xb - population[population$treatment==0,]$xb
     xbMean = mean(xbDiff)
+    xbBase = mean(population[population$treatment==0,]$xb)
     xbSD = sd(xbDiff)
   }
   auc = computePsAuc(ps)
@@ -210,7 +211,7 @@ graphMetrics2 <- function(metrics, id) {
   
   plot2 <- function(df) {
     xlim1 = max(df$rmse)
-    return(ggplot(df,aes(x=rmse,y=params))+geom_point(aes(shape = method,color=method))+scale_y_continuous(breaks=c(1:16),labels=ylabels)+geom_vline(xintercept = 0.0))+xlim(0,xlim1)
+    return(ggplot(df,aes(x=rmse,y=params))+geom_point(aes(shape = method,color=method))+scale_y_continuous(breaks=c(1:16),labels=ylabels)+geom_vline(xintercept = 0.0)+xlim(0,xlim1))
   }
   
   plot3 <- function(df) {
@@ -252,7 +253,7 @@ graphMetrics2 <- function(metrics, id) {
   if (id==9) plotFunc = plot9
   
   x = createX(metrics[[1]][[1]])
-  g1 <- plotFunc(x) + ggplot2::ggtitle(titles[1])+theme(legend.position="none")+theme(legend.justification=c(1,1), legend.position=c(1,1))
+  g1 <- plotFunc(x) + ggplot2::ggtitle(titles[1])+theme(legend.position="none")#+theme(legend.justification=c(1,1), legend.position=c(1,1))
   x = createX(metrics[[1]][[2]])
   g2 <- plotFunc(x) + ggplot2::ggtitle(titles[2])+theme(legend.position="none")
   x = createX(metrics[[1]][[3]])
