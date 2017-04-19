@@ -5,7 +5,8 @@ The package was extended to also provide additional function.
 There are three usage scenario
 
 1. Generate MIAD (minumum information about dataset) as .csv file that can be added to an OHDSI study
-2. Participate on DataQuality study
+2. Participate on DataQuality study (with later step for sharing of the limited data about your dataset)
+3. Run local report on Data Quality (not shared with anybody)
 
 
 
