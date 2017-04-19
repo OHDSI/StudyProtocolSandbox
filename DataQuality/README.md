@@ -2,7 +2,7 @@
 
 This is an informatics study that focuses on data quality (rather than a clinical question).
 The package was extended to also provide additional function.
-There are three usage scenario
+There are three usage scenarios.
 
 1. Generate MIAD (minumum information about dataset) as .csv file that can be added to an OHDSI study
 2. Participate on DataQuality study (with later step for sharing of the limited data about your dataset)
