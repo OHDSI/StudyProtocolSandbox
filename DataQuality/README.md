@@ -1,9 +1,38 @@
 # Data quality
 
 This is an informatics study that focuses on data quality (rather than a clinical question).
+The package was extended to also provide additional function.
+There are three usage scenario
+
+1. Generate MIAD (minumum information about dataset) as .csv file that can be added to an OHDSI study
+2. Participate on DataQuality study
 
 
-# Participate on DataQuality study
+
+# 1.Generate MIAD (minumum information about a dataset)
+
+A discussion about this function is in this [forum thread](http://forums.ohdsi.org/t/ohdsi-study-comparative-effectiveness-of-alendronate-and-raloxifene-in-reducing-the-risk-of-hip-fracture/2533/13?u=vojtech_huser). 
+This is done by runing the following function. The function will generate a .csv file in 'export' subfolder of the output folder (e.g., c:/temp/export).
+The function relies on existence of Achilles result tables in the workDatabaseSchema of your database.
+This function can be copied to any study by incorporating the file DatasetDQ.R into your study package.
+
+
+```R
+install.packages("devtools");library(devtools);
+install_github("ohdsi/StudyProtocolSandbox/DataQuality",args="--no-multiarch")
+library(DataQuality)
+
+#make sure achilles() has been executed some time prior running this function)
+
+createMIADLevelOne <- function(connectionDetails,
+                               cdmDatabaseSchema,
+                               workDatabaseSchema,
+                               outputFolder='c:/temp/) 
+```
+
+# 2.Participate on DataQuality study
+
+This takes a series of steps described below:
 
 ## Step 1
 Execute the latest version of Achilles
@@ -72,17 +101,9 @@ submitResults(exportFolder =file.path(workFolder,'export'),
 
 If your site has more than one CDM-shaped datasets (databases) that you want to include in the overal study, repeat the process using a new workFolder and picking a different name (dbName) for the next dataset (database)
 
-#Only run DataQuality locally
-
-Generate local report (not shared with anyone, creates a local .DOCX file)
-
-```R
-exportFolder<-file.path(workFolder,'export')
-writeReport(exportFolder = exportFolder,outputFile = file.path(workFolder,'report.docx'))
-```
 
 
-# Use of output data
+## Use of output data
 
 If any site requires a formal Data Use Agreement between your site and the Data Quality Study Principal Investigator please fill in the  Data Use Agreement template (see  the extras folder) and email it to the DQ study PI (for second signature for data recipient).
 
@@ -93,5 +114,15 @@ If you share your site's data with the DataQuality study principal investigator 
 This principle was used in the initial study of Achilles Heel evaluation. (precursor to this study)
 
 
-# Additional tools
+## Additional tools
 The tool relies on new computations done by the Achilles tool. Using Achilles version >=1.4 is required
+
+
+# 3.Only run DataQuality locally
+
+Generate local report (not shared with anyone, creates a local .DOCX file)
+
+```R
+exportFolder<-file.path(workFolder,'export')
+writeReport(exportFolder = exportFolder,outputFile = file.path(workFolder,'report.docx'))
+```
