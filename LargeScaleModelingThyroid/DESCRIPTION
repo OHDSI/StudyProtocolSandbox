@@ -1,0 +1,21 @@
+Package: LargeScaleModelingThyroid
+Title: Large Scale Modeling of Patients with Thyroid Conditions
+Version: 0.1
+Authors: Antonija Burcul [aut, cre],
+	 Frank deFalco [aut],
+	 Jill Hardin [aut]
+Maintainer: Antonija Burcul <burculantonija@gmail.com> 
+Description: The objective of this study is the characterisation of non-cancerous thyroid disorder population and identification and characterization of sources of variation within threatment pathways for thyroid conditions. 
+Depends:
+    R (>= 3.1),
+    DataBaseConnector (>=1.2.1)
+Imports:
+    RJDBC,
+    FeatureExtraction,
+    PatientLevelPrediction,
+    OhdsiSharing
+Suggests:
+    testthat
+License: Apache License 2.0
+Encoding: UTF-8
+LazyData: true
