@@ -1,8 +1,0 @@
-[
-  {
-    "targetId": 4,
-    "comparatorId": 5,
-    "outcomeIds": 6,
-    "attr_class": "drugComparatorOutcomes"
-  }
-]
