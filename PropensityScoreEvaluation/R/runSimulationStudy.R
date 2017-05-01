@@ -32,7 +32,7 @@
 #' @export
 runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodData, simulationRuns = 10,  
                                trueEffectSize = NA, outcomePrevalence = NA, hdpsFeatures, stratify=FALSE, discrete=FALSE,
-                               ignoreCensoring = FALSE, threads = 10, fudge = .001, prior = NULL, maxRatio = 1, numStrata = 10,
+                               ignoreCensoring = FALSE, threads = 10, fudge = .001, psPrior = NULL, maxRatio = 1, numStrata = 10,
                                useCovariates = FALSE) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
@@ -41,10 +41,6 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   estimatesExpHdps = NULL
   estimatesBiasHdps = NULL
   # estimatesRandom = NULL
-  aucLasso = NULL
-  aucExpHdps = NULL
-  aucBiasHdps = NULL
-  # aucRandom = NULL
   nonZeroOverlaps = NULL
   allOverlaps = NULL
   
@@ -56,18 +52,17 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   studyPop = simulationProfile$studyPop
   partialCMD = cohortMethodData
   covariates0 = as.numeric(names(simulationProfile$outcomeModelCoefficients[simulationProfile$outcomeModelCoefficients!=0]))
-  if (is.null(prior)) prior = createPrior(priorType = "none")
+  if (is.null(psPrior)) psPrior = createPrior(priorType = "none")
   
   # modify confounding and sample size
   if(!is.na(covariatesToDiscard)) {
     partialCMD = removeCovariates(partialCMD, ff::as.ff(covariatesToDiscard))
   }
   
-  if (!is.na(sampleRowIds)) {
-    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
-    sData$XB = sData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), sData$XB$rowId),]
-    partialCMD = removeSubjects(partialCMD, sampleRowIds)
-  }
+  if (is.na(sampleRowIds)) sampleRowIds = studyPop$rowId
+  studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+  sData$XB = sData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), sData$XB$rowId),]
+  partialCMD = removeSubjects(partialCMD, sampleRowIds)
 
   # insert true effect size
   if (is.na(trueEffectSize)) trueEffectSize = simulationProfile$observedEffectSize
@@ -131,7 +126,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
       studyPopNew$survivalTime = cmd$cohorts$newSurvivalTime[match(studyPopNew$rowId, cmd$cohorts$rowId)]
       
       # calculate outcomes for bias hdps
-      psBias = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = prior, stopOnError = FALSE)
+      psBias = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = psPrior, stopOnError = FALSE)
       if (!is.null(attr(psBias, "metaData")$psError)) next
       else {
         if (stratify) popBias=stratifyByPs(psBias,numStrata) else popBias=matchOnPs(psBias,maxRatio = maxRatio)
@@ -143,7 +138,6 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
                                              useCovariates = useCovariates)
         estimatesBiasHdps = rbind(outcomeModelBias$outcomeModelTreatmentEstimate, estimatesBiasHdps)
         
-        aucBiasHdps = c(computePsAuc(psBias), aucBiasHdps)
         psBiasPermanent$propensityScore = psBiasPermanent$propensityScore + psBias$propensityScore
         psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore + psBias$preferenceScore
         
