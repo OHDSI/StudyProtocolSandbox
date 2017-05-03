@@ -522,6 +522,7 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
   biasHdpsError = 0
   preset = !is.na(covariatesToDiscard) || !is.na(sampleRowIds)
   if(is.null(prior)) prior = createPrior(priorType = "none")
+  cohortMethodData = removeSubjects(cohortMethodData = cohortMethodData, rowIdsToKeep = studyPop$rowId)
   
   if (!is.na(outcomePrevalence)) {
     sData = simulationProfile$sData
@@ -533,6 +534,7 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
   }
   
   for (i in 1:runs) {
+    writeLines(paste("run: ", i))
     cmd = cohortMethodData
     if (!preset) {
       if (!is.na(sampleSize)) {
@@ -549,6 +551,7 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
       studyPop1 = studyPop[match(sampleRowIds, studyPop$rowId),]
       cmd = removeSubjects(cohortMethodData, sampleRowIds)
     }
+    
     if (!is.na(covariatesToDiscard)) cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
     
     if (hdpsFeatures == TRUE) {
