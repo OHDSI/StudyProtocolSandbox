@@ -260,7 +260,7 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
 
   if (is.na(sampleRowIds)) sampleRowIds = studyPop$rowId
   studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
-  cmd = removeSubjects(cmd, sampleRowIds)
+  cmd = removeSubjects(cohortMethodData, sampleRowIds)
   
   if (!is.na(covariatesToDiscard)) {
     cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
