@@ -257,11 +257,11 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
       if (!test$anyError) break
     }
   }
-  cmd = cohortMethodData
-  if (!is.na(sampleRowIds)) {
-    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
-    cmd = removeSubjects(cmd, sampleRowIds)
-  }
+
+  if (is.na(sampleRowIds)) sampleRowIds = studyPop$rowId
+  studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+  cmd = removeSubjects(cmd, sampleRowIds)
+  
   if (!is.na(covariatesToDiscard)) {
     cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
   }
