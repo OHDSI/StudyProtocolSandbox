@@ -15,222 +15,111 @@ createCohorts<-function(connectionDetails,
   #)
   #DatabaseConnector::executeSql(conn, renderedSql)
   
-  writeLines("ac180_wo_hx.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac180_wo_hx.sql",
+  aggregate_sql <- "DELETE FROM @target_database_schema.@target_cohort_table where cohort_definition_id = @target_cohort_id;
+  INSERT INTO @target_database_schema.@target_cohort_table (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)
+  SELECT @target_cohort_id as cohort_definition, subject_id, min(cohort_start_date), min(cohort_end_date) 
+  from @target_database_schema.@target_cohort_table
+  WHERE cohort_definition_id in @target_cohort_set
+  GROUP BY subject_id"
+  
+  
+  writeLines("ac_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 13,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 target_cohort_id=1300
   )
   DatabaseConnector::executeSql(conn, renderedSql)
   
-  writeLines("ac180_wo_hx_55_or_more.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac180_wo_hx_55_or_more.sql",
+  writeLines("ca_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 1356,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 target_cohort_id=3100
   )
   DatabaseConnector::executeSql(conn, renderedSql)
   
-  writeLines("ac180_wo_hx_less_than_55.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac180_wo_hx_less_than_55.sql",
+  writeLines("ad_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 1354,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 target_cohort_id=1400
   )
   DatabaseConnector::executeSql(conn, renderedSql)
   
-  writeLines("ac180_wo_hx_itt.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac180_wo_hx_itt.sql",
+  writeLines("da_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 131,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 target_cohort_id=4100
   )
   DatabaseConnector::executeSql(conn, renderedSql)
   
-  writeLines("ac180_wo_hx_itt_55_or_more.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac180_wo_hx_itt_55_or_more.sql",
+  writeLines("cd_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 13156,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 target_cohort_id=3400
   )
   DatabaseConnector::executeSql(conn, renderedSql)
   
-  writeLines("ac180_wo_hx_itt_less_than_55.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac180_wo_hx_itt_less_than_55.sql",
+  writeLines("dc_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 13154,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 target_cohort_id=4300
   )
   DatabaseConnector::executeSql(conn, renderedSql)
   
-  writeLines("ad180_wo_hx.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad180_wo_hx.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 14,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
+  ##aggregation code
   
-  writeLines("ad180_wo_hx_55_or_more.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad180_wo_hx_55_or_more.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 1456,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
+  sql <- renderSql(aggregate_sql,
+                   cdm_database_schema=cdmDatabaseSchema,
+                   target_database_schema=resultsDatabaseSchema,
+                   target_cohort_table=exposureTable,
+                   target_cohort_id=13,
+                   target_cohort_set="(1300,3100)")$sql
+  sql <- translateSql(sql,
+                      targetDialect=connectionDetails$dbms)$sql
+  DatabaseConnector::executeSql(conn, sql)
   
-  writeLines("ad180_wo_hx_less_than_55.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad180_wo_hx_less_than_55.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 1454,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
+  sql <- renderSql(aggregate_sql,
+                   cdm_database_schema=cdmDatabaseSchema,
+                   target_database_schema=resultsDatabaseSchema,
+                   target_cohort_table=exposureTable,
+                   target_cohort_id=14,
+                   target_cohort_set="(1400,4100)")$sql
+  sql <- translateSql(sql,
+                      targetDialect=connectionDetails$dbms)$sql
+  DatabaseConnector::executeSql(conn, sql)
   
-  writeLines("ad180_wo_hx_itt.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad180_wo_hx_itt.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 141,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
-
-  writeLines("ad180_wo_hx_itt_55_or_more.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad180_wo_hx_itt_55_or_more.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 14156,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
-  
-  writeLines("ad180_wo_hx_itt_less_than_55.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad180_wo_hx_itt_less_than_55.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 14154,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
-  
-  writeLines("cd180_wo_hx.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd180_wo_hx.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 34,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable  
-                                                 )
-  
-  DatabaseConnector::executeSql(conn, renderedSql)
-  
-  writeLines("cd180_wo_hx_55_or_more.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd180_wo_hx_55_or_more.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 3456,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable  
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
-  
-  writeLines("cd180_wo_hx_less_than_55.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd180_wo_hx_less_than_55.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 3454,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable  
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
-  
-  writeLines("cd180_wo_hx_itt.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd180_wo_hx_itt.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 341,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable  
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
-  
-  writeLines("cd180_wo_hx_itt_55_or_more.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd180_wo_hx_itt_55_or_more.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 34156,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable  
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
-  
-  writeLines("cd180_wo_hx_itt_less_than_55.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd180_wo_hx_itt_less_than_55.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_cohort_id = 34154,
-                                                 cdmDatabaseSchema=cdmDatabaseSchema,
-                                                 resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
-                                                 outcomeTable=outcomeTable  
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
+  sql <- renderSql(aggregate_sql,
+                   cdm_database_schema=cdmDatabaseSchema,
+                   target_database_schema=resultsDatabaseSchema,
+                   target_cohort_table=exposureTable,
+                   target_cohort_id=34,
+                   target_cohort_set="(3400,4300)")$sql
+  sql <- translateSql(sql,
+                      targetDialect=connectionDetails$dbms)$sql
+  DatabaseConnector::executeSql(conn, sql)
   
   writeLines("outcome_cohort.sql")
   renderedSql<-SqlRender::loadRenderTranslateSql("outcome_cohort.sql",
@@ -257,13 +146,8 @@ createCohorts<-function(connectionDetails,
 }
 
 addCohortNames <- function(data, IdColumnName = "outcomeId", nameColumnName = "outcomeName") {
-  idToName <- data.frame(cohortId = c(13, 1354, 1356, 131, 13154, 13156, 14, 1454, 1456, 141, 14154, 14156, 34, 3454, 3456, 341, 34154, 34156),
-                         cohortName = c("AC","AC less than 55", "AC 55 or more", 
-                                        "AC_ITT", "AC_ITT less than 55","AC_ITT 55 or more",
-                                        "AD","AD less than 55","AD 55 or more",
-                                        "AD_ITT", "AD_ITT less than 55","AD_ITT 55 or more",
-                                        "CD", "CD less than 55","CD 55 or more",
-                                        "CD_ITT","CD_ITT less than 55","CD_ITT 55 or more"))
+  idToName <- data.frame(cohortId = c(13,14,34),
+                         cohortName = c("AC","AD","CD"))
   names(idToName)[1] <- IdColumnName
   names(idToName)[2] <- nameColumnName
   data <- merge(data, idToName, all.x = TRUE)
