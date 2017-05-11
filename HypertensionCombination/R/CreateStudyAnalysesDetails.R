@@ -6,93 +6,41 @@ createAnalysesDetails <- function(outputFolder) {
                                                      "htn_med_list",
                                                      package = "HypertensionCombination"))
   
-  cohortset <- list(CD=34,
-                    BC=23,
-                    AC=13,
-                    BD=24,
-                    AD=14)
-  comparatorset <- list(BC=23,
-                        AC=13)
+  cohortset <- list(AC=13,
+                    AD=14,
+                    CD=34)
+  comparatorset <- list(AC=13,
+                        AD=14,
+                        CD=34)
   
-  outcomeset <- c(4320,4321, 420, 421, 0,1,2,3,4) 
+  outcomeset <- c(0, 378424, 4004352, 4280726, 133141, 137053, 140480, 380731,
+                  381581, 75344,  80809, 376415,  4224118, 4253054, 437409, 199067, 434272, 373478, 140641, 139099,
+                  4142905, 195862, 4271016, 375552, 380038, 135473, 138102, 29735, 4153877, 74396, 134870, 74855,
+                  200169, 194997,  192367, 4267582, 434872, 4329707, 4288544, 198075) 
+  #any death / #composite + any death / MI/HF/STROKE
+  #c(4320,4321, 420, 421, 0,1,2,3,4) 
   #composite + any death / composite + cardiocerebral death / stroke+MI+any death / stroke+MI+cc death/ any death/ cc death/MI/HF/STROKE
   
-  dcos1 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
-                                                     comparatorId = 13,
-                                                     excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                     outcomeIds = outcomeset)
-  dcos1<-list(dcos1)
-  dcos2 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
+  dcos1 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
                                                      comparatorId = 14,
                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                      outcomeIds = outcomeset)
-  dcos2<-list(dcos2)
-  dcos3 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
-                                                      comparatorId = 23,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos3<-list(dcos3)
-  dcos4 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
-                                                      comparatorId = 24,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos4<-list(dcos4)
-  dcos5 <- CohortMethod::createDrugComparatorOutcomes(targetId = 12,
-                                                      comparatorId = 34,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos5<-list(dcos5)
-  dcos6 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
+  dcos1<-list(dcos1)
+  
+  dcos2 <- CohortMethod::createDrugComparatorOutcomes(targetId = 34,
                                                       comparatorId = 14,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
-  dcos6<-list(dcos6)
-  dcos7 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
-                                                      comparatorId = 23,
+  dcos2<-list(dcos2)
+  
+  dcos3 <- CohortMethod::createDrugComparatorOutcomes(targetId = 34,
+                                                      comparatorId = 13,
                                                       excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                       outcomeIds = outcomeset)
-  dcos7<-list(dcos7)
-  dcos8 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
-                                                      comparatorId = 24,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos8<-list(dcos8)
-  dcos9 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13,
-                                                      comparatorId = 34,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos9<-list(dcos9)
-  dcos10 <- CohortMethod::createDrugComparatorOutcomes(targetId = 14,
-                                                      comparatorId = 23,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos10<-list(dcos10)
-  dcos11 <- CohortMethod::createDrugComparatorOutcomes(targetId = 14,
-                                                      comparatorId = 24,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos11<-list(dcos11)
-  dcos12 <- CohortMethod::createDrugComparatorOutcomes(targetId = 14,
-                                                      comparatorId = 34,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos12<-list(dcos12)
-  dcos13 <- CohortMethod::createDrugComparatorOutcomes(targetId = 23,
-                                                      comparatorId = 24,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos13<-list(dcos13)
-  dcos14 <- CohortMethod::createDrugComparatorOutcomes(targetId = 23,
-                                                      comparatorId = 34,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos14<-list(dcos14)
-  dcos15 <- CohortMethod::createDrugComparatorOutcomes(targetId = 24,
-                                                      comparatorId = 34,
-                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
-                                                      outcomeIds = outcomeset)
-  dcos15<-list(dcos15)
-  drugComparatorOutcomesList <- c(dcos1,dcos2,dcos3,dcos4,dcos5,dcos6,dcos7,dcos8,dcos9,dcos10,dcos11,dcos12,dcos13,dcos14,dcos15)
+  dcos3<-list(dcos3)
+  
+  
+  drugComparatorOutcomesList <- c(dcos1,dcos2,dcos3)
   
   covarSettings <- FeatureExtraction::createCovariateSettings(useCovariateDemographics = TRUE,
                                                               useCovariateDemographicsGender = TRUE,
@@ -149,17 +97,29 @@ createAnalysesDetails <- function(outputFolder) {
   getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(studyStartDate = "",
                                                                    studyEndDate = "",
                                                                    excludeDrugsFromCovariates = FALSE,
-                                                                   firstExposureOnly = FALSE,
+                                                                   firstExposureOnly = TRUE,
                                                                    removeDuplicateSubjects = TRUE,
                                                                    washoutPeriod = 0,
                                                                    covariateSettings = covarSettings)
 
-  createStudyPopArgs1 <- CohortMethod::createCreateStudyPopulationArgs(firstExposureOnly = FALSE,
+  
+  createStudyPopArgs1 <- CohortMethod::createCreateStudyPopulationArgs(firstExposureOnly = TRUE,
                                                                        washoutPeriod = 0,
                                                                        removeDuplicateSubjects = TRUE,
                                                                        removeSubjectsWithPriorOutcome = TRUE,
                                                                        minDaysAtRisk = 0,
-                                                                       riskWindowStart = 0,
+                                                                       riskWindowStart = 30,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 0,
+                                                                       addExposureDaysToEnd = TRUE)
+  
+  
+  createStudyPopArgs2 <- CohortMethod::createCreateStudyPopulationArgs(firstExposureOnly = TRUE,
+                                                                       washoutPeriod = 0,
+                                                                       removeDuplicateSubjects = TRUE,
+                                                                       removeSubjectsWithPriorOutcome = TRUE,
+                                                                       minDaysAtRisk = 0,
+                                                                       riskWindowStart = 180,
                                                                        addExposureDaysToStart = FALSE,
                                                                        riskWindowEnd = 0,
                                                                        addExposureDaysToEnd = TRUE)
@@ -188,8 +148,8 @@ createAnalysesDetails <- function(outputFolder) {
                                                                   includeCovariateIds = omIncludedConcepts)
 
 
-  cmAnalysis1 <- CohortMethod::createCmAnalysis(analysisId = 1,
-                                                description = "Hypertension Combination",
+  cmAnalysis1 <- CohortMethod::createCmAnalysis(analysisId = 30,
+                                                description = "Hypertension Combination (risk started after 30days)",
                                                 #targetType = 34,
                                                 #comparatorType = "BC",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
@@ -201,125 +161,13 @@ createAnalysesDetails <- function(outputFolder) {
                                                 computeCovariateBalance = TRUE,
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
-  cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
-                                                description = "CD vs AC",
-                                                targetType = "CD",
-                                                comparatorType = "AC",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
-  cmAnalysis3 <- CohortMethod::createCmAnalysis(analysisId = 3,
-                                                description = "CD vs BD",
-                                                targetType = "CD",
-                                                comparatorType = "BD",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
-  cmAnalysis4 <- CohortMethod::createCmAnalysis(analysisId = 4,
-                                                description = "CD vs AD",
-                                                targetType = "CD",
-                                                comparatorType = "AD",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
-  cmAnalysis5 <- CohortMethod::createCmAnalysis(analysisId = 5,
-                                                description = "BC vs AC",
-                                                targetType = "BC",
-                                                comparatorType = "AC",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
-  cmAnalysis6 <- CohortMethod::createCmAnalysis(analysisId = 6,
-                                                description = "BC vs BD",
-                                                targetType = "BC",
-                                                comparatorType = "BD",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
-  cmAnalysis7 <- CohortMethod::createCmAnalysis(analysisId = 7,
-                                                description = "BC vs AD",
-                                                targetType = "BC",
-                                                comparatorType = "AD",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
-  cmAnalysis8 <- CohortMethod::createCmAnalysis(analysisId = 8,
-                                                description = "AC vs BD",
-                                                targetType = "AC",
-                                                comparatorType = "BD",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
-
-  cmAnalysis9 <- CohortMethod::createCmAnalysis(analysisId = 9,
-                                                description = "AC vs AD",
-                                                targetType = "AC",
-                                                comparatorType = "AD",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
   
-  cmAnalysis10 <- CohortMethod::createCmAnalysis(analysisId = 10,
-                                                description = "BD vs AD",
-                                                targetType = "BD",
-                                                comparatorType = "AD",
+  cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 180,
+                                                description = "Hypertension Combination (risk started after 180days)",
+                                                #targetType = 34,
+                                                #comparatorType = "BC",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
+                                                createStudyPopArgs = createStudyPopArgs2,
                                                 createPs = TRUE,
                                                 createPsArgs = createPsArgs,
                                                 matchOnPs = TRUE,
@@ -327,8 +175,10 @@ createAnalysesDetails <- function(outputFolder) {
                                                 computeCovariateBalance = TRUE,
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
+
   
-  cmAnalysisList <- list(cmAnalysis1)
+  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2)
+#  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2)
 #  cmAnalysisList <- list(cmAnalysis1,
 #                         cmAnalysis2,
 #                         cmAnalysis3,
