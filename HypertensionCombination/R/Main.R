@@ -45,7 +45,7 @@ execute<-function(connectionDetails,
     drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
     CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
                                 cdmDatabaseSchema = cdmDatabaseSchema,
-                                oracleTempSchema = oracleTempSchema,
+                                #oracleTempSchema = oracleTempSchema,
                                 exposureDatabaseSchema = resultsDatabaseSchema,
                                 exposureTable = exposureTable,
                                 outcomeDatabaseSchema = resultsDatabaseSchema,
