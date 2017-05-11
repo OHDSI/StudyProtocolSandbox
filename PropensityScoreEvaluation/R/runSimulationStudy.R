@@ -357,9 +357,9 @@ runSimulationStudy1 <- function(simulationProfile, simulationSetup, cohortMethod
                                                    stratified = TRUE,
                                                    useCovariates = FALSE)
           estimatesBiasHdpsNone = rbind(outcomeModelBiasNone$outcomeModelTreatmentEstimate, estimatesBiasHdpsNone)
-          psBiasNone[,c("subjectId","treatment","cohortStartDate","daysFromObsStart","daysToCohortEnd","daysToObsEnd","outcomeCount",
-                        "timeAtRisk","daysToEvent","survivalTime","preferenceScore")] <- NULL
-          psBiasNoneList[[i]] = psBiasNone
+          psNew = popBiasNone[,c("rowId","propensityScore")]
+          attributes(psNew)$metaData = attributes(popBiasNone)$metaData
+          psBiasNoneList[[i]] = psNew
         }
         break
       }
