@@ -240,7 +240,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
 
 #' @export
 runSimulationStudy1 <- function(simulationProfile, simulationSetup, cohortMethodData, simulationRuns = 10,  
-                                trueEffectSize = NA, outcomePrevalence = NA, hdpsFeatures, stratify=FALSE, discrete=FALSE,
+                                trueEffectSize = NA, outcomePrevalence = NA, hdpsFeatures = TRUE, stratify=FALSE, discrete=FALSE,
                                 ignoreCensoring = FALSE, fudge = .001, psPrior = createPrior("laplace",useCrossValidation = TRUE),
                                 maxRatio = 1, numStrata = 10, nonePrior = FALSE) {
   saveFfState <- options("fffinalizer")$ffinalizer
@@ -345,9 +345,9 @@ runSimulationStudy1 <- function(simulationProfile, simulationSetup, cohortMethod
                                              stratified = TRUE,
                                              useCovariates = FALSE)
         estimatesBiasHdpsCV = rbind(outcomeModelBiasCV$outcomeModelTreatmentEstimate, estimatesBiasHdpsCV)
-        psBiasCV[,c("subjectId","treatment","cohortStartDate","daysFromObsStart","daysToCohortEnd","daysToObsEnd","outcomeCount",
-                    "timeAtRisk","daysToEvent","survivalTime","preferenceScore")] <- NULL
-        psBiasCVList[[i]] = psBiasCV
+        psNew = psBiasCV[,c("rowId","propensityScore")]
+        attributes(psNew)$metaData = attributes(psBiasCV)$metaData
+        psBiasCVList[[i]] = psNew
 
         if (nonePrior) {
           if (stratify) popBiasNone=stratifyByPs(psBiasNone,numStrata) else popBiasNone=matchOnPs(psBiasNone,maxRatio = maxRatio)
