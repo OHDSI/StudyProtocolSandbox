@@ -29,7 +29,7 @@ createMIADLevelOne <- function(connectionDetails,
   
   
   #check if Achilles_results tables are in workDatabaseSchema (hoping they would)
-  
+  conn <- DatabaseConnector::connect(connectionDetails)    
   
   tables<-getTableNames(conn,workDatabaseSchema) #requires certain version of DatabaseConnector
   tables<-toupper(tables)
@@ -38,7 +38,7 @@ createMIADLevelOne <- function(connectionDetails,
   if (hasAchillesDerivedTable) {
     
     
-    conn <- DatabaseConnector::connect(connectionDetails)  
+
     
     
     #assuming colum names will be upper case for all outputs
@@ -159,6 +159,7 @@ createMIADLevelOne <- function(connectionDetails,
     
     
   }
+  writeLinnes('Done generating MIAD')
   #return value
   invisible(NULL)
 }
