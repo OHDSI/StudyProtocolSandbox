@@ -91,6 +91,7 @@ createCohorts<-function(connectionDetails,
   
   ##aggregation code
   
+  writeLines("ac cohort aggregation")
   sql <- renderSql(aggregate_sql,
                    cdm_database_schema=cdmDatabaseSchema,
                    target_database_schema=resultsDatabaseSchema,
@@ -101,6 +102,7 @@ createCohorts<-function(connectionDetails,
                       targetDialect=connectionDetails$dbms)$sql
   DatabaseConnector::executeSql(conn, sql)
   
+  writeLines("ad cohort aggregation")
   sql <- renderSql(aggregate_sql,
                    cdm_database_schema=cdmDatabaseSchema,
                    target_database_schema=resultsDatabaseSchema,
@@ -111,6 +113,7 @@ createCohorts<-function(connectionDetails,
                       targetDialect=connectionDetails$dbms)$sql
   DatabaseConnector::executeSql(conn, sql)
   
+  writeLines("cd cohort aggregation")
   sql <- renderSql(aggregate_sql,
                    cdm_database_schema=cdmDatabaseSchema,
                    target_database_schema=resultsDatabaseSchema,
