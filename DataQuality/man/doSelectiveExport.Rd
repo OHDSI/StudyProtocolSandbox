@@ -11,4 +11,3 @@ doSelectiveExport(connectionDetails, cdmDatabaseSchema,
 \description{
 selected Achilles Measures
 }
-
