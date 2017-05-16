@@ -536,7 +536,7 @@ runSimulationStudy2 <- function(simulationProfile, cohortMethodData, simulationR
 }
 
 #' @export
-runSimulationStudy3 <- function(study, cohortMethodData, simulationProfile, simulationSetup, stratify = FALSE, maxRatio = 1, numStrata = 10, caliper = 0.25) {
+runSimulationStudy3 <- function(study, cohortMethodData, simulationProfile, simulationSetup, stratify = FALSE, maxRatio = 1, numStrata = 10, caliper = 0.25, maximizeMatching = TRUE) {
   estimatesLassoHDPS = NULL
   estimatesLassoCDM = NULL
   estimatesLassoAll = NULL
@@ -549,21 +549,43 @@ runSimulationStudy3 <- function(study, cohortMethodData, simulationProfile, simu
   studyPop = simulationProfile$studyPop
   studyPop = studyPop[match(study$settings$rowIds,studyPop$rowId),]
   simulationRuns = study$settings$simulationRuns
+  
   psLassoHDPS = simulationSetup$psLassoHDPS
-  if (stratify) strataLassoHDPS=stratifyByPs(psLassoHDPS,numStrata) else strataLassoHDPS=matchOnPs(psLassoHDPS, maxRatio = maxRatio, caliper = caliper)
+  maximizeMatching = maximizeMatching & sum(psLassoHDPS$treatment)>0.5*nrow(psLassoHDPS) & !stratify
+  if (stratify) strataLassoHDPS=stratifyByPs(psLassoHDPS,numStrata) 
+  else {
+    if (maximizeMatching) psLassoHDPS$treatment = 1 - psLassoHDPS$treatment
+    strataLassoHDPS=matchOnPs(psLassoHDPS, maxRatio = maxRatio, caliper = caliper)
+  }
   
   psLassoCDM = simulationSetup$psLassoCDM
-  if (stratify) strataLassoCDM=stratifyByPs(psLassoCDM,numStrata) else strataLassoCDM=matchOnPs(psLassoCDM, maxRatio = maxRatio, caliper = caliper)
+  if (stratify) strataLassoCDM=stratifyByPs(psLassoCDM,numStrata) 
+  else {
+    if (maximizeMatching) psLassoCDM$treatment = 1 - psLassoCDM$treatment
+    strataLassoCDM=matchOnPs(psLassoCDM, maxRatio = maxRatio, caliper = caliper)
+  }
   
   psLassoAll = simulationSetup$psLassoAll
-  if (stratify) strataLassoAll=stratifyByPs(psLassoAll,numStrata) else strataLassoAll=matchOnPs(psLassoAll, maxRatio = maxRatio, caliper = caliper)
+  if (stratify) strataLassoAll=stratifyByPs(psLassoAll,numStrata) 
+  else {
+    if (maximizeMatching) psLassoAll$treatment = 1 - psLassoAll$treatment
+    strataLassoAll=matchOnPs(psLassoAll, maxRatio = maxRatio, caliper = caliper)
+  }
   
   psExpCV = simulationSetup$psExpCV
-  if (stratify) strataExpCV=stratifyByPs(psExpCV,numStrata) else strataExpCV=matchOnPs(psExpCV, maxRatio = maxRatio, caliper = caliper)
+  if (stratify) strataExpCV=stratifyByPs(psExpCV,numStrata) 
+  else {
+    if (maximizeMatching) psExpCV$treatment = 1 - psExpCV$treatment
+    strataExpCV=matchOnPs(psExpCV, maxRatio = maxRatio, caliper = caliper)
+  }
   
   if (nonePrior) {
     psExpNone = simulationSetup$psExp
-    if (stratify) strataExpNone=stratifyByPs(psExpNone,numStrata) else strataExpNone=matchOnPs(psExpNone, maxRatio = maxRatio, caliper = caliper)
+    if (stratify) strataExpNone=stratifyByPs(psExpNone,numStrata)
+    else {
+      if (maximizeMatching) psExpNone$treatment = 1 - psExpNone$treatment
+      strataExpNone=matchOnPs(psExpNone, maxRatio = maxRatio, caliper = caliper)
+    }
   }
   
   cmd = cohortMethodData
@@ -637,7 +659,12 @@ runSimulationStudy3 <- function(study, cohortMethodData, simulationProfile, simu
     # bias
     psBiasCV = studyPopNew
     psBiasCV$propensityScore = study$psBiasCVList[[i]]
-    if (stratify) popBiasCV=stratifyByPs(psBiasCV,numStrata) else popBiasCV=matchOnPs(psBiasCV,maxRatio = maxRatio, caliper = caliper)
+    if (stratify) popBiasCV=stratifyByPs(psBiasCV,numStrata) 
+    else {
+      if (maximizeMatching) psBiasCV$treatment = 1 - psBiasCV$treatment
+      popBiasCV=matchOnPs(psBiasCV,maxRatio = maxRatio, caliper = caliper)
+      if (maximizeMatching) popBiasCV$treatment = 1 - popBiasCV$treatment
+    }
     outcomeModelBiasCV  <- fitOutcomeModel(population = popBiasCV,
                                            cohortMethodData = cmd,
                                            modelType = "cox",
@@ -648,7 +675,12 @@ runSimulationStudy3 <- function(study, cohortMethodData, simulationProfile, simu
     if (nonePrior) {
       psBiasNone = studyPopNew
       psBiasNone$propensityScore = study$psBiasNoneList[[i]]
-      if (stratify) popBiasNone=stratifyByPs(psBiasNone,numStrata) else popBiasNone=matchOnPs(psBiasNone,maxRatio = maxRatio, caliper = caliper)
+      if (stratify) popBiasNone=stratifyByPs(psBiasNone,numStrata) 
+      else {
+        if (maximizeMatching) psBiasNone$treatment = 1 - psBiasNone$treatment
+        popBiasNone=matchOnPs(psBiasNone,maxRatio = maxRatio, caliper = caliper)
+        if (maximizeMatching) popBiasNone$treatment = 1 - popBiasNone$treatment
+      }
       outcomeModelBiasNone  <- fitOutcomeModel(population = popBiasNone,
                                                cohortMethodData = cmd,
                                                modelType = "cox",
@@ -664,6 +696,7 @@ runSimulationStudy3 <- function(study, cohortMethodData, simulationProfile, simu
   settings$maxRatio = maxRatio
   settings$numStrata = numStrata
   settings$caliper = caliper
+  settings$maximizeMatching = maximizeMatching
   
   return(list(settings = settings,
               estimatesUnadjusted = estimatesUnadjusted,
