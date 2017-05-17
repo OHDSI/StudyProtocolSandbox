@@ -3,8 +3,13 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
     analysisSummary <- read.csv(file.path(exportFolder, "MainResults.csv"))
     
     tablesAndFiguresFolder <- file.path(exportFolder, "tablesAndFigures")
+    MainresultFolder<-file.path(exportFolder, "Mainresult")
+    
     if (!file.exists(tablesAndFiguresFolder))
         dir.create(tablesAndFiguresFolder)
+    
+    if (!file.exists(MainresultFolder))
+        dir.create(MainresultFolder)
     
     negControlCohortIds <- c(378424, 4004352, 4280726, 133141, 137053, 140480, 380731,
                              381581, 75344,  80809, 376415,  4224118, 4253054, 437409, 199067, 434272, 373478, 140641, 139099,
@@ -72,12 +77,24 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         
         idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
         balance <- read.csv(file.path(exportFolder, paste0("Balance",idx,".csv")))
+        
+        
+        
         CohortMethod::plotCovariateBalanceScatterPlot(balance,
-                                                      fileName = file.path(tablesAndFiguresFolder,
-                                                                           paste0("BalanceScatterPlot",idx,".png")))
+                                                          fileName = file.path(tablesAndFiguresFolder,
+                                                                               paste0("BalanceScatterPlot",idx,".png")))
         CohortMethod::plotCovariateBalanceOfTopVariables(balance,
-                                                         fileName = file.path(tablesAndFiguresFolder,
-                                                                              paste0("BalanceTopVariables",idx,".png")))
+                                                             fileName = file.path(tablesAndFiguresFolder,
+                                                                                  paste0("BalanceTopVariables",idx,".png")))
+        #One more result to the MainresultFolder
+        if(outcomeReference$outcomeId[i]==0){
+            CohortMethod::plotCovariateBalanceScatterPlot(balance,
+                                                          fileName = file.path(MainresultFolder,
+                                                                               paste0("BalanceScatterPlot",idx,".png")))
+            CohortMethod::plotCovariateBalanceOfTopVariables(balance,
+                                                             fileName = file.path(MainresultFolder,
+                                                                                  paste0("BalanceTopVariables",idx,".png")))
+        }
     }
     
     ### Population characteristics table
@@ -286,6 +303,9 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         
         table <- rbind(age, gender, year)
         write.csv(table, file.path(tablesAndFiguresFolder, paste0("PopChar",idx,".csv")), row.names = FALSE)
+        if(outcomeReference$outcomeId[i]==0){
+            write.csv(table, file.path(MainresultFolder, paste0("PopChar",idx,".csv")), row.names = FALSE)
+        }
     }
     
     for(i in 1:length(outcomeReference$analysisId)){
@@ -552,6 +572,10 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         
         table <- rbind(dm, ckd, af,charlson, dcsi, statin)
         write.csv(table, file.path(tablesAndFiguresFolder, paste0("PopComor",idx,".csv")), row.names = FALSE)
+        #One more table tothe mainresult table
+        if(outcomeReference$outcomeId[i]==0){
+            write.csv(table, file.path(MainresultFolder, paste0("PopComor",idx,".csv")), row.names = FALSE)
+        }
     }
     
     
@@ -573,6 +597,11 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         object <- list()
         attr(object, "metaData") <- list(attrition = attrition)
         CohortMethod::drawAttritionDiagram(object, fileName = file.path(tablesAndFiguresFolder, paste0("Attrition",idx,".png")))
+        
+        if(outcomeReference$outcomeId[i]==0){
+            CohortMethod::drawAttritionDiagram(object, fileName = file.path(MainresultFolder, paste0("Attrition",idx,".png")))
+        }
+        
     }
     
 }
