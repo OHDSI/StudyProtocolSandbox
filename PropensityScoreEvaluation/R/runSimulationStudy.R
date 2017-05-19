@@ -1000,12 +1000,11 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
     fun <- function(d) {return(findOutcomePrevalence(sData, cData, d) - outcomePrevalence)}
     delta <- uniroot(fun, lower = 0, upper = 10000)$root
     sData$baseline = sData$baseline^delta
-    cohortMethodData = simulateCMD(cohortMethodData, sData, cData, outcomeId)
   }
   
   for (i in 1:runs) {
     writeLines(paste("run: ", i))
-    cmd = cohortMethodData
+    cmd = simulateCMD(cohortMethodData, sData, cData, outcomeId)
     if (!preset) {
       if (!is.na(sampleSize)) {
         sampleRowIds = sample(studyPop$rowId, sampleSize)
@@ -1019,7 +1018,7 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
     studyPop1 = studyPop
     if (!is.na(sampleRowIds)) {
       studyPop1 = studyPop[match(sampleRowIds, studyPop$rowId),]
-      cmd = removeSubjects(cohortMethodData, sampleRowIds)
+      cmd = removeSubjects(cmd, sampleRowIds)
     }
     
     if (!is.na(covariatesToDiscard)) cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
