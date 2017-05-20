@@ -980,7 +980,7 @@ loadSimulationStudy <- function(file, readOnly = TRUE) {
 
 #' @export
 testConvergence <- function(cohortMethodData, simulationProfile, confoundingProportion=NA, sampleSize=NA, hdpsFeatures, 
-                            runs = 1, prior = NULL, outcomePrevalence = NA, covariatesToDiscard = NA, sampleRowIds = NA) {
+                            runs = 1, prior = NULL, outcomePrevalence = NA, covariatesToDiscard = NA, sampleRowIds = NA, discrete = FALSE) {
   studyPop = simulationProfile$studyPop
   outcomeId = simulationProfile$outcomeId
   modelCovariates = as.numeric(names(simulationProfile$outcomeModelCoefficients))
@@ -1004,7 +1004,7 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
   
   for (i in 1:runs) {
     writeLines(paste("run: ", i))
-    cmd = simulateCMD(cohortMethodData, sData, cData, outcomeId)
+    cmd = simulateCMD(cohortMethodData, sData, cData, outcomeId, discrete = discrete)
     if (!preset) {
       if (!is.na(sampleSize)) {
         sampleRowIds = sample(studyPop$rowId, sampleSize)
