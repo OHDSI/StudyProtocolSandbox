@@ -439,7 +439,7 @@ runSimulationStudy1 <- function(simulationProfile, simulationSetup, cohortMethod
 #' @export
 runSimulationStudy2 <- function(simulationProfile, cohortMethodData, simulationRuns = 10,
                                 trueEffectSize = NA, outcomePrevalence = NA, discrete = FALSE, ignoreCensoring = FALSE,
-                                psPrior = createPrior("laplace",useCrossValidation=TRUE), nonePrior = FALSE) {
+                                psPrior = createPrior("laplace",useCrossValidation=TRUE), nonePrior = FALSE, fudge = 0.001) {
   saveFfState <- options("fffinalizer")$ffinalizer
   options("fffinalizer" = "delete")
   
@@ -479,7 +479,7 @@ runSimulationStudy2 <- function(simulationProfile, cohortMethodData, simulationR
   
   # create hdps PS
   cmd = simulateCMD(partialCMD, sData, cData, outcomeId, discrete = discrete)
-  hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE)
+  hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = fudge)
   
   for (i in 1:simulationRuns) {
     start <- Sys.time()
@@ -749,9 +749,9 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
   
   # create exposure hdps
   if (hdpsFeatures == TRUE) {
-    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
   } else {
-    hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+    hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
   }
   psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop, prior = prior, stopOnError = FALSE)
   
@@ -993,14 +993,16 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
   preset = !is.na(covariatesToDiscard) || !is.na(sampleRowIds)
   if(is.null(prior)) prior = createPrior(priorType = "none")
   cohortMethodData = removeSubjects(cohortMethodData = cohortMethodData, rowIdsToKeep = studyPop$rowId)
+  sData = simulationProfile$sData
+  cData = simulationProfile$cData
   
   if (!is.na(outcomePrevalence)) {
-    sData = simulationProfile$sData
-    cData = simulationProfile$cData
     fun <- function(d) {return(findOutcomePrevalence(sData, cData, d) - outcomePrevalence)}
     delta <- uniroot(fun, lower = 0, upper = 10000)$root
     sData$baseline = sData$baseline^delta
   }
+  cmd = simulateCMD(cohortMethodData, sData, cData, outcomeId, discrete = discrete)
+  hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
   
   for (i in 1:runs) {
     writeLines(paste("run: ", i))
@@ -1020,14 +1022,17 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
       studyPop1 = studyPop[match(sampleRowIds, studyPop$rowId),]
       cmd = removeSubjects(cmd, sampleRowIds)
     }
+    studyPop1$daysToEvent = cmd$cohorts$newDaysToEvent[match(studyPop1$rowId, cmd$cohorts$rowId)]
+    studyPop1$outcomeCount = cmd$cohorts$newOutcomeCount[match(studyPop1$rowId, cmd$cohorts$rowId)]
+    studyPop1$survivalTime = cmd$cohorts$newSurvivalTime[match(studyPop1$rowId, cmd$cohorts$rowId)]
     
     if (!is.na(covariatesToDiscard)) cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
     
     if (hdpsFeatures == TRUE) {
-      hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+      #hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
       hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
     } else {
-      hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+      hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
       hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE)
     }
     
