@@ -485,7 +485,6 @@ runSimulationStudy2 <- function(simulationProfile, cohortMethodData, simulationR
     start <- Sys.time()
     writeLines(paste("Simulation: ", i))
     
-    # simulate and calculate bias hdps outcomes
     while(TRUE) {
       cmd = simulateCMD(partialCMD, sData, cData, outcomeId = outcomeId, discrete = discrete)
       if (is.null(cmd$outcomes)) next
@@ -495,13 +494,13 @@ runSimulationStudy2 <- function(simulationProfile, cohortMethodData, simulationR
       studyPopNew$outcomeCount = cmd$cohorts$newOutcomeCount[match(studyPopNew$rowId, cmd$cohorts$rowId)]
       studyPopNew$survivalTime = cmd$cohorts$newSurvivalTime[match(studyPopNew$rowId, cmd$cohorts$rowId)]
       
-      # calculate outcomes for bias hdps
-      psBiasCV = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = psPrior, stopOnError = FALSE)
       if (nonePrior) {
         psBiasNone = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = createPrior("none"), stopOnError = FALSE)
         psBiasNoneError = !is.null(attr(psBiasNone, "metaData")$psError)
+        if (psBiasNoneError) next
       }
-      if (!is.null(attr(psBiasCV, "metaData")$psError) | psBiasNoneError) next
+      psBiasCV = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = psPrior, stopOnError = FALSE)
+      if (!is.null(attr(psBiasCV, "metaData")$psError)) next
       outcomesList[[i]] = cmd$outcomes$rowId
       timesList[[i]] = cmd$cohorts$newSurvivalTime
       
