@@ -98,8 +98,10 @@ calculateMetrics1 <- function(simulationResults, cohortMethodData, simulationPro
   if (settings$nonePrior) expHdps1 = calculateMetricsHelper2(psExpHdps, settings, covariates, outcomeModelCovariates, balance)
   
   f <- function(ps,cohorts,settings,covariates,outcomeModelCovariates, balance) {
-    ps = data.frame(rowId = settings$rowId, propensityScore = ps)
-    return(list(calculateMetricsHelper2(merge(ps,cohorts[,c("rowId","treatment")]),settings,covariates,outcomeModelCovariates,balance)))
+    newPs = data.frame(rowId = settings$rowId, propensityScore = ps)
+    newPs = merge(newPs,cohorts[,c("rowId","treatment")])
+    attributes(newPs)$metaData = attributes(ps)$metaData
+    return(list(calculateMetricsHelper2(newPs,settings,covariates,outcomeModelCovariates,balance)))
   }
   
   biasHdpsCVList = sapply(simulationResults$psBiasCVList,f,cohorts,settings,covariates,outcomeModelCovariates,balance)
@@ -172,7 +174,7 @@ calculateMetricsHelper2 <- function(ps, settings, covariates, outcomeModelCovari
     if (settings$stratify) population = stratifyByPs(ps, numberOfStrata = settings$numStrata)
     else {
       if (settings$maximizeMatching) ps$treatment = 1 - ps$treatment
-      population = matchOnPs(ps, maxRatio = settings$maxRatio)
+      population = matchOnPs(ps, maxRatio = settings$maxRatio, caliper = settings$caliper)
       if (settings$maximizeMatching) population$treatment = 1 - population$treatment
     }
     afterBalance = computeAfterCovariateBalance(population, covariates)
