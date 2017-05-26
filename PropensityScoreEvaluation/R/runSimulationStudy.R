@@ -978,7 +978,7 @@ loadSimulationStudy <- function(file, readOnly = TRUE) {
 }
 
 #' @export
-testConvergence <- function(cohortMethodData, simulationProfile, confoundingProportion=NA, sampleSize=NA, hdpsFeatures, 
+testConvergence <- function(cohortMethodData, simulationProfile, confoundingProportion=NA, sampleSize=NA, 
                             runs = 1, prior = NULL, outcomePrevalence = NA, covariatesToDiscard = NA, sampleRowIds = NA, discrete = FALSE) {
   studyPop = simulationProfile$studyPop
   outcomeId = simulationProfile$outcomeId
@@ -1000,8 +1000,6 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
     delta <- uniroot(fun, lower = 0, upper = 10000)$root
     sData$baseline = sData$baseline^delta
   }
-  cmd = simulateCMD(cohortMethodData, sData, cData, outcomeId, discrete = discrete)
-  hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
   
   for (i in 1:runs) {
     writeLines(paste("run: ", i))
@@ -1027,13 +1025,8 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
     
     if (!is.na(covariatesToDiscard)) cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
     
-    if (hdpsFeatures == TRUE) {
-      #hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
-      hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
-    } else {
-      hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
-      hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE)
-    }
+    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
+    hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
     
     psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop1, prior = prior, stopOnError = FALSE)
     if(!is.null(attr(psExp, "metaData")$psError)){
