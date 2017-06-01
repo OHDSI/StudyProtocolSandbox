@@ -1,6 +1,6 @@
 # @file InjectSignals.R
 #
-# Copyright 2016 Observational Health Data Sciences and Informatics
+# Copyright 2017 Observational Health Data Sciences and Informatics
 #
 # This file is part of PopEstMethodEvaluation
 #
@@ -25,7 +25,7 @@ injectSignals <- function(connectionDetails,
                           workFolder,
                           cdmVersion = "5",
                           createBaselineCohorts = TRUE,
-                          maxThreads = 1) {
+                          maxCores = 1) {
     injectionFolder <- file.path(workFolder, "SignalInjection")
     if (!file.exists(injectionFolder))
         dir.create(injectionFolder)
@@ -67,10 +67,11 @@ injectSignals <- function(connectionDetails,
         prior = Cyclops::createPrior("laplace", exclude = 0, useCrossValidation = TRUE)
 
         control = Cyclops::createControl(cvType = "auto",
-                                         startingVariance = 0.001,
+                                         startingVariance = 0.01,
                                          noiseLevel = "quiet",
                                          tolerance = 2e-07,
-                                         threads = min(c(5, maxThreads)))
+                                         cvRepetitions = 1,
+                                         threads = min(c(10, maxCores)))
 
         result <- MethodEvaluation::injectSignals(connectionDetails,
                                                   cdmDatabaseSchema = cdmDatabaseSchema,
@@ -79,20 +80,29 @@ injectSignals <- function(connectionDetails,
                                                   exposureTable = "drug_era",
                                                   outcomeDatabaseSchema = outcomeDatabaseSchema,
                                                   outcomeTable = outcomeTable,
-                                                  exposureOutcomePairs = exposureOutcomePairs,
+                                                  outputDatabaseSchema = outcomeDatabaseSchema,
+                                                  outputTable = outcomeTable,
                                                   createOutputTable = FALSE,
+                                                  outputIdOffset = 10000,
+                                                  exposureOutcomePairs = exposureOutcomePairs,
                                                   firstExposureOnly = FALSE,
                                                   firstOutcomeOnly = FALSE,
+                                                  removePeopleWithPriorOutcomes = FALSE,
                                                   modelType = "poisson",
-                                                  prior = prior,
-                                                  control = control,
                                                   riskWindowStart = 0,
                                                   riskWindowEnd = 0,
                                                   addExposureDaysToEnd = TRUE,
-                                                  effectSizes = c(1, 1.25, 1.5, 2, 4),
+                                                  effectSizes = c(1.5, 2, 4),
+                                                  precision = 0.01,
+                                                  prior = prior,
+                                                  control = control,
+                                                  maxSubjectsForModel = 250000,
+                                                  minOutcomeCountForModel = 100,
+                                                  minOutcomeCountForInjection = 25,
                                                   workFolder = injectionFolder,
                                                   cdmVersion = cdmVersion,
-                                                  outcomeThreads = max(c(1, floor(maxThreads / 5))))
+                                                  modelThreads = max(1, round(maxCores/8)),
+                                                  generationThreads = min(6, maxCores))
         saveRDS(result, injectionSummaryFile)
     }
 }

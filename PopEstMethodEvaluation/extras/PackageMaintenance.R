@@ -1,4 +1,4 @@
-# Copyright 2016 Observational Health Data Sciences and Informatics
+# Copyright 2017 Observational Health Data Sciences and Informatics
 #
 # This file is part of PopEstMethodEvaluation
 #
@@ -17,6 +17,7 @@
 # Format and check code
 OhdsiRTools::formatRFolder()
 OhdsiRTools::checkUsagePackage("PopEstMethodEvaluation")
+OhdsiRTools::updateCopyrightYearFolder()
 
 # Create manual
 shell("rm extras/PopEstMethodEvaluation.pdf")
@@ -28,6 +29,7 @@ PopEstMethodEvaluation::createSccsSettings(fileName = "inst/settings/sccsAnalysi
 PopEstMethodEvaluation::createSelfControlledCohortSettings(fileName = "inst/settings/sccAnalysisSettings.txt")
 PopEstMethodEvaluation::createIctpdSettings(fileName = "inst/settings/ictpdAnalysisSettings.txt")
 PopEstMethodEvaluation::createCaseControlSettings(fileName = "inst/settings/ccAnalysisSettings.txt")
+PopEstMethodEvaluation::createCaseCrossoverSettings(fileName = "inst/settings/ccrAnalysisSettings.txt")
 
 # Insert cohort definitions into package
 # OhdsiRTools::insertCirceDefinitionInPackage(2409, "Rheumatoid arthritis")
