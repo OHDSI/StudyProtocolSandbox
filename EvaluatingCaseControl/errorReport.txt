@@ -1,0 +1,34 @@
+DBMS:
+pdw
+
+Error:
+execute JDBC update query failed in dbSendUpdate (There is already an object named '#covar_defs' in the database.)
+
+SQL:
+CREATE TABLE  #covar_defs (concept_id INT, covariate_id INT)
+
+R version:
+R version 3.4.0 (2017-04-21)
+
+Platform:
+x86_64-w64-mingw32
+
+Attached base packages:
+- stats
+- graphics
+- grDevices
+- utils
+- datasets
+- methods
+- base
+
+Other attached packages:
+- CaseControl (1.3.0)
+- FeatureExtraction (1.2.2)
+- survival (2.41-3)
+- Cyclops (1.2.3)
+- EvaluatingCaseControl (0.1.0)
+- DatabaseConnector (1.11.1)
+- RJDBC (0.2-5)
+- rJava (0.9-8)
+- DBI (0.6-1)
