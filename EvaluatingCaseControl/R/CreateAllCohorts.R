@@ -75,6 +75,15 @@ createCohorts <- function(connectionDetails,
                                            target_cohort_table = studyCohortTable,
                                            nesting_ids = negativeControls$nestingId)
   DatabaseConnector::executeSql(conn, sql)
+
+  sql <- "SELECT cohort_definition_id, COUNT(*) AS cohort_count FROM @target_database_schema.@target_cohort_table GROUP BY cohort_definition_id"
+  sql <- SqlRender::renderSql(sql,
+                              target_database_schema = workDatabaseSchema,
+                              target_cohort_table = studyCohortTable)$sql
+  sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+  counts <- DatabaseConnector::querySql(conn, sql)
+  write.csv(counts, file.path(workFolder, "CohortCounts.csv"))
+
   RJDBC::dbDisconnect(conn)
 }
 

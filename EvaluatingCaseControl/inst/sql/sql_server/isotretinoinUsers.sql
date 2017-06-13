@@ -16,6 +16,13 @@ UNION  select c.concept_id
 
 ) I
 ) C;
+INSERT INTO #Codesets (codeset_id, concept_id)
+SELECT 1 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
+( 
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (984232)and invalid_reason is null
+
+) I
+) C;
 
 
 with primary_events (event_id, person_id, start_date, end_date, op_start_date, op_end_date) as
@@ -33,7 +40,7 @@ from
 (
   select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
   FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 0)
+where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 1)
 ) C
 
 
@@ -82,7 +89,7 @@ with cteIncludedEvents(event_id, person_id, start_date, end_date, op_start_date,
 select event_id, person_id, start_date, end_date, op_start_date, op_end_date
 into #included_events
 FROM cteIncludedEvents Results
-WHERE Results.ordinal = 1
+
 ;
 
 -- Apply end date stratagies

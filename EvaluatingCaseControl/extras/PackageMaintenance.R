@@ -30,6 +30,8 @@ OhdsiRTools::insertCohortDefinitionSetInPackage("CohortsToCreate.csv",
 
 # Create analysis details ----
 createCaseControlAnalysesDetails("inst/settings/")
+createCohortMethodAnalysesDetails("inst/settings/")
+createCaseTimeControlAnalysesDetails("inst/settings/")
 
 # Store environment in which the study was executed ----
 OhdsiRTools::insertEnvironmentSnapshotInPackage("EvaluatingCaseControl")

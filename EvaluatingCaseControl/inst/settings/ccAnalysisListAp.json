@@ -13,7 +13,7 @@
     "selectControlsArgs": {
       "firstOutcomeOnly": true,
       "washoutPeriod": 365,
-      "controlsPerCase": 1,
+      "controlsPerCase": 4,
       "matchOnAge": true,
       "ageCaliper": 1,
       "matchOnGender": true,

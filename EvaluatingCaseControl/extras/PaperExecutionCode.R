@@ -19,17 +19,31 @@
 library(EvaluatingCaseControl)
 options(fftempdir = "S:/fftemp")
 
+# pw <- NULL
+# dbms <- "pdw"
+# user <- NULL
+# server <- "JRDUSAPSCTL01"
+# cdmDatabaseSchema <- "CDM_Truven_MDCD_V569.dbo"
+# oracleTempSchema <- NULL
+# workDatabaseSchema <- "scratch.dbo"
+# studyCohortTable <- "mschuemie_case_control_ap"
+# port <- 17001
+# workFolder <- "S:/Temp/EvaluatingCaseControl"
+# maxCores <- 30
+
+
 pw <- NULL
 dbms <- "pdw"
 user <- NULL
 server <- "JRDUSAPSCTL01"
-cdmDatabaseSchema <- "CDM_Truven_MDCD_V569.dbo"
+cdmDatabaseSchema <- "CDM_Truven_ccae_V568.dbo"
 oracleTempSchema <- NULL
 workDatabaseSchema <- "scratch.dbo"
-studyCohortTable <- "mschuemie_ci_calibration_cohorts_cprd"
+studyCohortTable <- "mschuemie_case_control_ap_ccae"
 port <- 17001
-workFolder <- "S:/Temp/EvaluatingCaseControl"
+workFolder <- "S:/Temp/EvaluatingCaseControl_ccae"
 maxCores <- 30
+
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
@@ -43,6 +57,8 @@ createCohorts(connectionDetails = connectionDetails,
               workDatabaseSchema = workDatabaseSchema,
               studyCohortTable = studyCohortTable,
               workFolder = workFolder)
+# conn <- connect(connectionDetails)
+# querySql(conn, "SELECT DISTINCT cohort_definition_id FROM scratch.dbo.mschuemie_case_control_ap_ccae")
 
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,

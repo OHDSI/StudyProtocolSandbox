@@ -14,7 +14,7 @@ Imports:
     MethodEvaluation,
     FeatureExtraction (>= 1.2.0),
     CohortMethod,
-    SelfControlledCaseSeries,
+    CaseCrossover,
     CaseControl,
     EmpiricalCalibration (>= 1.2.2),
     DBI,
