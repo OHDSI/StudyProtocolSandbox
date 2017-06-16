@@ -1,5 +1,3 @@
-#cmOutputFolder<-"C:/Users/chan/Desktop/17.5.18/output/cmOutput"
-#exportFolder<-"C:/Users/chan/Desktop/17.5.18/output/export"
 createTableAndFigures<-function(exportFolder, cmOutputFolder){
     outcomeReference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
     analysisSummary <- read.csv(file.path(exportFolder, "MainResults.csv"))
@@ -92,15 +90,7 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         CohortMethod::plotCovariateBalanceOfTopVariables(balance,
                                                              fileName = file.path(tablesAndFiguresFolder,
                                                                                   paste0("BalanceTopVariables",idx,".png")))
-        #One more result to the MainresultFolder
-        if(outcomeReference$outcomeId[i]==0){
-            CohortMethod::plotCovariateBalanceScatterPlot(balance,
-                                                          fileName = file.path(MainresultFolder,
-                                                                               paste0("BalanceScatterPlot",idx,".png")))
-            CohortMethod::plotCovariateBalanceOfTopVariables(balance,
-                                                             fileName = file.path(MainresultFolder,
-                                                                                  paste0("BalanceTopVariables",idx,".png")))
-        }
+        
     }
     
     ### Population characteristics table
@@ -309,9 +299,7 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         
         table <- rbind(age, gender, year)
         write.csv(table, file.path(tablesAndFiguresFolder, paste0("PopChar",idx,".csv")), row.names = FALSE)
-        if(outcomeReference$outcomeId[i]==0){
-            write.csv(table, file.path(MainresultFolder, paste0("PopChar",idx,".csv")), row.names = FALSE)
-        }
+
     }
     
     for(i in 1:length(outcomeReference$analysisId)){
@@ -578,10 +566,7 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         
         table <- rbind(dm, ckd, af,charlson, dcsi, statin)
         write.csv(table, file.path(tablesAndFiguresFolder, paste0("PopComor",idx,".csv")), row.names = FALSE)
-        #One more table tothe mainresult table
-        if(outcomeReference$outcomeId[i]==0){
-            write.csv(table, file.path(MainresultFolder, paste0("PopComor",idx,".csv")), row.names = FALSE)
-        }
+
     }
     
     
@@ -604,10 +589,7 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         attr(object, "metaData") <- list(attrition = attrition)
         CohortMethod::drawAttritionDiagram(object, fileName = file.path(tablesAndFiguresFolder, paste0("Attrition",idx,".png")))
         
-        if(outcomeReference$outcomeId[i]==0){
-            CohortMethod::drawAttritionDiagram(object, fileName = file.path(MainresultFolder, paste0("Attrition",idx,".png")))
-        }
-        
+
     }
     
 }
