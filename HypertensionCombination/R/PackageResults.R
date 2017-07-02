@@ -3,16 +3,12 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   
   #createMetaData(connectionDetails, cdmDatabaseSchema, exportFolder)
   cmOutputFolder <- file.path(outputFolder, "cmOutput")
-  MainresultFolder<-file.path(exportFolder, "Mainresult")
   
   if (!file.exists(outputFolder))
       dir.create(outputFolder)
   
   if (!file.exists(exportFolder))
       dir.create(exportFolder)
-  
-  if (!file.exists(MainresultFolder))
-      dir.create(MainresultFolder)
   
   outcomeReference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
   analysisSummary <- CohortMethod::summarizeAnalyses(outcomeReference)
@@ -37,9 +33,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     attrition <- CohortMethod::getAttritionTable(strata)
     idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
     write.csv(attrition, file.path(exportFolder, paste0("AttritionTable",idx,".csv")), row.names = FALSE)
-    if(outcomeReference$outcomeId[i]==0){
-        write.csv(attrition, file.path(MainresultFolder, paste0("AttritionTable",idx,".csv")), row.names = FALSE)
-    }
+    
   }
   
   ### Main propensity score plots ###
@@ -50,13 +44,6 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
     CohortMethod::plotPs(ps[[i]], scale = "preference", fileName = file.path(exportFolder, paste0("PsPrefScale",idx,".png")))
     CohortMethod::plotPs(ps[[i]], scale = "propensity", fileName = file.path(exportFolder, paste0("Ps",idx,".png")))
-    
-    #One more plot to the mainresult folder
-    if(outcomeReference$outcomeId[i]==0){
-        CohortMethod::plotPs(ps[[i]], scale = "preference", fileName = file.path(MainresultFolder, paste0("PsPrefScale",idx,".png")))
-        CohortMethod::plotPs(ps[[i]], scale = "propensity", fileName = file.path(MainresultFolder, paste0("Ps",idx,".png")))
-    }
-    
   }
   
   strataFile <- outcomeReference$strataFile
@@ -72,15 +59,6 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
                          scale = "propensity",
                          fileName = file.path(exportFolder, paste0("PsAfterVarRatioMatching",idx,".png")))
     
-    if(outcomeReference$outcomeId[i]==0){
-        CohortMethod::plotPs(strata,
-                             unfilteredData = ps[[i]],
-                             scale = "preference",
-                             fileName = file.path(MainresultFolder, paste0("PsAfterVarRatioMatchingPrefScale",idx,".png")))
-        CohortMethod::plotPs(strata,
-                             unfilteredData = ps[[i]],
-                             scale = "propensity",
-                             fileName = file.path(MainresultFolder, paste0("PsAfterVarRatioMatching",idx,".png")))
   }
   
   ### Propensity model ###
@@ -90,10 +68,6 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     psModel <- CohortMethod::getPsModel(ps, cohortMethodData[[i]])
     idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
     write.csv(psModel, file.path(exportFolder, paste0("PsModel",idx,".csv")), row.names = FALSE)
-    if(outcomeReference$outcomeId[i]==0){
-        write.csv(psModel, file.path(MainresultFolder, paste0("PsModel",idx,".csv")), row.names = FALSE)
-    }
-    
   }
   
   ### Main balance tables ###
@@ -115,22 +89,21 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     balance$afterMatchingMeanComparator[idx] <- NA
     idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
     write.csv(balance, file.path(exportFolder, paste0("Balance",idx,".csv")), row.names = FALSE)
-    if(outcomeReference$outcomeId[i]==0){
-        write.csv(balance, file.path(MainresultFolder, paste0("Balance",idx,".csv")), row.names = FALSE)
-    }
+    
   }
   
   ### Removed (redunant) covariates ###
   for(i in 1:length(cohortMethodData)){
-    if (!is.null(cohortMethodData[[i]]$metaData$deletedCovariateIds)) {
-      idx <- is.na(ffbase::ffmatch(cohortMethodData[[i]]$covariateRef$covariateId, ff::as.ff(cohortMethodData[[i]]$metaData$deletedCovariateIds)))
-      removedCovars <- ff::as.ram(cohortMethodData[[i]]$covariateRef[ffbase::ffwhich(idx, idx == FALSE), ])
-      idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
-      write.csv(removedCovars, file.path(exportFolder, paste0("RemovedCovars",idx,".csv")), row.names = FALSE)
-      if(outcomeReference$outcomeId[i]==0){
-          write.csv(removedCovars, file.path(MainresultFolder, paste0("RemovedCovars",idx,".csv")), row.names = FALSE)
-      }
-    }
+    
+        try(
+            if (!is.null(cohortMethodData[[i]]$metaData$deletedCovariateIds)) {
+          idx <- is.na(ffbase::ffmatch(cohortMethodData[[i]]$covariateRef$covariateId, ff::as.ff(cohortMethodData[[i]]$metaData$deletedCovariateIds)))
+          removedCovars <- ff::as.ram(cohortMethodData[[i]]$covariateRef[ffbase::ffwhich(idx, idx == FALSE), ])
+          idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
+          write.csv(removedCovars, file.path(exportFolder, paste0("RemovedCovars",idx,".csv")), row.names = FALSE)
+          
+        }
+        )
   }
   
   ### Main Kaplan Meier plots ###
@@ -142,11 +115,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
                                   includeZero = FALSE,
                                   fileName = file.path(exportFolder, paste0("KaplanMeier",idx,".png")))
     
-    if(outcomeReference$outcomeId[i]==0){
-        CohortMethod::plotKaplanMeier(strata,
-                                      includeZero = FALSE,
-                                      fileName = file.path(MainresultFolder, paste0("KaplanMeier",idx,".png")))
-    }
+    
   }
   
   ### Main outcome models ###
@@ -154,24 +123,23 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   for(i in 1:length(outcomeModelFile)){
     outcomeModel <- readRDS(outcomeModelFile[i])
     if (outcomeModel$outcomeModelStatus == "OK") {
-      model <- CohortMethod::getOutcomeModel(outcomeModel, cohortMethodData[[i]])
-      idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
-      write.csv(model, file.path(exportFolder, paste0("OutcomeModel",idx,".csv")), row.names = FALSE)
-      
-      if(outcomeReference$outcomeId[i]==0){
-          write.csv(model, file.path(MainresultFolder, paste0("OutcomeModel",idx,".csv")), row.names = FALSE)
+        try({
+            model <- CohortMethod::getOutcomeModel(outcomeModel, cohortMethodData[[i]])
+            idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
+            write.csv(model, file.path(exportFolder, paste0("OutcomeModel",idx,".csv")), row.names = FALSE)
+        })
       }
     }
   }
   
   ### create Tables and Figures
-  HypertensionCombination::createTableAndFigures(exportFolder, cmOutputFolder)
+#  HypertensionCombination::createTableAndFigures(exportFolder, cmOutputFolder)
   
   ### Add all to zip file ###
-  zipName <- file.path(exportFolder, "StudyResults.zip")
-  OhdsiSharing::compressFolder(exportFolder, zipName)
-  writeLines(paste("\nStudy results are ready for sharing at:", zipName))
-}
+#  zipName <- file.path(exportFolder, "StudyResults.zip")
+#  OhdsiSharing::compressFolder(exportFolder, zipName)
+#  writeLines(paste("\nStudy results are ready for sharing at:", zipName))
+#}
 
 createMetaData <- function(connectionDetails, cdmDatabaseSchema, exportFolder) {
   conn <- DatabaseConnector::connect(connectionDetails)
@@ -194,7 +162,6 @@ createMetaData <- function(connectionDetails, cdmDatabaseSchema, exportFolder) {
              paste("KeppraAngioedema version", packageVersion("KeppraAngioedema"), sep = ": "))
   write(lines, file.path(exportFolder, "MetaData.txt"))
   invisible(NULL)
-}
 }
 
 addAnalysisDescriptions <- function(object) {

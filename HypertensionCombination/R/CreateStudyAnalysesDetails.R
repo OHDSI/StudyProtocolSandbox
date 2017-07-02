@@ -14,7 +14,10 @@ createAnalysesDetails <- function(outputFolder) {
                     CD180=34180,
                     AC365=13365,
                     AD365=14365,
-                    CD365=34365)
+                    CD365=34365,
+                    AC730=13730,
+                    AD730=14730,
+                    CD730=34730)
   comparatorset <- list(AC30=1330,
                         AD30=1430,
                         CD30=3430,
@@ -23,9 +26,12 @@ createAnalysesDetails <- function(outputFolder) {
                         CD180=34180,
                         AC365=13365,
                         AD365=14365,
-                        CD365=34365)
+                        CD365=34365,
+                        AC365=13730,
+                        AD365=14730,
+                        CD365=34730)
   
-  outcomeset <- c(0
+  outcomeset <- c(0, 4320, 1,2,3,4
                   , 378424, 4004352, 4280726, 133141, 137053, 140480, 380731,
                   381581, 75344,  80809, 376415,  4224118, 4253054, 437409, 199067, 434272, 373478, 140641, 139099,
                   4142905, 195862, 4271016, 375552, 380038, 135473, 138102, 29735, 4153877, 74396, 134870, 74855,
@@ -89,6 +95,24 @@ createAnalysesDetails <- function(outputFolder) {
                                                       outcomeIds = outcomeset)
   dcos9<-list(dcos9)
   
+  dcos10 <- CohortMethod::createDrugComparatorOutcomes(targetId = 13730,
+                                                      comparatorId = 14730,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos10<-list(dcos10)
+  
+  dcos11 <- CohortMethod::createDrugComparatorOutcomes(targetId = 34730,
+                                                      comparatorId = 14730,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos11<-list(dcos11)
+  
+  dcos12 <- CohortMethod::createDrugComparatorOutcomes(targetId = 34730,
+                                                      comparatorId = 13730,
+                                                      excludedCovariateConceptIds = excludedCovariateConceptIds,
+                                                      outcomeIds = outcomeset)
+  dcos12<-list(dcos12)
+  
   
   drugComparatorOutcomesList1 <- c(
       dcos1,
@@ -104,6 +128,11 @@ createAnalysesDetails <- function(outputFolder) {
       dcos7,
       dcos8,
       dcos9)
+  
+  drugComparatorOutcomesList4 <- c(
+      dcos10,
+      dcos11,
+      dcos12)
   
   covarSettings <- FeatureExtraction::createCovariateSettings(useCovariateDemographics = TRUE,
                                                               useCovariateDemographicsGender = TRUE,
@@ -196,6 +225,16 @@ createAnalysesDetails <- function(outputFolder) {
                                                                        addExposureDaysToStart = FALSE,
                                                                        riskWindowEnd = 0,
                                                                        addExposureDaysToEnd = TRUE)
+  
+  createStudyPopArgs4 <- CohortMethod::createCreateStudyPopulationArgs(firstExposureOnly = TRUE,
+                                                                       washoutPeriod = 0,
+                                                                       removeDuplicateSubjects = TRUE,
+                                                                       removeSubjectsWithPriorOutcome = TRUE,
+                                                                       minDaysAtRisk = 0,
+                                                                       riskWindowStart = 730,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 0,
+                                                                       addExposureDaysToEnd = TRUE)
 
   # Fixing seed for reproducability:
   createPsArgs <- CohortMethod::createCreatePsArgs(prior = Cyclops::createPrior("laplace",
@@ -262,11 +301,26 @@ createAnalysesDetails <- function(outputFolder) {
                                                 computeCovariateBalance = TRUE,
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
+  
+  cmAnalysis4 <- CohortMethod::createCmAnalysis(analysisId = 730,
+                                                description = "Hypertension Combination (risk started after 365days)",
+                                                #targetType = 34,
+                                                #comparatorType = "BC",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs4,
+                                                createPs = TRUE,
+                                                createPsArgs = createPsArgs,
+                                                matchOnPs = TRUE,
+                                                matchOnPsArgs = matchOnPsArgs1,
+                                                computeCovariateBalance = TRUE,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
 
   
   cmAnalysisList1 <- list(cmAnalysis1)
   cmAnalysisList2 <- list(cmAnalysis2)
   cmAnalysisList3 <- list(cmAnalysis3)
+  cmAnalysisList4 <- list(cmAnalysis4)
 #  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2)
 #  cmAnalysisList <- list(cmAnalysis1,
 #                         cmAnalysis2,
@@ -282,6 +336,7 @@ createAnalysesDetails <- function(outputFolder) {
   CohortMethod::saveCmAnalysisList(cmAnalysisList1, file.path(outputFolder, "cmAnalysisList1.txt"))
   CohortMethod::saveCmAnalysisList(cmAnalysisList2, file.path(outputFolder, "cmAnalysisList2.txt"))
   CohortMethod::saveCmAnalysisList(cmAnalysisList3, file.path(outputFolder, "cmAnalysisList3.txt"))
+  CohortMethod::saveCmAnalysisList(cmAnalysisList4, file.path(outputFolder, "cmAnalysisList4.txt"))
   CohortMethod::saveDrugComparatorOutcomesList(drugComparatorOutcomesList1,
                                                file.path(outputFolder,
                                                          "drugComparatorOutcomesList1.txt"))
@@ -291,5 +346,8 @@ createAnalysesDetails <- function(outputFolder) {
   CohortMethod::saveDrugComparatorOutcomesList(drugComparatorOutcomesList3,
                                                file.path(outputFolder,
                                                          "drugComparatorOutcomesList3.txt"))
+  CohortMethod::saveDrugComparatorOutcomesList(drugComparatorOutcomesList4,
+                                               file.path(outputFolder,
+                                                         "drugComparatorOutcomesList4.txt"))
   
 }

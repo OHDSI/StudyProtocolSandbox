@@ -10,7 +10,8 @@ execute<-function(connectionDetails,
                   createCohorts = TRUE,
                   runAnalyses = TRUE,
                   packageResults = FALSE,
-                  maxCores = 4){
+                  maxCores = 4,
+                  createTableAndFigures=FALSE){
   
   if (cdmVersion == 4) {
     stop("CDM version 4 not supported")
@@ -33,9 +34,6 @@ execute<-function(connectionDetails,
                   outcomeTable)
     writeLines("")
   }
-    
-
-  
   
   ##30 analysis 1
   if (runAnalyses) {
@@ -86,6 +84,13 @@ execute<-function(connectionDetails,
       packageResults(connectionDetails = connectionDetails,
                      cdmDatabaseSchema = cdmDatabaseSchema,
                      outputFolder = file.path(outputFolder, "30"))
+      writeLines("")
+  }
+    
+  if (createTableAndFigures){
+      writeLines("createTableAndFigures")
+      createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"30"), "export"),
+                            cmOutputFolder= file.path(file.path(outputFolder,"30"),"cmOutput"))
       writeLines("")
   }
   
@@ -143,6 +148,13 @@ execute<-function(connectionDetails,
                      writeLines("")
   }  
     
+    if (createTableAndFigures){
+        writeLines("createTableAndFigures")
+        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"180"), "export"),
+                              cmOutputFolder= file.path(file.path(outputFolder,"180"),"cmOutput"))
+                              writeLines("")
+    }
+    
   ##365 analysis 3
 
     
@@ -195,6 +207,73 @@ execute<-function(connectionDetails,
                        outputFolder = file.path(outputFolder, "365"))
                        writeLines("")
     }  
+    
+    if (createTableAndFigures){
+        writeLines("createTableAndFigures")
+        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"365"), "export"),
+                              cmOutputFolder= file.path(file.path(outputFolder,"365"),"cmOutput"))
+                              writeLines("")
+    }
+    
+    ##730 analysis 4
+    
+    
+    if (runAnalyses) {
+        if (!file.exists(file.path(outputFolder, "730")))
+            dir.create(file.path(outputFolder, "730"))
+        
+        cmOutputFolder <- file.path(file.path(outputFolder, "730"), "cmOutput")
+        if (!file.exists(cmOutputFolder))
+            dir.create(cmOutputFolder)
+        
+        writeLines("Running analyses")
+        cmAnalysisListFile <- system.file("settings",
+                                          "cmAnalysisList4.txt",
+                                          package = "HypertensionCombination")
+        cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
+        
+        
+        drugComparatorOutcomesListFile <- system.file("settings",
+                                                      "drugComparatorOutcomesList4.txt",
+                                                      package = "HypertensionCombination")
+        drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
+        
+        
+        CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
+                                    cdmDatabaseSchema = cdmDatabaseSchema,
+                                    #oracleTempSchema = oracleTempSchema,
+                                    exposureDatabaseSchema = resultsDatabaseSchema,
+                                    exposureTable = exposureTable,
+                                    outcomeDatabaseSchema = resultsDatabaseSchema,
+                                    outcomeTable = outcomeTable,
+                                    cdmVersion = cdmVersion,
+                                    outputFolder = cmOutputFolder,
+                                    cmAnalysisList = cmAnalysisList,
+                                    drugComparatorOutcomesList = drugComparatorOutcomesList,
+                                    refitPsForEveryOutcome = FALSE,
+                                    getDbCohortMethodDataThreads = 1,
+                                    createPsThreads = 1,
+                                    psCvThreads = min(16, maxCores),
+                                    createStudyPopThreads = min(3, maxCores),
+                                    trimMatchStratifyThreads = min(10, maxCores),
+                                    computeCovarBalThreads = min(3, maxCores),
+                                    fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                    outcomeCvThreads = min(4, maxCores))}
+    
+    if (packageResults) {
+        writeLines("Packaging results in export folder for sharing")
+        packageResults(connectionDetails = connectionDetails,
+                       cdmDatabaseSchema = cdmDatabaseSchema,
+                       outputFolder = file.path(outputFolder, "730"))
+        writeLines("")
+    }  
+    
+    if (createTableAndFigures){
+        writeLines("createTableAndFigures")
+        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"730"), "export"),
+                              cmOutputFolder= file.path(file.path(outputFolder,"730"),"cmOutput"))
+        writeLines("")
+    }
     
     
   invisible(NULL)

@@ -241,6 +241,80 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   #####################################################################
   
+  #################################################################################
+  writeLines("ac_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort.sql",
+                                                 packageName="HypertensionCombination",
+                                                 dbms=connectionDetails$dbms,
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 drug_period=730,
+                                                 target_cohort_id=130730
+  )
+  DatabaseConnector::executeSql(conn, renderedSql)
+  
+  writeLines("ca_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort.sql",
+                                                 packageName="HypertensionCombination",
+                                                 dbms=connectionDetails$dbms,
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 drug_period=730,
+                                                 target_cohort_id=310730
+  )
+  DatabaseConnector::executeSql(conn, renderedSql)
+  
+  writeLines("ad_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort.sql",
+                                                 packageName="HypertensionCombination",
+                                                 dbms=connectionDetails$dbms,
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 drug_period=730,
+                                                 target_cohort_id=140730
+  )
+  DatabaseConnector::executeSql(conn, renderedSql)
+  
+  writeLines("da_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort.sql",
+                                                 packageName="HypertensionCombination",
+                                                 dbms=connectionDetails$dbms,
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 drug_period=730,
+                                                 target_cohort_id=410730
+  )
+  DatabaseConnector::executeSql(conn, renderedSql)
+  
+  writeLines("cd_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort.sql",
+                                                 packageName="HypertensionCombination",
+                                                 dbms=connectionDetails$dbms,
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 drug_period=730,
+                                                 target_cohort_id=340730
+  )
+  DatabaseConnector::executeSql(conn, renderedSql)
+  
+  writeLines("dc_cohort.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort.sql",
+                                                 packageName="HypertensionCombination",
+                                                 dbms=connectionDetails$dbms,
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 drug_period=730,
+                                                 target_cohort_id=430730
+  )
+  DatabaseConnector::executeSql(conn, renderedSql)
+  #####################################################################
+  
   
   
   ##aggregation code
@@ -349,6 +423,41 @@ createCohorts<-function(connectionDetails,
     DatabaseConnector::executeSql(conn, sql)
     
     
+    ###################################################################
+    writeLines("ac cohort aggregation")
+    sql <- renderSql(aggregate_sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=13730,
+                     target_cohort_set="(130730,310730)")$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("ad cohort aggregation")
+    sql <- renderSql(aggregate_sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=14730,
+                     target_cohort_set="(140730,410730)")$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("cd cohort aggregation")
+    sql <- renderSql(aggregate_sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=34730,
+                     target_cohort_set="(340730,430730)")$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    
     ###Subpopulation#######################################
     writeLines("subpopulation_male")
     gender_sql<-("
@@ -385,8 +494,8 @@ createCohorts<-function(connectionDetails,
 }
 
 addCohortNames <- function(data, IdColumnName = "outcomeId", nameColumnName = "outcomeName") {
-  idToName <- data.frame(cohortId = c(1330,1430,3430,13180,14180,34180,13365,14365,34365),
-                         cohortName = c("AC30","AD30","CD30","AC180","AD180","CD180","AC365","AD365","CD365"))
+  idToName <- data.frame(cohortId = c(1330,1430,3430,13180,14180,34180,13365,14365,34365,13730,14730,34730),
+                         cohortName = c("AC30","AD30","CD30","AC180","AD180","CD180","AC365","AD365","CD365","AC730","AD730","CD730"))
   names(idToName)[1] <- IdColumnName
   names(idToName)[2] <- nameColumnName
   data <- merge(data, idToName, all.x = TRUE)
