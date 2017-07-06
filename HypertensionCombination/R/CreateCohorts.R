@@ -23,7 +23,7 @@ createCohorts<-function(connectionDetails,
   GROUP BY subject_id"
   ##############################################################################
   writeLines("ac_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -35,7 +35,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("ca_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -47,7 +47,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("ad_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -59,7 +59,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("da_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -71,7 +71,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("cd_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -83,7 +83,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("dc_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -96,7 +96,7 @@ createCohorts<-function(connectionDetails,
   
   ###############################################################################
   writeLines("ac_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -108,7 +108,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("ca_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -120,7 +120,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("ad_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -132,7 +132,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("da_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -144,7 +144,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("cd_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -156,7 +156,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("dc_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -169,7 +169,7 @@ createCohorts<-function(connectionDetails,
   
   #################################################################################
   writeLines("ac_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -181,7 +181,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("ca_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -193,7 +193,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("ad_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -205,7 +205,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("da_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -217,7 +217,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("cd_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -229,7 +229,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("dc_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -243,7 +243,7 @@ createCohorts<-function(connectionDetails,
   
   #################################################################################
   writeLines("ac_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -255,7 +255,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("ca_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ca_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -267,7 +267,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("ad_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("ad_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -279,7 +279,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("da_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("da_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -291,7 +291,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("cd_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("cd_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
@@ -303,7 +303,7 @@ createCohorts<-function(connectionDetails,
   DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("dc_cohort.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort.sql",
+  renderedSql<-SqlRender::loadRenderTranslateSql("dc_cohort_per_protocol.sql",
                                                  packageName="HypertensionCombination",
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
