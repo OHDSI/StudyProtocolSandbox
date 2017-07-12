@@ -55,6 +55,7 @@ execute(connectionDetails,
 	createCohorts = TRUE,
 	runAnalyses = TRUE,
 	packageResults = TRUE,
+	createTableAndFigures=TRUE,
 	maxCores = 4)
 ```
 
