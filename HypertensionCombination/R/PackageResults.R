@@ -136,9 +136,9 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
 #  HypertensionCombination::createTableAndFigures(exportFolder, cmOutputFolder)
   
   ### Add all to zip file ###
-#  zipName <- file.path(exportFolder, "StudyResults.zip")
-#  OhdsiSharing::compressFolder(exportFolder, zipName)
-#  writeLines(paste("\nStudy results are ready for sharing at:", zipName))
+  zipName <- file.path(exportFolder, "StudyResults.zip")
+  OhdsiSharing::compressFolder(exportFolder, zipName)
+  writeLines(paste("\nStudy results are ready for sharing at:", zipName))
 #}
 
 createMetaData <- function(connectionDetails, cdmDatabaseSchema, exportFolder) {
