@@ -70,6 +70,15 @@ execute(connectionDetails,
 + ```packageResults``` set TRUE to package the result files as ```export/StudyResults.zip```. 
 + ```maxCores``` is the number of cores that are available for parallel processing.
 
+## Step 3. 
+This functions are under development.
+DO NOT USE!
+
+```R
+submitResults("c:/temp/study_results/export", key = "<key>", secret = "<secret>")
+writeReport("c:/temp/study_results/export", "c:/temp/study_results/report.docx")
+```
+
 ## Step 4.
 E-mail to Seng Chan You (applegna@gmail.com) with ```StudyResults.zip```
 
