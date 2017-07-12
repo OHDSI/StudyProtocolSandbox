@@ -275,6 +275,242 @@ execute<-function(connectionDetails,
         writeLines("")
     }
     
+    ##18001 analysis
+    
+    if (runAnalyses) {
+        if (!file.exists(file.path(outputFolder, "18001")))
+            dir.create(file.path(outputFolder, "18001"))
+        
+        cmOutputFolder <- file.path(file.path(outputFolder, "18001"), "cmOutput")
+        if (!file.exists(cmOutputFolder))
+            dir.create(cmOutputFolder)
+        
+        writeLines("Running analyses")
+        cmAnalysisListFile <- system.file("settings",
+                                          "cmAnalysisList5.txt",
+                                          package = "HypertensionCombination")
+        cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
+        
+        
+        drugComparatorOutcomesListFile <- system.file("settings",
+                                                      "drugComparatorOutcomesList5.txt",
+                                                      package = "HypertensionCombination")
+        drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
+        
+        
+        CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
+                                    cdmDatabaseSchema = cdmDatabaseSchema,
+                                    #oracleTempSchema = oracleTempSchema,
+                                    exposureDatabaseSchema = resultsDatabaseSchema,
+                                    exposureTable = exposureTable,
+                                    outcomeDatabaseSchema = resultsDatabaseSchema,
+                                    outcomeTable = outcomeTable,
+                                    cdmVersion = cdmVersion,
+                                    outputFolder = cmOutputFolder,
+                                    cmAnalysisList = cmAnalysisList,
+                                    drugComparatorOutcomesList = drugComparatorOutcomesList,
+                                    refitPsForEveryOutcome = FALSE,
+                                    getDbCohortMethodDataThreads = 1,
+                                    createPsThreads = 1,
+                                    psCvThreads = min(16, maxCores),
+                                    createStudyPopThreads = min(3, maxCores),
+                                    trimMatchStratifyThreads = min(10, maxCores),
+                                    computeCovarBalThreads = min(3, maxCores),
+                                    fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                    outcomeCvThreads = min(4, maxCores))}
+    
+    if (packageResults) {
+        writeLines("Packaging results in export folder for sharing")
+        packageResults(connectionDetails = connectionDetails,
+                       cdmDatabaseSchema = cdmDatabaseSchema,
+                       outputFolder = file.path(outputFolder, "18001"))
+        writeLines("")
+    }  
+    
+    if (createTableAndFigures){
+        writeLines("createTableAndFigures")
+        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"18001"), "export"),
+                              cmOutputFolder= file.path(file.path(outputFolder,"18001"),"cmOutput"))
+        writeLines("")
+    }
+    
+    ##18002  analysis
+    
+    if (runAnalyses) {
+        if (!file.exists(file.path(outputFolder, "18002")))
+            dir.create(file.path(outputFolder, "18002"))
+        
+        cmOutputFolder <- file.path(file.path(outputFolder, "18002"), "cmOutput")
+        if (!file.exists(cmOutputFolder))
+            dir.create(cmOutputFolder)
+        
+        writeLines("Running analyses")
+        cmAnalysisListFile <- system.file("settings",
+                                          "cmAnalysisList6.txt",
+                                          package = "HypertensionCombination")
+        cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
+        
+        
+        drugComparatorOutcomesListFile <- system.file("settings",
+                                                      "drugComparatorOutcomesList6.txt",
+                                                      package = "HypertensionCombination")
+        drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
+        
+        
+        CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
+                                    cdmDatabaseSchema = cdmDatabaseSchema,
+                                    #oracleTempSchema = oracleTempSchema,
+                                    exposureDatabaseSchema = resultsDatabaseSchema,
+                                    exposureTable = exposureTable,
+                                    outcomeDatabaseSchema = resultsDatabaseSchema,
+                                    outcomeTable = outcomeTable,
+                                    cdmVersion = cdmVersion,
+                                    outputFolder = cmOutputFolder,
+                                    cmAnalysisList = cmAnalysisList,
+                                    drugComparatorOutcomesList = drugComparatorOutcomesList,
+                                    refitPsForEveryOutcome = FALSE,
+                                    getDbCohortMethodDataThreads = 1,
+                                    createPsThreads = 1,
+                                    psCvThreads = min(16, maxCores),
+                                    createStudyPopThreads = min(3, maxCores),
+                                    trimMatchStratifyThreads = min(10, maxCores),
+                                    computeCovarBalThreads = min(3, maxCores),
+                                    fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                    outcomeCvThreads = min(4, maxCores))}
+    
+    if (packageResults) {
+        writeLines("Packaging results in export folder for sharing")
+        packageResults(connectionDetails = connectionDetails,
+                       cdmDatabaseSchema = cdmDatabaseSchema,
+                       outputFolder = file.path(outputFolder, "18002"))
+        writeLines("")
+    }  
+    
+    if (createTableAndFigures){
+        writeLines("createTableAndFigures")
+        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"18002"), "export"),
+                              cmOutputFolder= file.path(file.path(outputFolder,"18002"),"cmOutput"))
+        writeLines("")
+    }
+    
+    ##18059  analysis
+    
+    if (runAnalyses) {
+        if (!file.exists(file.path(outputFolder, "18059")))
+            dir.create(file.path(outputFolder, "18059"))
+        
+        cmOutputFolder <- file.path(file.path(outputFolder, "18059"), "cmOutput")
+        if (!file.exists(cmOutputFolder))
+            dir.create(cmOutputFolder)
+        
+        writeLines("Running analyses")
+        cmAnalysisListFile <- system.file("settings",
+                                          "cmAnalysisList7.txt",
+                                          package = "HypertensionCombination")
+        cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
+        
+        
+        drugComparatorOutcomesListFile <- system.file("settings",
+                                                      "drugComparatorOutcomesList7.txt",
+                                                      package = "HypertensionCombination")
+        drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
+        
+        
+        CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
+                                    cdmDatabaseSchema = cdmDatabaseSchema,
+                                    #oracleTempSchema = oracleTempSchema,
+                                    exposureDatabaseSchema = resultsDatabaseSchema,
+                                    exposureTable = exposureTable,
+                                    outcomeDatabaseSchema = resultsDatabaseSchema,
+                                    outcomeTable = outcomeTable,
+                                    cdmVersion = cdmVersion,
+                                    outputFolder = cmOutputFolder,
+                                    cmAnalysisList = cmAnalysisList,
+                                    drugComparatorOutcomesList = drugComparatorOutcomesList,
+                                    refitPsForEveryOutcome = FALSE,
+                                    getDbCohortMethodDataThreads = 1,
+                                    createPsThreads = 1,
+                                    psCvThreads = min(16, maxCores),
+                                    createStudyPopThreads = min(3, maxCores),
+                                    trimMatchStratifyThreads = min(10, maxCores),
+                                    computeCovarBalThreads = min(3, maxCores),
+                                    fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                    outcomeCvThreads = min(4, maxCores))}
+    
+    if (packageResults) {
+        writeLines("Packaging results in export folder for sharing")
+        packageResults(connectionDetails = connectionDetails,
+                       cdmDatabaseSchema = cdmDatabaseSchema,
+                       outputFolder = file.path(outputFolder, "18059"))
+        writeLines("")
+    }  
+    
+    if (createTableAndFigures){
+        writeLines("createTableAndFigures")
+        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"18059"), "export"),
+                              cmOutputFolder= file.path(file.path(outputFolder,"18059"),"cmOutput"))
+        writeLines("")
+    }
+    
+    ##18061  analysis
+    
+    if (runAnalyses) {
+        if (!file.exists(file.path(outputFolder, "18061")))
+            dir.create(file.path(outputFolder, "18061"))
+        
+        cmOutputFolder <- file.path(file.path(outputFolder, "18061"), "cmOutput")
+        if (!file.exists(cmOutputFolder))
+            dir.create(cmOutputFolder)
+        
+        writeLines("Running analyses")
+        cmAnalysisListFile <- system.file("settings",
+                                          "cmAnalysisList8.txt",
+                                          package = "HypertensionCombination")
+        cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
+        
+        
+        drugComparatorOutcomesListFile <- system.file("settings",
+                                                      "drugComparatorOutcomesList8.txt",
+                                                      package = "HypertensionCombination")
+        drugComparatorOutcomesList <- CohortMethod::loadDrugComparatorOutcomesList(drugComparatorOutcomesListFile)
+        
+        
+        CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
+                                    cdmDatabaseSchema = cdmDatabaseSchema,
+                                    #oracleTempSchema = oracleTempSchema,
+                                    exposureDatabaseSchema = resultsDatabaseSchema,
+                                    exposureTable = exposureTable,
+                                    outcomeDatabaseSchema = resultsDatabaseSchema,
+                                    outcomeTable = outcomeTable,
+                                    cdmVersion = cdmVersion,
+                                    outputFolder = cmOutputFolder,
+                                    cmAnalysisList = cmAnalysisList,
+                                    drugComparatorOutcomesList = drugComparatorOutcomesList,
+                                    refitPsForEveryOutcome = FALSE,
+                                    getDbCohortMethodDataThreads = 1,
+                                    createPsThreads = 1,
+                                    psCvThreads = min(16, maxCores),
+                                    createStudyPopThreads = min(3, maxCores),
+                                    trimMatchStratifyThreads = min(10, maxCores),
+                                    computeCovarBalThreads = min(3, maxCores),
+                                    fitOutcomeModelThreads = max(1, round(maxCores/4)),
+                                    outcomeCvThreads = min(4, maxCores))}
+    
+    if (packageResults) {
+        writeLines("Packaging results in export folder for sharing")
+        packageResults(connectionDetails = connectionDetails,
+                       cdmDatabaseSchema = cdmDatabaseSchema,
+                       outputFolder = file.path(outputFolder, "18061"))
+        writeLines("")
+    }  
+    
+    if (createTableAndFigures){
+        writeLines("createTableAndFigures")
+        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"18061"), "export"),
+                              cmOutputFolder= file.path(file.path(outputFolder,"18061"),"cmOutput"))
+        writeLines("")
+    }
+    
     
   invisible(NULL)
 }

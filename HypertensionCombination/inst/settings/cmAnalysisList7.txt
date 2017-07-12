@@ -1,7 +1,7 @@
 [
   {
-    "analysisId": 365,
-    "description": "Hypertension Combination (risk started after 365days)",
+    "analysisId": 18059,
+    "description": "Hypertension Combination (risk started after 180days)-age under 60",
     "getDbCohortMethodDataArgs": {
       "studyStartDate": "",
       "studyEndDate": "",
@@ -74,7 +74,7 @@
       "removeSubjectsWithPriorOutcome": true,
       "priorOutcomeLookback": 99999,
       "minDaysAtRisk": 0,
-      "riskWindowStart": 365,
+      "riskWindowStart": 180,
       "addExposureDaysToStart": false,
       "riskWindowEnd": 0,
       "addExposureDaysToEnd": true,

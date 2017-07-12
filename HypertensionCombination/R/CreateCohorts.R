@@ -459,14 +459,175 @@ createCohorts<-function(connectionDetails,
     
     
     ###Subpopulation#######################################
-    writeLines("subpopulation_male")
     gender_sql<-("
-          INSERT INTO target_database_schema.target_cohort_table
-          SELECT @target_cohort_id, subject_id, cohort_start_date, cohort_end_date
-          FROM target_database_schema.target_cohort_table co
-          JOIN cdm_database_schema.person pe
-          ON co.subject_id = pe.person_id
-          WHERE pe.gender_concept_id = @gender_concept_id")
+                DELETE FROM @target_database_schema.@target_cohort_table WHERE cohort_definition_id=@new_cohort_id
+
+                INSERT INTO @target_database_schema.@target_cohort_table(cohort_definition_id,subject_id,cohort_start_date,cohort_end_date)
+                SELECT @new_cohort_id AS cohort_definition_id,coh.subject_id,coh.cohort_start_date,coh.cohort_end_date
+                 FROM @target_database_schema.@target_cohort_table coh
+                 JOIN @cdm_database_schema.PERSON per
+                 ON coh.subject_id = per.person_id
+                 WHERE coh.COHORT_DEFINITION_ID = @target_cohort_id
+                 AND per.gender_concept_id = @gender_id;")
+    
+    writeLines("subpopulation_male_AC")
+    sql <- renderSql(gender_sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=13180,
+                     new_cohort_id=1318001,
+                     gender_id = 8507)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_female_AC")
+    sql <- renderSql(gender_sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=13180,
+                     new_cohort_id=1318002,
+                     gender_id = 8532)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_male_AD")
+    sql <- renderSql(gender_sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=14180,
+                     new_cohort_id=1418001,
+                     gender_id = 8507)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_female_AD")
+    sql <- renderSql(gender_sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=14180,
+                     new_cohort_id=1418002,
+                     gender_id = 8532)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_male_CD")
+    sql <- renderSql(gender_sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=34180,
+                     new_cohort_id=3418001,
+                     gender_id = 8507)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_female_CD")
+    sql <- renderSql(gender_sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=34180,
+                     new_cohort_id=3418002,
+                     gender_id = 8532)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    over60sql<-
+        "DELETE FROM @target_database_schema.@target_cohort_table WHERE cohort_definition_id=@new_cohort_id
+INSERT INTO @target_database_schema.@target_cohort_table(cohort_definition_id,subject_id,cohort_start_date,cohort_end_date)
+SELECT @new_cohort_id AS cohort_definition_id,coh.subject_id,coh.cohort_start_date,coh.cohort_end_date
+FROM @target_database_schema.@target_cohort_table coh
+JOIN @cdm_database_schema.PERSON per
+ON coh.subject_id = per.person_id
+	WHERE coh.COHORT_DEFINITION_ID = @target_cohort_id
+	  AND YEAR(coh.cohort_start_date)-per.year_of_birth >=60;"
+    
+    under60sql<-"DELETE FROM @target_database_schema.@target_cohort_table WHERE cohort_definition_id=@new_cohort_id
+INSERT INTO @target_database_schema.@target_cohort_table(cohort_definition_id,subject_id,cohort_start_date,cohort_end_date)
+SELECT @new_cohort_id AS cohort_definition_id,coh.subject_id,coh.cohort_start_date,coh.cohort_end_date
+FROM @target_database_schema.@target_cohort_table coh
+JOIN @cdm_database_schema.PERSON per
+ON coh.subject_id = per.person_id
+	WHERE coh.COHORT_DEFINITION_ID = @target_cohort_id
+	  AND YEAR(coh.cohort_start_date)-per.year_of_birth <60;"
+    
+    writeLines("subpopulation_over_60_AC")
+    sql <- renderSql(over60sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=13180,
+                     new_cohort_id=1318061)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_over_60_AD")
+    sql <- renderSql(over60sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=14180,
+                     new_cohort_id=1418061)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_over_60_CD")
+    sql <- renderSql(over60sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=34180,
+                     new_cohort_id=3418061)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_under_60_AC")
+    sql <- renderSql(under60sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=13180,
+                     new_cohort_id=1318059)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_under_60_AD")
+    sql <- renderSql(under60sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=14180,
+                     new_cohort_id=1418059)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    writeLines("subpopulation_under_60_CD")
+    sql <- renderSql(under60sql,
+                     cdm_database_schema=cdmDatabaseSchema,
+                     target_database_schema=resultsDatabaseSchema,
+                     target_cohort_table=exposureTable,
+                     target_cohort_id=34180,
+                     new_cohort_id=3418059)$sql
+    sql <- translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(conn, sql)
+    
+    
     
   
   writeLines("outcome_cohort.sql")
@@ -494,8 +655,11 @@ createCohorts<-function(connectionDetails,
 }
 
 addCohortNames <- function(data, IdColumnName = "outcomeId", nameColumnName = "outcomeName") {
-  idToName <- data.frame(cohortId = c(1330,1430,3430,13180,14180,34180,13365,14365,34365,13730,14730,34730),
-                         cohortName = c("AC30","AD30","CD30","AC180","AD180","CD180","AC365","AD365","CD365","AC730","AD730","CD730"))
+  idToName <- data.frame(cohortId = c(1330,1430,3430,13180,14180,34180,13365,14365,34365,13730,14730,34730,
+                                      1318001,1418001,3418001,1318002,1418002,3418002,1318061,1418061,3418061,1318059,1418059,3418059),
+                         cohortName = c("AC30","AD30","CD30","AC180","AD180","CD180","AC365","AD365","CD365","AC730","AD730","CD730",
+                                        "ACmale","ADmale","CDmale","ACfemale","ADfemale","CDfemale",
+                                        "AC60ormore","AD60ormore","CD60ormore","ACunder60","ADunder60","CDunder60"))
   names(idToName)[1] <- IdColumnName
   names(idToName)[2] <- nameColumnName
   data <- merge(data, idToName, all.x = TRUE)

@@ -6,7 +6,7 @@
       "studyStartDate": "",
       "studyEndDate": "",
       "excludeDrugsFromCovariates": false,
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "removeDuplicateSubjects": true,
       "washoutPeriod": 0,
       "covariateSettings": {
@@ -68,7 +68,7 @@
       "attr_class": "args"
     },
     "createStudyPopArgs": {
-      "firstExposureOnly": true,
+      "firstExposureOnly": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": true,
       "removeSubjectsWithPriorOutcome": true,
