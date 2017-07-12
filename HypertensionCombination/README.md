@@ -1,10 +1,10 @@
-#HypertensionCombination
+# HypertensionCombination
 
 The goal of this protocols is conducting comparative effectiveness research to establish evidences for optimal anti-hypertensive combination strategies among patients without cardiovascular outcome from various databases across world.
 
-#Participate on HypertensionCombination study
+# Participate on HypertensionCombination study
 
-##Step 1
+## Step 1
 Install packages for CohortMethod analysis
 
 ```R
@@ -21,7 +21,7 @@ install_github("ohdsi/EmpiricalCalibration")
 install_github("ohdsi/CohortMethod")
 ```
 
-##Step 2.
+## Step 2.
 Install the package HypertensionCombination.
 
 ```R
@@ -31,7 +31,7 @@ install_github("ohdsi/StudyProtocolSandbox/HypertensionCombination")
 library(HypertensionCombination)
 ```
 
-##Step 3. 
+## Step 3. 
 Execute the following code:
 
 ```R
@@ -69,7 +69,7 @@ execute(connectionDetails,
 + ```packageResults``` set TRUE to package the result files as ```export/StudyResults.zip```. 
 + ```maxCores``` is the number of cores that are available for parallel processing.
 
-##Step 4.
+## Step 4.
 E-mail to Seng Chan You (applegna@gmail.com) with ```StudyResults.zip```
 
 # Contacts
