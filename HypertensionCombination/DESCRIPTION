@@ -17,6 +17,7 @@ Imports:
     SqlRender,
     DatabaseConnector,
     Cyclops,
+	BigKnn,
     PatientLevelPrediction,
     FeatureExtraction,
     EmpiricalCalibration,

@@ -130,7 +130,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
         })
       }
     }
-  }
+#  }
   
   ### create Tables and Figures
 #  HypertensionCombination::createTableAndFigures(exportFolder, cmOutputFolder)
@@ -139,7 +139,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   zipName <- file.path(exportFolder, "StudyResults.zip")
   OhdsiSharing::compressFolder(exportFolder, zipName)
   writeLines(paste("\nStudy results are ready for sharing at:", zipName))
-#}
+}
 
 createMetaData <- function(connectionDetails, cdmDatabaseSchema, exportFolder) {
   conn <- DatabaseConnector::connect(connectionDetails)
