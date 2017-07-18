@@ -592,4 +592,8 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
 
     }
     
+	### Add all to zip file ###
+    zipName <- file.path(tablesAndFiguresFolder, "TablesAndFigures.zip")
+    OhdsiSharing::compressFolder(tablesAndFiguresFolder, zipName)
+    writeLines(paste("\nTablesAndFigures are ready for sharing at:", zipName))
 }
