@@ -70,7 +70,7 @@ execute(connectionDetails,
 + ```packageResults``` set TRUE to package the result files as ```export/StudyResults.zip```. 
 + ```maxCores``` is the number of cores that are available for parallel processing.
 
-## Step 3. 
+## Step 3-1. 
 This functions are under development.
 DO NOT USE!
 
