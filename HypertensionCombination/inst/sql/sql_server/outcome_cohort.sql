@@ -880,6 +880,15 @@ DROP TABLE #codesets;
 -- This syntax cannot be translated:
 --IF OBJECT_ID('@resultsDatabaseSchema.@outcomeTable', 'U') IS NULL
 
+IF OBJECT_ID('@resultsDatabaseSchema.@outcomeTable', 'U') IS NULL
+CREATE TABLE @resultsDatabaseSchema.@outcomeTable (
+  cohort_definition_id int NOT NULL,
+  subject_id int NOT NULL,
+  cohort_start_date date NOT NULL,
+  cohort_end_date date
+)
+;
+
 
 --HF+MI+STROKE+Any DEATH : 4320
 DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 4320;
