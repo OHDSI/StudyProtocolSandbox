@@ -314,7 +314,11 @@ createAnalysesDetails <- function(outputFolder) {
                                                               useCovariateInteractionMonth = FALSE,
                                                               excludedCovariateConceptIds = excludedCovariateConceptIds,
                                                               includedCovariateConceptIds = includedCovariateConceptIds,
-                                                              deleteCovariatesSmallCount = 50)
+                                                              deleteCovariatesSmallCount = 50,
+															  longTermDays = 365,
+															  mediumTermDays = 180,
+															  shortTermDays = 30,
+															  windowEndDays = 0)
 
   getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(studyStartDate = "",
                                                                    studyEndDate = "",
