@@ -15,55 +15,59 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
                              381581, 75344,  80809, 376415,  4224118, 4253054, 437409, 199067, 434272, 373478, 140641, 139099,
                              4142905, 195862, 4271016, 375552, 380038, 135473, 138102, 29735, 4153877, 74396, 134870, 74855,
                              200169, 194997,  192367, 4267582, 434872, 4329707, 4288544, 198075)
-    #negControlCohortIds <- unique(analysisSummary$outcomeId[analysisSummary$outcomeId != 124])
-    #  # Calibrate p-values and draw calibration plots:
-    #  for (analysisId in unique(analysisSummary$analysisId)) {
-    #    negControlSubset <- analysisSummary[analysisSummary$analysisId == analysisId & analysisSummary$outcomeId %in%
-    #                                          negControlCohortIds, ]
-    #    negControlSubset <- negControlSubset[!is.na(negControlSubset$logRr) & negControlSubset$logRr !=
-    #                                           0, ]
-    #    if (nrow(negControlSubset) > 10) {
-    #      null <- EmpiricalCalibration::fitMcmcNull(negControlSubset$logRr, negControlSubset$seLogRr)
-    #      subset <- analysisSummary[analysisSummary$analysisId == analysisId, ]
-    #      calibratedP <- EmpiricalCalibration::calibrateP(null, subset$logRr, subset$seLogRr)
-    #      subset$calibratedP <- calibratedP$p
-    #      subset$calibratedP_lb95ci <- calibratedP$lb95ci
-    #      subset$calibratedP_ub95ci <- calibratedP$ub95ci
-    #      mcmc <- attr(null, "mcmc")
-    #      subset$null_mean <- mean(mcmc$chain[, 1])
-    #      subset$null_sd <- 1/sqrt(mean(mcmc$chain[, 2]))
-    #      analysisSummary$calibratedP[analysisSummary$analysisId == analysisId] <- subset$calibratedP
-    #      analysisSummary$calibratedP_lb95ci[analysisSummary$analysisId == analysisId] <- subset$calibratedP_lb95ci
-    #      analysisSummary$calibratedP_ub95ci[analysisSummary$analysisId == analysisId] <- subset$calibratedP_ub95ci
-    #      analysisSummary$null_mean[analysisSummary$analysisId == analysisId] <- subset$null_mean
-    #      analysisSummary$null_sd[analysisSummary$analysisId == analysisId] <- subset$null_sd
-    #      EmpiricalCalibration::plotCalibration(negControlSubset$logRr,
-    #                                            negControlSubset$seLogRr,
-    #                                            fileName = file.path(tablesAndFiguresFolder,
-    #                                                                 paste0("Cal_a", analysisId, ".png")))
-    #      EmpiricalCalibration::plotCalibrationEffect(negControlSubset$logRr,
-    #                                                  negControlSubset$seLogRr,
-    #                                                  fileName = file.path(tablesAndFiguresFolder,
-    #                                                                       paste0("CalEffectNoHoi_a", analysisId, ".png")))
-    #      hoi <- analysisSummary[analysisSummary$analysisId == analysisId & !(analysisSummary$outcomeId %in%
-    #                                                                            negControlCohortIds), ]
-    #      EmpiricalCalibration::plotCalibrationEffect(negControlSubset$logRr,
-    #                                                  negControlSubset$seLogRr,
-    #                                                  hoi$logRr,
-    #                                                  hoi$seLogRr,
-    #                                                  fileName = file.path(tablesAndFiguresFolder,
-    #                                                                       paste0("CalEffect_a", analysisId, ".png")))
-    #      EmpiricalCalibration::plotCalibrationEffect(negControlSubset$logRr,
-    #                                                  negControlSubset$seLogRr,
-    #                                                  hoi$logRr,
-    #                                                  hoi$seLogRr,
-    #                                                  showCis = TRUE,
-    #                                                  fileName = file.path(tablesAndFiguresFolder,
-    #                                                                       paste0("CalEffectCi_a", analysisId, ".png")))
-    #    }
-    #  }
-    #  write.csv(analysisSummary, file.path(tablesAndFiguresFolder,
-    #                                       "EmpiricalCalibration.csv"), row.names = FALSE)
+    # Calibrate p-values and draw calibration plots:
+    
+    for (analysisId in unique(analysisSummary$analysisId)) {
+        negControlSubset <- analysisSummary[analysisSummary$analysisId == analysisId & analysisSummary$outcomeId %in%
+                                              negControlCohortIds, ]
+        negControlSubset <- negControlSubset[!is.na(negControlSubset$logRr) & negControlSubset$logRr !=
+                                               0, ]
+        if (nrow(negControlSubset) > 10) {
+          null <- EmpiricalCalibration::fitMcmcNull(negControlSubset$logRr, negControlSubset$seLogRr)
+          subset <- analysisSummary[analysisSummary$analysisId == analysisId, ]
+          calibratedP <- EmpiricalCalibration::calibrateP(null, subset$logRr, subset$seLogRr)
+          subset$calibratedP <- calibratedP$p
+          subset$calibratedP_lb95ci <- calibratedP$lb95ci
+          subset$calibratedP_ub95ci <- calibratedP$ub95ci
+          mcmc <- attr(null, "mcmc")
+          subset$null_mean <- mean(mcmc$chain[, 1])
+          subset$null_sd <- 1/sqrt(mean(mcmc$chain[, 2]))
+          analysisSummary$calibratedP[analysisSummary$analysisId == analysisId] <- subset$calibratedP
+          analysisSummary$calibratedP_lb95ci[analysisSummary$analysisId == analysisId] <- subset$calibratedP_lb95ci
+          analysisSummary$calibratedP_ub95ci[analysisSummary$analysisId == analysisId] <- subset$calibratedP_ub95ci
+          analysisSummary$null_mean[analysisSummary$analysisId == analysisId] <- subset$null_mean
+          analysisSummary$null_sd[analysisSummary$analysisId == analysisId] <- subset$null_sd
+          
+          EmpiricalCalibration::plotCalibration(negControlSubset$logRr,
+                                                negControlSubset$seLogRr,
+                                                fileName = file.path(tablesAndFiguresFolder,
+                                                                 paste0("Cal_a", analysisId, ".png")))
+          EmpiricalCalibration::plotCalibrationEffect(negControlSubset$logRr,
+                                                      negControlSubset$seLogRr,
+                                                      fileName = file.path(tablesAndFiguresFolder,
+                                                                           paste0("CalEffectNoHoi_a", analysisId, ".png")))
+          hoi <- analysisSummary[analysisSummary$analysisId == analysisId & !(analysisSummary$outcomeId %in%
+                                                                                negControlCohortIds), ]
+          
+          EmpiricalCalibration::plotCalibrationEffect(negControlSubset$logRr,
+                                                      negControlSubset$seLogRr,
+                                                      hoi$logRr,
+                                                      hoi$seLogRr,
+                                                      fileName = file.path(tablesAndFiguresFolder,
+                                                                           paste0("CalEffect_a", analysisId, ".png")))
+          
+          
+          EmpiricalCalibration::plotCalibrationEffect(negControlSubset$logRr,
+                                                      negControlSubset$seLogRr,
+                                                      hoi$logRr,
+                                                      hoi$seLogRr,
+                                                      showCis = TRUE,
+                                                      fileName = file.path(tablesAndFiguresFolder,
+                                                                           paste0("CalEffectCi_a", analysisId, ".png")))
+        }
+      }
+      write.csv(analysisSummary, file.path(tablesAndFiguresFolder,
+                                           "EmpiricalCalibration.csv"), row.names = FALSE)
     
     # Balance plots:
     #  balance <- read.csv(file.path(exportFolder, "Balance1On1Matching.csv"))
@@ -86,15 +90,7 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         CohortMethod::plotCovariateBalanceOfTopVariables(balance,
                                                              fileName = file.path(tablesAndFiguresFolder,
                                                                                   paste0("BalanceTopVariables",idx,".png")))
-        #One more result to the MainresultFolder
-        if(outcomeReference$outcomeId[i]==0){
-            CohortMethod::plotCovariateBalanceScatterPlot(balance,
-                                                          fileName = file.path(MainresultFolder,
-                                                                               paste0("BalanceScatterPlot",idx,".png")))
-            CohortMethod::plotCovariateBalanceOfTopVariables(balance,
-                                                             fileName = file.path(MainresultFolder,
-                                                                                  paste0("BalanceTopVariables",idx,".png")))
-        }
+        
     }
     
     ### Population characteristics table
@@ -303,9 +299,7 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         
         table <- rbind(age, gender, year)
         write.csv(table, file.path(tablesAndFiguresFolder, paste0("PopChar",idx,".csv")), row.names = FALSE)
-        if(outcomeReference$outcomeId[i]==0){
-            write.csv(table, file.path(MainresultFolder, paste0("PopChar",idx,".csv")), row.names = FALSE)
-        }
+
     }
     
     for(i in 1:length(outcomeReference$analysisId)){
@@ -572,10 +566,7 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         
         table <- rbind(dm, ckd, af,charlson, dcsi, statin)
         write.csv(table, file.path(tablesAndFiguresFolder, paste0("PopComor",idx,".csv")), row.names = FALSE)
-        #One more table tothe mainresult table
-        if(outcomeReference$outcomeId[i]==0){
-            write.csv(table, file.path(MainresultFolder, paste0("PopComor",idx,".csv")), row.names = FALSE)
-        }
+
     }
     
     
@@ -598,10 +589,11 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         attr(object, "metaData") <- list(attrition = attrition)
         CohortMethod::drawAttritionDiagram(object, fileName = file.path(tablesAndFiguresFolder, paste0("Attrition",idx,".png")))
         
-        if(outcomeReference$outcomeId[i]==0){
-            CohortMethod::drawAttritionDiagram(object, fileName = file.path(MainresultFolder, paste0("Attrition",idx,".png")))
-        }
-        
+
     }
     
+	### Add all to zip file ###
+    zipName <- file.path(tablesAndFiguresFolder, "TablesAndFigures.zip")
+    OhdsiSharing::compressFolder(tablesAndFiguresFolder, zipName)
+    writeLines(paste("\nTablesAndFigures are ready for sharing at:", zipName))
 }

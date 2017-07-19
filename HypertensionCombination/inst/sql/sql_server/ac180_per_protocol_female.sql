@@ -7,7 +7,7 @@ CREATE TABLE #Codesets (
 INSERT INTO #Codesets (codeset_id, concept_id)
 SELECT 12 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (1335471,1351557,1340128,19050216,1341927,1346686,1363749,19122327,1347384,1308216,1367500,1310756,40226742,1373225,1331235,1334456,1317640,1308842,19102107,1342439,19040051)and invalid_reason is null
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (1335471,1351557,1340128,19050216,1341927,1346686,1363749,19122327,1347384,1308216,1367500,1310756,40226742,1373225,1331235,1334456,1317640,1308842,19102107)and invalid_reason is null
 
 ) I
 ) C;
@@ -116,17 +116,17 @@ from
 (
   select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
   FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 15)
+where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 22)
 ) C
 JOIN @cdm_database_schema.PERSON P on C.person_id = P.person_id
-WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= @drug_period
+WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 180
 AND YEAR(C.drug_era_start_date) - P.year_of_birth >= 20
 -- End Drug Era Criteria
 
   ) P
 ) P
 JOIN @cdm_database_schema.observation_period OP on P.person_id = OP.person_id and P.start_date >=  OP.observation_period_start_date and P.start_date <= op.observation_period_end_date
-WHERE DATEADD(day,365,OP.OBSERVATION_PERIOD_START_DATE) <= P.START_DATE AND DATEADD(day,0,P.START_DATE) <= OP.OBSERVATION_PERIOD_END_DATE AND P.ordinal = 1
+WHERE DATEADD(day,365,OP.OBSERVATION_PERIOD_START_DATE) <= P.START_DATE AND DATEADD(day,0,P.START_DATE) <= OP.OBSERVATION_PERIOD_END_DATE
 -- End Primary Events
 
 )
@@ -180,7 +180,7 @@ from
 (
   select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
   FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 22)
+where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 21)
 ) C
 
 WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 180
@@ -226,27 +226,13 @@ FROM
   FROM #qualified_events E
   LEFT JOIN
   (
-    -- Begin Correlated Criteria
-SELECT 0 as index_id, p.person_id, p.event_id
-FROM #qualified_events P
-LEFT JOIN
-(
-  -- Begin Drug Era Criteria
-select C.person_id, C.drug_era_id as event_id, C.drug_era_start_date as start_date, C.drug_era_end_date as end_date, C.drug_concept_id as TARGET_CONCEPT_ID
-from 
-(
-  select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
-  FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 22)
-) C
-
-WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
--- End Drug Era Criteria
-
-) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= DATEADD(day,-365,P.START_DATE) and A.START_DATE <= DATEADD(day,-1,P.START_DATE)
-GROUP BY p.person_id, p.event_id
-HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
--- End Correlated Criteria
+    -- Begin Demographic Criteria
+SELECT 0 as index_id, e.person_id, e.event_id
+FROM #qualified_events E
+JOIN @cdm_database_schema.PERSON P ON P.PERSON_ID = E.PERSON_ID
+WHERE P.gender_concept_id in (8532)
+GROUP BY e.person_id, e.event_id
+-- End Demographic Criteria
 
   ) CQ on E.person_id = CQ.person_id and E.event_id = CQ.event_id
   GROUP BY E.person_id, E.event_id
@@ -284,7 +270,7 @@ from
 (
   select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
   FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 15)
+where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 22)
 ) C
 
 WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
@@ -331,13 +317,13 @@ from
 (
   select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
   FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 13)
+where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 21)
 ) C
 
 WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
 -- End Drug Era Criteria
 
-) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= DATEADD(day,-365,P.START_DATE) and A.START_DATE <= DATEADD(day,180,P.START_DATE)
+) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= DATEADD(day,-365,P.START_DATE) and A.START_DATE <= DATEADD(day,-1,P.START_DATE)
 GROUP BY p.person_id, p.event_id
 HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
 -- End Correlated Criteria
@@ -378,7 +364,7 @@ from
 (
   select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
   FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 21)
+where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 13)
 ) C
 
 WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
@@ -400,6 +386,53 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
 
 INSERT INTO #inclusionRuleCohorts (inclusion_rule_id, person_id, event_id)
 select 4 as inclusion_rule_id, person_id, event_id
+FROM 
+(
+  select pe.person_id, pe.event_id
+  FROM #qualified_events pe
+  
+JOIN (
+-- Begin Criteria Group
+select 0 as index_id, person_id, event_id
+FROM
+(
+  select E.person_id, E.event_id 
+  FROM #qualified_events E
+  LEFT JOIN
+  (
+    -- Begin Correlated Criteria
+SELECT 0 as index_id, p.person_id, p.event_id
+FROM #qualified_events P
+LEFT JOIN
+(
+  -- Begin Drug Era Criteria
+select C.person_id, C.drug_era_id as event_id, C.drug_era_start_date as start_date, C.drug_era_end_date as end_date, C.drug_concept_id as TARGET_CONCEPT_ID
+from 
+(
+  select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
+  FROM @cdm_database_schema.DRUG_ERA de
+where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 15)
+) C
+
+WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
+-- End Drug Era Criteria
+
+) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= DATEADD(day,-365,P.START_DATE) and A.START_DATE <= DATEADD(day,180,P.START_DATE)
+GROUP BY p.person_id, p.event_id
+HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
+-- End Correlated Criteria
+
+  ) CQ on E.person_id = CQ.person_id and E.event_id = CQ.event_id
+  GROUP BY E.person_id, E.event_id
+  HAVING COUNT(index_id) = 1
+) G
+-- End Criteria Group
+) AC on AC.person_id = pe.person_id AND AC.event_id = pe.event_id
+) Results
+;
+
+INSERT INTO #inclusionRuleCohorts (inclusion_rule_id, person_id, event_id)
+select 5 as inclusion_rule_id, person_id, event_id
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -447,7 +480,7 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
 ;
 
 INSERT INTO #inclusionRuleCohorts (inclusion_rule_id, person_id, event_id)
-select 5 as inclusion_rule_id, person_id, event_id
+select 6 as inclusion_rule_id, person_id, event_id
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -494,7 +527,7 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
 ;
 
 INSERT INTO #inclusionRuleCohorts (inclusion_rule_id, person_id, event_id)
-select 6 as inclusion_rule_id, person_id, event_id
+select 7 as inclusion_rule_id, person_id, event_id
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -541,7 +574,7 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
 ;
 
 INSERT INTO #inclusionRuleCohorts (inclusion_rule_id, person_id, event_id)
-select 7 as inclusion_rule_id, person_id, event_id
+select 8 as inclusion_rule_id, person_id, event_id
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -600,7 +633,7 @@ with cteIncludedEvents(event_id, person_id, start_date, end_date, op_start_date,
   ) MG -- matching groups
 
   -- the matching group with all bits set ( POWER(2,# of inclusion rules) - 1 = inclusion_rule_mask
-  WHERE (MG.inclusion_rule_mask = POWER(cast(2 as bigint),8)-1)
+  WHERE (MG.inclusion_rule_mask = POWER(cast(2 as bigint),9)-1)
 
 )
 select event_id, person_id, start_date, end_date, op_start_date, op_end_date
@@ -617,47 +650,6 @@ from #included_events;
 
 
 
-INSERT INTO #cohort_ends (event_id, person_id, end_date)
-select i.event_id, i.person_id, MIN(c.start_date) as end_date
-FROM #included_events i
-JOIN
-(
--- Begin Drug Era Criteria
-select C.person_id, C.drug_era_id as event_id, C.drug_era_start_date as start_date, C.drug_era_end_date as end_date, C.drug_concept_id as TARGET_CONCEPT_ID
-from 
-(
-  select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
-  FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 13)
-) C
-
-WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
--- End Drug Era Criteria
-
-) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
-GROUP BY i.event_id, i.person_id
-;
-
-INSERT INTO #cohort_ends (event_id, person_id, end_date)
-select i.event_id, i.person_id, MIN(c.start_date) as end_date
-FROM #included_events i
-JOIN
-(
--- Begin Drug Era Criteria
-select C.person_id, C.drug_era_id as event_id, C.drug_era_start_date as start_date, C.drug_era_end_date as end_date, C.drug_concept_id as TARGET_CONCEPT_ID
-from 
-(
-  select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
-  FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 21)
-) C
-
-WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
--- End Drug Era Criteria
-
-) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
-GROUP BY i.event_id, i.person_id
-;
 
 
 DELETE FROM @target_database_schema.@target_cohort_table where cohort_definition_id = @target_cohort_id;

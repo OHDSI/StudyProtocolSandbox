@@ -126,7 +126,7 @@ AND YEAR(C.drug_era_start_date) - P.year_of_birth >= 20
   ) P
 ) P
 JOIN @cdm_database_schema.observation_period OP on P.person_id = OP.person_id and P.start_date >=  OP.observation_period_start_date and P.start_date <= op.observation_period_end_date
-WHERE DATEADD(day,365,OP.OBSERVATION_PERIOD_START_DATE) <= P.START_DATE AND DATEADD(day,0,P.START_DATE) <= OP.OBSERVATION_PERIOD_END_DATE AND P.ordinal = 1
+WHERE DATEADD(day,365,OP.OBSERVATION_PERIOD_START_DATE) <= P.START_DATE AND DATEADD(day,0,P.START_DATE) <= OP.OBSERVATION_PERIOD_END_DATE
 -- End Primary Events
 
 )
@@ -337,7 +337,7 @@ where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id 
 WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
 -- End Drug Era Criteria
 
-) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= DATEADD(day,-365,P.START_DATE) and A.START_DATE <= DATEADD(day,180,P.START_DATE)
+) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= DATEADD(day,-365,P.START_DATE) and A.START_DATE <= DATEADD(day,@drug_period,P.START_DATE)
 GROUP BY p.person_id, p.event_id
 HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
 -- End Correlated Criteria
@@ -384,7 +384,7 @@ where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id 
 WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
 -- End Drug Era Criteria
 
-) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= DATEADD(day,-365,P.START_DATE) and A.START_DATE <= DATEADD(day,180,P.START_DATE)
+) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= DATEADD(day,-365,P.START_DATE) and A.START_DATE <= DATEADD(day,@drug_period,P.START_DATE)
 GROUP BY p.person_id, p.event_id
 HAVING COUNT(A.TARGET_CONCEPT_ID) <= 0
 -- End Correlated Criteria
@@ -616,52 +616,8 @@ into #cohort_ends
 from #included_events;
 
 
-
-INSERT INTO #cohort_ends (event_id, person_id, end_date)
-select i.event_id, i.person_id, MIN(c.start_date) as end_date
-FROM #included_events i
-JOIN
-(
--- Begin Drug Era Criteria
-select C.person_id, C.drug_era_id as event_id, C.drug_era_start_date as start_date, C.drug_era_end_date as end_date, C.drug_concept_id as TARGET_CONCEPT_ID
-from 
-(
-  select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
-  FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 13)
-) C
-
-WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
--- End Drug Era Criteria
-
-) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
-GROUP BY i.event_id, i.person_id
-;
-
-INSERT INTO #cohort_ends (event_id, person_id, end_date)
-select i.event_id, i.person_id, MIN(c.start_date) as end_date
-FROM #included_events i
-JOIN
-(
--- Begin Drug Era Criteria
-select C.person_id, C.drug_era_id as event_id, C.drug_era_start_date as start_date, C.drug_era_end_date as end_date, C.drug_concept_id as TARGET_CONCEPT_ID
-from 
-(
-  select de.*, ROW_NUMBER() over (PARTITION BY de.person_id ORDER BY de.drug_era_start_date, de.drug_era_id) as ordinal
-  FROM @cdm_database_schema.DRUG_ERA de
-where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 21)
-) C
-
-WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 7
--- End Drug Era Criteria
-
-) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
-GROUP BY i.event_id, i.person_id
-;
-
-
 DELETE FROM @target_database_schema.@target_cohort_table where cohort_definition_id = @target_cohort_id;
-INSERT INTO @target_database_schema.@target_cohort_table (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)
+INSERT INTO @target_database_schema.@target_cohort_table-- (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)
 select @target_cohort_id as cohort_definition_id, F.person_id, F.start_date, F.end_date
 FROM (
   select I.person_id, I.start_date, E.end_date, row_number() over (partition by I.person_id, I.event_id order by E.end_date) as ordinal 
