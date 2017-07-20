@@ -10,8 +10,9 @@ execute<-function(connectionDetails,
                   createCohorts = TRUE,
                   runAnalyses = TRUE,
                   packageResults = FALSE,
-                  maxCores = 4,
-                  createTableAndFigures=FALSE){
+                  createTableAndFigures=FALSE,
+				  compressResults = FALSE,
+                  maxCores = 4){
   
   if (cdmVersion == 4) {
     stop("CDM version 4 not supported")
@@ -24,6 +25,9 @@ execute<-function(connectionDetails,
     cmOutputFolder <- file.path(file.path(outputFolder), "cmOutput")
     if (!file.exists(cmOutputFolder))
         dir.create(cmOutputFolder)
+    exportFolder <- file.path(file.path(outputFolder), "export")
+    if (!file.exists(exportFolder))
+        dir.create(exportFolder)
     
   if (createCohorts) {
     writeLines("Creating cohort for hypertension combination treatment")
@@ -37,12 +41,12 @@ execute<-function(connectionDetails,
   
   ##30 analysis 1
   if (runAnalyses) {
-      if (!file.exists(file.path(outputFolder, "30")))
-          dir.create(file.path(outputFolder, "30"))
-      
-      cmOutputFolder <- file.path(file.path(outputFolder, "30"), "cmOutput")
-      if (!file.exists(cmOutputFolder))
-          dir.create(cmOutputFolder)
+      cmAnalysisOutputFolder <- file.path(cmOutputFolder, "30")
+      if (!file.exists(cmAnalysisOutputFolder))
+          dir.create(cmAnalysisOutputFolder)
+		  cmAnalysisExportFolder <- file.path(exportFolder, "30")
+      if (!file.exists(cmAnalysisExportFolder))
+          dir.create(cmAnalysisExportFolder)
           
       
     writeLines("Running analyses")
@@ -83,14 +87,15 @@ execute<-function(connectionDetails,
       writeLines("Packaging results in export folder for sharing")
       packageResults(connectionDetails = connectionDetails,
                      cdmDatabaseSchema = cdmDatabaseSchema,
-                     outputFolder = file.path(outputFolder, "30"))
+                     cmOutputFolder = cmAnalysisOutputFolder,
+					   exportFolder= cmAnalysisExportFolder)
       writeLines("")
   }
     
   if (createTableAndFigures){
       writeLines("createTableAndFigures")
-      createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"30"), "export"),
-                            cmOutputFolder= file.path(file.path(outputFolder,"30"),"cmOutput"))
+      createTableAndFigures(exportFolder= cmAnalysisExportFolder,
+                              cmOutputFolder= cmAnalysisOutputFolder)
       writeLines("")
   }
   
@@ -99,12 +104,12 @@ execute<-function(connectionDetails,
 
     
   if (runAnalyses) {
-      if (!file.exists(file.path(outputFolder, "180")))
-          dir.create(file.path(outputFolder, "180"))
-      
-      cmOutputFolder <- file.path(file.path(outputFolder, "180"), "cmOutput")
-      if (!file.exists(cmOutputFolder))
-          dir.create(cmOutputFolder)
+      cmAnalysisOutputFolder <- file.path(cmOutputFolder, "180")
+      if (!file.exists(cmAnalysisOutputFolder))
+          dir.create(cmAnalysisOutputFolder)
+		  cmAnalysisExportFolder <- file.path(exportFolder, "180")
+      if (!file.exists(cmAnalysisExportFolder))
+          dir.create(cmAnalysisExportFolder)
       
       writeLines("Running analyses")
       cmAnalysisListFile <- system.file("settings",
@@ -144,14 +149,15 @@ execute<-function(connectionDetails,
       writeLines("Packaging results in export folder for sharing")
       packageResults(connectionDetails = connectionDetails,
                      cdmDatabaseSchema = cdmDatabaseSchema,
-                     outputFolder = file.path(outputFolder, "180"))
+                     cmOutputFolder = cmAnalysisOutputFolder,
+					   exportFolder= cmAnalysisExportFolder)
                      writeLines("")
   }  
     
     if (createTableAndFigures){
         writeLines("createTableAndFigures")
-        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"180"), "export"),
-                              cmOutputFolder= file.path(file.path(outputFolder,"180"),"cmOutput"))
+        createTableAndFigures(exportFolder= cmAnalysisExportFolder,
+                              cmOutputFolder= cmAnalysisOutputFolder)
                               writeLines("")
     }
     
@@ -159,12 +165,12 @@ execute<-function(connectionDetails,
 
     
     if (runAnalyses) {
-        if (!file.exists(file.path(outputFolder, "365")))
-            dir.create(file.path(outputFolder, "365"))
-        
-        cmOutputFolder <- file.path(file.path(outputFolder, "365"), "cmOutput")
-        if (!file.exists(cmOutputFolder))
-            dir.create(cmOutputFolder)
+        cmAnalysisOutputFolder <- file.path(cmOutputFolder, "365")
+      if (!file.exists(cmAnalysisOutputFolder))
+          dir.create(cmAnalysisOutputFolder)
+		  cmAnalysisExportFolder <- file.path(exportFolder, "365")
+      if (!file.exists(cmAnalysisExportFolder))
+          dir.create(cmAnalysisExportFolder)
         
         writeLines("Running analyses")
         cmAnalysisListFile <- system.file("settings",
@@ -204,14 +210,15 @@ execute<-function(connectionDetails,
         writeLines("Packaging results in export folder for sharing")
         packageResults(connectionDetails = connectionDetails,
                        cdmDatabaseSchema = cdmDatabaseSchema,
-                       outputFolder = file.path(outputFolder, "365"))
+                       cmOutputFolder = cmAnalysisOutputFolder,
+					   exportFolder= cmAnalysisExportFolder)
                        writeLines("")
     }  
     
     if (createTableAndFigures){
         writeLines("createTableAndFigures")
-        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"365"), "export"),
-                              cmOutputFolder= file.path(file.path(outputFolder,"365"),"cmOutput"))
+        createTableAndFigures(exportFolder= cmAnalysisExportFolder,
+                              cmOutputFolder= cmAnalysisOutputFolder)
                               writeLines("")
     }
     
@@ -219,12 +226,12 @@ execute<-function(connectionDetails,
     
     
     if (runAnalyses) {
-        if (!file.exists(file.path(outputFolder, "730")))
-            dir.create(file.path(outputFolder, "730"))
-        
-        cmOutputFolder <- file.path(file.path(outputFolder, "730"), "cmOutput")
-        if (!file.exists(cmOutputFolder))
-            dir.create(cmOutputFolder)
+        cmAnalysisOutputFolder <- file.path(cmOutputFolder, "730")
+      if (!file.exists(cmAnalysisOutputFolder))
+          dir.create(cmAnalysisOutputFolder)
+		  cmAnalysisExportFolder <- file.path(exportFolder, "730")
+      if (!file.exists(cmAnalysisExportFolder))
+          dir.create(cmAnalysisExportFolder)
         
         writeLines("Running analyses")
         cmAnalysisListFile <- system.file("settings",
@@ -264,26 +271,27 @@ execute<-function(connectionDetails,
         writeLines("Packaging results in export folder for sharing")
         packageResults(connectionDetails = connectionDetails,
                        cdmDatabaseSchema = cdmDatabaseSchema,
-                       outputFolder = file.path(outputFolder, "730"))
+                       cmOutputFolder = cmAnalysisOutputFolder,
+					   exportFolder= cmAnalysisExportFolder)
         writeLines("")
     }  
     
     if (createTableAndFigures){
         writeLines("createTableAndFigures")
-        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"730"), "export"),
-                              cmOutputFolder= file.path(file.path(outputFolder,"730"),"cmOutput"))
+        createTableAndFigures(exportFolder= cmAnalysisExportFolder,
+                              cmOutputFolder= cmAnalysisOutputFolder)
         writeLines("")
     }
     
     ##18001 analysis
     
     if (runAnalyses) {
-        if (!file.exists(file.path(outputFolder, "18001")))
-            dir.create(file.path(outputFolder, "18001"))
-        
-        cmOutputFolder <- file.path(file.path(outputFolder, "18001"), "cmOutput")
-        if (!file.exists(cmOutputFolder))
-            dir.create(cmOutputFolder)
+        cmAnalysisOutputFolder <- file.path(cmOutputFolder, "18001")
+      if (!file.exists(cmAnalysisOutputFolder))
+          dir.create(cmAnalysisOutputFolder)
+		  cmAnalysisExportFolder <- file.path(exportFolder, "18001")
+      if (!file.exists(cmAnalysisExportFolder))
+          dir.create(cmAnalysisExportFolder)
         
         writeLines("Running analyses")
         cmAnalysisListFile <- system.file("settings",
@@ -323,26 +331,27 @@ execute<-function(connectionDetails,
         writeLines("Packaging results in export folder for sharing")
         packageResults(connectionDetails = connectionDetails,
                        cdmDatabaseSchema = cdmDatabaseSchema,
-                       outputFolder = file.path(outputFolder, "18001"))
+                       cmOutputFolder = cmAnalysisOutputFolder,
+					   exportFolder= cmAnalysisExportFolder)
         writeLines("")
     }  
     
     if (createTableAndFigures){
         writeLines("createTableAndFigures")
-        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"18001"), "export"),
-                              cmOutputFolder= file.path(file.path(outputFolder,"18001"),"cmOutput"))
+        createTableAndFigures(exportFolder= cmAnalysisExportFolder,
+                              cmOutputFolder= cmAnalysisOutputFolder)
         writeLines("")
     }
     
     ##18002  analysis
     
     if (runAnalyses) {
-        if (!file.exists(file.path(outputFolder, "18002")))
-            dir.create(file.path(outputFolder, "18002"))
-        
-        cmOutputFolder <- file.path(file.path(outputFolder, "18002"), "cmOutput")
-        if (!file.exists(cmOutputFolder))
-            dir.create(cmOutputFolder)
+        cmAnalysisOutputFolder <- file.path(cmOutputFolder, "18002")
+      if (!file.exists(cmAnalysisOutputFolder))
+          dir.create(cmAnalysisOutputFolder)
+		  cmAnalysisExportFolder <- file.path(exportFolder, "18002")
+      if (!file.exists(cmAnalysisExportFolder))
+          dir.create(cmAnalysisExportFolder)
         
         writeLines("Running analyses")
         cmAnalysisListFile <- system.file("settings",
@@ -382,26 +391,27 @@ execute<-function(connectionDetails,
         writeLines("Packaging results in export folder for sharing")
         packageResults(connectionDetails = connectionDetails,
                        cdmDatabaseSchema = cdmDatabaseSchema,
-                       outputFolder = file.path(outputFolder, "18002"))
+                       cmOutputFolder = cmAnalysisOutputFolder,
+					   exportFolder= cmAnalysisExportFolder)
         writeLines("")
     }  
     
     if (createTableAndFigures){
         writeLines("createTableAndFigures")
-        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"18002"), "export"),
-                              cmOutputFolder= file.path(file.path(outputFolder,"18002"),"cmOutput"))
+        createTableAndFigures(exportFolder= cmAnalysisExportFolder,
+                              cmOutputFolder= cmAnalysisOutputFolder)
         writeLines("")
     }
     
     ##18059  analysis
     
     if (runAnalyses) {
-        if (!file.exists(file.path(outputFolder, "18059")))
-            dir.create(file.path(outputFolder, "18059"))
-        
-        cmOutputFolder <- file.path(file.path(outputFolder, "18059"), "cmOutput")
-        if (!file.exists(cmOutputFolder))
-            dir.create(cmOutputFolder)
+        cmAnalysisOutputFolder <- file.path(cmOutputFolder, "18059")
+      if (!file.exists(cmAnalysisOutputFolder))
+          dir.create(cmAnalysisOutputFolder)
+		cmAnalysisExportFolder <- file.path(exportFolder, "18059")
+      if (!file.exists(cmAnalysisExportFolder))
+          dir.create(cmAnalysisExportFolder)
         
         writeLines("Running analyses")
         cmAnalysisListFile <- system.file("settings",
@@ -441,26 +451,27 @@ execute<-function(connectionDetails,
         writeLines("Packaging results in export folder for sharing")
         packageResults(connectionDetails = connectionDetails,
                        cdmDatabaseSchema = cdmDatabaseSchema,
-                       outputFolder = file.path(outputFolder, "18059"))
+                       cmOutputFolder = cmAnalysisOutputFolder,
+					   exportFolder= cmAnalysisExportFolder)
         writeLines("")
     }  
     
     if (createTableAndFigures){
         writeLines("createTableAndFigures")
-        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"18059"), "export"),
-                              cmOutputFolder= file.path(file.path(outputFolder,"18059"),"cmOutput"))
+        createTableAndFigures(exportFolder= cmAnalysisExportFolder,
+                              cmOutputFolder= cmAnalysisOutputFolder)
         writeLines("")
     }
     
     ##18061  analysis
     
     if (runAnalyses) {
-        if (!file.exists(file.path(outputFolder, "18061")))
-            dir.create(file.path(outputFolder, "18061"))
-        
-        cmOutputFolder <- file.path(file.path(outputFolder, "18061"), "cmOutput")
-        if (!file.exists(cmOutputFolder))
-            dir.create(cmOutputFolder)
+        cmAnalysisOutputFolder <- file.path(cmOutputFolder, "18061")
+      if (!file.exists(cmAnalysisOutputFolder))
+          dir.create(cmAnalysisOutputFolder)
+		cmAnalysisExportFolder <- file.path(exportFolder, "18061")
+      if (!file.exists(cmAnalysisExportFolder))
+          dir.create(cmAnalysisExportFolder)
         
         writeLines("Running analyses")
         cmAnalysisListFile <- system.file("settings",
@@ -500,17 +511,23 @@ execute<-function(connectionDetails,
         writeLines("Packaging results in export folder for sharing")
         packageResults(connectionDetails = connectionDetails,
                        cdmDatabaseSchema = cdmDatabaseSchema,
-                       outputFolder = file.path(outputFolder, "18061"))
+                       cmOutputFolder = cmAnalysisOutputFolder,
+					   exportFolder= cmAnalysisExportFolder)
         writeLines("")
     }  
     
     if (createTableAndFigures){
         writeLines("createTableAndFigures")
-        createTableAndFigures(exportFolder= exportFolder <- file.path( file.path(outputFolder,"18061"), "export"),
-                              cmOutputFolder= file.path(file.path(outputFolder,"18061"),"cmOutput"))
+        createTableAndFigures(exportFolder= cmAnalysisExportFolder,
+                              cmOutputFolder= cmAnalysisOutputFolder)
         writeLines("")
     }
-    
+
+  if (compressResults) {
+    writeLines("Compressing study results")
+    compressResults(exportFolder)
+    writeLines("")
+  }    
     
   invisible(NULL)
 }

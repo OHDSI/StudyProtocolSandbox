@@ -1,14 +1,6 @@
-packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, minCellCount = 5) {
-  exportFolder <- file.path(outputFolder, "export")
-  
+packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, exportFolder, minCellCount = 5) {
+  cmOutputFolder<-outputFolder
   #createMetaData(connectionDetails, cdmDatabaseSchema, exportFolder)
-  cmOutputFolder <- file.path(outputFolder, "cmOutput")
-  
-  if (!file.exists(outputFolder))
-      dir.create(outputFolder)
-  
-  if (!file.exists(exportFolder))
-      dir.create(exportFolder)
   
   outcomeReference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
   analysisSummary <- CohortMethod::summarizeAnalyses(outcomeReference)
@@ -136,9 +128,9 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
 #  HypertensionCombination::createTableAndFigures(exportFolder, cmOutputFolder)
   
   ### Add all to zip file ###
-  zipName <- file.path(exportFolder, "StudyResults.zip")
-  OhdsiSharing::compressFolder(exportFolder, zipName)
-  writeLines(paste("\nStudy results are ready for sharing at:", zipName))
+#  zipName <- file.path(exportFolder, "StudyResults.zip")
+#  OhdsiSharing::compressFolder(exportFolder, zipName)
+#  writeLines(paste("\nStudy results are ready for sharing at:", zipName))
 }
 
 createMetaData <- function(connectionDetails, cdmDatabaseSchema, exportFolder) {
