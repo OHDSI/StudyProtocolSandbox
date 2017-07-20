@@ -52,11 +52,11 @@ execute(connectionDetails,
 	outcomeTable = "outcomeTable",
 	cdmVersion = 5,
 	outputFolder = "output",
-    createCohorts = TRUE,
-    runAnalyses = TRUE,
-    packageResults = TRUE,
-    createTableAndFigures=TRUE,
-    compressResults = TRUE,
+	createCohorts = TRUE,
+	runAnalyses = TRUE,
+	packageResults = TRUE,
+	createTableAndFigures=TRUE,
+	compressResults = TRUE,
 	maxCores = 4)
 ```
 
