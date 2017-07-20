@@ -1,5 +1,4 @@
-packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, exportFolder, minCellCount = 5) {
-  cmOutputFolder<-outputFolder
+packageResults <- function(connectionDetails, cdmDatabaseSchema, cmOutputFolder, exportFolder, minCellCount = 5) {
   #createMetaData(connectionDetails, cdmDatabaseSchema, exportFolder)
   
   outcomeReference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
