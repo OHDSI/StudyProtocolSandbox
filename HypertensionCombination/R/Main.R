@@ -507,20 +507,27 @@ execute<-function(connectionDetails,
                                     fitOutcomeModelThreads = max(1, round(maxCores/4)),
                                     outcomeCvThreads = min(4, maxCores))}
     
+	analysesList <- c("30","180","365","730","18001","18002","18059","18061")
+	analysesPaths <- file.path(cmOutputFolder,analysesList)
+	exportPaths <- file.path(exportFolder,analysesList)
     if (packageResults) {
-        writeLines("Packaging results in export folder for sharing")
-        packageResults(connectionDetails = connectionDetails,
-                       cdmDatabaseSchema = cdmDatabaseSchema,
-                       cmOutputFolder = cmAnalysisOutputFolder,
-					   exportFolder= cmAnalysisExportFolder)
-        writeLines("")
+		for(i in 1:length(analysesList)){
+			writeLines("Packaging results in export folder for sharing")
+			packageResults(connectionDetails = connectionDetails,
+						   cdmDatabaseSchema = cdmDatabaseSchema,
+						   cmOutputFolder = analysesPaths[i],
+						   exportFolder= exportPaths[i])
+			writeLines("")
+		}
     }  
     
     if (createTableAndFigures){
-        writeLines("createTableAndFigures")
-        createTableAndFigures(exportFolder= cmAnalysisExportFolder,
-                              cmOutputFolder= cmAnalysisOutputFolder)
-        writeLines("")
+		for(i in 1:length(analysesList)){
+			writeLines("createTableAndFigures")
+			createTableAndFigures(exportFolder= exportPaths[i],
+								  cmOutputFolder= analysesPaths[i])
+			writeLines("")
+		}
     }
 
   if (compressResults) {
