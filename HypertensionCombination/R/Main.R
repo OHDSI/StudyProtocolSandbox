@@ -515,7 +515,7 @@ execute<-function(connectionDetails,
 			writeLines("Packaging results in export folder for sharing")
 			packageResults(connectionDetails = connectionDetails,
 						   cdmDatabaseSchema = cdmDatabaseSchema,
-						   cmOutputFolder = analysesPaths[i],
+						   cmOutputFolder = cmOutputFolder,
 						   exportFolder= exportPaths[i])
 			writeLines("")
 		}
@@ -525,7 +525,7 @@ execute<-function(connectionDetails,
 		for(i in 1:length(analysesList)){
 			writeLines("createTableAndFigures")
 			createTableAndFigures(exportFolder= exportPaths[i],
-								  cmOutputFolder= analysesPaths[i])
+								  cmOutputFolder= cmOutputFolder)
 			writeLines("")
 		}
     }
