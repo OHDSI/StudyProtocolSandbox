@@ -17,16 +17,16 @@ Imports:
     SqlRender,
     DatabaseConnector,
     Cyclops,
-	BigKnn,
+    BigKnn,
     PatientLevelPrediction,
     FeatureExtraction,
     EmpiricalCalibration,
     CohortMethod,
-	gmailr,
-	mime,
-	rmarkdown,
-	ggplot2,
-	knitr
+    gmailr,
+    mime,
+    rmarkdown,
+    ggplot2,
+    knitr
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
