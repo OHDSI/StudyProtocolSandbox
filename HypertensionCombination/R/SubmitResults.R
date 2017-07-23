@@ -8,11 +8,10 @@ submitResults <- function(exportFolder, from_addr) {
   mime() %>%
   to("sungjae.2425@gmail.com") %>%
   from(from_addr) %>%
-  text_body("This is testing") -> text_msg
-  
-  write.csv(file = "iris.csv", iris)
-  text_msg %>%
+#  text_body("This is testing") -> text_msg
+#  text_msg %>%
   subject("Study result") %>%
+  text_body("This is testing") %>%
   attach_file("iris.csv") -> file_attachment
   
   result<-send_message(file_attachment)
