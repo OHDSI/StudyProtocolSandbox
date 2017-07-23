@@ -15,7 +15,8 @@ execute<-function(connectionDetails,
 				  compressResults = TRUE,
 				  writeReport = TRUE,
 				  submitResults = TRUE,
-				  yourEmail = "email_address"){
+				  yourEmail = "email_address",
+				  msg = msg){
 
 	if(cdmVersion == 4) {
 		stop("CDM version 4 not supported")
@@ -126,7 +127,7 @@ execute<-function(connectionDetails,
 	}
 
 	if(submitResults){
-		submitResults(exportFolder, from_addr = yourEmail)
+		submitResults(exportFolder, from_addr = yourEmail, msg = msg)
 	}
 	
   invisible(NULL)

@@ -1,4 +1,4 @@
-submitResults <- function(exportFolder, from_addr) {
+submitResults <- function(exportFolder, from_addr, msg) {
   zipName <- file.path(exportFolder, "StudyResults.zip")
   if (!file.exists(zipName)) {
     stop(paste("Cannot find file", zipName))
@@ -11,7 +11,7 @@ submitResults <- function(exportFolder, from_addr) {
 #  text_body("This is testing") -> text_msg
 #  text_msg %>%
   subject("Study result") %>%
-  text_body("This is testing") %>%
+  html_body(paste0("<html><body>",msg,"</body></html>")) %>%
   attach_file("iris.csv") -> file_attachment
   
   result<-send_message(file_attachment)
