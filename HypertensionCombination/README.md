@@ -60,7 +60,8 @@ execute(connectionDetails,
 	writeReport = TRUE,
 	compressResults = TRUE,
 	submitResults = TRUE,
-	yourEmail = "email_address")
+	yourEmail = "email_address",
+	msg = "message")
 ```
 
 + ```cdmDatabaseSchema``` specify the schema name where your data in OMOP CDM format resides.
