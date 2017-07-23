@@ -57,8 +57,8 @@ execute(connectionDetails,
 	maxCores = 4,
 	packageResults = TRUE,
 	createTableAndFigures=TRUE,
-	compressResults = TRUE,
 	writeReport = TRUE,
+	compressResults = TRUE,
 	submitResults = TRUE,
 	yourEmail = "email_address")
 ```

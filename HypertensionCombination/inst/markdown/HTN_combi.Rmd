@@ -5,6 +5,8 @@ date: "12 July 2017"
 output:
   html_document: default
   pdf_document: default
+params: 
+    exportFolder
 ---
 
 ```{r setup, include=FALSE}
