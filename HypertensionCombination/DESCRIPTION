@@ -23,6 +23,7 @@ Imports:
     EmpiricalCalibration,
     CohortMethod,
 	gmailr,
+	mime,
 	rmarkdown,
 	ggplot2,
 	knitr
