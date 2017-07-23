@@ -117,14 +117,14 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, cmOutputFolder,
   outcomeModelFile <- outcomeReference$outcomeModelFile
   for(i in 1:length(outcomeModelFile)){
     outcomeModel <- readRDS(outcomeModelFile[i])
-    if (outcomeModel$outcomeModelStatus == "OK") {
+    if (outcomeModel$outcomeModelStatus == "OK" && outcomeModel$outcomeModelCoefficients !=0) {
         try({
             model <- CohortMethod::getOutcomeModel(outcomeModel, cohortMethodData[[i]])
             idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
             write.csv(model, file.path(exportFolder, paste0("OutcomeModel",idx,".csv")), row.names = FALSE)
         })
-      }
     }
+  }
 #  }
   
   ### create Tables and Figures
