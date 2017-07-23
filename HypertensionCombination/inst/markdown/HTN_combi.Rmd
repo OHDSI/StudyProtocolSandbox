@@ -6,7 +6,7 @@ output:
   html_document: default
   pdf_document: default
 params: 
-    exportFolder: "E:/R/OHDSI/HypertensionCombination/output/export"
+    exportFolder: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r initial_setting, include=FALSE}
-exportFolder<-"E:/R/OHDSI/HypertensionCombination/output/export"#params$exportFolder
+exportFolder<-#params$exportFolder
 
 outcomeName=c("0.all death", "1.MACCE", "2.CV death", "3.MI", "4.HF", "5.stroke")
 
