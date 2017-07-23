@@ -5,14 +5,14 @@ submitResults <- function(exportFolder, from_addr, msg) {
   }
   writeLines(paste0("Uploading file '", zipName, "' to study coordinating center"))
   
-  mime() %>%
+  file_attachment <- mime() %>%
   to("sungjae.2425@gmail.com") %>%
   from(from_addr) %>%
 #  text_body("This is testing") -> text_msg
 #  text_msg %>%
   subject("Study result") %>%
   html_body(paste0("<html><body>",msg,"</body></html>")) %>%
-  attach_file("iris.csv") -> file_attachment
+  attach_file(zipName)
   
   result<-send_message(file_attachment)
 #  result <- OhdsiSharing::putS3File(file = zipName,
