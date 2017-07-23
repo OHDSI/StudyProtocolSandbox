@@ -6,7 +6,7 @@ output:
   html_document: default
   pdf_document: default
 params: 
-    exportFolder
+    exportFolder: C:/
 ---
 
 ```{r setup, include=FALSE}
