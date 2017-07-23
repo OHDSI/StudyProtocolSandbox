@@ -6,7 +6,7 @@ output:
   html_document: default
   pdf_document: default
 params: 
-    exportFolder: E:/R/OHDSI/HypertensionCombination/output/export
+    exportFolder: "E:/R/OHDSI/HypertensionCombination/output/export"
 ---
 
 ```{r setup, include=FALSE}
