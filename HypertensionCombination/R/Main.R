@@ -9,10 +9,13 @@ execute<-function(connectionDetails,
                   outputFolder = "output",
                   createCohorts = TRUE,
                   runAnalyses = TRUE,
-                  packageResults = FALSE,
-                  createTableAndFigures=FALSE,
-				  compressResults = FALSE,
-                  maxCores = 4){
+                  maxCores = 4,
+                  packageResults = TRUE,
+				  createTableAndFigures=TRUE,
+				  compressResults = TRUE,
+				  writeReport = TRUE,
+				  submitResults = TRUE,
+				  yourEmail = "email_address"){
 
 	if(cdmVersion == 4) {
 		stop("CDM version 4 not supported")
@@ -111,11 +114,19 @@ execute<-function(connectionDetails,
 		}
     }
 
+	if(writeReport){
+		writeReport(exportFolder)
+	}
+
 	if(compressResults){
 		writeLines("Compressing study results")
 		compressResults(exportFolder)
 		writeLines("")
-	}    
-    
+	}
+
+	if(submitResults){
+		submitResults(exportFolder, from_addr = yourEmail)
+	}
+	
   invisible(NULL)
 }

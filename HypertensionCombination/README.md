@@ -54,10 +54,13 @@ execute(connectionDetails,
 	outputFolder = "output",
 	createCohorts = TRUE,
 	runAnalyses = TRUE,
+	maxCores = 4,
 	packageResults = TRUE,
 	createTableAndFigures=TRUE,
 	compressResults = TRUE,
-	maxCores = 4)
+	writeReport = TRUE,
+	submitResults = TRUE,
+	yourEmail = "email_address")
 ```
 
 + ```cdmDatabaseSchema``` specify the schema name where your data in OMOP CDM format resides.
@@ -77,7 +80,7 @@ DO NOT USE!
 
 ```R
 submitResults("c:/temp/study_results/export", from_addr = "email_address")
-writeReport("c:/temp/study_results/export", "c:/temp/study_results/report.docx")
+writeReport("c:/temp/study_results/export", "c:/temp/study_results/report.html")
 ```
 
 ## Step 4.
