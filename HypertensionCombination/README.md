@@ -76,7 +76,7 @@ This functions are under development.
 DO NOT USE!
 
 ```R
-submitResults("c:/temp/study_results/export", key = "<key>", secret = "<secret>")
+submitResults("c:/temp/study_results/export", from_addr = "email_address")
 writeReport("c:/temp/study_results/export", "c:/temp/study_results/report.docx")
 ```
 
