@@ -19,13 +19,13 @@ exportFolder<-params$exportFolder
 outcomeName=c("0.all death", "1.MACCE", "2.CV death", "3.MI", "4.HF", "5.stroke")
 
 result30<-read.csv(paste0(exportFolder,"/30/tablesAndFigures/EmpiricalCalibration.csv"))
-#result180<-read.csv(paste0(exportFolder,"/180/tablesAndFigures/EmpiricalCalibration.csv"))
-#result365<-read.csv(paste0(exportFolder,"/365/tablesAndFigures/EmpiricalCalibration.csv"))
-#result730<-read.csv(paste0(exportFolder,"/730/tablesAndFigures/EmpiricalCalibration.csv"))
-#male<-read.csv(paste0(exportFolder,"/18001/tablesAndFigures/EmpiricalCalibration.csv"))
-#female<-read.csv(paste0(exportFolder,"/18002/tablesAndFigures/EmpiricalCalibration.csv"))
-#old<-read.csv(paste0(exportFolder,"/18061/tablesAndFigures/EmpiricalCalibration.csv"))
-#young<-read.csv(paste0(exportFolder,"/18059/tablesAndFigures/EmpiricalCalibration.csv"))
+result180<-read.csv(paste0(exportFolder,"/180/tablesAndFigures/EmpiricalCalibration.csv"))
+result365<-read.csv(paste0(exportFolder,"/365/tablesAndFigures/EmpiricalCalibration.csv"))
+result730<-read.csv(paste0(exportFolder,"/730/tablesAndFigures/EmpiricalCalibration.csv"))
+male<-read.csv(paste0(exportFolder,"/18001/tablesAndFigures/EmpiricalCalibration.csv"))
+female<-read.csv(paste0(exportFolder,"/18002/tablesAndFigures/EmpiricalCalibration.csv"))
+old<-read.csv(paste0(exportFolder,"/18061/tablesAndFigures/EmpiricalCalibration.csv"))
+young<-read.csv(paste0(exportFolder,"/18059/tablesAndFigures/EmpiricalCalibration.csv"))
 library(EmpiricalCalibration)
 result.forest.plot<-function(data=data, comparatorName="AC", targetName= "CD", analysisName="30days",outcomeIdset = c(4320,0,1,2,3,4), outcomeName){
     data<-data [grepl(comparatorName,data$comparatorName) & grepl(targetName,data$targetName) & data$outcomeId %in% c(0,1,2,3,4,4320),]
@@ -43,55 +43,55 @@ library(dplyr)
 
 ###AC(treat) vs AD(comparator)
 ```{r inclusion flow chart1, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/Attrition_a180_t13180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/Attrition_a180_t13180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 ###CD(treat) vs AC(comparator)
 ```{r inclusion flow chart2, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/Attrition_a180_t34180_c13180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/Attrition_a180_t34180_c13180_o0.png"))
+grid.raster(img)
 ```
 
 ###CD(treat) vs AD(comparator)
 ```{r inclusion flow chart3, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/Attrition_a180_t34180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/Attrition_a180_t34180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 
 #Propensiy score plot before and after matching 
 ###AC(treat) vs AD(comparator)
 ```{r Propensiy score plot1, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/PsPrefScale_a180_t13180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/PsPrefScale_a180_t13180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 ```{r Propensiy score plot2, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/PsAfterVarRatioMatchingPrefScale_a180_t13180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/PsAfterVarRatioMatchingPrefScale_a180_t13180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 ###CD(treat) vs AC(comparator)
 ```{r Propensiy score plot3, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/PsPrefScale_a180_t34180_c13180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/PsPrefScale_a180_t34180_c13180_o0.png"))
+grid.raster(img)
 ```
 
 ```{r Propensiy score plot4, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/PsAfterVarRatioMatchingPrefScale_a180_t34180_c13180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/PsAfterVarRatioMatchingPrefScale_a180_t34180_c13180_o0.png"))
+grid.raster(img)
 ```
 
 ###CD(treat) vs AD(comparator)
 ```{r Propensiy score plot5, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/PsPrefScale_a180_t34180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/PsPrefScale_a180_t34180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 ```{r Propensiy score plot6, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/PsAfterVarRatioMatchingPrefScale_a180_t34180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/PsAfterVarRatioMatchingPrefScale_a180_t34180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 #Balance scatter plot
@@ -99,22 +99,22 @@ library(dplyr)
 ###AC(treat) vs AD(comparator)
 
 ```{r Balance scatter plot1, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/BalanceScatterPlot_a180_t13180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/BalanceScatterPlot_a180_t13180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 ###CD(treat) vs AC(comparator)
 
 ```{r Balance scatter plot2, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/BalanceScatterPlot_a180_t34180_c13180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/BalanceScatterPlot_a180_t34180_c13180_o0.png"))
+grid.raster(img)
 ```
 
 ###CD(treat) vs AD(comparator)
 
 ```{r Balance scatter plot3, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/BalanceScatterPlot_a180_t34180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/BalanceScatterPlot_a180_t34180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 #Empirical Calibration
@@ -127,20 +127,20 @@ grid.raster(img)
 
 ###180days
 ```{r Empirical Calibration2, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/CalEffect_a180.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/CalEffect_a180.png"))
+grid.raster(img)
 ```
 
 ###365days
 ```{r Empirical Calibration3, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/365/tablesAndFigures/CalEffect_a365.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/365/tablesAndFigures/CalEffect_a365.png"))
+grid.raster(img)
 ```
 
 ###730days
 ```{r Empirical Calibration4, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/730/tablesAndFigures/CalEffect_a730.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/730/tablesAndFigures/CalEffect_a730.png"))
+grid.raster(img)
 ```
 
 #Results: Primary endpoint(All-cause mortality)
@@ -148,42 +148,42 @@ grid.raster(img)
 
 ```{r result_table, echo=FALSE}
 library(knitr)
-#result<-read.csv(paste0(exportFolder,"/180/tablesAndFigures/EmpiricalCalibration.csv"))
-#main<-result
-#main<-result %>% filter(outcomeId ==0)
+result<-read.csv(paste0(exportFolder,"/180/tablesAndFigures/EmpiricalCalibration.csv"))
+main<-result
+main<-result %>% filter(outcomeId ==0)
 
-#maintable<-data.frame(active_drug=main$targetName,
-#           comparator_drug = main$comparatorName,
-#           No_treat=main$treated,
-#           No_comparator=main$treated,
-#           HR = round(main$rr,2),
-#           CI=paste(round(main$ci95lb,2),round(main$ci95ub,2),sep="-"),
-#           p=round(main$p,3),
-#           calibratedP=round(main$calibratedP,3)
-#           )
-#kable(maintable)
+maintable<-data.frame(active_drug=main$targetName,
+           comparator_drug = main$comparatorName,
+           No_treat=main$treated,
+           No_comparator=main$treated,
+           HR = round(main$rr,2),
+           CI=paste(round(main$ci95lb,2),round(main$ci95ub,2),sep="-"),
+           p=round(main$p,3),
+           calibratedP=round(main$calibratedP,3)
+           )
+kable(maintable)
 ```
 
 ##Survival Curve
 ###AC(treat) vs AD(comparator)
 
 ```{r Survival Curve AD vs AD, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/KaplanMeier_a180_t13180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/KaplanMeier_a180_t13180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 ###CD(treat) vs AC(comparator)
 
 ```{r Survival Curve CD vs AC, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/KaplanMeier_a180_t34180_c13180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/KaplanMeier_a180_t34180_c13180_o0.png"))
+grid.raster(img)
 ```
 
 ###CD(treat) vs AD(comparator)
 
 ```{r Survival Curve CD vs AD, echo=FALSE}
-#img<-readPNG(paste0(exportFolder,"/180/KaplanMeier_a180_t34180_c14180_o0.png"))
-#grid.raster(img)
+img<-readPNG(paste0(exportFolder,"/180/KaplanMeier_a180_t34180_c14180_o0.png"))
+grid.raster(img)
 ```
 
 #Results: Secondary endpoint(calibrated)
@@ -200,66 +200,66 @@ result.forest.plot(data=result30,
 ```
 
 ```{r result_forest_plot AC AD 180, echo=FALSE}
-#result.forest.plot(data=result180,
-#                   comparatorName="AD",
-#                   targetName="AC",
-#                   analysisName="180days",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=result180,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="180days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot AC AD 365, echo=FALSE}
-#result.forest.plot(data=result365,
-#                   comparatorName="AD",
-#                   targetName="AC",
-#                   analysisName="365days",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=result365,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="365days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot AC AD 730, echo=FALSE}
-#result.forest.plot(data=result730,
-#                   comparatorName="AD",
-#                   targetName="AC",
-#                   analysisName="730days",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=result730,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="730days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot AC AD male, echo=FALSE}
-#result.forest.plot(data=male,
-#                   comparatorName="AD",
-#                   targetName="AC",
-#                   analysisName="male",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=male,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="male",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot AC AD female, echo=FALSE}
-#result.forest.plot(data=female,
-#                   comparatorName="AD",
-#                   targetName="AC",
-#                   analysisName="female",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=female,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="female",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot AC AD old, echo=FALSE}
-#result.forest.plot(data=old,
-#                   comparatorName="AD",
-#                   targetName="AC",
-#                   analysisName="old",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=old,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="old",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot AC AD young, echo=FALSE}
-#result.forest.plot(data=young,
-#                   comparatorName="AD",
-#                   targetName="AC",
-#                   analysisName="young",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=young,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="young",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ###CD(treat) vs AC(comparator)
@@ -274,67 +274,67 @@ result.forest.plot(data=result30,
 ```
 
 ```{r result_forest_plot CD AC 180, echo=FALSE}
-#result.forest.plot(data=result180,
-#                   comparatorName="AC",
-#                   targetName="CD",
-#                   analysisName="180days",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=result180,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="180days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AC 365, echo=FALSE}
-#result.forest.plot(data=result365,
-#                   comparatorName="AC",
-#                   targetName="CD",
-#                   analysisName="365days",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=result365,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="365days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AC 730, echo=FALSE}
-#result.forest.plot(data=result730,
-#                   comparatorName="AC",
-#                   targetName="CD",
-#                   analysisName="730days",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=result730,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="730days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 
 ```{r result_forest_plot CD AC male, echo=FALSE}
-#result.forest.plot(data=male,
-#                   comparatorName="AC",
-#                   targetName="CD",
-#                   analysisName="male",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=male,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="male",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AC female, echo=FALSE}
-#result.forest.plot(data=female,
-#                   comparatorName="AC",
-#                   targetName="CD",
-#                   analysisName="female",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=female,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="female",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AC old, echo=FALSE}
-#result.forest.plot(data=old,
-#                   comparatorName="AC",
-#                   targetName="CD",
-#                   analysisName="old",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=old,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="old",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AC young, echo=FALSE}
-#result.forest.plot(data=young,
-#                   comparatorName="AC",
-#                   targetName="CD",
-#                   analysisName="young",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=young,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="young",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 
@@ -350,64 +350,64 @@ result.forest.plot(data=result30,
 ```
 
 ```{r result_forest_plot CD AD 180, echo=FALSE}
-#result.forest.plot(data=result180,
-#                   comparatorName="AD",
-#                   targetName="CD",
-#                   analysisName="180days",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=result180,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="180days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AD 365, echo=FALSE}
-#result.forest.plot(data=result365,
-#                   comparatorName="AD",
-#                   targetName="CD",
-#                   analysisName="365days",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=result365,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="365days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AD 730, echo=FALSE}
-#result.forest.plot(data=result730,
-#                   comparatorName="AD",
-#                   targetName="CD",
-#                   analysisName="730days",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=result730,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="730days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AD male, echo=FALSE}
-#result.forest.plot(data=male,
-#                   comparatorName="AD",
-#                   targetName="CD",
-#                   analysisName="male",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=male,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="male",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AD female, echo=FALSE}
-#result.forest.plot(data=female,
-#                   comparatorName="AD",
-#                   targetName="CD",
-#                   analysisName="female",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=female,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="female",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AD old, echo=FALSE}
-#result.forest.plot(data=old,
-#                   comparatorName="AD",
-#                   targetName="CD",
-#                   analysisName="old",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=old,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="old",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
 
 ```{r result_forest_plot CD AD young, echo=FALSE}
-#result.forest.plot(data=young,
-#                   comparatorName="AD",
-#                   targetName="CD",
-#                   analysisName="young",
-#                   outcomeIdset = c(0,4320,1,2,3,4),
-#                   outcomeName = outcomeName)
+result.forest.plot(data=young,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="young",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
 ```
