@@ -3,13 +3,10 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
     analysisSummary <- read.csv(file.path(exportFolder, "MainResults.csv"))
     
     tablesAndFiguresFolder <- file.path(exportFolder, "tablesAndFigures")
-    MainresultFolder<-file.path(exportFolder, "Mainresult")
     
     if (!file.exists(tablesAndFiguresFolder))
         dir.create(tablesAndFiguresFolder)
     
-    if (!file.exists(MainresultFolder))
-        dir.create(MainresultFolder)
     
     negControlCohortIds <- c(378424, 4004352, 4280726, 133141, 137053, 140480, 380731,
                              381581, 75344,  80809, 376415,  4224118, 4253054, 437409, 199067, 434272, 373478, 140641, 139099,
