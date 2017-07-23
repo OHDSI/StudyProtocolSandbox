@@ -21,7 +21,10 @@ Imports:
     PatientLevelPrediction,
     FeatureExtraction,
     EmpiricalCalibration,
-    CohortMethod
+    CohortMethod,
+	gmailr,
+	rmarkdown,
+	ggplot2
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
