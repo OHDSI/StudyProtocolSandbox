@@ -134,6 +134,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, cmOutputFolder,
 #  zipName <- file.path(exportFolder, "StudyResults.zip")
 #  OhdsiSharing::compressFolder(exportFolder, zipName)
 #  writeLines(paste("\nStudy results are ready for sharing at:", zipName))
+  writeLines(paste("\nStudy results are ready for sharing at:", exportFolder))
 }
 
 createMetaData <- function(connectionDetails, cdmDatabaseSchema, exportFolder) {
