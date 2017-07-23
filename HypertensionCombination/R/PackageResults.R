@@ -66,18 +66,22 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, cmOutputFolder,
   for(i in 1:length(strataFile)){
     strata <- readRDS(strataFile[i])
     balance <- CohortMethod::computeCovariateBalance(strata, cohortMethodData[[i]])
-    idx <- balance$beforeMatchingSumTreated < minCellCount
-    balance$beforeMatchingSumTreated[idx] <- NA
-    balance$beforeMatchingMeanTreated[idx] <- NA
-    idx <- balance$beforeMatchingSumComparator < minCellCount
-    balance$beforeMatchingSumComparator[idx] <- NA
-    balance$beforeMatchingMeanComparator[idx] <- NA
-    idx <- balance$afterMatchingSumTreated < minCellCount
-    balance$afterMatchingSumTreated[idx] <- NA
-    balance$afterMatchingMeanTreated[idx] <- NA
-    idx <- balance$afterMatchingSumComparator < minCellCount
-    balance$afterMatchingSumComparator[idx] <- NA
-    balance$afterMatchingMeanComparator[idx] <- NA
+    if(idx <- balance$beforeMatchingSumTreated < minCellCount){
+		balance$beforeMatchingSumTreated[idx] <- NA
+		balance$beforeMatchingMeanTreated[idx] <- NA
+	}
+	if(idx <- balance$beforeMatchingSumComparator < minCellCount){
+		balance$beforeMatchingSumComparator[idx] <- NA
+		balance$beforeMatchingMeanComparator[idx] <- NA
+    }
+    if(idx <- balance$afterMatchingSumTreated < minCellCount){
+		balance$afterMatchingSumTreated[idx] <- NA
+		balance$afterMatchingMeanTreated[idx] <- NA
+    }
+    if(idx <- balance$afterMatchingSumComparator < minCellCount){
+		balance$afterMatchingSumComparator[idx] <- NA
+		balance$afterMatchingMeanComparator[idx] <- NA
+    }
     idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
     write.csv(balance, file.path(exportFolder, paste0("Balance",idx,".csv")), row.names = FALSE)
     
