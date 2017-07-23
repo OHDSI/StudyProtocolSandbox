@@ -66,19 +66,19 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, cmOutputFolder,
   for(i in 1:length(strataFile)){
     strata <- readRDS(strataFile[i])
     balance <- CohortMethod::computeCovariateBalance(strata, cohortMethodData[[i]])
-    if(idx <- balance$beforeMatchingSumTreated < minCellCount){
+    if(length(idx <- balance$beforeMatchingSumTreated < minCellCount)>0){
 		balance$beforeMatchingSumTreated[idx] <- NA
 		balance$beforeMatchingMeanTreated[idx] <- NA
 	}
-	if(idx <- balance$beforeMatchingSumComparator < minCellCount){
+	if(length(idx <- balance$beforeMatchingSumComparator < minCellCount)>0){
 		balance$beforeMatchingSumComparator[idx] <- NA
 		balance$beforeMatchingMeanComparator[idx] <- NA
     }
-    if(idx <- balance$afterMatchingSumTreated < minCellCount){
+    if(length(idx <- balance$afterMatchingSumTreated < minCellCount)>0){
 		balance$afterMatchingSumTreated[idx] <- NA
 		balance$afterMatchingMeanTreated[idx] <- NA
     }
-    if(idx <- balance$afterMatchingSumComparator < minCellCount){
+    if(length(idx <- balance$afterMatchingSumComparator < minCellCount)>0){
 		balance$afterMatchingSumComparator[idx] <- NA
 		balance$afterMatchingMeanComparator[idx] <- NA
     }
