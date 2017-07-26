@@ -76,7 +76,9 @@ execute(connectionDetails,
 + ```maxCores``` is the number of cores that are available for parallel processing.
 
 ## Step 4.
-E-mail to Seng Chan You (applegna@gmail.com) with ```StudyResults.zip```
+Please submit results by submitResults parameter.
++ This will send ```StudyResults.zip``` to google drive
+or E-mail to Seng Chan You (applegna@gmail.com) with ```StudyResults.zip```
 
 # Contacts
 - Study design: Seng Chan You (applegna@gmail.com)
