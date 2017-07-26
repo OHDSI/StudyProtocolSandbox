@@ -11,12 +11,11 @@ execute<-function(connectionDetails,
                   runAnalyses = TRUE,
                   maxCores = 4,
                   packageResults = TRUE,
-				  createTableAndFigures=TRUE,
-				  compressResults = TRUE,
-				  writeReport = TRUE,
-				  submitResults = TRUE,
-				  yourEmail = "email_address",
-				  msg = msg){
+                  createTableAndFigures=TRUE,
+                  compressResults = TRUE,
+                  writeReport = TRUE,
+                  submitResults = TRUE,
+                  localName = "AUSOM_test"){
 
 	if(cdmVersion == 4) {
 		stop("CDM version 4 not supported")
@@ -127,7 +126,7 @@ execute<-function(connectionDetails,
 	}
 
 	if(submitResults){
-		submitResults(exportFolder, from_addr = yourEmail, msg = msg)
+		submitResults(exportFolder, localName)
 	}
 	
   invisible(NULL)
