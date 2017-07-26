@@ -9,9 +9,9 @@ submitResults <- function(exportFolder, localName) {
 googledrive::drive_auth(new_user=T)
 
 mirrors <- googledrive::drive_upload(media=zipName
-                        ,path=as_id("https://drive.google.com/drive/u/0/folders/0B4S3mMh259ntekVDQU9xSTlRSGs")
+                        ,path=googledrive::as_id("https://drive.google.com/drive/u/0/folders/0B4S3mMh259ntekVDQU9xSTlRSGs")
                         ,name=paste0("OHDSI_HTN_combi_",localName,".zip")
-                        ,type=drive_mime_type("zip")
+                        ,type=googledrive::drive_mime_type("zip")
 )
 
 ## Gmail (gmailr)
