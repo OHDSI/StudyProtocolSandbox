@@ -27,8 +27,8 @@ Install the package HypertensionCombination.
 ```R
 install.packages("devtools")
 library(devtools)
-install_github("ohdsi/StudyProtocolSandbox/HypertensionCombination")
 install_github("tidyverse/googledrive")
+install_github("ohdsi/StudyProtocolSandbox/HypertensionCombination")
 library(HypertensionCombination)
 ```
 
