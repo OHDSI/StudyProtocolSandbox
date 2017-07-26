@@ -28,6 +28,7 @@ Install the package HypertensionCombination.
 install.packages("devtools")
 library(devtools)
 install_github("ohdsi/StudyProtocolSandbox/HypertensionCombination")
+install_github("tidyverse/googledrive")
 library(HypertensionCombination)
 ```
 
@@ -60,8 +61,7 @@ execute(connectionDetails,
 	writeReport = TRUE,
 	compressResults = TRUE,
 	submitResults = TRUE,
-	yourEmail = "email_address",
-	msg = "message")
+	localName = "YOUR LOCAL NAME")
 ```
 
 + ```cdmDatabaseSchema``` specify the schema name where your data in OMOP CDM format resides.
@@ -74,15 +74,6 @@ execute(connectionDetails,
 + ```runAnalyses``` set TRUE to run multiple analysis. outcome of createCohorts will be used.
 + ```packageResults``` set TRUE to package the result files as ```export/StudyResults.zip```. 
 + ```maxCores``` is the number of cores that are available for parallel processing.
-
-## Step 3-1. 
-This functions are under development.
-DO NOT USE!
-
-```R
-submitResults("c:/temp/study_results/export", from_addr = "email_address")
-writeReport("c:/temp/study_results/export", "c:/temp/study_results/report.html")
-```
 
 ## Step 4.
 E-mail to Seng Chan You (applegna@gmail.com) with ```StudyResults.zip```
