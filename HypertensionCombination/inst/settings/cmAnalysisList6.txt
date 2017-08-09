@@ -8,6 +8,7 @@
       "excludeDrugsFromCovariates": false,
       "firstExposureOnly": false,
       "removeDuplicateSubjects": true,
+      "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "covariateSettings": {
         "useCovariateDemographics": true,
@@ -73,6 +74,7 @@
     },
     "createStudyPopArgs": {
       "firstExposureOnly": false,
+      "restrictToCommonPeriod": false,
       "washoutPeriod": 0,
       "removeDuplicateSubjects": true,
       "removeSubjectsWithPriorOutcome": true,
@@ -86,7 +88,8 @@
     },
     "createPs": true,
     "createPsArgs": {
-      "stopOnHighCorrelation": true,
+      "errorOnHighCorrelation": true,
+      "stopOnError": true,
       "prior": {
         "priorType": "laplace",
         "variance": 1,
@@ -169,7 +172,7 @@
         "startingVariance": 0.01,
         "useKKTSwindle": false,
         "tuneSwindle": 10,
-        "selectorType": "byPid",
+        "selectorType": "auto",
         "initialBound": 2,
         "maxBoundCount": 5,
         "attr_class": "cyclopsControl"
