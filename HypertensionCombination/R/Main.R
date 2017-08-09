@@ -41,8 +41,8 @@ execute<-function(connectionDetails,
 		writeLines("")
 	}
 
-	#analysesList <- c("30","180","365","730","18001","18002","18059","18061")
-	analysesList <- c("30")
+	analysesList <- c("30","180","365","730","18001","18002","18059","18061")
+	#analysesList <- c("30")
 	analysesPaths <- file.path(cmOutputFolder,analysesList)
 	exportPaths <- file.path(exportFolder,analysesList)
 	
