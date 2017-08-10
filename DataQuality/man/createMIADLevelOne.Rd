@@ -2,12 +2,13 @@
 % Please edit documentation in R/DatasetDQ.R
 \name{createMIADLevelOne}
 \alias{createMIADLevelOne}
-\title{Level one data about dataset}
+\title{Level one data about dataset MIAD stands for minimum information about a dataset
+percentage measures are used that hide exact patient counts}
 \usage{
 createMIADLevelOne(connectionDetails, cdmDatabaseSchema,
   workDatabaseSchema = cdmDatabaseSchema, outputFolder)
 }
 \description{
-Level one data about dataset
+Level one data about dataset MIAD stands for minimum information about a dataset
+percentage measures are used that hide exact patient counts
 }
-

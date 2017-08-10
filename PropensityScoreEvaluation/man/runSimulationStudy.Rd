@@ -7,8 +7,8 @@
 runSimulationStudy(simulationProfile, simulationSetup, cohortMethodData,
   simulationRuns = 10, trueEffectSize = NA, outcomePrevalence = NA,
   hdpsFeatures, stratify = FALSE, discrete = FALSE,
-  ignoreCensoring = FALSE, threads = 10, fudge = 0.001, prior = NULL,
-  maxRatio = 0, numStrata = 10, useCovariates = FALSE)
+  ignoreCensoring = FALSE, fudge = 0.001, psPrior = NULL, maxRatio = 1,
+  numStrata = 10, useCovariates = FALSE)
 }
 \arguments{
 \item{simulationProfile}{simulationProfile object created by createCMDSimulationProfile function}
@@ -23,8 +23,6 @@ runSimulationStudy(simulationProfile, simulationSetup, cohortMethodData,
 
 \item{ignoreCensoring}{Ignore censoring altogether; sets censoring process baseline survival function to 1}
 
-\item{threads}{Number of parallel threads to use}
-
 \item{studyPop}{Study population created by createStudyPopulation function}
 
 \item{confoundingScheme}{Type of unmeasured confounding to use for PS (0 = none; 1 = demographics; 2 = random proportion; 3 = demographics and random proportion)}
@@ -32,6 +30,8 @@ runSimulationStudy(simulationProfile, simulationSetup, cohortMethodData,
 \item{confoundingProportion}{Proportion of covariates to hide from propensity score as unmeasured confounding}
 
 \item{ignoreCensoringCovariates}{Ignore covariates effects on censoring process; only uses baseline function}
+
+\item{threads}{Number of parallel threads to use}
 }
 \value{
 Returns the following: \describe{

@@ -1,14 +1,5 @@
-packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, minCellCount = 5) {
-  exportFolder <- file.path(outputFolder, "export")
-  
+packageResults <- function(connectionDetails, cdmDatabaseSchema, cmOutputFolder, exportFolder, minCellCount = 5) {
   #createMetaData(connectionDetails, cdmDatabaseSchema, exportFolder)
-  cmOutputFolder <- file.path(outputFolder, "cmOutput")
-  
-  if (!file.exists(outputFolder))
-      dir.create(outputFolder)
-  
-  if (!file.exists(exportFolder))
-      dir.create(exportFolder)
   
   outcomeReference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
   analysisSummary <- CohortMethod::summarizeAnalyses(outcomeReference)
@@ -75,18 +66,22 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   for(i in 1:length(strataFile)){
     strata <- readRDS(strataFile[i])
     balance <- CohortMethod::computeCovariateBalance(strata, cohortMethodData[[i]])
-    idx <- balance$beforeMatchingSumTreated < minCellCount
-    balance$beforeMatchingSumTreated[idx] <- NA
-    balance$beforeMatchingMeanTreated[idx] <- NA
-    idx <- balance$beforeMatchingSumComparator < minCellCount
-    balance$beforeMatchingSumComparator[idx] <- NA
-    balance$beforeMatchingMeanComparator[idx] <- NA
-    idx <- balance$afterMatchingSumTreated < minCellCount
-    balance$afterMatchingSumTreated[idx] <- NA
-    balance$afterMatchingMeanTreated[idx] <- NA
-    idx <- balance$afterMatchingSumComparator < minCellCount
-    balance$afterMatchingSumComparator[idx] <- NA
-    balance$afterMatchingMeanComparator[idx] <- NA
+    if(length(idx <- balance$beforeMatchingSumTreated < minCellCount)>0){
+		balance$beforeMatchingSumTreated[idx] <- NA
+		balance$beforeMatchingMeanTreated[idx] <- NA
+	}
+	if(length(idx <- balance$beforeMatchingSumComparator < minCellCount)>0){
+		balance$beforeMatchingSumComparator[idx] <- NA
+		balance$beforeMatchingMeanComparator[idx] <- NA
+    }
+    if(length(idx <- balance$afterMatchingSumTreated < minCellCount)>0){
+		balance$afterMatchingSumTreated[idx] <- NA
+		balance$afterMatchingMeanTreated[idx] <- NA
+    }
+    if(length(idx <- balance$afterMatchingSumComparator < minCellCount)>0){
+		balance$afterMatchingSumComparator[idx] <- NA
+		balance$afterMatchingMeanComparator[idx] <- NA
+    }
     idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
     write.csv(balance, file.path(exportFolder, paste0("Balance",idx,".csv")), row.names = FALSE)
     
@@ -122,24 +117,25 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   outcomeModelFile <- outcomeReference$outcomeModelFile
   for(i in 1:length(outcomeModelFile)){
     outcomeModel <- readRDS(outcomeModelFile[i])
-    if (outcomeModel$outcomeModelStatus == "OK") {
+    if (outcomeModel$outcomeModelStatus == "OK" && outcomeModel$outcomeModelCoefficients !=0) {
         try({
             model <- CohortMethod::getOutcomeModel(outcomeModel, cohortMethodData[[i]])
             idx<-paste0("_a",outcomeReference$analysisId[i],"_t",outcomeReference$targetId[i],"_c",outcomeReference$comparatorId[i],"_o",outcomeReference$outcomeId[i])
             write.csv(model, file.path(exportFolder, paste0("OutcomeModel",idx,".csv")), row.names = FALSE)
         })
-      }
     }
   }
+#  }
   
   ### create Tables and Figures
 #  HypertensionCombination::createTableAndFigures(exportFolder, cmOutputFolder)
   
   ### Add all to zip file ###
-  zipName <- file.path(exportFolder, "StudyResults.zip")
-  OhdsiSharing::compressFolder(exportFolder, zipName)
-  writeLines(paste("\nStudy results are ready for sharing at:", zipName))
-#}
+#  zipName <- file.path(exportFolder, "StudyResults.zip")
+#  OhdsiSharing::compressFolder(exportFolder, zipName)
+#  writeLines(paste("\nStudy results are ready for sharing at:", zipName))
+  writeLines(paste("\nStudy results are ready for sharing at:", exportFolder))
+}
 
 createMetaData <- function(connectionDetails, cdmDatabaseSchema, exportFolder) {
   conn <- DatabaseConnector::connect(connectionDetails)

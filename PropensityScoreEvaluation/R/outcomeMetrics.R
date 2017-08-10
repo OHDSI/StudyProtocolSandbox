@@ -52,6 +52,139 @@ calculateMetricsHelper <- function(estimates, cohortMethodData, settings, ps, st
               xbMean = xbMean, xbSD = xbSD))
 }
 
+#' @export
+calculateMetrics1 <- function(simulationResults, cohortMethodData, simulationProfile, simulationSetup, balance=TRUE) {
+  expHdps = NULL
+  biasHdps = NULL
+  beforeBalance = NULL
+  settings = simulationResults$settings
+  psLassoHDPS = simulationSetup$psLassoHDPS
+  psLassoCDM = simulationSetup$psLassoCDM
+  psLassoAll = simulationSetup$psLassoAll
+  psExpCV = simulationSetup$psExpCV
+  if (settings$nonePrior) {
+    psExpHdps = simulationSetup$psExp
+  }
+  
+  cohorts <- ff::as.ffdf(cohortMethodData$cohorts[, c("rowId", "treatment")])
+  covariates <- cohortMethodData$covariates
+  normFactors <- attr(cohortMethodData$covariates,"normFactors")
+  if (!is.null(normFactors)){
+    covariates <- ffbase::merge.ffdf(covariates, ff::as.ffdf(normFactors))
+    covariates$covariateValue <- covariates$covariateValue * covariates$maxs
+    covariates$maxs <- NULL
+  }
+  if (balance) {
+    beforeBalance = computeBeforeCovariateBalance(cohorts, covariates)
+    beforeBalance$stdDiff <- (beforeBalance$meanTreated - beforeBalance$meanComparator)/beforeBalance$sd
+    beforeBalance = beforeBalance[,c("covariateId","stdDiff")]
+  }
+  
+  outcomeModelCovariates = as.numeric(names(simulationProfile$outcomeModelCoefficients[simulationProfile$outcomeModelCoefficients!=0]))
+  lassoHDPS = calculateMetricsHelper1(simulationResults$estimatesLassoHDPS, settings)
+  lassoCDM = calculateMetricsHelper1(simulationResults$estimatesLassoCDM, settings)
+  lassoAll = calculateMetricsHelper1(simulationResults$estimatesLassoAll, settings)
+  expHdpsCV = calculateMetricsHelper1(simulationResults$estimatesExpHdpsCV, settings)
+  biasHdpsCV = calculateMetricsHelper1(simulationResults$estimatesBiasHdpsCV, settings)
+  if (settings$nonePrior) {
+    expHdps = calculateMetricsHelper1(simulationResults$estimatesExpHdpsNone, settings)
+    biasHdps = calculateMetricsHelper1(simulationResults$estimatesBiasHdpsNone, settings)
+  }
+  
+  lassoHDPS1 = calculateMetricsHelper2(psLassoHDPS, settings, covariates, outcomeModelCovariates, balance)
+  lassoCDM1 = calculateMetricsHelper2(psLassoCDM, settings, covariates, outcomeModelCovariates, balance)
+  lassoAll1 = calculateMetricsHelper2(psLassoAll, settings, covariates, outcomeModelCovariates, balance)
+  expHdpsCV1 = calculateMetricsHelper2(psExpCV, settings, covariates, outcomeModelCovariates, balance)
+  if (settings$nonePrior) expHdps1 = calculateMetricsHelper2(psExpHdps, settings, covariates, outcomeModelCovariates, balance)
+  
+  f <- function(ps,cohorts,settings,covariates,outcomeModelCovariates, balance) {
+    newPs = data.frame(rowId = settings$rowId, propensityScore = ps)
+    newPs = merge(newPs,cohorts[,c("rowId","treatment")])
+    attributes(newPs)$metaData = attributes(ps)$metaData
+    return(list(calculateMetricsHelper2(newPs,settings,covariates,outcomeModelCovariates,balance)))
+  }
+  
+  biasHdpsCVList = sapply(simulationResults$psBiasCVList,f,cohorts,settings,covariates,outcomeModelCovariates,balance)
+  if (settings$nonePrior) {
+    biasHdpsList = sapply(simulationResults$psBiasNoneList,f,cohorts,settings,covariates,outcomeModelCovariates,balance)
+  }
+  
+  lassoHDPS$auc = lassoHDPS1$auc
+  lassoHDPS$overlap = lassoHDPS1$overlap
+  lassoHDPS$afterBalance = lassoHDPS1$afterBalance
+  lassoHDPS$utilized = lassoHDPS1$utilized
+  
+  lassoCDM$auc = lassoCDM1$auc
+  lassoCDM$overlap = lassoCDM1$overlap
+  lassoCDM$afterBalance = lassoCDM1$afterBalance
+  lassoCDM$utilized = lassoCDM1$utilized
+  
+  lassoAll$auc = lassoAll1$auc
+  lassoAll$overlap = lassoAll1$overlap
+  lassoAll$afterBalance = lassoAll1$afterBalance
+  lassoAll$utilized = lassoAll1$utilized
+  
+  expHdpsCV$auc = expHdpsCV1$auc
+  expHdpsCV$overlap = expHdpsCV1$overlap
+  expHdpsCV$afterBalance = expHdpsCV1$afterBalance
+  expHdpsCV$utilized = expHdpsCV1$utilized
+  
+  biasHdpsCV$metrics = biasHdpsCVList
+  
+  if (settings$nonePrior) {
+    expHdps$auc = expHdps1$auc
+    expHdps$overlap = expHdps1$overlap
+    expHdps$afterBalance = expHdps1$afterBalance
+    expHdps$utilized = expHdps1$utilized
+    biasHdps$metrics = biasHdpsList
+  }
+  
+  return(list(lassoHDPS = lassoHDPS,
+              lassoCDM = lassoCDM,
+              lassoAll = lassoAll,
+              expHdpsCV = expHdpsCV,
+              expHdps = expHdps,
+              biasHdpsCV = biasHdpsCV,
+              biasHdps = biasHdps,
+              beforeBalance = beforeBalance))
+}
+
+calculateMetricsHelper1 <- function(estimates, settings) {
+  trueEffectSize = settings$trueEffectSize
+  good = which(!is.na(estimates$seLogRr))
+  n = length(good)
+  bias = mean(estimates$logRr[good]) - trueEffectSize
+  #bias = exp(mean(estimates$logRr[good]))/exp(trueEffectSize) - 1
+  sd = sd(estimates$logRr[good]) / sqrt(n)
+  rmse = sqrt(bias^2+sd^2)
+  coverage = length(which((estimates$logLb95[good] <= trueEffectSize) & (estimates$logUb95[good] >= trueEffectSize))) / n
+  return(list(bias = bias, sd = sd, rmse = rmse, coverage = coverage))
+}
+
+calculateMetricsHelper2 <- function(ps, settings, covariates, outcomeModelCovariates, balance) {
+  auc = computePsAuc(ps)
+  psModelCovariates = attributes(ps)$metaData$psModelCoef
+  psModelCovariates = as.numeric(names(psModelCovariates[psModelCovariates!=0]))
+  psModelCovariates = psModelCovariates[!is.na(psModelCovariates)]
+  t = match(outcomeModelCovariates, psModelCovariates)
+  overlap = length(which(!is.na(t)))/length(outcomeModelCovariates)
+  afterBalance = NULL
+  utilized = NULL
+  if (balance) {
+    if (settings$stratify) population = stratifyByPs(ps, numberOfStrata = settings$numStrata)
+    else {
+      if (settings$maximizeMatching) ps$treatment = 1 - ps$treatment
+      population = matchOnPs(ps, maxRatio = settings$maxRatio, caliper = settings$caliper)
+      if (settings$maximizeMatching) population$treatment = 1 - population$treatment
+    }
+    afterBalance = computeAfterCovariateBalance(population, covariates)
+    afterBalance$stdDiff <- (afterBalance$meanTreated - afterBalance$meanComparator)/afterBalance$sd
+    afterBalance = afterBalance[,c("covariateId","stdDiff")]
+    utilized = nrow(population)/nrow(ps)
+  }
+  return(list(auc = auc, overlap = overlap, afterBalance = afterBalance, utilized = utilized))
+}
+
 calculateMetricsList1 <- function(inFolder, cohortMethodData, simulationProfile, dimensions) {
   result = rep(list(rep(list(rep(list(rep(list(NA), dimensions[4])), dimensions[3])), dimensions[2])), dimensions[1])
   counter = 1

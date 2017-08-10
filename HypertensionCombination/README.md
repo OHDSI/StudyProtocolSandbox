@@ -15,8 +15,9 @@ install_github("ohdsi/OhdsiSharing")
 install_github("ohdsi/SqlRender")
 install_github("ohdsi/DatabaseConnector")
 install_github("ohdsi/Cyclops")
-install_github("ohdsi/PatientLevelPrediction")
 install_github("ohdsi/FeatureExtraction")
+install_github("ohdsi/BigKnn")
+install_github("ohdsi/PatientLevelPrediction")
 install_github("ohdsi/EmpiricalCalibration")
 install_github("ohdsi/CohortMethod")
 ```
@@ -27,6 +28,7 @@ Install the package HypertensionCombination.
 ```R
 install.packages("devtools")
 library(devtools)
+install_github("tidyverse/googledrive")
 install_github("ohdsi/StudyProtocolSandbox/HypertensionCombination")
 library(HypertensionCombination)
 ```
@@ -54,9 +56,13 @@ execute(connectionDetails,
 	outputFolder = "output",
 	createCohorts = TRUE,
 	runAnalyses = TRUE,
+	maxCores = 4,
 	packageResults = TRUE,
 	createTableAndFigures=TRUE,
-	maxCores = 4)
+	writeReport = TRUE,
+	compressResults = TRUE,
+	submitResults = TRUE,
+	localName = "YOUR LOCAL NAME")
 ```
 
 + ```cdmDatabaseSchema``` specify the schema name where your data in OMOP CDM format resides.
@@ -70,17 +76,9 @@ execute(connectionDetails,
 + ```packageResults``` set TRUE to package the result files as ```export/StudyResults.zip```. 
 + ```maxCores``` is the number of cores that are available for parallel processing.
 
-## Step 3. 
-This functions are under development.
-DO NOT USE!
-
-```R
-submitResults("c:/temp/study_results/export", key = "<key>", secret = "<secret>")
-writeReport("c:/temp/study_results/export", "c:/temp/study_results/report.docx")
-```
-
 ## Step 4.
-E-mail to Seng Chan You (applegna@gmail.com) with ```StudyResults.zip```
+- Please submit results through submitResults parameter. This will send ```StudyResults.zip``` to google drive
+- or E-mail to Seng Chan You (applegna@gmail.com) with ```StudyResults.zip```
 
 # Contacts
 - Study design: Seng Chan You (applegna@gmail.com)

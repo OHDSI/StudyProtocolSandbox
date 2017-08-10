@@ -881,6 +881,7 @@ DROP TABLE #codesets;
 --IF OBJECT_ID('@resultsDatabaseSchema.@outcomeTable', 'U') IS NULL
 
 
+
 --HF+MI+STROKE+Any DEATH : 4320
 DELETE FROM @resultsDatabaseSchema.@outcomeTable WHERE cohort_definition_id = 4320;
 

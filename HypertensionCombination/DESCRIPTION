@@ -17,10 +17,17 @@ Imports:
     SqlRender,
     DatabaseConnector,
     Cyclops,
+    BigKnn,
     PatientLevelPrediction,
     FeatureExtraction,
     EmpiricalCalibration,
-    CohortMethod
+    CohortMethod,
+    googledrive,
+    curl (>= 2.8.1),
+    mime,
+    rmarkdown,
+    ggplot2,
+    knitr
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true

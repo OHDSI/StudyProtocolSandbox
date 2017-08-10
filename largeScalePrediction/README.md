@@ -28,10 +28,9 @@ How to run
 	library(LargeScalePrediction)
     options('fftempdir' = 's:/fftemp')
 
-	connectionDetails <- createConnectionDetails(dbms = "postgresql",
-												 user = "joe",
-												 password = "secret",
-												 server = "myserver")
+	connectionDetails <- createConnectionDetails(dbms = "postgresql",user = "joe",
+						     password = "secret",
+						     server = "myserver")
     workFolder <- "s:/temp/LargeScalePrediction"
 
     fetchAllDataFromServer(connectionDetails = connectionDetails,
@@ -49,7 +48,7 @@ How to run
     
     * The results can be zipped using the following command:
     
-    packageResults(workFolder = workFolder.
+    packageResults(workFolder = workFolder,
                    dbName="<name>")
 	```
 	* ```dbName``` is added to name of the zipfile.

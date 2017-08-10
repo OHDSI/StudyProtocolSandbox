@@ -24,6 +24,8 @@ install_github("ohdsi/StudyProtocolSandbox/DataQuality",args="--no-multiarch")
 library(DataQuality)
 
 #make sure achilles() has been executed some time prior running this function)
+#workDatabseSchema should contain Achilles tables
+#connectionDetails are standard OHDSI details for database connection
 
 createMIADLevelOne <- function(connectionDetails,
                                cdmDatabaseSchema,
@@ -122,8 +124,27 @@ The tool relies on new computations done by the Achilles tool. Using Achilles ve
 # 3.Only run DataQuality locally
 
 Generate local report (not shared with anyone, creates a local .DOCX file)
+First the executeDQ function must be run. This creates a export subfolder.
+Generation of local report relies on data in this export folder.
 
 ```R
+workFolder <- 'c:/temp/DQStudy-dataset1'  #ideally, use one workFolder per database
+dir.create(workFolder) 
+
+#populate database parameters
+cdmDatabaseSchema <-'datasetA'
+resultsDatabaseSchema <-'datasetAResults' 
+
+
+executeDQ(connectionDetails = connectionDetails,
+  cdmDatabaseSchema = cdmDatabaseSchema,
+  resultsDatabaseSchema = resultsDatabaseSchema,
+  workFolder = workFolder
+  )
+
 exportFolder<-file.path(workFolder,'export')
-writeReport(exportFolder = exportFolder,outputFile = file.path(workFolder,'report.docx'))
+
+writeReport(exportFolder = exportFolder,
+  outputFile = file.path(workFolder,'report.docx')
+  )
 ```

@@ -32,7 +32,7 @@
 #' @export
 runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodData, simulationRuns = 10,  
                                trueEffectSize = NA, outcomePrevalence = NA, hdpsFeatures, stratify=FALSE, discrete=FALSE,
-                               ignoreCensoring = FALSE, threads = 10, fudge = .001, prior = NULL, maxRatio = 1, numStrata = 10,
+                               ignoreCensoring = FALSE, fudge = .001, psPrior = NULL, maxRatio = 1, numStrata = 10,
                                useCovariates = FALSE) {
   # Save ff state
   saveFfState <- options("fffinalizer")$ffinalizer
@@ -41,10 +41,6 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   estimatesExpHdps = NULL
   estimatesBiasHdps = NULL
   # estimatesRandom = NULL
-  aucLasso = NULL
-  aucExpHdps = NULL
-  aucBiasHdps = NULL
-  # aucRandom = NULL
   nonZeroOverlaps = NULL
   allOverlaps = NULL
   
@@ -56,18 +52,17 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
   studyPop = simulationProfile$studyPop
   partialCMD = cohortMethodData
   covariates0 = as.numeric(names(simulationProfile$outcomeModelCoefficients[simulationProfile$outcomeModelCoefficients!=0]))
-  if (is.null(prior)) prior = createPrior(priorType = "none")
+  if (is.null(psPrior)) psPrior = createPrior(priorType = "none")
   
   # modify confounding and sample size
   if(!is.na(covariatesToDiscard)) {
     partialCMD = removeCovariates(partialCMD, ff::as.ff(covariatesToDiscard))
   }
   
-  if (!is.na(sampleRowIds)) {
-    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
-    sData$XB = sData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), sData$XB$rowId),]
-    partialCMD = removeSubjects(partialCMD, sampleRowIds)
-  }
+  if (is.na(sampleRowIds)) sampleRowIds = studyPop$rowId
+  studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+  sData$XB = sData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), sData$XB$rowId),]
+  partialCMD = removeSubjects(partialCMD, sampleRowIds)
 
   # insert true effect size
   if (is.na(trueEffectSize)) trueEffectSize = simulationProfile$observedEffectSize
@@ -131,7 +126,7 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
       studyPopNew$survivalTime = cmd$cohorts$newSurvivalTime[match(studyPopNew$rowId, cmd$cohorts$rowId)]
       
       # calculate outcomes for bias hdps
-      psBias = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = prior, stopOnError = FALSE)
+      psBias = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = psPrior, stopOnError = FALSE)
       if (!is.null(attr(psBias, "metaData")$psError)) next
       else {
         if (stratify) popBias=stratifyByPs(psBias,numStrata) else popBias=matchOnPs(psBias,maxRatio = maxRatio)
@@ -143,7 +138,6 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
                                              useCovariates = useCovariates)
         estimatesBiasHdps = rbind(outcomeModelBias$outcomeModelTreatmentEstimate, estimatesBiasHdps)
         
-        aucBiasHdps = c(computePsAuc(psBias), aucBiasHdps)
         psBiasPermanent$propensityScore = psBiasPermanent$propensityScore + psBias$propensityScore
         psBiasPermanent$preferenceScore = psBiasPermanent$preferenceScore + psBias$preferenceScore
         
@@ -245,6 +239,481 @@ runSimulationStudy <- function(simulationProfile, simulationSetup, cohortMethodD
 }
 
 #' @export
+runSimulationStudy1 <- function(simulationProfile, simulationSetup, cohortMethodData, simulationRuns = 10,  
+                                trueEffectSize = NA, outcomePrevalence = NA, hdpsFeatures = TRUE, stratify=FALSE, discrete=FALSE,
+                                ignoreCensoring = FALSE, fudge = .001, psPrior = createPrior("laplace",useCrossValidation = TRUE),
+                                maxRatio = 1, numStrata = 10, nonePrior = FALSE) {
+  saveFfState <- options("fffinalizer")$ffinalizer
+  options("fffinalizer" = "delete")
+  estimatesLassoHDPS = NULL
+  estimatesLassoCDM = NULL
+  estimatesLassoAll = NULL
+  estimatesExpHdpsCV = NULL
+  estimatesBiasHdpsCV = NULL
+  estimatesExpHdpsNone = NULL
+  estimatesBiasHdpsNone = NULL
+  
+  outcomeId = simulationProfile$outcomeId
+  sData = simulationProfile$sData
+  cData = simulationProfile$cData
+  studyPop = simulationProfile$studyPop
+  sampleRowIds = NA
+  partialCMD = cohortMethodData
+  
+  psBiasNoneError = FALSE
+  psBiasCVList = rep(list(NA),simulationRuns)
+  psBiasNoneList = rep(list(NA),simulationRuns)
+
+  # modify confounding and sample size
+  if (is.na(sampleRowIds)) sampleRowIds = studyPop$rowId
+  studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+  sData$XB = sData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), sData$XB$rowId),]
+  partialCMD = removeSubjects(partialCMD, sampleRowIds)
+  
+  # insert true effect size
+  if (is.na(trueEffectSize)) trueEffectSize = simulationProfile$observedEffectSize
+  sData$XB = insertEffectSize(sData$XB, trueEffectSize, ff::as.ffdf(partialCMD$cohorts))
+  # ignore censoring
+  if (ignoreCensoring) cData$baseline = ff::as.ff(rep(1, length(cData$baseline)))
+  
+  # set new outcome prevalence
+  if (!is.na(outcomePrevalence)) {
+    fun <- function(d) {return(findOutcomePrevalence(sData, cData, d) - outcomePrevalence)}
+    delta <- uniroot(fun, lower = 0, upper = 10000)$root
+    sData$baseline = sData$baseline^delta
+  } else {
+    outcomePrevalence = findOutcomePrevalence(sData, cData)
+  }
+  
+  # create hdps PS
+  cmd = simulateCMD(partialCMD, sData, cData, outcomeId, discrete = discrete)
+  if (hdpsFeatures == TRUE) {
+    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = fudge)
+  } else {
+    hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = fudge)
+  }
+  
+  # handle propensity scores
+  psLassoHDPS = simulationSetup$psLassoHDPS
+  if (stratify) strataLassoHDPS=stratifyByPs(psLassoHDPS,numStrata) else strataLassoHDPS=matchOnPs(psLassoHDPS, maxRatio = maxRatio)
+  
+  psLassoCDM = simulationSetup$psLassoCDM
+  if (stratify) strataLassoCDM=stratifyByPs(psLassoCDM,numStrata) else strataLassoCDM=matchOnPs(psLassoCDM, maxRatio = maxRatio)
+  
+  psLassoAll = simulationSetup$psLassoAll
+  if (stratify) strataLassoAll=stratifyByPs(psLassoAll,numStrata) else strataLassoAll=matchOnPs(psLassoAll, maxRatio = maxRatio)
+
+  psExpCV = simulationSetup$psExpCV
+  if (stratify) strataExpCV=stratifyByPs(psExpCV,numStrata) else strataExpCV=matchOnPs(psExpCV, maxRatio = maxRatio)
+
+  if (nonePrior) {
+    psExpNone = simulationSetup$psExp
+    if (stratify) strataExpNone=stratifyByPs(psExpNone,numStrata) else strataExpNone=matchOnPs(psExpNone, maxRatio = maxRatio)
+  }
+  
+  for (i in 1:simulationRuns) {
+    start <- Sys.time()
+    writeLines(paste("Simulation: ", i))
+    
+    # simulate and calculate bias hdps outcomes
+    while(TRUE) {
+      cmd = simulateCMD(partialCMD, sData, cData, outcomeId = outcomeId, discrete = discrete)
+      if (is.null(cmd$outcomes)) next
+      if (hdpsFeatures == TRUE) {
+        hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
+      } else {
+        hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE)
+      }
+      studyPopNew = studyPop
+      studyPopNew$daysToEvent = cmd$cohorts$newDaysToEvent[match(studyPopNew$rowId, cmd$cohorts$rowId)]
+      studyPopNew$outcomeCount = cmd$cohorts$newOutcomeCount[match(studyPopNew$rowId, cmd$cohorts$rowId)]
+      studyPopNew$survivalTime = cmd$cohorts$newSurvivalTime[match(studyPopNew$rowId, cmd$cohorts$rowId)]
+      
+      # calculate outcomes for bias hdps
+      psBiasCV = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = psPrior, stopOnError = FALSE)
+      if (nonePrior) {
+        psBiasNone = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = createPrior("none"), stopOnError = FALSE)
+        psBiasNoneError = !is.null(attr(psBiasNone, "metaData")$psError)
+      }
+      if (!is.null(attr(psBiasCV, "metaData")$psError) | psBiasNoneError) next
+      else {
+        if (stratify) popBiasCV=stratifyByPs(psBiasCV,numStrata) else popBiasCV=matchOnPs(psBiasCV,maxRatio = maxRatio)
+        # bias
+        outcomeModelBiasCV  <- fitOutcomeModel(population = popBiasCV,
+                                             cohortMethodData = cmd,
+                                             modelType = "cox",
+                                             stratified = TRUE,
+                                             useCovariates = FALSE)
+        estimatesBiasHdpsCV = rbind(outcomeModelBiasCV$outcomeModelTreatmentEstimate, estimatesBiasHdpsCV)
+        psNew = psBiasCV[,c("rowId","propensityScore")]
+        attributes(psNew)$metaData = attributes(psBiasCV)$metaData
+        psBiasCVList[[i]] = psNew
+
+        if (nonePrior) {
+          if (stratify) popBiasNone=stratifyByPs(psBiasNone,numStrata) else popBiasNone=matchOnPs(psBiasNone,maxRatio = maxRatio)
+          outcomeModelBiasNone  <- fitOutcomeModel(population = popBiasNone,
+                                                   cohortMethodData = cmd,
+                                                   modelType = "cox",
+                                                   stratified = TRUE,
+                                                   useCovariates = FALSE)
+          estimatesBiasHdpsNone = rbind(outcomeModelBiasNone$outcomeModelTreatmentEstimate, estimatesBiasHdpsNone)
+          psNew = psBiasNone[,c("rowId","propensityScore")]
+          attributes(psNew)$metaData = attributes(psBiasNone)$metaData
+          psBiasNoneList[[i]] = psNew
+        }
+        break
+      }
+    }
+    
+    # calculate outcomes for lasso
+    popLassoHDPS = merge(studyPopNew, strataLassoHDPS[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+    outcomeModelLassoHDPS <- fitOutcomeModel(population = popLassoHDPS,
+                                             cohortMethodData = cmd,
+                                             modelType = "cox",
+                                             stratified = TRUE,
+                                             useCovariates = FALSE)
+    estimatesLassoHDPS = rbind(outcomeModelLassoHDPS$outcomeModelTreatmentEstimate, estimatesLassoHDPS)
+    
+    popLassoCDM = merge(studyPopNew, strataLassoCDM[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+    outcomeModelLassoCDM <- fitOutcomeModel(population = popLassoCDM,
+                                             cohortMethodData = cmd,
+                                             modelType = "cox",
+                                             stratified = TRUE,
+                                             useCovariates = FALSE)
+    estimatesLassoCDM = rbind(outcomeModelLassoCDM$outcomeModelTreatmentEstimate, estimatesLassoCDM)
+    
+    popLassoAll = merge(studyPopNew, strataLassoAll[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+    outcomeModelLassoAll <- fitOutcomeModel(population = popLassoAll,
+                                             cohortMethodData = cmd,
+                                             modelType = "cox",
+                                             stratified = TRUE,
+                                             useCovariates = FALSE)
+    estimatesLassoAll = rbind(outcomeModelLassoAll$outcomeModelTreatmentEstimate, estimatesLassoAll)
+    
+    # calculate outcomes for exp hdps
+    popExpCV = merge(studyPopNew, strataExpCV[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+    outcomeModelExpCV <- fitOutcomeModel(population = popExpCV,
+                                         cohortMethodData = cmd,
+                                         modelType = "cox",
+                                         stratified = TRUE,
+                                         useCovariates = FALSE)
+    estimatesExpHdpsCV = rbind(outcomeModelExpCV$outcomeModelTreatmentEstimate, estimatesExpHdpsCV)
+    
+    if (nonePrior) {
+      popExpNone = merge(studyPopNew, strataExpNone[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+      outcomeModelExpNone <- fitOutcomeModel(population = popExpNone,
+                                           cohortMethodData = cmd,
+                                           modelType = "cox",
+                                           stratified = TRUE,
+                                           useCovariates = FALSE)
+      estimatesExpHdpsNone = rbind(outcomeModelExpNone$outcomeModelTreatmentEstimate, estimatesExpHdpsNone)
+    }
+    delta <- Sys.time() - start
+    writeLines(paste("run took", signif(delta, 3), attr(delta, "units")))
+  }
+  
+  settings = list(trueEffectSize = trueEffectSize,
+                  outcomePrevalence = outcomePrevalence,
+                  simulationRuns = simulationRuns,
+                  hdpsFeatures = hdpsFeatures,
+                  stratify = stratify,
+                  maxRatio = maxRatio,
+                  numStrata = numStrata,
+                  nonePrior = nonePrior)
+
+  # Restore ff state
+  options("fffinalizer" = saveFfState)
+  
+  return(list(settings = settings,
+              estimatesLassoHDPS = estimatesLassoHDPS,
+              estimatesLassoCDM = estimatesLassoCDM,
+              estimatesLassoAll = estimatesLassoAll,
+              estimatesExpHdpsCV = estimatesExpHdpsCV,
+              estimatesBiasHdpsCV = estimatesBiasHdpsCV,
+              estimatesExpHdpsNone = estimatesExpHdpsNone,
+              estimatesBiasHdpsNone = estimatesBiasHdpsNone,
+              psBiasCVList = psBiasCVList,
+              psBiasNoneList = psBiasNoneList))
+}
+
+#' @export
+runSimulationStudy2 <- function(simulationProfile, cohortMethodData, simulationRuns = 10,
+                                trueEffectSize = NA, outcomePrevalence = NA, discrete = FALSE, ignoreCensoring = FALSE,
+                                psPrior = createPrior("laplace",useCrossValidation=TRUE), nonePrior = FALSE, fudge = 0.001, threads = 4) {
+  saveFfState <- options("fffinalizer")$ffinalizer
+  options("fffinalizer" = "delete")
+  
+  outcomeId = simulationProfile$outcomeId
+  sData = simulationProfile$sData
+  cData = simulationProfile$cData
+  studyPop = simulationProfile$studyPop
+  sampleRowIds = NA
+  partialCMD = cohortMethodData
+  
+  psBiasNoneError = FALSE
+  psBiasCVList = rep(list(NA),simulationRuns)
+  psBiasNoneList = rep(list(NA),simulationRuns)
+  outcomesList = rep(list(NA),simulationRuns)
+  timesList = rep(list(NA),simulationRuns)
+  
+  # modify confounding and sample size
+  if (is.na(sampleRowIds)) sampleRowIds = studyPop$rowId
+  studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+  sData$XB = sData$XB[ffbase::ffmatch(ff::as.ff(sampleRowIds), sData$XB$rowId),]
+  partialCMD = removeSubjects(partialCMD, sampleRowIds)
+  
+  # insert true effect size
+  if (is.na(trueEffectSize)) trueEffectSize = simulationProfile$observedEffectSize
+  sData$XB = insertEffectSize(sData$XB, trueEffectSize, ff::as.ffdf(partialCMD$cohorts))
+  # ignore censoring
+  if (ignoreCensoring) cData$baseline = ff::as.ff(rep(1, length(cData$baseline)))
+  
+  # set new outcome prevalence
+  if (!is.na(outcomePrevalence)) {
+    fun <- function(d) {return(findOutcomePrevalence(sData, cData, d) - outcomePrevalence)}
+    delta <- uniroot(fun, lower = 0, upper = 10000)$root
+    sData$baseline = sData$baseline^delta
+  } else {
+    outcomePrevalence = findOutcomePrevalence(sData, cData)
+  }
+  
+  # create hdps PS
+  cmd = simulateCMD(partialCMD, sData, cData, outcomeId, discrete = discrete)
+  hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = fudge)
+  
+  for (i in 1:simulationRuns) {
+    start <- Sys.time()
+    writeLines(paste("Simulation: ", i))
+    
+    while(TRUE) {
+      cmd = simulateCMD(partialCMD, sData, cData, outcomeId = outcomeId, discrete = discrete)
+      if (is.null(cmd$outcomes)) next
+      hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
+      studyPopNew = studyPop
+      studyPopNew$daysToEvent = cmd$cohorts$newDaysToEvent[match(studyPopNew$rowId, cmd$cohorts$rowId)]
+      studyPopNew$outcomeCount = cmd$cohorts$newOutcomeCount[match(studyPopNew$rowId, cmd$cohorts$rowId)]
+      studyPopNew$survivalTime = cmd$cohorts$newSurvivalTime[match(studyPopNew$rowId, cmd$cohorts$rowId)]
+      
+      if (nonePrior) {
+        psBiasNone = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = createPrior("none"), stopOnError = FALSE)
+        psBiasNoneError = !is.null(attr(psBiasNone, "metaData")$psError)
+        if (psBiasNoneError) next
+      }
+      psBiasCV = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = psPrior, stopOnError = FALSE,
+                          control = createControl(noiseLevel = "silent",
+                                                  cvType = "auto", 
+                                                  tolerance = 2e-07, 
+                                                  cvRepetitions = 10, 
+                                                  startingVariance = 0.01,
+                                                  threads = threads))
+      if (!is.null(attr(psBiasCV, "metaData")$psError)) next
+      outcomesList[[i]] = cmd$outcomes$rowId
+      timesList[[i]] = cmd$cohorts$newSurvivalTime
+      
+      psNew = psBiasCV[,c("propensityScore")]
+      attributes(psNew)$metaData = attributes(psBiasCV)$metaData
+      psBiasCVList[[i]] = psNew
+      if (nonePrior) {
+        psNew = psBiasNone[,c("propensityScore")]
+        attributes(psNew)$metaData = attributes(psBiasNone)$metaData
+        psBiasNoneList[[i]] = psNew
+      }
+      break
+    }
+    delta <- Sys.time() - start
+    writeLines(paste("run took", signif(delta, 3), attr(delta, "units")))
+  }
+  
+  settings = list(trueEffectSize = trueEffectSize,
+                  outcomePrevalence = outcomePrevalence,
+                  simulationRuns = simulationRuns,
+                  nonePrior = nonePrior,
+                  rowIds = sampleRowIds)
+  
+  # Restore ff state
+  options("fffinalizer" = saveFfState)
+  
+  return(list(settings = settings,
+              outcomesList = outcomesList,
+              timesList = timesList,
+              psBiasCVList = psBiasCVList,
+              psBiasNoneList = psBiasNoneList))
+}
+
+#' @export
+runSimulationStudy3 <- function(study, cohortMethodData, simulationProfile, simulationSetup, stratify = FALSE, maxRatio = 1, numStrata = 10, caliper = 0.25, maximizeMatching = TRUE) {
+  estimatesLassoHDPS = NULL
+  estimatesLassoCDM = NULL
+  estimatesLassoAll = NULL
+  estimatesExpHdpsCV = NULL
+  estimatesBiasHdpsCV = NULL
+  estimatesExpHdpsNone = NULL
+  estimatesBiasHdpsNone = NULL
+  estimatesUnadjusted = NULL
+  nonePrior = study$settings$nonePrior
+  studyPop = simulationProfile$studyPop
+  studyPop = studyPop[match(study$settings$rowIds,studyPop$rowId),]
+  simulationRuns = study$settings$simulationRuns
+  
+  psLassoHDPS = simulationSetup$psLassoHDPS
+  maximizeMatching = maximizeMatching & sum(psLassoHDPS$treatment)>0.5*nrow(psLassoHDPS) & !stratify
+  if (stratify) strataLassoHDPS=stratifyByPs(psLassoHDPS,numStrata) 
+  else {
+    if (maximizeMatching) psLassoHDPS$treatment = 1 - psLassoHDPS$treatment
+    strataLassoHDPS=matchOnPs(psLassoHDPS, maxRatio = maxRatio, caliper = caliper)
+  }
+  
+  psLassoCDM = simulationSetup$psLassoCDM
+  if (stratify) strataLassoCDM=stratifyByPs(psLassoCDM,numStrata) 
+  else {
+    if (maximizeMatching) psLassoCDM$treatment = 1 - psLassoCDM$treatment
+    strataLassoCDM=matchOnPs(psLassoCDM, maxRatio = maxRatio, caliper = caliper)
+  }
+  
+  psLassoAll = simulationSetup$psLassoAll
+  if (stratify) strataLassoAll=stratifyByPs(psLassoAll,numStrata) 
+  else {
+    if (maximizeMatching) psLassoAll$treatment = 1 - psLassoAll$treatment
+    strataLassoAll=matchOnPs(psLassoAll, maxRatio = maxRatio, caliper = caliper)
+  }
+  
+  psExpCV = simulationSetup$psExpCV
+  if (stratify) strataExpCV=stratifyByPs(psExpCV,numStrata) 
+  else {
+    if (maximizeMatching) psExpCV$treatment = 1 - psExpCV$treatment
+    strataExpCV=matchOnPs(psExpCV, maxRatio = maxRatio, caliper = caliper)
+  }
+  
+  if (nonePrior) {
+    psExpNone = simulationSetup$psExp
+    if (stratify) strataExpNone=stratifyByPs(psExpNone,numStrata)
+    else {
+      if (maximizeMatching) psExpNone$treatment = 1 - psExpNone$treatment
+      strataExpNone=matchOnPs(psExpNone, maxRatio = maxRatio, caliper = caliper)
+    }
+  }
+  
+  cmd = cohortMethodData
+  
+  for (i in 1:simulationRuns) {
+    start <- Sys.time()
+    writeLines(paste("Simulation: ", i))
+    studyPopNew = studyPop
+    studyPopNew$survivalTime = study$timesList[[i]]
+    t = match(study$outcomesList[[i]],studyPop$rowId)
+    studyPopNew$outcomeCount = 0
+    studyPopNew$outcomeCount[t] = 1
+    studyPopNew$daysToEvent = NA
+    studyPopNew$daysToEvent[t] = studyPopNew$survivalTime[t] - 1
+    
+    cmd$cohorts = studyPopNew
+    cmd$outcomes = studyPopNew[,c("rowId","daysToEvent")]
+    cmd$outcomes$outcomeId = simulationProfile$outcomeId
+    
+    outcomeModelUnadjusted <- fitOutcomeModel(population = studyPopNew,
+                                              cohortMethodData = cmd,
+                                              modelType = "cox",
+                                              stratified = FALSE,
+                                              useCovariates = FALSE)
+    estimatesUnadjusted = rbind(outcomeModelUnadjusted$outcomeModelTreatmentEstimate, estimatesUnadjusted)
+    
+    # calculate outcomes for lasso
+    popLassoHDPS = merge(studyPopNew, strataLassoHDPS[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+    outcomeModelLassoHDPS <- fitOutcomeModel(population = popLassoHDPS,
+                                             cohortMethodData = cmd,
+                                             modelType = "cox",
+                                             stratified = TRUE,
+                                             useCovariates = FALSE)
+    estimatesLassoHDPS = rbind(outcomeModelLassoHDPS$outcomeModelTreatmentEstimate, estimatesLassoHDPS)
+    
+    popLassoCDM = merge(studyPopNew, strataLassoCDM[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+    outcomeModelLassoCDM <- fitOutcomeModel(population = popLassoCDM,
+                                            cohortMethodData = cmd,
+                                            modelType = "cox",
+                                            stratified = TRUE,
+                                            useCovariates = FALSE)
+    estimatesLassoCDM = rbind(outcomeModelLassoCDM$outcomeModelTreatmentEstimate, estimatesLassoCDM)
+    
+    popLassoAll = merge(studyPopNew, strataLassoAll[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+    outcomeModelLassoAll <- fitOutcomeModel(population = popLassoAll,
+                                            cohortMethodData = cmd,
+                                            modelType = "cox",
+                                            stratified = TRUE,
+                                            useCovariates = FALSE)
+    estimatesLassoAll = rbind(outcomeModelLassoAll$outcomeModelTreatmentEstimate, estimatesLassoAll)
+    
+    # calculate outcomes for exp hdps
+    popExpCV = merge(studyPopNew, strataExpCV[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+    outcomeModelExpCV <- fitOutcomeModel(population = popExpCV,
+                                         cohortMethodData = cmd,
+                                         modelType = "cox",
+                                         stratified = TRUE,
+                                         useCovariates = FALSE)
+    estimatesExpHdpsCV = rbind(outcomeModelExpCV$outcomeModelTreatmentEstimate, estimatesExpHdpsCV)
+    
+    if (nonePrior) {
+      popExpNone = merge(studyPopNew, strataExpNone[,c("rowId", "propensityScore", "preferenceScore", "stratumId")])
+      outcomeModelExpNone <- fitOutcomeModel(population = popExpNone,
+                                             cohortMethodData = cmd,
+                                             modelType = "cox",
+                                             stratified = TRUE,
+                                             useCovariates = FALSE)
+      estimatesExpHdpsNone = rbind(outcomeModelExpNone$outcomeModelTreatmentEstimate, estimatesExpHdpsNone)
+    }
+    
+    # bias
+    psBiasCV = studyPopNew
+    psBiasCV$propensityScore = study$psBiasCVList[[i]]
+    if (stratify) popBiasCV=stratifyByPs(psBiasCV,numStrata) 
+    else {
+      if (maximizeMatching) psBiasCV$treatment = 1 - psBiasCV$treatment
+      popBiasCV=matchOnPs(psBiasCV,maxRatio = maxRatio, caliper = caliper)
+      if (maximizeMatching) popBiasCV$treatment = 1 - popBiasCV$treatment
+    }
+    outcomeModelBiasCV  <- fitOutcomeModel(population = popBiasCV,
+                                           cohortMethodData = cmd,
+                                           modelType = "cox",
+                                           stratified = TRUE,
+                                           useCovariates = FALSE)
+    estimatesBiasHdpsCV = rbind(outcomeModelBiasCV$outcomeModelTreatmentEstimate, estimatesBiasHdpsCV)
+    
+    if (nonePrior) {
+      psBiasNone = studyPopNew
+      psBiasNone$propensityScore = study$psBiasNoneList[[i]]
+      if (stratify) popBiasNone=stratifyByPs(psBiasNone,numStrata) 
+      else {
+        if (maximizeMatching) psBiasNone$treatment = 1 - psBiasNone$treatment
+        popBiasNone=matchOnPs(psBiasNone,maxRatio = maxRatio, caliper = caliper)
+        if (maximizeMatching) popBiasNone$treatment = 1 - popBiasNone$treatment
+      }
+      outcomeModelBiasNone  <- fitOutcomeModel(population = popBiasNone,
+                                               cohortMethodData = cmd,
+                                               modelType = "cox",
+                                               stratified = TRUE,
+                                               useCovariates = FALSE)
+      estimatesBiasHdpsNone = rbind(outcomeModelBiasNone$outcomeModelTreatmentEstimate, estimatesBiasHdpsNone)
+    }
+    delta <- Sys.time() - start
+    writeLines(paste("run took", signif(delta, 3), attr(delta, "units")))
+  }
+  settings = study$settings
+  settings$stratify = stratify
+  settings$maxRatio = maxRatio
+  settings$numStrata = numStrata
+  settings$caliper = caliper
+  settings$maximizeMatching = maximizeMatching
+  
+  return(list(settings = settings,
+              estimatesUnadjusted = estimatesUnadjusted,
+              estimatesLassoHDPS = estimatesLassoHDPS,
+              estimatesLassoCDM = estimatesLassoCDM,
+              estimatesLassoAll = estimatesLassoAll,
+              estimatesExpHdpsCV = estimatesExpHdpsCV,
+              estimatesBiasHdpsCV = estimatesBiasHdpsCV,
+              estimatesExpHdpsNone = estimatesExpHdpsNone,
+              estimatesBiasHdpsNone = estimatesBiasHdpsNone))
+}
+#' @export
 setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidation = TRUE, confoundingProportion = NA, 
                             sampleSize = NA, threads = 10, hdpsFeatures, prior = NULL, outcomePrevalence = NA,
                             sampleRowIds = NA, covariatesToDiscard = NA) {
@@ -263,11 +732,11 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
       if (!test$anyError) break
     }
   }
-  cmd = cohortMethodData
-  if (!is.na(sampleRowIds)) {
-    studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
-    cmd = removeSubjects(cmd, sampleRowIds)
-  }
+
+  if (is.na(sampleRowIds)) sampleRowIds = studyPop$rowId
+  studyPop = studyPop[match(sampleRowIds, studyPop$rowId),]
+  cmd = removeSubjects(cohortMethodData, sampleRowIds)
+  
   if (!is.na(covariatesToDiscard)) {
     cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
   }
@@ -285,9 +754,9 @@ setUpSimulation <- function(simulationProfile, cohortMethodData, useCrossValidat
   
   # create exposure hdps
   if (hdpsFeatures == TRUE) {
-    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
   } else {
-    hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
+    hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
   }
   psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop, prior = prior, stopOnError = FALSE)
   
@@ -515,8 +984,8 @@ loadSimulationStudy <- function(file, readOnly = TRUE) {
 }
 
 #' @export
-testConvergence <- function(cohortMethodData, simulationProfile, confoundingProportion=NA, sampleSize=NA, hdpsFeatures, 
-                            runs = 1, prior = NULL, outcomePrevalence = NA, covariatesToDiscard = NA, sampleRowIds = NA) {
+testConvergence <- function(cohortMethodData, simulationProfile, confoundingProportion=NA, sampleSize=NA, 
+                            runs = 1, prior = NULL, outcomePrevalence = NA, covariatesToDiscard = NA, sampleRowIds = NA, discrete = FALSE) {
   studyPop = simulationProfile$studyPop
   outcomeId = simulationProfile$outcomeId
   modelCovariates = as.numeric(names(simulationProfile$outcomeModelCoefficients))
@@ -528,18 +997,19 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
   biasHdpsError = 0
   preset = !is.na(covariatesToDiscard) || !is.na(sampleRowIds)
   if(is.null(prior)) prior = createPrior(priorType = "none")
+  cohortMethodData = removeSubjects(cohortMethodData = cohortMethodData, rowIdsToKeep = studyPop$rowId)
+  sData = simulationProfile$sData
+  cData = simulationProfile$cData
   
   if (!is.na(outcomePrevalence)) {
-    sData = simulationProfile$sData
-    cData = simulationProfile$cData
     fun <- function(d) {return(findOutcomePrevalence(sData, cData, d) - outcomePrevalence)}
     delta <- uniroot(fun, lower = 0, upper = 10000)$root
     sData$baseline = sData$baseline^delta
-    cohortMethodData = simulateCMD(cohortMethodData, sData, cData, outcomeId)
   }
   
   for (i in 1:runs) {
-    cmd = cohortMethodData
+    writeLines(paste("run: ", i))
+    cmd = simulateCMD(cohortMethodData, sData, cData, outcomeId, discrete = discrete)
     if (!preset) {
       if (!is.na(sampleSize)) {
         sampleRowIds = sample(studyPop$rowId, sampleSize)
@@ -553,17 +1023,16 @@ testConvergence <- function(cohortMethodData, simulationProfile, confoundingProp
     studyPop1 = studyPop
     if (!is.na(sampleRowIds)) {
       studyPop1 = studyPop[match(sampleRowIds, studyPop$rowId),]
-      cmd = removeSubjects(cohortMethodData, sampleRowIds)
+      cmd = removeSubjects(cmd, sampleRowIds)
     }
+    studyPop1$daysToEvent = cmd$cohorts$newDaysToEvent[match(studyPop1$rowId, cmd$cohorts$rowId)]
+    studyPop1$outcomeCount = cmd$cohorts$newOutcomeCount[match(studyPop1$rowId, cmd$cohorts$rowId)]
+    studyPop1$survivalTime = cmd$cohorts$newSurvivalTime[match(studyPop1$rowId, cmd$cohorts$rowId)]
+    
     if (!is.na(covariatesToDiscard)) cmd = removeCovariates(cmd, ff::as.ff(covariatesToDiscard))
     
-    if (hdpsFeatures == TRUE) {
-      hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
-      hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
-    } else {
-      hdps0 = runHdps1(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .01)
-      hdpsBias = runHdps1NewOutcomes(hdps0, cmd, useExpRank = FALSE)
-    }
+    hdps0 = runHdps(cmd, outcomeId = outcomeId, useExpRank = TRUE, fudge = .001)
+    hdpsBias = runHdpsNewOutcomes(hdps0, cmd, useExpRank = FALSE)
     
     psExp = createPs(cohortMethodData = hdps0$cmd, population = studyPop1, prior = prior, stopOnError = FALSE)
     if(!is.null(attr(psExp, "metaData")$psError)){
