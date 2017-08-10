@@ -116,7 +116,7 @@ execute<-function(connectionDetails,
     }
 
 	if(writeReport){
-		writeReport(exportFolder)
+		writeReport(normalizePath(exportFolder,winslash="/"))
 	}
 
 	if(compressResults){
