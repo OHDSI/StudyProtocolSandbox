@@ -23,12 +23,22 @@ install_github("ohdsi/CohortMethod")
 ```
 
 ## Step 2.
-Install the package HypertensionCombination.
+Install the package HypertensionCombination and dependent packages.
 
 ```R
+#Install dependent packages
+install.packages("htmltools")
+install.packages("rprojroot")
+install.packages("evaluate")
+install.packages("yaml")
+install.packages("httpuv")
+install.packages("forestplot")
+
 install.packages("devtools")
 library(devtools)
 install_github("tidyverse/googledrive")
+
+#Install the package HypertensionCombination
 install_github("ohdsi/StudyProtocolSandbox/HypertensionCombination")
 library(HypertensionCombination)
 ```
