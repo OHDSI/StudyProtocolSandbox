@@ -494,14 +494,116 @@ forestplot(labeltext=tabletext,
 )
 ```
 
-###Primary and secondary endpoint in subgroups
-```{r Primary and secondary endpoint in subgroups, echo=FALSE}
+###Subgroup analysis - sex
+```{r Primary and secondary endpoint in subgroups-sex, echo=FALSE}
 result18001<-read.csv(file.path(exportFolder,"18001/MainResults.csv"))
 result18001<-merge(result18001,outcomes,by.x="outcomeId",by.y="concept_id")
 
 result18002<-read.csv(file.path(exportFolder,"18002/MainResults.csv"))
 result18002<-merge(result18002,outcomes,by.x="outcomeId",by.y="concept_id")
+ 
+outcome_id=c(0,4320,1,2,3,4)
+#AC_vs_AD
+tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
+outcome18001<-result18001[grepl("AD",result18001$comparatorName) & grepl("AC",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
+outcome18002<-result18002[grepl("AD",result18002$comparatorName) & grepl("AC",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
 
+match_order18001=match(outcome_id,outcome18001$outcomeId)
+match_order18002=match(outcome_id,outcome18002$outcomeId)
+
+matched_outcome18001=outcome18001[match_order18001,]
+matched_outcome18002=outcome18002[match_order18002,]
+
+bound_rr=cbind(matched_outcome18001$rr,matched_outcome18002$rr)
+bound_lower=cbind(matched_outcome18001$ci95lb,matched_outcome18002$ci95lb)
+bound_upper=cbind(matched_outcome18001$ci95ub,matched_outcome18002$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="AC favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.3,
+           legend=c("Male","Female")
+)
+
+#CD_vs_AD
+
+tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
+outcome18001<-result18001[grepl("AD",result18001$comparatorName) & grepl("CD",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
+outcome18002<-result18002[grepl("AD",result18002$comparatorName) & grepl("CD",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
+
+match_order18001=match(outcome_id,outcome18001$outcomeId)
+match_order18002=match(outcome_id,outcome18002$outcomeId)
+
+matched_outcome18001=outcome18001[match_order18001,]
+matched_outcome18002=outcome18002[match_order18002,]
+
+bound_rr=cbind(matched_outcome18001$rr,matched_outcome18002$rr)
+bound_lower=cbind(matched_outcome18001$ci95lb,matched_outcome18002$ci95lb)
+bound_upper=cbind(matched_outcome18001$ci95ub,matched_outcome18002$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.3,
+           legend=c("Male","Female")
+)
+
+#CD_vs_AC
+
+tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
+outcome18001<-result18001[grepl("AC",result18001$comparatorName) & grepl("CD",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
+outcome18002<-result18002[grepl("AC",result18002$comparatorName) & grepl("CD",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
+
+
+match_order18001=match(outcome_id,outcome18001$outcomeId)
+match_order18002=match(outcome_id,outcome18002$outcomeId)
+
+matched_outcome18001=outcome18001[match_order18001,]
+matched_outcome18002=outcome18002[match_order18002,]
+
+bound_rr=cbind(matched_outcome18001$rr,matched_outcome18002$rr)
+bound_lower=cbind(matched_outcome18001$ci95lb,matched_outcome18002$ci95lb)
+bound_upper=cbind(matched_outcome18001$ci95ub,matched_outcome18002$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AC favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.3,
+           legend=c("Male","Female")
+)
+
+```
+
+###Subgroup analysis - age
+
+```{r Primary and secondary endpoint in subgroups-age, echo=FALSE}
 result18059<-read.csv(file.path(exportFolder,"18059/MainResults.csv"))
 result18059<-merge(result18059,outcomes,by.x="outcomeId",by.y="concept_id")
 
@@ -511,30 +613,24 @@ result18061<-merge(result18061,outcomes,by.x="outcomeId",by.y="concept_id")
 outcome_id=c(0,4320,1,2,3,4)
 #AC_vs_AD
 tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
-outcome18001<-result18001[grepl("AD",result18001$comparatorName) & grepl("AC",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
-outcome18002<-result18002[grepl("AD",result18002$comparatorName) & grepl("AC",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
 outcome18059<-result18059[grepl("AD",result18059$comparatorName) & grepl("AC",result18059$targetName) & (result18059$outcomeId %in% outcome_id),]
 outcome18061<-result18061[grepl("AD",result18061$comparatorName) & grepl("AC",result18061$targetName) & (result18061$outcomeId %in% outcome_id),]
 
-match_order18001=match(outcome_id,outcome18001$outcomeId)
-match_order18002=match(outcome_id,outcome18002$outcomeId)
 match_order18059=match(outcome_id,outcome18059$outcomeId)
 match_order18061=match(outcome_id,outcome18061$outcomeId)
 
-matched_outcome18001=outcome18001[match_order18001,]
-matched_outcome18002=outcome18002[match_order18002,]
 matched_outcome18059=outcome18059[match_order18059,]
 matched_outcome18061=outcome18061[match_order18061,]
 
-bound_rr=cbind(matched_outcome18001$rr,matched_outcome18002$rr,matched_outcome18059$rr,matched_outcome18061$rr)
-bound_lower=cbind(matched_outcome18001$ci95lb,matched_outcome18002$ci95lb,matched_outcome18059$ci95lb,matched_outcome18061$ci95lb)
-bound_upper=cbind(matched_outcome18001$ci95ub,matched_outcome18002$ci95ub,matched_outcome18059$ci95ub,matched_outcome18061$ci95ub)
+bound_rr=cbind(matched_outcome18059$rr,matched_outcome18061$rr)
+bound_lower=cbind(matched_outcome18059$ci95lb,matched_outcome18061$ci95lb)
+bound_upper=cbind(matched_outcome18059$ci95ub,matched_outcome18061$ci95ub)
 
 forestplot(labeltext=tabletext,
            mean=bound_rr,
            lower=bound_lower,
            upper=bound_upper,
-           col=fpColors(box=c("black","royalblue","darkred","darkgreen"),line='darkblue'),
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
            f.ci_norm = c(fpDrawCircleCI),
            boxsize=0.1,
            xlog=TRUE,
@@ -542,37 +638,31 @@ forestplot(labeltext=tabletext,
            title="AC favor                             AD favor",
            clip=c(0.25,4.0),
            xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
-           line.margin = 0.2,
-           legend=c("Male","Female","กร60 years", "<60 years")
+           line.margin = 0.3,
+           legend=c("<60 years", "กร60 years")
 )
 
 #CD_vs_AD
 
 tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
-outcome18001<-result18001[grepl("AD",result18001$comparatorName) & grepl("CD",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
-outcome18002<-result18002[grepl("AD",result18002$comparatorName) & grepl("CD",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
 outcome18059<-result18059[grepl("AD",result18059$comparatorName) & grepl("CD",result18059$targetName) & (result18059$outcomeId %in% outcome_id),]
 outcome18061<-result18061[grepl("AD",result18061$comparatorName) & grepl("CD",result18061$targetName) & (result18061$outcomeId %in% outcome_id),]
 
-match_order18001=match(outcome_id,outcome18001$outcomeId)
-match_order18002=match(outcome_id,outcome18002$outcomeId)
 match_order18059=match(outcome_id,outcome18059$outcomeId)
 match_order18061=match(outcome_id,outcome18061$outcomeId)
 
-matched_outcome18001=outcome18001[match_order18001,]
-matched_outcome18002=outcome18002[match_order18002,]
 matched_outcome18059=outcome18059[match_order18059,]
 matched_outcome18061=outcome18061[match_order18061,]
 
-bound_rr=cbind(matched_outcome18001$rr,matched_outcome18002$rr,matched_outcome18059$rr,matched_outcome18061$rr)
-bound_lower=cbind(matched_outcome18001$ci95lb,matched_outcome18002$ci95lb,matched_outcome18059$ci95lb,matched_outcome18061$ci95lb)
-bound_upper=cbind(matched_outcome18001$ci95ub,matched_outcome18002$ci95ub,matched_outcome18059$ci95ub,matched_outcome18061$ci95ub)
+bound_rr=cbind(matched_outcome18059$rr,matched_outcome18061$rr)
+bound_lower=cbind(matched_outcome18059$ci95lb,matched_outcome18061$ci95lb)
+bound_upper=cbind(matched_outcome18059$ci95ub,matched_outcome18061$ci95ub)
 
 forestplot(labeltext=tabletext,
            mean=bound_rr,
            lower=bound_lower,
            upper=bound_upper,
-           col=fpColors(box=c("black","royalblue","darkred","darkgreen"),line='darkblue'),
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
            f.ci_norm = c(fpDrawCircleCI),
            boxsize=0.1,
            xlog=TRUE,
@@ -580,37 +670,31 @@ forestplot(labeltext=tabletext,
            title="CD favor                             AD favor",
            clip=c(0.25,4.0),
            xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
-           line.margin = 0.2,
-           legend=c("Male","Female","กร60 years", "<60 years")
+           line.margin = 0.3,
+           legend=c("<60 years", "กร60 years")
 )
 
 #CD_vs_AC
 
 tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
-outcome18001<-result18001[grepl("AC",result18001$comparatorName) & grepl("CD",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
-outcome18002<-result18002[grepl("AC",result18002$comparatorName) & grepl("CD",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
 outcome18059<-result18059[grepl("AC",result18059$comparatorName) & grepl("CD",result18059$targetName) & (result18059$outcomeId %in% outcome_id),]
 outcome18061<-result18061[grepl("AC",result18061$comparatorName) & grepl("CD",result18061$targetName) & (result18061$outcomeId %in% outcome_id),]
 
-match_order18001=match(outcome_id,outcome18001$outcomeId)
-match_order18002=match(outcome_id,outcome18002$outcomeId)
 match_order18059=match(outcome_id,outcome18059$outcomeId)
 match_order18061=match(outcome_id,outcome18061$outcomeId)
 
-matched_outcome18001=outcome18001[match_order18001,]
-matched_outcome18002=outcome18002[match_order18002,]
 matched_outcome18059=outcome18059[match_order18059,]
 matched_outcome18061=outcome18061[match_order18061,]
 
-bound_rr=cbind(matched_outcome18001$rr,matched_outcome18002$rr,matched_outcome18059$rr,matched_outcome18061$rr)
-bound_lower=cbind(matched_outcome18001$ci95lb,matched_outcome18002$ci95lb,matched_outcome18059$ci95lb,matched_outcome18061$ci95lb)
-bound_upper=cbind(matched_outcome18001$ci95ub,matched_outcome18002$ci95ub,matched_outcome18059$ci95ub,matched_outcome18061$ci95ub)
+bound_rr=cbind(matched_outcome18059$rr,matched_outcome18061$rr)
+bound_lower=cbind(matched_outcome18059$ci95lb,matched_outcome18061$ci95lb)
+bound_upper=cbind(matched_outcome18059$ci95ub,matched_outcome18061$ci95ub)
 
 forestplot(labeltext=tabletext,
            mean=bound_rr,
            lower=bound_lower,
            upper=bound_upper,
-           col=fpColors(box=c("blACk","royalblue","darkred","darkgreen"),line='darkblue'),
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
            f.ci_norm = c(fpDrawCircleCI),
            boxsize=0.1,
            xlog=TRUE,
@@ -618,8 +702,8 @@ forestplot(labeltext=tabletext,
            title="CD favor                             AC favor",
            clip=c(0.25,4.0),
            xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
-           line.margin = 0.2,
-           legend=c("Male","Female","กร60 years", "<60 years")
+           line.margin = 0.3,
+           legend=c("<60 years", "กร60 years")
 )
 
 ```
