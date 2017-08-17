@@ -41,13 +41,13 @@ execute<-function(connectionDetails,
 		writeLines("")
 	}
 
-	analysesList <- c("30","180","365","730","18001","18002","18059","18061")
+	analysesList <- c("30","180","365","730","18001","18002","18059","18061","18011")
 	#analysesList <- c("30")
 	analysesPaths <- file.path(cmOutputFolder,analysesList)
 	exportPaths <- file.path(exportFolder,analysesList)
 	
-	cmAnalysisListFileName <- paste0("cmAnalysisList",c(1:8),".txt")
-	drugComparatorOutcomeListPathFileName <- paste0("drugComparatorOutcomesList",c(1:8),".txt")
+	cmAnalysisListFileName <- paste0("cmAnalysisList",c(1:9),".txt")
+	drugComparatorOutcomeListPathFileName <- paste0("drugComparatorOutcomesList",c(1:9),".txt")
 	
 	if (runAnalyses) {
 		for(i in 1:length(analysesList)){

@@ -22,23 +22,23 @@ createCohorts<-function(connectionDetails,
   WHERE cohort_definition_id in @target_cohort_set
   GROUP BY subject_id"
   ##############################################################################
-  writeLines("create_exposure_cohort_table.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("create_cohort_table.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_database_schema=resultsDatabaseSchema,
-                                                 cohort_table=exposureTable
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
+  #writeLines("create_exposure_cohort_table.sql")
+  #renderedSql<-SqlRender::loadRenderTranslateSql("create_cohort_table.sql",
+  #                                               packageName="HypertensionCombination",
+  #                                               dbms=connectionDetails$dbms,
+  #                                               target_database_schema=resultsDatabaseSchema,
+  #                                               cohort_table=exposureTable
+  #)
+  #DatabaseConnector::executeSql(conn, renderedSql)
   
-  writeLines("create_outcome_cohort_table.sql")
-  renderedSql<-SqlRender::loadRenderTranslateSql("create_cohort_table.sql",
-                                                 packageName="HypertensionCombination",
-                                                 dbms=connectionDetails$dbms,
-                                                 target_database_schema=resultsDatabaseSchema,
-                                                 cohort_table=outcomeTable
-  )
-  DatabaseConnector::executeSql(conn, renderedSql)
+  #writeLines("create_outcome_cohort_table.sql")
+  #renderedSql<-SqlRender::loadRenderTranslateSql("create_cohort_table.sql",
+  #                                               packageName="HypertensionCombination",
+  #                                               dbms=connectionDetails$dbms,
+  #                                               target_database_schema=resultsDatabaseSchema,
+  #                                               cohort_table=outcomeTable
+  #)
+  #DatabaseConnector::executeSql(conn, renderedSql)
   
   writeLines("ac_cohort.sql")
   renderedSql<-SqlRender::loadRenderTranslateSql("ac_cohort_per_protocol.sql",
@@ -706,7 +706,6 @@ ON coh.subject_id = per.person_id
                                                  dbms=connectionDetails$dbms,
                                                  cdmDatabaseSchema=cdmDatabaseSchema,
                                                  resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
                                                  outcomeTable=outcomeTable)
   DatabaseConnector::executeSql(conn, renderedSql)
   
@@ -716,7 +715,7 @@ ON coh.subject_id = per.person_id
                                                  dbms=connectionDetails$dbms,
                                                  cdm_database_schema=cdmDatabaseSchema,
                                                  target_database_schema=resultsDatabaseSchema,
-                                                 target_cohort_table=exposureTable,
+                                                 target_cohort_table=outcomeTable,
                                                  target_cohort_id = 6
                                                  )
   DatabaseConnector::executeSql(conn, renderedSql)
@@ -727,7 +726,6 @@ ON coh.subject_id = per.person_id
                                                  dbms=connectionDetails$dbms,
                                                  cdmDatabaseSchema=cdmDatabaseSchema,
                                                  resultsDatabaseSchema=resultsDatabaseSchema,
-                                                 exposureTable=exposureTable,
                                                  outcomeTable=outcomeTable)
   
   DatabaseConnector::executeSql(conn, renderedSql)
