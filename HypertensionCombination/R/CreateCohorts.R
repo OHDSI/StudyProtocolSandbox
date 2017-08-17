@@ -651,12 +651,15 @@ ON coh.subject_id = per.person_id
               INSERT INTO @target_database_schema.@target_cohort_table(cohort_definition_id,subject_id,cohort_start_date,cohort_end_date)
               SELECT @new_cohort_id AS cohort_definition_id,coh.subject_id,coh.cohort_start_date,coh.cohort_end_date
                  FROM @target_database_schema.@target_cohort_table coh
-                 WHERE subject_id NOT IN 
+                 WHERE 
+                coh.cohort_definition_id = @target_cohort_id
+                AND subject_id NOT IN 
                     (SELECT DISTINCT person_id as subject_id
                     FROM @target_database_schema.@target_cohort_table coh
                     JOIN @cdm_database_schema.condition_occurrence con
                     ON coh.subject_id = con.person_id
                     WHERE con.condition_start_date <= coh.cohort_start_date
+                    AND coh.cohort_definition_id = @target_cohort_id
                     AND condition_concept_id in 
                         (select concept_id from @cdm_database_schema.CONCEPT where concept_id in (201820)and invalid_reason is null
                         UNION  select c.concept_id
