@@ -658,6 +658,17 @@ ON coh.subject_id = per.person_id
                                                  outcomeTable=outcomeTable)
   DatabaseConnector::executeSql(conn, renderedSql)
   
+  writeLines("ESRD.sql")
+  renderedSql<-SqlRender::loadRenderTranslateSql("ESRD_cohort.sql",
+                                                 packageName="HypertensionCombination",
+                                                 dbms=connectionDetails$dbms,
+                                                 cdm_database_schema=cdmDatabaseSchema,
+                                                 target_database_schema=resultsDatabaseSchema,
+                                                 target_cohort_table=exposureTable,
+                                                 target_cohort_id = 6
+                                                 )
+  DatabaseConnector::executeSql(conn, renderedSql)
+  
   writeLines("negative_control.sql")
   renderedSql<-SqlRender::loadRenderTranslateSql("negative_control.sql",
                                                  packageName="HypertensionCombination",

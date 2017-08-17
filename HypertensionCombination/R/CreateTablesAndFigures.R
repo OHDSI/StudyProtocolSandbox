@@ -350,7 +350,7 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         
         ##ckd
         
-        ckd <- balance[grepl("[cC]hronic kidney disease", balance$covariateName)|grepl("[cC]hronic renal impairment", balance$covariateName), ]
+        ckd <- balance[grepl("[cC]hronic kidney disease", balance$covariateName)|grepl("[cC]hronic renal impairment", balance$covariateName)|grepl("[cC]hronic renal failure", balance$covariateName), ]
         ckd <- data.frame(group = ckd$covariateName,
                           beforecountTreated = ckd$beforeMatchingSumTreated,
                           beforecountComparator = ckd$beforeMatchingSumComparator,
@@ -365,7 +365,7 @@ createTableAndFigures<-function(exportFolder, cmOutputFolder){
         )
         
         # Add removed ckd group (if any):
-        removedckdGroup <- removedCovars[grepl("[cC]hronic kidney disease", removedCovars$covariateName)|grepl("[cC]hronic renal impairment", removedCovars$covariateName), ]
+        removedckdGroup <- removedCovars[grepl("[cC]hronic kidney disease", removedCovars$covariateName)|grepl("[cC]hronic renal impairment", removedCovars$covariateName)|grepl("[cC]hronic renal failure", balance$covariateName) , ]
         try(
             if (nrow(removedckdGroup) == 1) {
                 beforetotalTreated <- ckd$beforecountTreated[1] / ckd$beforefractionTreated[1]
