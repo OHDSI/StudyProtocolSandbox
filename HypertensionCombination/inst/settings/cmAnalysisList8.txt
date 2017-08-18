@@ -102,7 +102,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -156,7 +156,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
