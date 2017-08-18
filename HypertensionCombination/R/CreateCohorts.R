@@ -646,18 +646,12 @@ ON coh.subject_id = per.person_id
     DatabaseConnector::executeSql(conn, sql)
     
     
-    dm_sql<-("DELETE FROM @target_database_schema.@target_cohort_table WHERE cohort_definition_id=@new_cohort_id
-
-              INSERT INTO @target_database_schema.@target_cohort_table(cohort_definition_id,subject_id,cohort_start_date,cohort_end_date)
-              SELECT @new_cohort_id AS cohort_definition_id,coh.subject_id,coh.cohort_start_date,coh.cohort_end_date
-                 FROM @target_database_schema.@target_cohort_table coh
-                 WHERE 
-                coh.cohort_definition_id = @target_cohort_id
-                AND subject_id NOT IN 
-                    (SELECT DISTINCT person_id as subject_id
-                    FROM @target_database_schema.@target_cohort_table coh
-                    JOIN @cdm_database_schema.condition_occurrence con
-                    ON coh.subject_id = con.person_id
+    dm_sql<-("
+            SELECT DISTINCT person_id as subject_id
+                INTO #wo_dm
+                FROM @target_database_schema.@target_cohort_table coh
+                JOIN @cdm_database_schema.condition_occurrence con
+                ON coh.subject_id = con.person_id
                     WHERE con.condition_start_date <= coh.cohort_start_date
                     AND coh.cohort_definition_id = @target_cohort_id
                     AND condition_concept_id in 
@@ -667,7 +661,16 @@ ON coh.subject_id = per.person_id
                         join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
                         and ca.ancestor_concept_id in (201820)
                         and c.invalid_reason is null)
-                 )")
+                )
+            DELETE FROM @target_database_schema.@target_cohort_table WHERE cohort_definition_id=@new_cohort_id;
+            
+            INSERT INTO @target_database_schema.@target_cohort_table(cohort_definition_id,subject_id,cohort_start_date,cohort_end_date)
+            SELECT @new_cohort_id AS cohort_definition_id,coh.subject_id,coh.cohort_start_date,coh.cohort_end_date
+             FROM @target_database_schema.@target_cohort_table coh
+             WHERE 
+            coh.cohort_definition_id = @target_cohort_id
+            AND subject_id NOT IN (SELECT subject_id from #wo_dm);
+            DROP TABLE #wo_dm")
     
     writeLines("subpopulation_without_DM_AC")
     sql <- SqlRender::renderSql(dm_sql,
