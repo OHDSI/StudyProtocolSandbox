@@ -21,7 +21,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r initial_setting, include=FALSE}
 exportFolder<-params$exportFolder
-
 outcomeName=c("0.all death", "1.MACCE", "2.CV death", "3.MI", "4.HF", "5.stroke")
 
 result30<-read.csv(paste0(exportFolder,"/30/tablesAndFigures/EmpiricalCalibration.csv"))
@@ -32,6 +31,7 @@ male<-read.csv(paste0(exportFolder,"/18001/tablesAndFigures/EmpiricalCalibration
 female<-read.csv(paste0(exportFolder,"/18002/tablesAndFigures/EmpiricalCalibration.csv"))
 old<-read.csv(paste0(exportFolder,"/18061/tablesAndFigures/EmpiricalCalibration.csv"))
 young<-read.csv(paste0(exportFolder,"/18059/tablesAndFigures/EmpiricalCalibration.csv"))
+woDM<-read.csv(paste0(exportFolder,"/18011/tablesAndFigures/EmpiricalCalibration.csv"))
 result.forest.plot<-function(data=data, comparatorName="AC", targetName= "CD", analysisName="30days",outcomeIdset = c(4320,0,1,2,3,4), outcomeName){
     data<-data [grepl(comparatorName,data$comparatorName) & grepl(targetName,data$targetName) & data$outcomeId %in% c(0,1,2,3,4,4320),]
     data<-data[match(outcomeIdset,data$outcomeId),]
@@ -205,6 +205,7 @@ target_outcome_concept_name = c("overall death",
                          "MI",
                          "HF",
                          "Stroke",
+                         
                          "MACCE"
                          )
 target_outcomes = data.frame(concept_id = target_outcome_concept_id, concept_name = target_outcome_concept_name)
@@ -325,7 +326,6 @@ forestplot(labeltext=tabletext,
 )
 
 #CD_vs_AD
-tabletext= c("MCDCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome<-result[grepl("AD",result$comparatorName) & grepl("CD",result$targetName) & (result$outcomeId %in% outcome_id),]
 match_order=match(outcome_id,outcome$outcomeId)
 matched_outcome=outcome[match_order,]
@@ -345,7 +345,6 @@ forestplot(labeltext=tabletext,
 )
 
 #CD_vs_AC
-tabletext= c("MCDCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome<-result[grepl("AC",result$comparatorName) & grepl("CD",result$targetName) & (result$outcomeId %in% outcome_id),]
 match_order=match(outcome_id,outcome$outcomeId)
 matched_outcome=outcome[match_order,]
@@ -380,8 +379,8 @@ result730<-read.csv(file.path(exportFolder,"730/MainResults.csv"))
 result730<-merge(result730,outcomes,by.x="outcomeId",by.y="concept_id")
 
 outcome_id=c(0,4320,1,2,3,4)
-#AC_vs_AD
 tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
+#AC_vs_AD
 outcome30<-result30[grepl("AD",result30$comparatorName) & grepl("AC",result30$targetName) & (result30$outcomeId %in% outcome_id),]
 outcome180<-result180[grepl("AD",result180$comparatorName) & grepl("AC",result180$targetName) & (result180$outcomeId %in% outcome_id),]
 outcome365<-result365[grepl("AD",result365$comparatorName) & grepl("AC",result365$targetName) & (result365$outcomeId %in% outcome_id),]
@@ -419,7 +418,6 @@ forestplot(labeltext=tabletext,
 
 #CD_vs_AD
 
-tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome30<-result30[grepl("AD",result30$comparatorName) & grepl("CD",result30$targetName) & (result30$outcomeId %in% outcome_id),]
 outcome180<-result180[grepl("AD",result180$comparatorName) & grepl("CD",result180$targetName) & (result180$outcomeId %in% outcome_id),]
 outcome365<-result365[grepl("AD",result365$comparatorName) & grepl("CD",result365$targetName) & (result365$outcomeId %in% outcome_id),]
@@ -457,7 +455,6 @@ forestplot(labeltext=tabletext,
 
 #CD_vs_AC
 
-tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome30<-result30[grepl("AC",result30$comparatorName) & grepl("CD",result30$targetName) & (result30$outcomeId %in% outcome_id),]
 outcome180<-result180[grepl("AC",result180$comparatorName) & grepl("CD",result180$targetName) & (result180$outcomeId %in% outcome_id),]
 outcome365<-result365[grepl("AC",result365$comparatorName) & grepl("CD",result365$targetName) & (result365$outcomeId %in% outcome_id),]
@@ -481,7 +478,7 @@ forestplot(labeltext=tabletext,
            mean=bound_rr,
            lower=bound_lower,
            upper=bound_upper,
-           col=fpColors(box=c("blACk","royalblue","darkred","darkgreen"),line='darkblue'),
+           col=fpColors(box=c("black","royalblue","darkred","darkgreen"),line='darkblue'),
            f.ci_norm = c(fpDrawCircleCI),
            boxsize=0.1,
            xlog=TRUE,
@@ -502,9 +499,7 @@ result18001<-merge(result18001,outcomes,by.x="outcomeId",by.y="concept_id")
 result18002<-read.csv(file.path(exportFolder,"18002/MainResults.csv"))
 result18002<-merge(result18002,outcomes,by.x="outcomeId",by.y="concept_id")
  
-outcome_id=c(0,4320,1,2,3,4)
 #AC_vs_AD
-tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome18001<-result18001[grepl("AD",result18001$comparatorName) & grepl("AC",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
 outcome18002<-result18002[grepl("AD",result18002$comparatorName) & grepl("AC",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
 
@@ -536,7 +531,6 @@ forestplot(labeltext=tabletext,
 
 #CD_vs_AD
 
-tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome18001<-result18001[grepl("AD",result18001$comparatorName) & grepl("CD",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
 outcome18002<-result18002[grepl("AD",result18002$comparatorName) & grepl("CD",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
 
@@ -568,7 +562,6 @@ forestplot(labeltext=tabletext,
 
 #CD_vs_AC
 
-tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome18001<-result18001[grepl("AC",result18001$comparatorName) & grepl("CD",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
 outcome18002<-result18002[grepl("AC",result18002$comparatorName) & grepl("CD",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
 
@@ -610,9 +603,7 @@ result18059<-merge(result18059,outcomes,by.x="outcomeId",by.y="concept_id")
 result18061<-read.csv(file.path(exportFolder,"18061/MainResults.csv"))
 result18061<-merge(result18061,outcomes,by.x="outcomeId",by.y="concept_id")
 
-outcome_id=c(0,4320,1,2,3,4)
 #AC_vs_AD
-tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome18059<-result18059[grepl("AD",result18059$comparatorName) & grepl("AC",result18059$targetName) & (result18059$outcomeId %in% outcome_id),]
 outcome18061<-result18061[grepl("AD",result18061$comparatorName) & grepl("AC",result18061$targetName) & (result18061$outcomeId %in% outcome_id),]
 
@@ -639,12 +630,11 @@ forestplot(labeltext=tabletext,
            clip=c(0.25,4.0),
            xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
            line.margin = 0.3,
-           legend=c("<60 years", "กร60 years")
+           legend=c("<60 years", ">=60 years")
 )
 
 #CD_vs_AD
 
-tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome18059<-result18059[grepl("AD",result18059$comparatorName) & grepl("CD",result18059$targetName) & (result18059$outcomeId %in% outcome_id),]
 outcome18061<-result18061[grepl("AD",result18061$comparatorName) & grepl("CD",result18061$targetName) & (result18061$outcomeId %in% outcome_id),]
 
@@ -671,12 +661,11 @@ forestplot(labeltext=tabletext,
            clip=c(0.25,4.0),
            xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
            line.margin = 0.3,
-           legend=c("<60 years", "กร60 years")
+           legend=c("<60 years", ">=60 years")
 )
 
 #CD_vs_AC
 
-tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
 outcome18059<-result18059[grepl("AC",result18059$comparatorName) & grepl("CD",result18059$targetName) & (result18059$outcomeId %in% outcome_id),]
 outcome18061<-result18061[grepl("AC",result18061$comparatorName) & grepl("CD",result18061$targetName) & (result18061$outcomeId %in% outcome_id),]
 
@@ -703,9 +692,100 @@ forestplot(labeltext=tabletext,
            clip=c(0.25,4.0),
            xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
            line.margin = 0.3,
-           legend=c("<60 years", "กร60 years")
+           legend=c("<60 years", ">=60 years")
 )
 
+```
+
+
+###Subgroup analysis - w/o diabetes mellitus
+
+```{r Primary and secondary endpoint in subgroups-dm, echo=FALSE}
+result18011<-read.csv(file.path(exportFolder,"18011/MainResults.csv"))
+result18011<-merge(result18011,outcomes,by.x="outcomeId",by.y="concept_id")
+
+#AC_vs_AD
+outcome18011<-result18011[grepl("AD",result18011$comparatorName) & grepl("AC",result18011$targetName) & (result18011$outcomeId %in% outcome_id),]
+
+match_order18011=match(outcome_id,outcome18011$outcomeId)
+
+matched_outcome18011=outcome18011[match_order18011,]
+
+bound_rr=matched_outcome18011$rr
+bound_lower=matched_outcome18011$ci95lb
+bound_upper=matched_outcome18011$ci95ub
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box="royalblue",line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="AC favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0)#,
+           #line.margin = 0.3,
+           #legend=c("without diabetes mellitus")
+)
+
+#CD_vs_AD
+
+outcome18011<-result18011[grepl("AD",result18011$comparatorName) & grepl("CD",result18011$targetName) & (result18011$outcomeId %in% outcome_id),]
+
+match_order18011=match(outcome_id,outcome18011$outcomeId)
+
+matched_outcome18011=outcome18011[match_order18011,]
+
+bound_rr=matched_outcome18011$rr
+bound_lower=matched_outcome18011$ci95lb
+bound_upper=matched_outcome18011$ci95ub
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box="royalblue",line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0)#,
+           #line.margin = 0.3,
+           #legend=c("without diabetes mellitus")
+)
+
+#CD_vs_AC
+
+outcome18011<-result18011[grepl("AC",result18011$comparatorName) & grepl("CD",result18011$targetName) & (result18011$outcomeId %in% outcome_id),]
+
+match_order18011=match(outcome_id,outcome18011$outcomeId)
+
+matched_outcome18011=outcome18011[match_order18011,]
+
+bound_rr=matched_outcome18011$rr
+bound_lower=matched_outcome18011$ci95lb
+bound_upper=matched_outcome18011$ci95ub
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box="royalblue",line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AC favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0)#,
+           #line.margin = 0.3,
+           #legend=c("without diabetes mellitus")
+)
 ```
 
 
