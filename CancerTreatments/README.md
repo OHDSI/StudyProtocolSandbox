@@ -4,7 +4,8 @@ OHDSI Cancer Treatment
 This study aims to look at cancer patients. It is inspired by a question from National Cancer Institute (NCI).
 
 Wiki link to the study is [OHDSI Wiki](http://www.ohdsi.org/web/wiki/doku.php?id=research:bisphosphonates_and_hip_fracture) 
-protocol is in extras folder
+
+Protocol is available here [Protocol](https://1drv.ms/w/s!AkvVyFP8dhtKjVt-45bwg29Sf7wg)
 
 
 Requirements
@@ -65,6 +66,7 @@ How to run
     submitResults("c:/temp/study_results/export", key = "<key>", secret = "<secret>")
     ```
     Where ```key``` and ```secret``` are the credentials provided to you personally by the study coordinator.
+	
 
 
 
