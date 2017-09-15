@@ -24,14 +24,14 @@ connectionDetails <- myConnectionDetails
 resutlsDatabaseSchema <- c(schema1, schema2)
 
 inputDataFolder='c:/temp/input'
-cdmDatabaseSchema='ccae'
+
 cdmDatabaseSchema='myCdmData'
 
 ```
 
-## Step 1c Install OHDSIVocab package
+## Step 1c Get OHDSI vocabulary files
 ```r
-devtools::install_github("vojtechhuser/OHDSIVocab")
+tbd
 ```
 
 ## MegaStep 2 Get Data from database and analyze it
