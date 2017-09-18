@@ -12,6 +12,22 @@ Description: This study will be a retrospective, observational, new-user cohort 
 	Adjustment for baseline confounders will be done by propensity model.
 Depends: R (>= 3.3.1)
 Imports: 
+    OhdsiRTools,
+    OhdsiSharing,
+    SqlRender,
+    DatabaseConnector,
+    Cyclops,
+    BigKnn,
+    PatientLevelPrediction,
+    FeatureExtraction,
+    EmpiricalCalibration,
+    CohortMethod,
+    googledrive,
+    curl (>= 2.8.1),
+    mime,
+    rmarkdown,
+    ggplot2,
+    knitr
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true

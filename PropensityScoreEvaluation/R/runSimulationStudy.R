@@ -439,7 +439,7 @@ runSimulationStudy1 <- function(simulationProfile, simulationSetup, cohortMethod
 #' @export
 runSimulationStudy2 <- function(simulationProfile, cohortMethodData, simulationRuns = 10,
                                 trueEffectSize = NA, outcomePrevalence = NA, discrete = FALSE, ignoreCensoring = FALSE,
-                                psPrior = createPrior("laplace",useCrossValidation=TRUE), nonePrior = FALSE, fudge = 0.001) {
+                                psPrior = createPrior("laplace",useCrossValidation=TRUE), nonePrior = FALSE, fudge = 0.001, threads = 4) {
   saveFfState <- options("fffinalizer")$ffinalizer
   options("fffinalizer" = "delete")
   
@@ -499,7 +499,13 @@ runSimulationStudy2 <- function(simulationProfile, cohortMethodData, simulationR
         psBiasNoneError = !is.null(attr(psBiasNone, "metaData")$psError)
         if (psBiasNoneError) next
       }
-      psBiasCV = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = psPrior, stopOnError = FALSE)
+      psBiasCV = createPs(cohortMethodData = hdpsBias, population = studyPopNew, prior = psPrior, stopOnError = FALSE,
+                          control = createControl(noiseLevel = "silent",
+                                                  cvType = "auto", 
+                                                  tolerance = 2e-07, 
+                                                  cvRepetitions = 10, 
+                                                  startingVariance = 0.01,
+                                                  threads = threads))
       if (!is.null(attr(psBiasCV, "metaData")$psError)) next
       outcomesList[[i]] = cmd$outcomes$rowId
       timesList[[i]] = cmd$cohorts$newSurvivalTime
