@@ -30,12 +30,6 @@ runCaseCrossover <- function(connectionDetails,
     if (cdmVersion == '4')
         stop("The CaseCrossover package does not support CDM version 4")
     start <- Sys.time()
-    ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
-
-    # injectionSummaryFile <- file.path(workFolder, "injectionSummary.rds")
-    # if (!file.exists(injectionSummaryFile))
-    #     stop("Cannot find injection summary file. Please run injectSignals first.")
-    # injectedSignals <- readRDS(injectionSummaryFile)
 
     ccrFolder <- file.path(workFolder, "caseCrossover")
     if (!file.exists(ccrFolder))
@@ -43,14 +37,25 @@ runCaseCrossover <- function(connectionDetails,
 
     ccrSummaryFile <- file.path(workFolder, "ccrSummary.rds")
     if (!file.exists(ccrSummaryFile)) {
+        ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
+
+        injectionSummaryFile <- file.path(workFolder, "injectionSummary.rds")
+        if (!file.exists(injectionSummaryFile))
+            stop("Cannot find injection summary file. Please run injectSignals first.")
+        injectedSignals <- readRDS(injectionSummaryFile)
+        # Add nesting Id:
+        injectedSignals$targetId <- injectedSignals$exposureId
+        injectedSignals <- merge(injectedSignals, ohdsiNegativeControls[, c("targetId", "outcomeId", "nestingId")])
+
         eonList <- list()
-        # for (i in 1:nrow(injectedSignals)) {
-        #     if (injectedSignals$trueEffectSize[i] != 0) {
-        #         eonList[[length(eonList)+1]] <- CaseControl::createExposureOutcomeNestingCohort(exposureId = injectedSignals$exposureId[i],
-        #                                                                                         outcomeId = injectedSignals$newOutcomeId[i],
-        #                                                                                         nestingCohortId = 80180)
-        #     }
-        # }
+        for (i in 1:nrow(injectedSignals)) {
+            if (injectedSignals$trueEffectSize[i] != 0) {
+                eonList[[length(eonList)+1]] <- CaseCrossover::createExposureOutcomeNestingCohort(exposureId = injectedSignals$exposureId[i],
+                                                                                                  outcomeId = injectedSignals$newOutcomeId[i],
+                                                                                                  nestingCohortId = injectedSignals$nestingId[i])
+            }
+        }
+        ohdsiNegativeControls <- unique(ohdsiNegativeControls[,c("targetId", "outcomeId", "nestingId")])
         for (i in 1:nrow(ohdsiNegativeControls)) {
             eonList[[length(eonList)+1]] <- CaseCrossover::createExposureOutcomeNestingCohort(exposureId = ohdsiNegativeControls$targetId[i],
                                                                                               outcomeId = ohdsiNegativeControls$outcomeId[i],
@@ -71,8 +76,8 @@ runCaseCrossover <- function(connectionDetails,
                                                    exposureOutcomeNestingCohortList = eonList,
                                                    outputFolder = ccrFolder,
                                                    getDbCaseCrossoverDataThreads = 1,
-                                                   selectSubjectsToIncludeThreads = min(3, maxCores),
-                                                   getExposureStatusThreads = min(3, maxCores),
+                                                   selectSubjectsToIncludeThreads = min(5, maxCores),
+                                                   getExposureStatusThreads = min(5, maxCores),
                                                    fitCaseCrossoverModelThreads = min(5, maxCores))
         ccrSummary <- CaseCrossover::summarizeCcrAnalyses(ccrResult)
         saveRDS(ccrSummary, ccrSummaryFile)

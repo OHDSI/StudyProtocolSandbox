@@ -25,13 +25,6 @@ runSelfControlledCohort <- function(connectionDetails,
                                     workFolder,
                                     cdmVersion = "5") {
     start <- Sys.time()
-    ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
-
-    #
-    # injectionSummaryFile <- file.path(workFolder, "injectionSummary.rds")
-    # if (!file.exists(injectionSummaryFile))
-    #     stop("Cannot find injection summary file. Please run injectSignals first.")
-    # injectedSignals <- readRDS(injectionSummaryFile)
 
     sccFolder <- file.path(workFolder, "selfControlledCohort")
     if (!file.exists(sccFolder))
@@ -39,13 +32,21 @@ runSelfControlledCohort <- function(connectionDetails,
 
     sccSummaryFile <- file.path(workFolder, "sccSummary.rds")
     if (!file.exists(sccSummaryFile)) {
+        ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
+
+        injectionSummaryFile <- file.path(workFolder, "injectionSummary.rds")
+        if (!file.exists(injectionSummaryFile))
+            stop("Cannot find injection summary file. Please run injectSignals first.")
+        injectedSignals <- readRDS(injectionSummaryFile)
+
+
         eoList <- list()
-        # for (i in 1:nrow(injectedSignals)) {
-        #     if (injectedSignals$trueEffectSize[i] != 0) {
-        #         eoList[[length(eoList)+1]] <- SelfControlledCohort::createExposureOutcome(exposureId = injectedSignals$exposureId[i],
-        #                                                                                 outcomeId = injectedSignals$newOutcomeId[i])
-        #     }
-        # }
+        for (i in 1:nrow(injectedSignals)) {
+            if (injectedSignals$trueEffectSize[i] != 0) {
+                eoList[[length(eoList)+1]] <- SelfControlledCohort::createExposureOutcome(exposureId = injectedSignals$exposureId[i],
+                                                                                        outcomeId = injectedSignals$newOutcomeId[i])
+            }
+        }
         for (i in 1:nrow(ohdsiNegativeControls)) {
             eoList[[length(eoList)+1]] <- SelfControlledCohort::createExposureOutcome(exposureId = ohdsiNegativeControls$targetId[i],
                                                                                       outcomeId = ohdsiNegativeControls$outcomeId[i])
@@ -62,7 +63,7 @@ runSelfControlledCohort <- function(connectionDetails,
                                                           exposureOutcomeList = eoList,
                                                           cdmVersion = cdmVersion,
                                                           outputFolder = sccFolder,
-                                                          analysisThreads = 10)
+                                                          analysisThreads = min(10, maxCores))
         sccSummary <- SelfControlledCohort::summarizeAnalyses(sccResult)
         saveRDS(sccSummary, sccSummaryFile)
     }
@@ -81,7 +82,7 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            riskWindowEndUnexposed = -1,
                                                                            addLengthOfExposureUnexposed = TRUE,
                                                                            riskWindowStartUnexposed = -1,
-                                                                           washoutPeriod = 183,
+                                                                           washoutPeriod = 365,
                                                                            followupPeriod = 183)
 
     sccAnalysis1 <- SelfControlledCohort::createSccAnalysis(analysisId = 1,
@@ -97,7 +98,7 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            riskWindowEndUnexposed = -1,
                                                                            addLengthOfExposureUnexposed = FALSE,
                                                                            riskWindowStartUnexposed = -30,
-                                                                           washoutPeriod = 183,
+                                                                           washoutPeriod = 365,
                                                                            followupPeriod = 183)
 
     sccAnalysis2 <- SelfControlledCohort::createSccAnalysis(analysisId = 2,
@@ -113,7 +114,7 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            riskWindowEndUnexposed = -1,
                                                                            addLengthOfExposureUnexposed = TRUE,
                                                                            riskWindowStartUnexposed = -1,
-                                                                           washoutPeriod = 183,
+                                                                           washoutPeriod = 365,
                                                                            followupPeriod = 183)
 
     sccAnalysis3 <- SelfControlledCohort::createSccAnalysis(analysisId = 3,
@@ -130,7 +131,7 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            riskWindowEndUnexposed = -1,
                                                                            addLengthOfExposureUnexposed = FALSE,
                                                                            riskWindowStartUnexposed = -30,
-                                                                           washoutPeriod = 183,
+                                                                           washoutPeriod = 365,
                                                                            followupPeriod = 183)
 
     sccAnalysis4 <- SelfControlledCohort::createSccAnalysis(analysisId = 4,
@@ -146,7 +147,7 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            riskWindowEndUnexposed = -1,
                                                                            addLengthOfExposureUnexposed = TRUE,
                                                                            riskWindowStartUnexposed = -1,
-                                                                           washoutPeriod = 183,
+                                                                           washoutPeriod = 365,
                                                                            followupPeriod = 183)
 
     sccAnalysis5 <- SelfControlledCohort::createSccAnalysis(analysisId = 5,
@@ -162,7 +163,7 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            riskWindowEndUnexposed = -1,
                                                                            addLengthOfExposureUnexposed = FALSE,
                                                                            riskWindowStartUnexposed = -30,
-                                                                           washoutPeriod = 183,
+                                                                           washoutPeriod = 365,
                                                                            followupPeriod = 183)
 
     sccAnalysis6 <- SelfControlledCohort::createSccAnalysis(analysisId = 6,
@@ -178,7 +179,7 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            riskWindowEndUnexposed = -1,
                                                                            addLengthOfExposureUnexposed = TRUE,
                                                                            riskWindowStartUnexposed = -1,
-                                                                           washoutPeriod = 183,
+                                                                           washoutPeriod = 365,
                                                                            followupPeriod = 183)
 
     sccAnalysis7 <- SelfControlledCohort::createSccAnalysis(analysisId = 7,
@@ -195,7 +196,7 @@ createSelfControlledCohortSettings <- function(fileName) {
                                                                            riskWindowEndUnexposed = -1,
                                                                            addLengthOfExposureUnexposed = FALSE,
                                                                            riskWindowStartUnexposed = -30,
-                                                                           washoutPeriod = 183,
+                                                                           washoutPeriod = 365,
                                                                            followupPeriod = 183)
 
     sccAnalysis8 <- SelfControlledCohort::createSccAnalysis(analysisId = 8,

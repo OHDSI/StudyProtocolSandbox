@@ -11,7 +11,7 @@ Imports:
     RJDBC,
     Cyclops,
     MethodEvaluation,
-    FeatureExtraction,
+    FeatureExtraction (>= 2.0.0),
     CohortMethod,
     SelfControlledCohort,
     SelfControlledCaseSeries,

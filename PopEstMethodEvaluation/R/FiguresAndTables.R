@@ -18,16 +18,30 @@
 
 #' @export
 createFiguresAndTables <- function(exportFolder) {
-    # exportFolder <- file.path(workFolder, "shareableResults")
+    # exportFolder <- file.path(workFolder, "export")
+    plotFolder <- file.path(exportFolder, "plot")
+    if (!file.exists(plotFolder))
+        dir.create(plotFolder)
     estimatesFile <- file.path(exportFolder, "Estimates.csv")
-    estimates <- read.csv(estimatesFile)
+    estimates <- read.csv(estimatesFile, stringsAsFactors = FALSE)
     analysisRefFile <- file.path(exportFolder, "AnalysisRef.csv")
-    analysisRef <-  read.csv(analysisRefFile)
+    analysisRef <-  read.csv(analysisRefFile, stringsAsFactors = FALSE)
     injectionSummaryFile <- file.path(exportFolder, "InjectionSummary.csv")
-    injectedSignals <-  read.csv(injectionSummaryFile)
-
+    injectedSignals <-  read.csv(injectionSummaryFile, stringsAsFactors = FALSE)
+    negativeControlFile <- file.path(exportFolder, "negativeControls.csv")
+    negativeControls <- read.csv(negativeControlFile, stringsAsFactors = FALSE)
+    negativeControls$stratum <- negativeControls$outcomeName
+    negativeControls$stratum[negativeControls$type == "Outcome control"] <- negativeControls$targetName[negativeControls$type == "Outcome control"]
+    negativeControls$exposureId <- negativeControls$targetId
+    injectedSignals <- merge(injectedSignals, negativeControls[, c("exposureId", "outcomeId", "stratum")])
     injectedSignals$outcomeId <- injectedSignals$newOutcomeId
-    data <- merge(estimates, injectedSignals[, c("exposureId", "outcomeId", "targetEffectSize", "trueEffectSize", "trueEffectSizeFirstExposure")])
+    negativeControls$targetEffectSize <- 1
+    negativeControls$trueEffectSize <- 1
+    negativeControls$trueEffectSizeFirstExposure <- 1
+
+    groundTruth <- rbind(injectedSignals[, c("exposureId", "outcomeId", "targetEffectSize", "trueEffectSize", "trueEffectSizeFirstExposure", "stratum")],
+                         negativeControls[, c("exposureId", "outcomeId", "targetEffectSize", "trueEffectSize", "trueEffectSizeFirstExposure", "stratum")])
+    data <- merge(estimates, groundTruth)
 
     errorModels <- data.frame(method = analysisRef$method,
                               analysisId = analysisRef$analysisId,
@@ -35,77 +49,87 @@ createFiguresAndTables <- function(exportFolder) {
                               meanSlope = 0,
                               sdIntercept = 0,
                               sdSlope = 0)
+    strata <- c(unique(groundTruth$stratum), "All")
     performance <- data.frame()
     for (i in 1:nrow(analysisRef)) {
-        # i <- 8
-        method <- analysisRef$method[i]
-        analysisId <- analysisRef$analysisId[i]
-        analysisData <- data[data$analysisId == analysisId & data$method == method, ]
-
-        analysisPerformance <- MethodEvaluation::computeMetrics(logRr = analysisData$logRr,
-                                                                seLogRr = analysisData$seLogRr,
-                                                                trueLogRr = log(analysisData$targetEffectSize))
-        analysisPerformance$method <- method
-        analysisPerformance$analysisId <- analysisId
-        analysisPerformance$trueRr <- exp(analysisPerformance$trueLogRr)
-        performance <- rbind(performance, analysisPerformance)
-
-        trueAndObsFile <- file.path(exportFolder, paste0("trueAndObs_",method, "_a", analysisId, ".png"))
-        EmpiricalCalibration::plotTrueAndObserved(logRr = analysisData$logRr,
-                                                  seLogRr = analysisData$seLogRr,
-                                                  trueLogRr = log(analysisData$targetEffectSize),
-                                                  xLabel = "Incidence rate ratio",
-                                                  fileName = trueAndObsFile)
-
-        rocsFile <- file.path(exportFolder, paste0("aucs_",method, "_a", analysisId,".png"))
-        MethodEvaluation::plotRocsInjectedSignals(logRr = analysisData$logRr,
-                                                  trueLogRr = log(analysisData$targetEffectSize),
-                                                  showAucs = TRUE,
-                                                  fileName = rocsFile)
-
-        nullDistFile <- file.path(exportFolder, paste0("nullDist_",method, "_a", analysisId,".png"))
-        EmpiricalCalibration::plotCalibrationEffect(logRrNegatives = analysisData$logRr[analysisData$targetEffectSize == 1],
-                                                    seLogRrNegatives = analysisData$seLogRr[analysisData$targetEffectSize == 1],
-                                                    xLabel = "Incidence rate ratio",
-                                                    fileName = nullDistFile)
-
-        calibrationFile <- file.path(exportFolder, paste0("calibration_",method, "_a", analysisId,".png"))
-        EmpiricalCalibration::plotCalibration(logRr = analysisData$logRr[analysisData$targetEffectSize == 1],
-                                              seLogRr = analysisData$seLogRr[analysisData$targetEffectSize == 1],
-                                              useMcmc = FALSE,
-                                              fileName = calibrationFile)
-
-        errorModel <- EmpiricalCalibration::fitSystematicErrorModel(logRr = analysisData$logRr,
-                                                                    seLogRr = analysisData$seLogRr,
-                                                                    trueLogRr = log(analysisData$targetEffectSize))
-        idx <- errorModels$analysisId == analysisId & errorModels$method == method
-        errorModels$meanIntercept[idx] <- errorModel[1]
-        errorModels$meanSlope[idx] <- errorModel[2]
-        errorModels$sdIntercept[idx] <- errorModel[3]
-        errorModels$sdSlope[idx] <- errorModel[4]
-
-        calibrated <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = analysisData$logRr,
+        for (stratum in strata) {
+            # i <- 1
+            method <- analysisRef$method[i]
+            analysisId <- analysisRef$analysisId[i]
+            if (stratum == "All") {
+                analysisData <- data[data$analysisId == analysisId & data$method == method, ]
+            } else {
+                analysisData <- data[data$analysisId == analysisId & data$method == method & data$stratum == stratum, ]
+            }
+            analysisData <- analysisData[!is.na(analysisData$seLogRr), ]
+            if (sum(analysisData$trueEffectSize == 1) > 0 && sum(analysisData$trueEffectSize != 1) > 0) {
+                analysisPerformance <- MethodEvaluation::computeMetrics(logRr = analysisData$logRr,
                                                                         seLogRr = analysisData$seLogRr,
-                                                                        model = errorModel)
+                                                                        trueLogRr = log(analysisData$targetEffectSize))
+                analysisPerformance$method <- method
+                analysisPerformance$analysisId <- analysisId
+                analysisPerformance$stratum <- stratum
+                analysisPerformance$trueRr <- exp(analysisPerformance$trueLogRr)
+                performance <- rbind(performance, analysisPerformance)
 
-        calibrated$targetEffectSize <- analysisData$targetEffectSize
-        trueAndObsCaliFile <- file.path(exportFolder, paste0("trueAndObsCali_",method, "_a", analysisId, ".png"))
-        EmpiricalCalibration::plotTrueAndObserved(logRr = calibrated$logRr,
-                                                  seLogRr = calibrated$seLogRr,
-                                                  trueLogRr = log(calibrated$targetEffectSize),
-                                                  xLabel = "Incidence rate ratio",
-                                                  fileName = trueAndObsCaliFile)
+                trueAndObsFile <- file.path(plotFolder, paste0("trueAndObs_",method, "_a", analysisId, "_", stratum, ".png"))
+                EmpiricalCalibration::plotTrueAndObserved(logRr = analysisData$logRr,
+                                                          seLogRr = analysisData$seLogRr,
+                                                          trueLogRr = log(analysisData$targetEffectSize),
+                                                          xLabel = "Incidence rate ratio",
+                                                          fileName = trueAndObsFile)
 
+                rocsFile <- file.path(plotFolder, paste0("aucs_",method, "_a", analysisId, "_", stratum, ".png"))
+                MethodEvaluation::plotRocsInjectedSignals(logRr = analysisData$logRr,
+                                                          trueLogRr = log(analysisData$targetEffectSize),
+                                                          showAucs = TRUE,
+                                                          fileName = rocsFile)
 
-        coverageFile <- file.path(exportFolder, paste0("coverage_",method, "_a", analysisId,".png"))
-        EmpiricalCalibration::plotCiCalibration(logRr = analysisData$logRr,
-                                                seLogRr = analysisData$seLogRr,
-                                                trueLogRr = log(analysisData$targetEffectSize),
-                                                fileName = coverageFile)
+                nullDistFile <- file.path(plotFolder, paste0("nullDist_",method, "_a", analysisId, "_", stratum, ".png"))
+                EmpiricalCalibration::plotCalibrationEffect(logRrNegatives = analysisData$logRr[analysisData$targetEffectSize == 1],
+                                                            seLogRrNegatives = analysisData$seLogRr[analysisData$targetEffectSize == 1],
+                                                            xLabel = "Incidence rate ratio",
+                                                            fileName = nullDistFile)
+
+                # calibrationFile <- file.path(exportFolder, paste0("calibration_",method, "_a", analysisId,".png"))
+                # EmpiricalCalibration::plotCalibration(logRr = analysisData$logRr[analysisData$targetEffectSize == 1],
+                #                                       seLogRr = analysisData$seLogRr[analysisData$targetEffectSize == 1],
+                #                                       useMcmc = FALSE,
+                #                                       fileName = calibrationFile)
+                #
+                # errorModel <- EmpiricalCalibration::fitSystematicErrorModel(logRr = analysisData$logRr,
+                #                                                             seLogRr = analysisData$seLogRr,
+                #                                                             trueLogRr = log(analysisData$targetEffectSize))
+                # idx <- errorModels$analysisId == analysisId & errorModels$method == method
+                # errorModels$meanIntercept[idx] <- errorModel[1]
+                # errorModels$meanSlope[idx] <- errorModel[2]
+                # errorModels$sdIntercept[idx] <- errorModel[3]
+                # errorModels$sdSlope[idx] <- errorModel[4]
+                #
+                # calibrated <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = analysisData$logRr,
+                #                                                                 seLogRr = analysisData$seLogRr,
+                #                                                                 model = errorModel)
+                #
+                # calibrated$targetEffectSize <- analysisData$targetEffectSize
+                # trueAndObsCaliFile <- file.path(exportFolder, paste0("trueAndObsCali_",method, "_a", analysisId, ".png"))
+                # EmpiricalCalibration::plotTrueAndObserved(logRr = calibrated$logRr,
+                #                                           seLogRr = calibrated$seLogRr,
+                #                                           trueLogRr = log(calibrated$targetEffectSize),
+                #                                           xLabel = "Incidence rate ratio",
+                #                                           fileName = trueAndObsCaliFile)
+                #
+                #
+                # coverageFile <- file.path(exportFolder, paste0("coverage_",method, "_a", analysisId,".png"))
+                # EmpiricalCalibration::plotCiCalibration(logRr = analysisData$logRr,
+                #                                         seLogRr = analysisData$seLogRr,
+                #                                         trueLogRr = log(analysisData$targetEffectSize),
+                #                                         fileName = coverageFile)
+            }
+        }
     }
-    errorModelsFile <- file.path(exportFolder, paste0("errorModels.csv"))
-    write.csv(errorModels, file = errorModelsFile, row.names = FALSE)
-    performanceFile <- file.path(exportFolder, paste0("performance.csv"))
+    # errorModelsFile <- file.path(exportFolder, paste0("errorModels.csv"))
+    # write.csv(errorModels, file = errorModelsFile, row.names = FALSE)
+    performanceFile <- file.path(plotFolder, paste0("performance.csv"))
     write.csv(performance, file = performanceFile, row.names = FALSE)
 }
 
@@ -202,23 +226,23 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
                                                  description = description))
 
     # ICTPD #
-    ictpdSummaryFile <- file.path(workFolder, "ictpdSummary.rds")
-    if (!file.exists(ictpdSummaryFile)) {
-        stop(paste0("Couldn't find ", ictpdSummaryFile, ", please make sure you've successfully completed run runIctpd"))
-    }
-    ictpdEstimates <- readRDS(ictpdSummaryFile)
-    ictpdEstimates$method <- "ictpd"
-    colnames(ictpdEstimates)[colnames(ictpdEstimates) == "exposureofinterest"] <- "exposureId"
-    colnames(ictpdEstimates)[colnames(ictpdEstimates) == "outcomeofinterest"] <- "outcomeId"
-    estimates <- rbind(estimates, ictpdEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
-
-    ictpdAnalysisListFile <- system.file("settings", "ictpdAnalysisSettings.txt", package = "PopEstMethodEvaluation")
-    ictpdAnalysisList <- IcTemporalPatternDiscovery::loadIctpdAnalysisList(ictpdAnalysisListFile)
-    analysisId <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "analysisId"))
-    description <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "description"))
-    analysisRef <- rbind(analysisRef, data.frame(method = "ictpd",
-                                                 analysisId = analysisId,
-                                                 description = description))
+    # ictpdSummaryFile <- file.path(workFolder, "ictpdSummary.rds")
+    # if (!file.exists(ictpdSummaryFile)) {
+    #     stop(paste0("Couldn't find ", ictpdSummaryFile, ", please make sure you've successfully completed run runIctpd"))
+    # }
+    # ictpdEstimates <- readRDS(ictpdSummaryFile)
+    # ictpdEstimates$method <- "ictpd"
+    # colnames(ictpdEstimates)[colnames(ictpdEstimates) == "exposureofinterest"] <- "exposureId"
+    # colnames(ictpdEstimates)[colnames(ictpdEstimates) == "outcomeofinterest"] <- "outcomeId"
+    # estimates <- rbind(estimates, ictpdEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
+    #
+    # ictpdAnalysisListFile <- system.file("settings", "ictpdAnalysisSettings.txt", package = "PopEstMethodEvaluation")
+    # ictpdAnalysisList <- IcTemporalPatternDiscovery::loadIctpdAnalysisList(ictpdAnalysisListFile)
+    # analysisId <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "analysisId"))
+    # description <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "description"))
+    # analysisRef <- rbind(analysisRef, data.frame(method = "ictpd",
+    #                                              analysisId = analysisId,
+    #                                              description = description))
 
     # Case-control #
     ccSummaryFile <- file.path(workFolder, "ccSummary.rds")
@@ -237,6 +261,24 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
                                                  analysisId = analysisId,
                                                  description = description))
 
+    # Case-crossover #
+    ccrSummaryFile <- file.path(workFolder, "ccrSummary.rds")
+    if (!file.exists(ccrSummaryFile)) {
+        stop(paste0("Couldn't find ", ccrSummaryFile, ", please make sure you've successfully completed run CaseCrossover"))
+    }
+    ccrEstimates <- readRDS(ccrSummaryFile)
+    ccrEstimates$method <- "ccr"
+    estimates <- rbind(estimates, ccrEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
+
+    ccrAnalysisListFile <- system.file("settings", "ccrAnalysisSettings.txt", package = "PopEstMethodEvaluation")
+    ccrAnalysisList <- CaseCrossover::loadCcrAnalysisList(ccrAnalysisListFile)
+    analysisId <- unlist(OhdsiRTools::selectFromList(ccrAnalysisList, "analysisId"))
+    description <- unlist(OhdsiRTools::selectFromList(ccrAnalysisList, "description"))
+    analysisRef <- rbind(analysisRef, data.frame(method = "ccr",
+                                                 analysisId = analysisId,
+                                                 description = description))
+
+
     estimatesFile <- file.path(exportFolder, "Estimates.csv")
     write.csv(estimates, estimatesFile, row.names = FALSE)
 
@@ -246,6 +288,10 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
     injectedSignals <- injectedSignals[, c("exposureId", "outcomeId", "newOutcomeId", "targetEffectSize", "trueEffectSize", "trueEffectSizeFirstExposure")]
     injectionSummaryFile <- file.path(exportFolder, "InjectionSummary.csv")
     write.csv(injectedSignals, injectionSummaryFile, row.names = FALSE)
+
+    negativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
+    negativeControlFile <- file.path(exportFolder, "negativeControls.csv")
+    write.csv(negativeControls, negativeControlFile, row.names = FALSE)
 
     ### Add all to zip file ###
     zipName <- file.path(exportFolder, "StudyResults.zip")
@@ -284,7 +330,7 @@ createMetaData <- function(addCdmSource = TRUE,
         sql <- SqlRender::renderSql(sql, cdm_database_schema = cdmDatabaseSchema)$sql
         sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
         cdmSource <- DatabaseConnector::querySql(conn, sql)
-        RJDBC::dbDisconnect(conn)
+        DatabaseConnector::disconnect(conn)
         lines <- c(lines, paste(names(cdmSource), cdmSource[1, ], sep = ": "))
     }
     if (addPackageVersions) {

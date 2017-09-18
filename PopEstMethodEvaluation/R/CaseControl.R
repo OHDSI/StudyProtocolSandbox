@@ -31,39 +31,19 @@ runCaseControl <- function(connectionDetails,
         stop("The CaseControl package does not support CDM version 4")
     start <- Sys.time()
 
-    ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
-
-    # injectionSummaryFile <- file.path(workFolder, "injectionSummary.rds")
-    # if (!file.exists(injectionSummaryFile))
-    #     stop("Cannot find injection summary file. Please run injectSignals first.")
-    # injectedSignals <- readRDS(injectionSummaryFile)
-
     ccFolder <- file.path(workFolder, "caseControl")
     if (!file.exists(ccFolder))
         dir.create(ccFolder)
 
     ccSummaryFile <- file.path(workFolder, "ccSummary.rds")
     if (!file.exists(ccSummaryFile)) {
-        # eonList <- list()
-        # for (i in 1:nrow(injectedSignals)) {
-        #     if (injectedSignals$trueEffectSize[i] != 0) {
-        #         eonList[[length(eonList)+1]] <- CaseControl::createExposureOutcomeNestingCohort(exposureId = injectedSignals$exposureId[i],
-        #                                                                                         outcomeId = injectedSignals$newOutcomeId[i],
-        #                                                                                         nestingCohortId = 80180)
-        #     }
-        # }
+        allControls <- read.csv(file.path(workFolder , "allControls.csv"))
+        allControls <- unique(allControls[, c("targetId", "outcomeId", "nestingId")])
         eonList <- list()
-        # for (i in 1:nrow(injectedSignals)) {
-        #     if (injectedSignals$trueEffectSize[i] != 0) {
-        #         eonList[[length(eonList)+1]] <- CaseControl::createExposureOutcomeNestingCohort(exposureId = injectedSignals$exposureId[i],
-        #                                                                                         outcomeId = injectedSignals$newOutcomeId[i],
-        #                                                                                         nestingCohortId = 80180)
-        #     }
-        # }
-        for (i in 1:nrow(ohdsiNegativeControls)) {
-            eonList[[length(eonList)+1]] <- CaseControl::createExposureOutcomeNestingCohort(exposureId = ohdsiNegativeControls$targetId[i],
-                                                                                              outcomeId = ohdsiNegativeControls$outcomeId[i],
-                                                                                              nestingCohortId = ohdsiNegativeControls$nestingId[i])
+        for (i in 1:nrow(allControls)) {
+            eonList[[length(eonList)+1]] <- CaseControl::createExposureOutcomeNestingCohort(exposureId = allControls$targetId[i],
+                                                                                            outcomeId = allControls$outcomeId[i],
+                                                                                            nestingCohortId = allControls$nestingId[i])
         }
         ccAnalysisListFile <- system.file("settings", "ccAnalysisSettings.txt", package = "PopEstMethodEvaluation")
         ccAnalysisList <- CaseControl::loadCcAnalysisList(ccAnalysisListFile)
@@ -99,7 +79,7 @@ createCaseControlSettings <- function(fileName) {
                                                                getVisits = FALSE)
 
     selectControlsArgs1 <- CaseControl::createSelectControlsArgs(firstOutcomeOnly = FALSE,
-                                                                 washoutPeriod = 180,
+                                                                 washoutPeriod = 365,
                                                                  controlsPerCase = 2,
                                                                  matchOnAge = TRUE,
                                                                  ageCaliper = 2,
@@ -124,7 +104,7 @@ createCaseControlSettings <- function(fileName) {
                                                  fitCaseControlModelArgs = fitCaseControlModelArgs1)
 
     selectControlsArgs2 <- CaseControl::createSelectControlsArgs(firstOutcomeOnly = FALSE,
-                                                                 washoutPeriod = 180,
+                                                                 washoutPeriod = 365,
                                                                  controlsPerCase = 10,
                                                                  matchOnAge = TRUE,
                                                                  ageCaliper = 2,
@@ -186,7 +166,7 @@ createCaseControlSettings <- function(fileName) {
     #                                              fitCaseControlModelArgs = fitCaseControlModelArgs2)
 
     # selectControlsArgs3 <- CaseControl::createSelectControlsArgs(firstOutcomeOnly = FALSE,
-    #                                                              washoutPeriod = 180,
+    #                                                              washoutPeriod = 365,
     #                                                              controlsPerCase = 2,
     #                                                              matchOnAge = TRUE,
     #                                                              ageCaliper = 2,
@@ -204,7 +184,7 @@ createCaseControlSettings <- function(fileName) {
     #                                              fitCaseControlModelArgs = fitCaseControlModelArgs1)
 
     # selectControlsArgs4 <- CaseControl::createSelectControlsArgs(firstOutcomeOnly = FALSE,
-    #                                                              washoutPeriod = 180,
+    #                                                              washoutPeriod = 365,
     #                                                              controlsPerCase = 10,
     #                                                              matchOnAge = TRUE,
     #                                                              ageCaliper = 2,

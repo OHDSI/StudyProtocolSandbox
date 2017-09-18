@@ -12,7 +12,7 @@
     },
     "selectControlsArgs": {
       "firstOutcomeOnly": false,
-      "washoutPeriod": 180,
+      "washoutPeriod": 365,
       "controlsPerCase": 2,
       "matchOnAge": true,
       "ageCaliper": 2,
@@ -87,7 +87,7 @@
     },
     "selectControlsArgs": {
       "firstOutcomeOnly": false,
-      "washoutPeriod": 180,
+      "washoutPeriod": 365,
       "controlsPerCase": 10,
       "matchOnAge": true,
       "ageCaliper": 2,
@@ -162,7 +162,7 @@
     },
     "selectControlsArgs": {
       "firstOutcomeOnly": false,
-      "washoutPeriod": 180,
+      "washoutPeriod": 365,
       "controlsPerCase": 2,
       "matchOnAge": true,
       "ageCaliper": 2,
@@ -237,7 +237,7 @@
     },
     "selectControlsArgs": {
       "firstOutcomeOnly": false,
-      "washoutPeriod": 180,
+      "washoutPeriod": 365,
       "controlsPerCase": 10,
       "matchOnAge": true,
       "ageCaliper": 2,

@@ -11,7 +11,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": {
         "includeCovariateIds": "exposureId",
@@ -90,7 +90,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": [
         {
@@ -184,7 +184,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": {
         "includeCovariateIds": "exposureId",
@@ -263,7 +263,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": {
         "includeCovariateIds": "exposureId",
@@ -332,7 +332,7 @@
   },
   {
     "analysisId": 5,
-    "description": "Using event-dependent observation",
+    "description": "Using all other exposures",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
       "deleteCovariatesSmallCount": 100,
@@ -342,7 +342,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": [
         {

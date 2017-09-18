@@ -18,9 +18,10 @@
 
 library(PopEstMethodEvaluation)
 options('fftempdir' = 'r:/fftemp')
+options(java.parameters = "-Xmx8000m")
 
-workFolder <- "s:/PopEstMethodEvaluation"
-
+workFolder <- "r:/PopEstMethodEvaluation"
+maxCores <- 32
 
 pw <- NULL
 dbms <- "pdw"
@@ -41,40 +42,24 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 password = pw,
                                                                 port = port)
 
-MethodEvaluation::createReferenceSetCohorts(connectionDetails = connectionDetails,
-                                            oracleTempSchema = oracleTempSchema,
-                                            cdmDatabaseSchema = cdmDatabaseSchema,
-                                            outcomeDatabaseSchema = outcomeDatabaseSchema,
-                                            outcomeTable = outcomeTable,
-                                            nestingDatabaseSchema = nestingCohortDatabaseSchema,
-                                            nestingTable = nestingCohortTable,
-                                            referenceSet = "ohdsiNegativeControls")
-
-
-# conn <- DatabaseConnector::connect(connectionDetails)
-# counts <- querySql(conn, "SELECT cohort_definition_id, COUNT(*) FROM scratch.dbo.mschuemi_ohdsi_nesting GROUP BY cohort_definition_id")
-# library(MethodEvaluation)
-# data("ohdsiNegativeControls")
-# allIds <- unique(ohdsiNegativeControls$nestingId)
-# allIds[!(allIds %in% counts$COHORT_DEFINITION_ID)]
-# ohdsiNegativeControls[ohdsiNegativeControls$nestingId == 10036049, ]
-
+# MethodEvaluation::createReferenceSetCohorts(connectionDetails = connectionDetails,
+#                                             oracleTempSchema = oracleTempSchema,
+#                                             cdmDatabaseSchema = cdmDatabaseSchema,
+#                                             outcomeDatabaseSchema = outcomeDatabaseSchema,
+#                                             outcomeTable = outcomeTable,
+#                                             nestingDatabaseSchema = nestingCohortDatabaseSchema,
+#                                             nestingTable = nestingCohortTable,
+#                                             referenceSet = "ohdsiNegativeControls")
+#
 # injectSignals(connectionDetails = connectionDetails,
 #               cdmDatabaseSchema = cdmDatabaseSchema,
 #               oracleTempSchema = oracleTempSchema,
 #               outcomeDatabaseSchema = outcomeDatabaseSchema,
 #               outcomeTable = outcomeTable,
 #               workFolder = workFolder,
-#               cdmVersion = cdmVersion,
-#               createBaselineCohorts = FALSE,
-#               maxCores = 32)
+#               maxCores = maxCores)
 
-createNestingCohorts(connectionDetails = connectionDetails,
-                     cdmDatabaseSchema = cdmDatabaseSchema,
-                     oracleTempSchema = oracleTempSchema,
-                     nestingCohortDatabaseSchema = nestingCohortDatabaseSchema,
-                     nestingCohortTable = nestingCohortTable,
-                     cdmVersion = cdmVersion)
+
 
 runCohortMethod(connectionDetails = connectionDetails,
                 cdmDatabaseSchema = cdmDatabaseSchema,

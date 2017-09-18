@@ -19,19 +19,6 @@
 library(EvaluatingCaseControl)
 options(fftempdir = "S:/fftemp")
 
-# pw <- NULL
-# dbms <- "pdw"
-# user <- NULL
-# server <- "JRDUSAPSCTL01"
-# cdmDatabaseSchema <- "CDM_Truven_MDCD_V569.dbo"
-# oracleTempSchema <- NULL
-# workDatabaseSchema <- "scratch.dbo"
-# studyCohortTable <- "mschuemie_case_control_ap"
-# port <- 17001
-# workFolder <- "S:/Temp/EvaluatingCaseControl"
-# maxCores <- 30
-
-
 pw <- NULL
 dbms <- "pdw"
 user <- NULL
