@@ -148,12 +148,7 @@ createFiguresAndTables <- function(exportFolder) {
 #'                            (/)
 #'
 #' @export
-packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
-    injectionSummaryFile <- file.path(workFolder, "injectionSummary.rds")
-    if (!file.exists(injectionSummaryFile))
-        stop("Cannot find injection summary file. Please run injectSignals first.")
-    injectedSignals <- readRDS(injectionSummaryFile)
-
+packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, workFolder) {
     exportFolder <- file.path(workFolder, "export")
     if (!file.exists(exportFolder))
         dir.create(exportFolder)
@@ -166,20 +161,23 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
                    exportFolder = exportFolder)
 
     ### Create overall results table and analysisRef table ###
+    allControls <- read.csv(file.path(workFolder , "allControls.csv"), stringsAsFactors = FALSE)
+    # Add controls not in database:
+    ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
+    ohdsiNegativeControls$oldOutcomeId <- ohdsiNegativeControls$outcomeId
+    ohdsiNegativeControls$stratum <- ohdsiNegativeControls$outcomeName
+    ohdsiNegativeControls$stratum[ohdsiNegativeControls$type == "ohdsiNegativeControls"] <- ohdsiNegativeControls$targetName
+    ohdsiNegativeControls <- ohdsiNegativeControls[, c("targetId", "targetName", "comparatorId", "comparatorName", "nestingId", "nestingName", "oldOutcomeId", "outcomeName", "type", "stratum")]
+    fullGrid <- do.call("rbind", replicate(4, ohdsiNegativeControls, simplify = FALSE))
+    fullGrid$targetEffectSize <- rep(c(1, 1.5, 2, 4), each = nrow(ohdsiNegativeControls))
+    idx <- fullGrid$targetEffectSize != 1
+    fullGrid$outcomeName[idx] <- paste0(fullGrid$outcomeName[idx], ", RR=", fullGrid$targetEffectSize[idx])
+    allControls <- merge(allControls, fullGrid, all.y = TRUE)
+
     estimates <- data.frame()
     analysisRef <- data.frame()
 
     # SCCS #
-    sccsSummaryFile <- file.path(workFolder, "sccsSummary.rds")
-    if (!file.exists(sccsSummaryFile)) {
-        stop(paste0("Couldn't find ", sccsSummaryFile, ", please make sure you've successfully completed runSelfControlledCaseSeries"))
-    }
-    sccsEstimates <- readRDS(sccsSummaryFile)
-    sccsEstimates$method <- "sccs"
-    colnames(sccsEstimates)[colnames(sccsEstimates) == "logRr(Exposure of interest)"] <- "logRr"
-    colnames(sccsEstimates)[colnames(sccsEstimates) == "seLogRr(Exposure of interest)"] <- "seLogRr"
-    estimates <- rbind(estimates, sccsEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
-
     sccsAnalysisListFile <- system.file("settings", "sccsAnalysisSettings.txt", package = "PopEstMethodEvaluation")
     sccsAnalysisList <- SelfControlledCaseSeries::loadSccsAnalysisList(sccsAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(sccsAnalysisList, "analysisId"))
@@ -188,16 +186,24 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
                                                  analysisId = analysisId,
                                                  description = description))
 
-    # CohortMethod #
-    cmSummaryFile <- file.path(workFolder, "cmSummary.rds")
-    if (!file.exists(cmSummaryFile)) {
-        stop(paste0("Couldn't find ", cmSummaryFile, ", please make sure you've successfully completed runCohortMethod"))
+    sccsSummaryFile <- file.path(workFolder, "sccsSummary.rds")
+    if (!file.exists(sccsSummaryFile)) {
+        stop(paste0("Couldn't find ", sccsSummaryFile, ", please make sure you've successfully completed runSelfControlledCaseSeries"))
     }
-    cmEstimates <- readRDS(cmSummaryFile)
-    cmEstimates$method <- "cm"
-    colnames(cmEstimates)[colnames(cmEstimates) == "targetId"] <- "exposureId"
-    estimates <- rbind(estimates, cmEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
+    sccsEstimates <- readRDS(sccsSummaryFile)
+    colnames(sccsEstimates)[colnames(sccsEstimates) == "exposureId"] <- "targetId"
+    colnames(sccsEstimates)[colnames(sccsEstimates) == "logRr(Exposure of interest)"] <- "logRr"
+    colnames(sccsEstimates)[colnames(sccsEstimates) == "seLogRr(Exposure of interest)"] <- "seLogRr"
+    colnames(sccsEstimates)[colnames(sccsEstimates) == "ci95lb(Exposure of interest)"] <- "ci95lb"
+    colnames(sccsEstimates)[colnames(sccsEstimates) == "ci95ub(Exposure of interest)"] <- "ci95ub"
+    fullGrid <- do.call("rbind", replicate(length(analysisId), allControls, simplify = FALSE))
+    fullGrid$analysisId <- rep(analysisId, each = nrow(allControls))
+    sccsEstimates <- merge(fullGrid, sccsEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
+    sccsEstimates$method <- "SCCS"
+    sccsEstimates$cer <- FALSE
+    estimates <- rbind(estimates, sccsEstimates)
 
+    # CohortMethod #
     cmAnalysisListFile <- system.file("settings", "cmAnalysisSettings.txt", package = "PopEstMethodEvaluation")
     cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(cmAnalysisList, "analysisId"))
@@ -206,17 +212,20 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
                                                  analysisId = analysisId,
                                                  description = description))
 
+    cmSummaryFile <- file.path(workFolder, "cmSummary.rds")
+    if (!file.exists(cmSummaryFile)) {
+        stop(paste0("Couldn't find ", cmSummaryFile, ", please make sure you've successfully completed cohortMethod"))
+    }
+    cmEstimates <- readRDS(cmSummaryFile)
+    fullGrid <- do.call("rbind", replicate(length(analysisId), allControls, simplify = FALSE))
+    fullGrid$analysisId <- rep(analysisId, each = nrow(allControls))
+    cmEstimates <- merge(fullGrid, cmEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
+    cmEstimates$method <- "Cohort method"
+    cmEstimates$cer <- TRUE
+    estimates <- rbind(estimates, cmEstimates)
+
 
     # SelfControlledCohort #
-    sccSummaryFile <- file.path(workFolder, "sccSummary.rds")
-    if (!file.exists(sccSummaryFile)) {
-        stop(paste0("Couldn't find ", sccSummaryFile, ", please make sure you've successfully completed runSelfControlledCohort"))
-    }
-    sccEstimates <- readRDS(sccSummaryFile)
-    sccEstimates$method <- "scc"
-    colnames(sccEstimates)[colnames(sccEstimates) == "targetId"] <- "exposureId"
-    estimates <- rbind(estimates, sccEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
-
     sccAnalysisListFile <- system.file("settings", "sccAnalysisSettings.txt", package = "PopEstMethodEvaluation")
     sccAnalysisList <- SelfControlledCohort::loadSccAnalysisList(sccAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(sccAnalysisList, "analysisId"))
@@ -225,34 +234,23 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
                                                  analysisId = analysisId,
                                                  description = description))
 
-    # ICTPD #
-    # ictpdSummaryFile <- file.path(workFolder, "ictpdSummary.rds")
-    # if (!file.exists(ictpdSummaryFile)) {
-    #     stop(paste0("Couldn't find ", ictpdSummaryFile, ", please make sure you've successfully completed run runIctpd"))
-    # }
-    # ictpdEstimates <- readRDS(ictpdSummaryFile)
-    # ictpdEstimates$method <- "ictpd"
-    # colnames(ictpdEstimates)[colnames(ictpdEstimates) == "exposureofinterest"] <- "exposureId"
-    # colnames(ictpdEstimates)[colnames(ictpdEstimates) == "outcomeofinterest"] <- "outcomeId"
-    # estimates <- rbind(estimates, ictpdEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
-    #
-    # ictpdAnalysisListFile <- system.file("settings", "ictpdAnalysisSettings.txt", package = "PopEstMethodEvaluation")
-    # ictpdAnalysisList <- IcTemporalPatternDiscovery::loadIctpdAnalysisList(ictpdAnalysisListFile)
-    # analysisId <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "analysisId"))
-    # description <- unlist(OhdsiRTools::selectFromList(ictpdAnalysisList, "description"))
-    # analysisRef <- rbind(analysisRef, data.frame(method = "ictpd",
-    #                                              analysisId = analysisId,
-    #                                              description = description))
+    sccSummaryFile <- file.path(workFolder, "sccSummary.rds")
+    if (!file.exists(sccSummaryFile)) {
+        stop(paste0("Couldn't find ", sccSummaryFile, ", please make sure you've successfully completed runSelfControlledCohort"))
+    }
+    sccEstimates <- readRDS(sccSummaryFile)
+    colnames(sccEstimates)[colnames(sccEstimates) == "exposureId"] <- "targetId"
+    colnames(sccEstimates)[colnames(sccEstimates) == "irrLb95"] <- "ci95lb"
+    colnames(sccEstimates)[colnames(sccEstimates) == "irrUb95"] <- "ci95ub"
+    fullGrid <- do.call("rbind", replicate(length(analysisId), allControls, simplify = FALSE))
+    fullGrid$analysisId <- rep(analysisId, each = nrow(allControls))
+    sccEstimates <- merge(fullGrid, sccEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
+    sccEstimates$method <- "Self-controlled cohort"
+    sccEstimates$cer <- FALSE
+    estimates <- rbind(estimates, sccEstimates)
+
 
     # Case-control #
-    ccSummaryFile <- file.path(workFolder, "ccSummary.rds")
-    if (!file.exists(ccSummaryFile)) {
-        stop(paste0("Couldn't find ", ccSummaryFile, ", please make sure you've successfully completed run runIctpd"))
-    }
-    ccEstimates <- readRDS(ccSummaryFile)
-    ccEstimates$method <- "cc"
-    estimates <- rbind(estimates, ccEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
-
     ccAnalysisListFile <- system.file("settings", "ccAnalysisSettings.txt", package = "PopEstMethodEvaluation")
     ccAnalysisList <- CaseControl::loadCcAnalysisList(ccAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(ccAnalysisList, "analysisId"))
@@ -261,15 +259,22 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
                                                  analysisId = analysisId,
                                                  description = description))
 
-    # Case-crossover #
-    ccrSummaryFile <- file.path(workFolder, "ccrSummary.rds")
-    if (!file.exists(ccrSummaryFile)) {
-        stop(paste0("Couldn't find ", ccrSummaryFile, ", please make sure you've successfully completed run CaseCrossover"))
-    }
-    ccrEstimates <- readRDS(ccrSummaryFile)
-    ccrEstimates$method <- "ccr"
-    estimates <- rbind(estimates, ccrEstimates[, c("exposureId", "outcomeId", "method", "analysisId", "logRr", "seLogRr")])
 
+    ccSummaryFile <- file.path(workFolder, "ccSummary.rds")
+    if (!file.exists(ccSummaryFile)) {
+        stop(paste0("Couldn't find ", ccSummaryFile, ", please make sure you've successfully completed runCaseControl"))
+    }
+    ccEstimates <- readRDS(ccSummaryFile)
+    colnames(ccEstimates)[colnames(ccEstimates) == "exposureId"] <- "targetId"
+    fullGrid <- do.call("rbind", replicate(length(analysisId), allControls, simplify = FALSE))
+    fullGrid$analysisId <- rep(analysisId, each = nrow(allControls))
+    ccEstimates <- merge(fullGrid, ccEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
+    ccEstimates$method <- "Case-control"
+    ccEstimates$cer <- FALSE
+    estimates <- rbind(estimates, ccEstimates)
+
+
+    # Case-crossover #
     ccrAnalysisListFile <- system.file("settings", "ccrAnalysisSettings.txt", package = "PopEstMethodEvaluation")
     ccrAnalysisList <- CaseCrossover::loadCcrAnalysisList(ccrAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(ccrAnalysisList, "analysisId"))
@@ -278,6 +283,19 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
                                                  analysisId = analysisId,
                                                  description = description))
 
+    ccrSummaryFile <- file.path(workFolder, "ccrSummary.rds")
+    if (!file.exists(ccrSummaryFile)) {
+        stop(paste0("Couldn't find ", ccrSummaryFile, ", please make sure you've successfully completed runSelfControlledCohort"))
+    }
+    ccrEstimates <- readRDS(ccrSummaryFile)
+    colnames(ccrEstimates)[colnames(ccrEstimates) == "exposureId"] <- "targetId"
+    fullGrid <- do.call("rbind", replicate(length(analysisId), allControls, simplify = FALSE))
+    fullGrid$analysisId <- rep(analysisId, each = nrow(allControls))
+    ccrEstimates <- merge(fullGrid, ccrEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
+    ccrEstimates$method <- "Self-controlled cohort"
+    ccrEstimates$cer <- FALSE
+    estimates <- rbind(estimates, ccrEstimates)
+
 
     estimatesFile <- file.path(exportFolder, "Estimates.csv")
     write.csv(estimates, estimatesFile, row.names = FALSE)
@@ -285,18 +303,20 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
     analysisRefFile <- file.path(exportFolder, "AnalysisRef.csv")
     write.csv(analysisRef, analysisRefFile, row.names = FALSE)
 
-    injectedSignals <- injectedSignals[, c("exposureId", "outcomeId", "newOutcomeId", "targetEffectSize", "trueEffectSize", "trueEffectSizeFirstExposure")]
-    injectionSummaryFile <- file.path(exportFolder, "InjectionSummary.csv")
-    write.csv(injectedSignals, injectionSummaryFile, row.names = FALSE)
+    write.csv(allControls, file.path(exportFolder, "AllControls.csv"), row.names = FALSE)
 
-    negativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
-    negativeControlFile <- file.path(exportFolder, "negativeControls.csv")
-    write.csv(negativeControls, negativeControlFile, row.names = FALSE)
+    # injectedSignals <- injectedSignals[, c("exposureId", "outcomeId", "newOutcomeId", "targetEffectSize", "trueEffectSize", "trueEffectSizeFirstExposure")]
+    # injectionSummaryFile <- file.path(exportFolder, "InjectionSummary.csv")
+    # write.csv(injectedSignals, injectionSummaryFile, row.names = FALSE)
+    #
+    # negativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
+    # negativeControlFile <- file.path(exportFolder, "negativeControls.csv")
+    # write.csv(negativeControls, negativeControlFile, row.names = FALSE)
 
     ### Add all to zip file ###
-    zipName <- file.path(exportFolder, "StudyResults.zip")
-    OhdsiSharing::compressFolder(exportFolder, zipName)
-    writeLines(paste("\nStudy results are ready for sharing at:", zipName))
+    # zipName <- file.path(exportFolder, "StudyResults.zip")
+    # OhdsiSharing::compressFolder(exportFolder, zipName)
+    # writeLines(paste("\nStudy results are ready for sharing at:", zipName))
 }
 
 #' Create metadata file

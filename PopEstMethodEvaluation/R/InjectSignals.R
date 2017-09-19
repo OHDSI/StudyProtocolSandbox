@@ -126,10 +126,12 @@ injectSignals <- function(connectionDetails,
     injectedSignals <- merge(injectedSignals, ohdsiNegativeControls)
     injectedSignals <- injectedSignals[injectedSignals$trueEffectSize != 0, ]
     injectedSignals$outcomeName <- paste0(injectedSignals$outcomeName, ", RR=", injectedSignals$targetEffectSize)
+    injectedSignals$oldOutcomeId <- injectedSignals$outcomeId
     injectedSignals$outcomeId <- injectedSignals$newOutcomeId
     ohdsiNegativeControls$targetEffectSize <- 1
     ohdsiNegativeControls$trueEffectSize <- 1
     ohdsiNegativeControls$trueEffectSizeFirstExposure <- 1
+    ohdsiNegativeControls$oldOutcomeId <- ohdsiNegativeControls$outcomeId
     allControls <- rbind(ohdsiNegativeControls, injectedSignals[, names(ohdsiNegativeControls)])
     exposureOutcomes <- data.frame()
     exposureOutcomes <- rbind(exposureOutcomes, data.frame(exposureId = allControls$targetId,

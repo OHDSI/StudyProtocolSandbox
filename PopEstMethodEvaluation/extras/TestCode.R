@@ -28,6 +28,7 @@ dbms <- "pdw"
 user <- NULL
 server <- "JRDUSAPSCTL01"
 cdmDatabaseSchema <- "CDM_Truven_MDCD_V569.dbo"
+databaseName <- "MDCD"
 oracleTempSchema <- NULL
 outcomeDatabaseSchema <- "scratch.dbo"
 outcomeTable <- "mschuemi_ohdsi_hois"
