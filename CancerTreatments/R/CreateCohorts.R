@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-.createCohorts <- function(connection,
+createCohorts <- function(connection,
                            cdmDatabaseSchema,
                            cohortDatabaseSchema,
                            cohortTable,
