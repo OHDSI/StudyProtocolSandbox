@@ -166,13 +166,18 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
     ohdsiNegativeControls$oldOutcomeId <- ohdsiNegativeControls$outcomeId
     ohdsiNegativeControls$stratum <- ohdsiNegativeControls$outcomeName
-    ohdsiNegativeControls$stratum[ohdsiNegativeControls$type == "ohdsiNegativeControls"] <- ohdsiNegativeControls$targetName
+    idx <- ohdsiNegativeControls$type == "Outcome control"
+    ohdsiNegativeControls$stratum[idx] <- ohdsiNegativeControls$targetName[idx]
     ohdsiNegativeControls <- ohdsiNegativeControls[, c("targetId", "targetName", "comparatorId", "comparatorName", "nestingId", "nestingName", "oldOutcomeId", "outcomeName", "type", "stratum")]
     fullGrid <- do.call("rbind", replicate(4, ohdsiNegativeControls, simplify = FALSE))
     fullGrid$targetEffectSize <- rep(c(1, 1.5, 2, 4), each = nrow(ohdsiNegativeControls))
     idx <- fullGrid$targetEffectSize != 1
     fullGrid$outcomeName[idx] <- paste0(fullGrid$outcomeName[idx], ", RR=", fullGrid$targetEffectSize[idx])
     allControls <- merge(allControls, fullGrid, all.y = TRUE)
+    toJson <- function(object) {
+        object <- OhdsiRTools:::convertAttrToMember(object)
+        return(jsonlite::toJSON(object, pretty = TRUE, force = TRUE, null = "null", auto_unbox = TRUE))
+    }
 
     estimates <- data.frame()
     analysisRef <- data.frame()
@@ -182,9 +187,11 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     sccsAnalysisList <- SelfControlledCaseSeries::loadSccsAnalysisList(sccsAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(sccsAnalysisList, "analysisId"))
     description <- unlist(OhdsiRTools::selectFromList(sccsAnalysisList, "description"))
-    analysisRef <- rbind(analysisRef, data.frame(method = "sccs",
+    json <- sapply(sccsAnalysisList, toJson)
+    analysisRef <- rbind(analysisRef, data.frame(method = "SCCS",
                                                  analysisId = analysisId,
-                                                 description = description))
+                                                 description = description,
+                                                 json = json))
 
     sccsSummaryFile <- file.path(workFolder, "sccsSummary.rds")
     if (!file.exists(sccsSummaryFile)) {
@@ -208,9 +215,11 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(cmAnalysisList, "analysisId"))
     description <- unlist(OhdsiRTools::selectFromList(cmAnalysisList, "description"))
-    analysisRef <- rbind(analysisRef, data.frame(method = "cm",
+    json <- sapply(cmAnalysisList, toJson)
+    analysisRef <- rbind(analysisRef, data.frame(method = "Cohort method",
                                                  analysisId = analysisId,
-                                                 description = description))
+                                                 description = description,
+                                                 json = json))
 
     cmSummaryFile <- file.path(workFolder, "cmSummary.rds")
     if (!file.exists(cmSummaryFile)) {
@@ -219,7 +228,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     cmEstimates <- readRDS(cmSummaryFile)
     fullGrid <- do.call("rbind", replicate(length(analysisId), allControls, simplify = FALSE))
     fullGrid$analysisId <- rep(analysisId, each = nrow(allControls))
-    cmEstimates <- merge(fullGrid, cmEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
+    cmEstimates <- merge(fullGrid, cmEstimates[, c("targetId", "comparatorId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
     cmEstimates$method <- "Cohort method"
     cmEstimates$cer <- TRUE
     estimates <- rbind(estimates, cmEstimates)
@@ -230,9 +239,11 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     sccAnalysisList <- SelfControlledCohort::loadSccAnalysisList(sccAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(sccAnalysisList, "analysisId"))
     description <- unlist(OhdsiRTools::selectFromList(sccAnalysisList, "description"))
-    analysisRef <- rbind(analysisRef, data.frame(method = "scc",
+    json <- sapply(sccsAnalysisList, toJson)
+    analysisRef <- rbind(analysisRef, data.frame(method = "Self-controlled cohort",
                                                  analysisId = analysisId,
-                                                 description = description))
+                                                 description = description,
+                                                 json = json))
 
     sccSummaryFile <- file.path(workFolder, "sccSummary.rds")
     if (!file.exists(sccSummaryFile)) {
@@ -255,9 +266,11 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     ccAnalysisList <- CaseControl::loadCcAnalysisList(ccAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(ccAnalysisList, "analysisId"))
     description <- unlist(OhdsiRTools::selectFromList(ccAnalysisList, "description"))
-    analysisRef <- rbind(analysisRef, data.frame(method = "cc",
+    json <- sapply(ccAnalysisList, toJson)
+    analysisRef <- rbind(analysisRef, data.frame(method = "Case-control",
                                                  analysisId = analysisId,
-                                                 description = description))
+                                                 description = description,
+                                                 json = json))
 
 
     ccSummaryFile <- file.path(workFolder, "ccSummary.rds")
@@ -279,9 +292,11 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     ccrAnalysisList <- CaseCrossover::loadCcrAnalysisList(ccrAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(ccrAnalysisList, "analysisId"))
     description <- unlist(OhdsiRTools::selectFromList(ccrAnalysisList, "description"))
-    analysisRef <- rbind(analysisRef, data.frame(method = "ccr",
+    json <- sapply(ccrAnalysisList, toJson)
+    analysisRef <- rbind(analysisRef, data.frame(method = "Case-crossover",
                                                  analysisId = analysisId,
-                                                 description = description))
+                                                 description = description,
+                                                 json = json))
 
     ccrSummaryFile <- file.path(workFolder, "ccrSummary.rds")
     if (!file.exists(ccrSummaryFile)) {
@@ -292,11 +307,11 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     fullGrid <- do.call("rbind", replicate(length(analysisId), allControls, simplify = FALSE))
     fullGrid$analysisId <- rep(analysisId, each = nrow(allControls))
     ccrEstimates <- merge(fullGrid, ccrEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
-    ccrEstimates$method <- "Self-controlled cohort"
+    ccrEstimates$method <- "Case-crossover"
     ccrEstimates$cer <- FALSE
     estimates <- rbind(estimates, ccrEstimates)
 
-
+    estimates$db <- databaseName
     estimatesFile <- file.path(exportFolder, "Estimates.csv")
     write.csv(estimates, estimatesFile, row.names = FALSE)
 
@@ -366,3 +381,45 @@ createMetaData <- function(addCdmSource = TRUE,
     write(lines, file.path(exportFolder, "MetaData.txt"))
     invisible(NULL)
 }
+
+#' @export
+addCalibration <- function(exportFolder) {
+    # exportFolder <- file.path(workFolder, "export")
+    estimates <- read.csv(file.path(exportFolder, "Estimates.csv"))
+    combis <- unique(estimates[, c("method", "analysisId", "stratum")])
+    calibrate <- function(i , combis, estimates) {
+        # print(i)
+        subset <- estimates[estimates$method == combis$method[i] & estimates$analysisId == combis$analysisId[i] & estimates$stratum == combis$stratum[i], ]
+        filterSubset <- subset[!is.na(subset$seLogRr) & !is.infinite(subset$seLogRr), ]
+        if (nrow(filterSubset) < 5 || length(unique(filterSubset$targetEffectSize)) < 2) {
+            subset$calLogRr <- rep(NA, nrow(subset))
+            subset$calSeLogRr <- rep(NA, nrow(subset))
+            subset$calCi95lb <- rep(NA, nrow(subset))
+            subset$calCi95ub <- rep(NA, nrow(subset))
+            subset$calP <- rep(NA, nrow(subset))
+        } else {
+            model <- EmpiricalCalibration::fitSystematicErrorModel(logRr = filterSubset$logRr,
+                                                                   seLogRr = filterSubset$seLogRr,
+                                                                   trueLogRr = log(filterSubset$targetEffectSize),
+                                                                   estimateCovarianceMatrix = FALSE)
+            caliCi <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = subset$logRr,
+                                                                        seLogRr = subset$seLogRr,
+                                                                        model = model)
+            null <- EmpiricalCalibration::fitNull(logRr = filterSubset$logRr[filterSubset$targetEffectSize == 1],
+                                                  seLogRr = filterSubset$seLogRr[filterSubset$targetEffectSize == 1])
+            caliP <- EmpiricalCalibration::calibrateP(null = null,
+                                                      logRr = subset$logRr,
+                                                      seLogRr = subset$seLogRr)
+            subset$calLogRr <- caliCi$logRr
+            subset$calSeLogRr <- caliCi$seLogRr
+            subset$calCi95lb <- exp(caliCi$logLb95Rr)
+            subset$calCi95ub <- exp(caliCi$logUb95Rr)
+            subset$calP <- caliP
+        }
+        return(subset)
+    }
+    calibratedEstimates <- sapply(1:nrow(combis), calibrate, combis = combis, estimates = estimates, simplify = FALSE)
+    calibratedEstimates <- do.call("rbind", calibratedEstimates)
+    write.csv(calibratedEstimates, file.path(exportFolder, "calibrated.csv"), row.names = FALSE)
+}
+
