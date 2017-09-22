@@ -9,7 +9,7 @@ OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_id
   #other params)
 {
   # If we don't give sites an ID number, then one will be randomly chosen.
-  if(is.null(site_id)) site_id <- sample(1:1e6, 1)
+  site_id <- sample(1:1e6, 1)
 
   dataExportFolder <- paste0(user_folder, 'Extracted Data/')
   resultsFolder <- paste0(user_folder, 'Results/')
