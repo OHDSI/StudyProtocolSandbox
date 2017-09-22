@@ -42,6 +42,7 @@ How to run
 	                                             user = "joe",
 						     password = "secret",
 						     server = "myserver")
+	```
 						     
 	
 	* For details on how to configure```createConnectionDetails``` in your environment type this for help:
@@ -61,7 +62,20 @@ How to run
 
 	* ```maxCores``` is the number of cores that are available for parallel processing. If more cores are made available this can speed up the analyses. Preferrably, this should be set the number of cores available in the machine.
 	
-5. Upload the file ```export/studyResult.zip``` in the output folder to the study coordinator:
+5. Execute
+
+    ```r
+    hello()
+    cdmDatabaseSchema='mycdm'
+    workDatabaseSchema='usersandbox'
+    studyCohortTable='cancercohort'
+    workFolder='c:/b/cath'
+
+execute(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseSchema,
+        workDatabaseSchema = workDatabaseSchema,studyCohortTable = studyCohortTable,outputFolder = workFolder)
+
+    ```
+6. Upload the file ```export/studyResult.zip``` in the output folder to the study coordinator:
     ```r
     submitResults("c:/temp/study_results/export", key = "<key>", secret = "<secret>")
     ```
