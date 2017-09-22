@@ -3,9 +3,10 @@
 #'
 #' @export
 analyze_all <- function(site_id, all_ids, pop_id, resultsDatabaseSchema, dataExportFolder, resultsFolder, exportFolder,
-                        write_full_cids = T, OMOP, concept_file = NULL)
+                        kbFolder, write_full_cids = T, OMOP, concept_file = NULL, Share_Data = F, dates)
 {
-  if(OMOP & is.null(concept_file)) concept <- OHDSIVocab::concept
+  print(resultsDatabaseSchema)
+
 
   for(analysis_id in all_ids)
   {
@@ -18,6 +19,7 @@ analyze_all <- function(site_id, all_ids, pop_id, resultsDatabaseSchema, dataExp
     for(i in 1:length(resultsDatabaseSchema))
     {
       db <- resultsDatabaseSchema[i]
+      print(db)
       cat('doing:', analysis_id, db, '\n')
       data_folder <- paste0(dataExportFolder, db, '/')
 
@@ -25,9 +27,10 @@ analyze_all <- function(site_id, all_ids, pop_id, resultsDatabaseSchema, dataExp
       pop <- get_pop(data_folder, pop_id)
       event <- get_event(data_folder, analysis_id)
 
-      l <- analyze_one(pop, event, analysis_id, db, output_folder, write_full_cids, OMOP, concept_file)
+      l <- analyze_one(pop, event, analysis_id, db, output_folder, write_full_cids, OMOP, concept_file, dates = dates)
       anonym_db <- anonymize_db_schema(site_id, i)
-      exportResults(l$eventM2, l$full_cids, l$rollup1.0, l$rollup2.0, anonym_db, analysis_id, export_folder)
+      exportResults(l$eventM2, l$full_cids, l$rollup1.0, l$rollup2.0, anonym_db, analysis_id,
+                    kbFolder, export_folder, Share_Data, concept_file)
     }
   }
 }
@@ -40,11 +43,15 @@ analyze_all <- function(site_id, all_ids, pop_id, resultsDatabaseSchema, dataExp
 #' as they will be overridden the next time this function is called.
 #' @export
 analyze_one <- function(pop, event, analysis_id, db_schema, resultsFolder,
-                        write_full_cids = T, OMOP, concept_file)
+                        write_full_cids = T, OMOP, concept_file, dates)
 {
   # Load the OHDSIVocab concept table if that's the correct one but it hasn't been passed in.
   # Step2 will check other conditions and throw error.
-  if(OMOP & is.null(concept_file)) concept <- OHDSIVocab::concept
+  if(OMOP & is.null(concept_file))
+  {
+      print('STOP!!! LOAD CONCEPT FILE')
+      break
+  }
 
   #output_folder <- paste0(resultsFolder, 'File Results/')
   #if(!dir.exists(output_folder)) dir.create(output_folder)
@@ -54,9 +61,12 @@ analyze_one <- function(pop, event, analysis_id, db_schema, resultsFolder,
   # Main Code Body.
 
   # 2 (event, pop, event_type=704, OMOP = FALSE, concept_file=NULL)
-  eventM2 <- step_2(event, pop, analysis_id, OMOP, concept_file) # pt and pop count have NAs... remove
+  eventM2 <- step_2(event, pop, analysis_id, OMOP, concept_file, dates = dates) # pt and pop count have NAs... remove
   eventM2 %<>% dplyr::mutate(pt_count = ifelse(is.na(pt_count), 0, pt_count),
                              population_count = ifelse(is.na(population_count), 0, population_count))
+
+  fname <- paste(analysis_id, db_schema, 'processed_data.csv', sep = '_')
+  readr::write_csv(eventM2, paste0(resultsFolder, fname))
 
   print("Step 2 done")
 
@@ -81,6 +91,8 @@ analyze_one <- function(pop, event, analysis_id, db_schema, resultsFolder,
   else event_type <- 'unknown'
   l <- step_4(full_cids, dest_path = output_folder , event_type, db_schema)
   print(paste0("step 4 ------ done. new files in: ", output_folder))
+
+  print_Rollup_Graphs(analysis_id, db_schema, full_cids, l$rollup1.0, l$rollup2.0, dest_path = output_folder, eventM2)
   l$eventM2 <- eventM2
   l$full_cids <- full_cids
   return(l)

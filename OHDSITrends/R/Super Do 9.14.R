@@ -4,25 +4,27 @@
 #' @param
 #'
 #' @export
-OHDSITrends <- function(site_id, connectionDetails,resultsDatabaseSchema, result_event_ids,
-                        pop_id, user_folder, OMOP = F, concept_file = NULL)
+OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_ids,
+                        pop_id, user_folder, OMOP = F, concept_file = NULL, Share_Data = F, dates)
   #other params)
 {
   # If we don't give sites an ID number, then one will be randomly chosen.
-  if(is.null(site_id)) site_id <- sample(1:100, 1)
-    
+  if(is.null(site_id)) site_id <- sample(1:1e6, 1)
+
   dataExportFolder <- paste0(user_folder, 'Extracted Data/')
   resultsFolder <- paste0(user_folder, 'Results/')
   exportFolder <- paste0(user_folder, 'export/')
+  kbFolder <- paste0(user_folder, 'kb/')
+  print(resultsDatabaseSchema)
   #make dirs
 
-  for(dr in c(user_folder, dataExportFolder, resultsFolder, exportFolder))
+  for(dr in c(user_folder, dataExportFolder, resultsFolder, exportFolder, kbFolder))
     if(!dir.exists(dr)) dir.create(dr)
   medical_event_ids <- c(result_event_ids, pop_id)
   getData2(connectionDetails,resultsDatabaseSchema, dataExportFolder, medical_event_ids)
 
-  analyze_all(all_ids = result_event_ids, pop_id = pop_id, resultsDatabaseSchema, dataExportFolder,
-              resultsFolder = resultsFolder, exportFolder, write_full_cids = T, OMOP = T, concept_file)
+  analyze_all(site_id, all_ids = result_event_ids, pop_id = pop_id, resultsDatabaseSchema, dataExportFolder,
+          resultsFolder, exportFolder, kbFolder, write_full_cids = T, OMOP = T, concept_file, Share_Data, dates)
 }
 
 #' @description This function will analyze all analysis_ids for all schemas you ask of it.
@@ -40,7 +42,8 @@ OHDSITrends <- function(site_id, connectionDetails,resultsDatabaseSchema, result
 # For now, pass in analysis_id so that step_4 works. After confirming, modidy step_4 so this is not needed
 # (see comment in Analyze all trends.R)
 
-OHDSITrends2 <- function(pop_file_path, event_file_path, concept_file = NULL, analysis_id, db_schema,  user_folder, OMOP = F)
+OHDSITrends2 <- function(pop_file_path, event_file_path, concept_file = NULL, analysis_id, db_schema,
+                         user_folder, write_full_cids = F, OMOP = F, dates)
 {
   pop <- readr::read_csv(pop_file_path)
   event <- readr::read_csv(event_file_path)
@@ -48,9 +51,9 @@ OHDSITrends2 <- function(pop_file_path, event_file_path, concept_file = NULL, an
   resultsFolder <- paste0(user_folder, 'Results/')
   for(dr in c(user_folder, resultsFolder))
     if(!dir.exists(dr)) dir.create(dr)
-  analyze_one(pop, event, analysis_id, db_schema, resultsFolder, write_full_cids = F, OMOP = T, concept_file)
+  analyze_one(pop, event, analysis_id, db_schema, resultsFolder,
+              write_full_cids, OMOP, concept_file, dates)
 }
-
 
 
 
