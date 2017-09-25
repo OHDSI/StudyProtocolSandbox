@@ -25,7 +25,7 @@ plyr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, and DatabaseConnector
 # Installation
 Run this code to install:
 ```r
-devtools::install_github(ysumath1/OHDSITrends)
+devtools::install_github('ohdsi/StudyProtocolSandbox/OHDSITrends')
 ```
 
 ## How to run
