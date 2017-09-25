@@ -134,7 +134,7 @@ Now, you are ready for step_2.
 The best way to do this step is using the function wrapper OHDSITrends, by running this command:
 
 ```r
-OHDSITrends(connectionDetails = myConnDetails, resultsDatabaseSchema = mySchemas, result_event_ids = result_event_ids, pop_id = 116, user_folder, OMOP, concept_file, dates = dates)
+OHDSITrends(connectionDetails = myConnDetails, resultsDatabaseSchema = mySchemas, result_event_ids, user_folder, OMOP, concept_file, dates)
 ```
 * The program may take a while to run. Conservatively estimate about 20 minutes to process each analysis_id in each database_schma you pass to the program. It may be slower or faster, depending on the size of the data being analyzed.
 

@@ -2,15 +2,10 @@
 #exportFolder <- paste0(user_folder, 'export/')
 #db_schema = anonymize_db_schema(1, 1)
 
-kbFolder <- 'C:/Users/sumathipalaya/Desktop/Package/OHDSITrends/inst/'
-
 #' @param anaonym_db_schema anonymized db_schema; use anonymize_db_schema to get
 #' @param event_type In step_4, this was the text-conversion of that OMOP analysis_id. Number might be better?
 #' Either can work, just makes a computer reading-in the file_name a bit harder.
 #' @export
-
-
-
 
 exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, event_type,
                           kbFolder,dest_path, Share_Data = F, concept)
@@ -68,7 +63,7 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
     if(event_type == 904)
     {
       # Edit this line; should just be /inst/kb-drug_era3.csv
-      kb3_path <- paste0('inst/kb-drug_era3.csv')
+      kb3_path <- system.file("csv", "kb-drug_era3.csv", package = "OHDSITrends")
       kb2.csv <- make_and_save_kb(kb3_path, concept, kbFolder)
       dg <- OHDSI_shiny_dg(kb2.csv, eventM2, event_type)
       analyze_grouped_events(full_cids, eventM2, dg, kb2.csv, event_type, db_schema, dest_path)

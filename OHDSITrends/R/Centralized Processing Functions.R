@@ -4,6 +4,7 @@ get.extFiles <- function(fnames, ext)
 }
 
 
+#' Sep Exports
 #' @description get the files that match the descriptor (e.g.3rd word in export
 #' file naming convention)
 #' @param descriptor Description value (case sensitive)
@@ -51,7 +52,7 @@ read_and_rbind_csv_files <- function(myfiles, folder)
 analyzeOneFileType <- function(sub_folder, fType, outFolder)
 {
   fnames  <- dir(sub_folder)
-  files <- get.extFiles(fnames, '.csv')
+  files <- fnames[endsWith(fnames, "events.csv")]
   myfiles <- sepExportFiles(files, fType)
   df <- read_and_rbind_csv_files(myfiles, sub_folder)
 
