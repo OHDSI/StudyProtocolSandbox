@@ -61,21 +61,32 @@ myConnDetails <- createConnectionDetails(dbms="postgresql"
 
 Alternatively, you can store your database connection details in a conn.R file, as recommended elsewhere. 
 
-Next, get your concept file: 
-This package needs to understand the medical events you are extracting from your database. To do so, it requires a CONCEPT file. If you use an OMOP dataset, there is a function that may help you. The CONCEPT file can also be obtained from Athena directly. If you aren't sure, try the Athena CONCEPT file. Save the CONCEPT.csv file in a memorable place. You will need that file path. 
+Next, get your concept file, which is necessary for grouping medical evnets by ancestor-relationships. Two ways to get this file:
 
+Method 1: From your OMOP Database.
 If you have the concept file on your database, then run these lines:
  ```r
- 
- SELECT * FROM CONCEPT
+ conn <-  conn<-DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
+ concept <- DatabaseConnector::querySql(conn,
+             'select * from concept')
  
  ```
+ 
+ Method 2:
+ Read Athena CONCEPT.csv file
+ 
+ ```r
+ concept_file <- file_path_to_Athena_CONCEPT.csv
+ ```
+ 
 You can pass in either the concept R data.frame() object OR the filepath to a CONCEPT.csv file. The function will work with both approaches.
 
-You will also need to identify database schema and analysis_ids to run this code against. The best analysis_ids are those for which there is data on per-decile level per year. These events typically end in '04' in OMOP version 5 and are named "by concept_id by calendar year by gender by age decile." 
-For example, analysis_id 404 in OMOP version 5 is named "Number of persons with at least one condition occrurrence, by condition_concept_id, by calendar year by gender by age decile."
+You will also need to identify the database schema from which to pull the results. This code will analyze the analysis_ids
+904 = drugEra or drug ingredient per decile per calendar year
+604 = procedures per decile per calendar year
+404 = conditions per decile per calendar year
 
-In addition, you will need to specify the analysis_id for the patient population. You want the analysis id that is named "Number of persons with at least one day of observation in each year by gender and age decile." In OMOP version 5, this is 116.
+In addition, you will need to specify the pop_id  = 116, becuase this is the population id for OMOP sites.
 
 In addition, it is helpful to specify a date range for which you expect most of your data to be complete. For example a database may begin collecting information from 1985, but the data for 2017 is only for half (or part) of the year. In this instance, you'd want to select a date range from 1985-2016, so that the incomplete annual data in 2017 does not bias trends.
 
@@ -83,7 +94,7 @@ Specify the path to an folder where you want all the result to go. Put a '/' at 
 
 Indicate if your site uses OMOP or not setting an OMOP variable to T or F
 
-Putting it all together, your code should look something like this:
+Putting it all together, your code should look  like this:
 
 ```r
 options(java.parameters = "-Xmx8000m")
@@ -95,11 +106,18 @@ library(DatabaseConnector)
 myConnDetails <- createConnectionDetails(dbms="postgresql"
                                      ,user='my_user_name', password = 'my_password'
                                              ,server='server/database')
+
+
 concept <- readr::read_csv(CONCEPT.csv)
+
+conn <-  conn<-DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
+concept <- DatabaseConnector::querySql(conn,
+'select * from concept')
+
 
 resultsDatabaseSchema = c(db_schema1, db_schema2, db_schema3)
 
-result_event_ids  = c(904, 604, 404, 504) # 904 is drugEra, 604 is procedure, 404 is condition, 504 is mortality by condition.
+result_event_ids  = c(904, 604, 404) # 904 is drugEra, 604 is procedure, 404 is condition
 
 pop_id = 116 # Always true for OMOP site
 
@@ -116,13 +134,12 @@ Now, you are ready for step_2.
 The best way to do this step is using the function wrapper OHDSITrends, by running this command:
 
 ```r
-user_folder <- folder_to_put_all_the_results_from_this_package
-
 OHDSITrends(site_id, connectionDetails, resultsDatabaseSchema, result_event_ids, pop_id = 116,
 user_folder, OMOP, concept_file)
-
-# The program may take a while to run. Conservatively estimate about 20 minutes to process each analysis_id in each database_schma you pass to the program. It may be slower or faster, depending on the size of the data being analyzed.
 ```
+* The program may take a while to run. Conservatively estimate about 20 minutes to process each analysis_id in each database_schma you pass to the program. It may be slower or faster, depending on the size of the data being analyzed.
+
+** if you are an OMOP site, there is nothing else for you to do. When the program is done, zip the export folder (if it isn't already) and email to the study coordinators.
 
 This function, which requires minimal user input, will:
 
