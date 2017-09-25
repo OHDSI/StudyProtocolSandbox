@@ -115,7 +115,7 @@ concept <- DatabaseConnector::querySql(conn,
 'select * from concept')
 
 
-resultsDatabaseSchema = c(db_schema1, db_schema2, db_schema3)
+mySchemas = c(db_schema1, db_schema2, db_schema3)
 
 result_event_ids  = c(904, 604, 404) # 904 is drugEra, 604 is procedure, 404 is condition
 
@@ -134,8 +134,7 @@ Now, you are ready for step_2.
 The best way to do this step is using the function wrapper OHDSITrends, by running this command:
 
 ```r
-OHDSITrends(connectionDetails, resultsDatabaseSchema, result_event_ids, pop_id = 116,
-user_folder, OMOP, concept_file)
+OHDSITrends(connectionDetails = myConnDetails, resultsDatabaseSchema = mySchemas, result_event_ids = result_event_ids, pop_id = 116, user_folder, OMOP, concept_file, dates = dates)
 ```
 * The program may take a while to run. Conservatively estimate about 20 minutes to process each analysis_id in each database_schma you pass to the program. It may be slower or faster, depending on the size of the data being analyzed.
 
