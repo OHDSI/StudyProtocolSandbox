@@ -19,7 +19,7 @@ CONCEPT file that allows the program to understand what types of medical events 
 This package was built using R 3.4.1 and dplyr version 0.7.2.
 
 Additionally, the following packages must be installed, but not loaded with the library() command:
-plyr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, and DatabaseConnector
+plyr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, and DatabaseConnector; DatabaseConnector depends on SQLReadr and RJava.
 
 
 # Installation
@@ -61,10 +61,8 @@ myConnDetails <- createConnectionDetails(dbms="postgresql"
 
 Alternatively, you can store your database connection details in a conn.R file, as recommended elsewhere. 
 
-
 Next, get your concept file: 
 This package needs to understand the medical events you are extracting from your database. To do so, it requires a CONCEPT file. If you use an OMOP dataset, there is a function that may help you. The CONCEPT file can also be obtained from Athena directly. If you aren't sure, try the Athena CONCEPT file. Save the CONCEPT.csv file in a memorable place. You will need that file path. 
-
 
 If you have the concept file on your database, then run these lines:
  ```r
@@ -79,7 +77,7 @@ For example, analysis_id 404 in OMOP version 5 is named "Number of persons with 
 
 In addition, you will need to specify the analysis_id for the patient population. You want the analysis id that is named "Number of persons with at least one day of observation in each year by gender and age decile." In OMOP version 5, this is 116.
 
-In addition, it is helpful to specify a date range for which you expect most of your data to be complete. For example a database may begin collecting information from 2005, but the data for 2015 is only for half (or part) of the year. In this instance, you'd want to select a date range from 2005-2014, so that the incomplete annual data in 2015 does not bias trends.
+In addition, it is helpful to specify a date range for which you expect most of your data to be complete. For example a database may begin collecting information from 1985, but the data for 2017 is only for half (or part) of the year. In this instance, you'd want to select a date range from 1985-2016, so that the incomplete annual data in 2017 does not bias trends.
 
 Specify the path to an folder where you want all the result to go. Put a '/' at the end of this filepath.
 
@@ -101,11 +99,11 @@ concept <- readr::read_csv(CONCEPT.csv)
 
 resultsDatabaseSchema = c(db_schema1, db_schema2, db_schema3)
 
-result_event_ids  = c(904, 604, 404) # 904 is drugEra, 604 is procedure, 404 is condition
+result_event_ids  = c(904, 604, 404, 504) # 904 is drugEra, 604 is procedure, 404 is condition, 504 is mortality by condition.
 
-pop_id = 116
+pop_id = 116 # Always true for OMOP site
 
-dates = 2005:2014 # Appropriate for the example above
+dates = 1985:2016 # Appropriate for the example above
 
 user_folder = paste0('myFilePath', '/') # Path to an empty folder to put all the exciting results with a '/')
 
@@ -113,10 +111,20 @@ OMOP = T # I am an OMOP site. F if false
 ```
 Now, you are ready for step_2.
 
-## MegaStep 2 Get Data from database and analyze it
+## Step 2: Run the analysis
 
-The best way to do this step is using the function wrapper OHDSITrends. This function requires
-minimal user input and will:
+The best way to do this step is using the function wrapper OHDSITrends, by running this command:
+
+```r
+user_folder <- folder_to_put_all_the_results_from_this_package
+
+OHDSITrends(site_id, connectionDetails, resultsDatabaseSchema, result_event_ids, pop_id = 116,
+user_folder, OMOP, concept_file)
+
+# The program may take a while to run. Conservatively estimate about 20 minutes to process each analysis_id in each database_schma you pass to the program. It may be slower or faster, depending on the size of the data being analyzed.
+```
+
+This function, which requires minimal user input, will:
 
 1. Extract data from database and store it in a 'Extracted Data' folder. This package is designed to work 
 with data for annual trends and annual time-points. If your data is not structured this way, problems may arise. 
@@ -132,22 +140,6 @@ Because this folder is designed for sharing, ALL identifiable database schema in
 All these actions take place within a (preferably empty) user-created folder. This is the easiest (and best) way to use this package.
 
 To use this function execute the following:
-
-```r
-resutltsDatabaseSchema <- c(schema1, schema2, ..., scheman) #pass as many schema as you like
-
-result_event_ids <- c(medical_events_I_want_to_analyze) #e..g 904 = drugExposure, 604 = procedures
-# be sure all these event_ids are present in each resultsDatabaseSchema you pass to this function.
-
-pop_d <- myPopId # e.g. 116
-
-user_folder <- folder_to_put_all_the_results_from_this_package
-
-OHDSITrends(site_id, connectionDetails, resultsDatabaseSchema, result_event_ids, pop_id = 116,
-              user_folder, OMOP, concept_file)
-
-# The program may take a while to run. Conservatively estimate about 20 minutes to process each analysis_id in each database_schma you pass to the program. It may be slower or faster, depending on the size of the data being analyzed. 
-```
 
 Once you've run the OHDSITrends function, you don't need to do anything else. The package run smoothly. When the program is done, check your user_folder, there should be some interesting files in the /Results and /export folder. 
 
