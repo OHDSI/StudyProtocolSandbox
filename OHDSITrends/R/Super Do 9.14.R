@@ -4,8 +4,8 @@
 #' @param
 #'
 #' @export
-OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_ids,
-                        pop_id, user_folder, OMOP = F, concept_file = NULL, Share_Data = F, dates)
+OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_ids, user_folder,
+                        OMOP = F, concept_file = NULL, dates, Share_Data = F, pop_id = 116)
   #other params)
 {
   # If we don't give sites an ID number, then one will be randomly chosen.

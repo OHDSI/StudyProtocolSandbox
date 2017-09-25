@@ -38,6 +38,7 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
 
   fname <- paste(event_type, db_schema, "Overall_interesting_data.csv")
   out_1.d <- subset_big_by_small_ids(eventM2, rollup1.0)
+  out_1.d %<>% dplyr::select(-c(pt_count, population_count))
   readr::write_csv(out_1.d, path = paste0(dest_path, fname))
 
   fname <- paste(event_type, db_schema, "Top_trending_events.csv", sep = '_')
@@ -46,6 +47,7 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
 
   fname <- paste(event_type, db_schema, "Overall_interesting_data.csv")
   out_2.d <- subset_big_by_small_ids(eventM2, rollup2.0)
+  out_2.d %<>% dplyr::select(-c(pt_count, population_count))
   readr::write_csv(out_2.d, path = paste0(dest_path, fname))
 
   # Print graphs using out_1, out_2, and eventM2 (use these dfs to make pdf graphs)
