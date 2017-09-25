@@ -85,6 +85,8 @@ You will also need to identify the database schema from which to pull the result
 904 = drugEra or drug ingredient per decile per calendar year
 604 = procedures per decile per calendar year
 404 = conditions per decile per calendar year
+704 = drugExposure or drug product per decile per calendar year
+504 = mortality by condition per decile per calendar year
 
 In addition, you will need to specify the pop_id  = 116, becuase this is the population id for OMOP sites.
 
@@ -117,7 +119,7 @@ concept <- DatabaseConnector::querySql(conn,
 
 mySchemas = c(db_schema1, db_schema2, db_schema3)
 
-result_event_ids  = c(904, 604, 404) # 904 is drugEra, 604 is procedure, 404 is condition
+result_event_ids  = c(904, 604, 404, 704, 504) # 904 is drugEra (ingredient), 604 is procedure, 404 is condition, 704 = drugExposure (dose), 504 = mortality by condition
 
 pop_id = 116 # Always true for OMOP site
 
