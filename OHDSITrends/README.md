@@ -4,17 +4,6 @@ This package is using Achilles precomputed metadata to analyze trends. The inten
 This package is optimally designed to analyze trends in interesting medical events from datasets built under the OMOP Common Data Model. 
 
 
-There are two ways to use this package: Fully automatic Mode and varying levels of Manual Mode. Fully automatic mode is currently limited to OMOP datasets. Fully automatic Mode will give the best results, but is currently limited to OMOP datasets. This mode requires limited input from the user and will do a full analysis of all the data you ask of it. This process is described below.
-
-If you do not use an OMOP dataset, you must use the Manual Mode described at the end of this document. It is quite a bit more complicated. 
-
-## Package Contents
-1. All the functions to execute this package in for OMOP datasts; 
-2. Knowledge base for grouping OMOP drugEra events by type of drug class.
-
-## Not included by necessary
-CONCEPT file that allows the program to understand what types of medical events it is analyzing. 
-
 ## Dependencies and R Version
 This package was built using R 3.4.1 and dplyr version 0.7.2.
 
@@ -28,9 +17,7 @@ Run this code to install:
 devtools::install_github('ohdsi/StudyProtocolSandbox/OHDSITrends')
 ```
 
-## How to run
-
-# Automatic Mode Steps
+## How to run (OMOP site)
 
 # Step 1 -- Setting up
 
@@ -142,6 +129,11 @@ To submit data, inspect the extrac folder, zip the content and send by email (en
 
 # Using the package with non-OMOP data
 
+To use the package on non-OMOP data it requires few more steps. (using  varying levels of Manual Mode for the package).  This mode requires limited input from the user and will do a full analysis of all the data you ask of it. This process is described below.
+
+If you do not use an OMOP dataset, you must use the Manual Mode described at the end of this document. It is quite a bit more complicated. 
+
+
 Specify OMOP = FALSE when calling the 
 
 To create compliant input data for the package, you need to provide data in .csv format and your vocabulary
@@ -252,5 +244,13 @@ You may also want to remove the call to the "make_and_save_kb" function if your 
 
 ```
 
+
+# Extra notes
+## Package Contents
+1. All the functions to execute this package in for OMOP datasts; 
+2. Knowledge base for grouping OMOP drugEra events by type of drug class.
+
+## Not included by necessary
+CONCEPT file that allows the program to understand what types of medical events it is analyzing. 
 
 
