@@ -11,12 +11,6 @@ Additionally, the following packages must be installed, but not loaded with the 
 plyr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, and DatabaseConnector; DatabaseConnector depends on SQLReadr and RJava.
 
 
-# Installation
-Run this code to install:
-```r
-
-```
-
 
 # Step 1 -- Setting up
 
