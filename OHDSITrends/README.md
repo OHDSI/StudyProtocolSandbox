@@ -122,7 +122,15 @@ OHDSITrends(connectionDetails = myConnDetails,
 
 
 The function creates output in two subfolders inside the user folder defined by the user. Result subfolder includes detailed output for local user to inspect (not to be shared). A much smaller subset of data (in the second folder (named export) is for doing a trend component of the Data Quality study (to be shared with the study PI).
-To submit data, inspect the extrac folder, zip the content and send by email (encrypted) to the study coordinator. You may also use the S3 bucket OHDSI mechanism. Email the study PI for the key and secret to submit data for this mechanism.
+
+## Step 3: Inspect output data
+
+The package creates useful PDF files that highligh detected trends in drug ingredients, diagnoses, procedures, etc.
+See the result folder for PDF output. Readme file in the results folder also provides more details.
+
+## Step 4: Submit data
+
+To submit data, inspect the extract folder (file names are identical to results folder), zip the content and send by email (encrypted) to the study coordinator. You may also use the S3 bucket OHDSI mechanism. Email the study PI for the key and secret to submit data for this mechanism.
 
 
 # Using the package with non-OMOP data
@@ -132,123 +140,8 @@ To use the package on non-OMOP data it requires few more steps. (using  varying 
 If you do not use an OMOP dataset, you must use the Manual Mode described at the end of this document. It is quite a bit more complicated. 
 
 
-Specify OMOP = FALSE when calling the 
+Specify OMOP = FALSE when calling the main function.
+Email the author for more instructions for non-OMOP sites.
 
-To create compliant input data for the package, you need to provide data in .csv format and your vocabulary
-
-This function, which requires minimal user input, will:
-
-1. Extract data from database and store it in a 'Extracted Data' folder. This package is designed to work 
-with data for annual trends and annual time-points. If your data is not structured this way, problems may arise. 
-
-2. Process the extracted data locally
-
-3. Analyze the data, and store the outputs in a 'Results' folder. Summary 1 pager .tsv files are created. There is also a '.csv' file containing the trend analysis results for all the medical events associated with a particular analysis_id as well.
-
-4. Create an 'export' folder that will contain 1-pager files identical files to the 'Results' folder in both a human"readable" file format and one that is more easily read by a computer to faciliate centralized processing. In addition, graphss containing .pdfs for some items are also created. 
-
-Because this folder is designed for sharing, ALL identifiable database schema information will be anonymized. The code generates a random three letter sequence for each database you run this program on. 
-
-All these actions take place within a (preferably empty) user-created folder. This is the easiest (and best) way to use this package.
-
-To use this function execute the following:
-
-Once you've run the OHDSITrends function, you don't need to do anything else. The package run smoothly. When the program is done, check your user_folder, there should be some interesting files in the /Results and /export folder. 
-
-If you're statisfied with the results in the /export folder, please zip (.zip) the folder and email it to the study curators for centralized processing. 
-
-Quick note: If you look in the results folder, you will see your originial database schema is in the file names. This is to help you understand your outputs and distinguish what is what. In the export folder, your database_schemas are anonymized. Each schema is given three random letters, which represent your site, followed by a number. The number indicates whether this was the first, second, third, etc. schema you entered. Nothing in the export folder will contain your original schemas. Only the results folder will contain this information.
-
-## Manual Mode
-Can also be done manually. Execute the following code if you want to go that approach
-
-It is STRONGLY recommended you use the {\code getData2} function in this package to download data, as this package requires a particular (sensibly organized) system of filepaths and filenames. 
-
-Execute the following
-
-```r
-site_id <- sample(1:100, 1)
-
-dataExportFolder <- paste0(user_folder, 'Extracted Data/')
-resultsFolder <- paste0(user_folder, 'Results/')
-exportFolder <- paste0(user_folder, 'export/')
-kbFolder <- paste0(user_folder, 'kb/')
-print(resultsDatabaseSchema)
-
-
-for(dr in c(user_folder, dataExportFolder, resultsFolder, exportFolder))
-    if(!dir.exists(dr)) dir.create(dr)
-medical_event_ids <- c(result_event_ids, pop_id)
-getData2(connectionDetails,resultsDatabaseSchema, dataExportFolder, medical_event_ids)
-
-analyze_all(site_id, all_ids = result_event_ids, pop_id = pop_id, resultsDatabaseSchema, dataExportFolder,
-              resultsFolder, exportFolder, kbFolder, write_full_cids = T, OMOP = T, concept_file)
-```
-
-If you don't want to use the getData function, or want to analyze just one item from .csv files, then execute these lines:
-
-```r
-OHDSITrends2(pop_file_path, event_file_path, concept_file = NULL, analysis_id, db_schema,  user_folder, OMOP = F)
-```
-
-If you want to do your own analysis from the raw data, then use thse commands to get started:
-```r
-pop <- readr::read_csv(pop_file_path)
-event <- readr::read_csv(event_file_path)
-
-# eventM2 is raw data
-eventM2 <- step_2(event, pop, analysis_id, OMOP, concept_file) 
-eventM2 %<>% dplyr::mutate(pt_count = ifelse(is.na(pt_count), 0, pt_count),
-                             population_count = ifelse(is.na(population_count), 0, population_count))
-
-
-# full_cids is classified trends
-l <- lin_filter2(eventM2, alpha = 0.1, m = 2/2000)
-full_cids <- l$good
-```
-
-# Assumptions
-
-## concept IDs
-concept.csv file in inputDataFolder has 2 columns, id and name
-id is string  (at most institutions it would be integer)
-but event ids such as 'ICD9CM:250.00' , 'RxNorm:13513', or 'ATC5:A01BB71', 'asthmaNOS'
-
-
-## Additional (or different) knowledge base groupings. 
-By default, the program will use the knowledge-bases included in the package's /inst folder. This included knowledge base is ONLY good for OMOP datasets.
-
-To use your own knowledge base, it must be set up with concept_id, concept_name, ancestor_concept_id, and ancestor_concept_name. If not, errors will result. Verify and re-run. 
-
-
-Currently, the main OHDSITrends wrapper function does not easily allow one to update or change the knowledge base that is used to group medical events by a hierarchy. To use your own knowledge base, MODIFY the exportResults function so that it uses the knowledge base you want. You may also need to edit the analysis_ids that are included in that if statement so that your code will run properly. 
-
-You may also want to remove the call to the "make_and_save_kb" function if your knowledge base is set up properly. This function is useful if your knowledge base is quite bare-bones (this function is called in the base code below, becuase the knowledge base we provide with the package has been stripped of all human-interpretable information, and must be re-constituted on site to work properly. It is unlikely your own knowledge base will be set-up that way.)
-
-```r
-
- # Group By
-  if(event_type %in% c(904, 604))
-  {
-    if(event_type == 904)
-    {
-      # Edit this line to change the knowledge base
-      kb3_path <- paste0('inst/kb-drug_era3.csv')
-      kb2.csv <- make_and_save_kb(kb3_path, concept, kbFolder)
-      dg <- OHDSI_shiny_dg(kb2.csv, eventM2, event_type)
-      analyze_grouped_events(full_cids, eventM2, dg, kb2.csv, event_type, db_schema, dest_path)
-    }
-  }
-
-```
-
-
-# Extra notes
-## Package Contents
-1. All the functions to execute this package in for OMOP datasts; 
-2. Knowledge base for grouping OMOP drugEra events by type of drug class.
-
-## Not included by necessary
-CONCEPT file that allows the program to understand what types of medical events it is analyzing. 
 
 
