@@ -79,7 +79,7 @@ Putting it all together, your code should look  like this:
 
 ```r
 options(java.parameters = "-Xmx8000m")
-
+devtools::install_github('ohdsi/StudyProtocolSandbox/OHDSITrends',args="--no-multiarch")
 library(OHDSITrends)
 library(DatabaseConnector)
 #have your connection details ready 
