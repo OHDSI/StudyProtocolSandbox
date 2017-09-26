@@ -52,7 +52,7 @@ If you have the concept file on your database, then run these lines:
  Read Athena CONCEPT.csv file
  
  ```r
- concept_file <- file_path_to_Athena_CONCEPT.csv
+ concept <- readr::read_csv('CONCEPT.csv')
  ```
  
 You can pass in either the concept R data.frame() object OR the filepath to a CONCEPT.csv file. The function will work with both approaches.
@@ -115,7 +115,7 @@ OHDSITrends(connectionDetails = myConnDetails,
    result_event_ids,
    user_folder,
    OMOP=TRUE,
-   concept_file, 
+   concept, 
    dates)
 ```
 * The program may take a while to run. Conservatively estimate about 20 minutes to process each analysis_id in each database_schma you pass to the program. It may be slower or faster, depending on the size of the data being analyzed.
