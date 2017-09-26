@@ -1,4 +1,4 @@
-Package to analyze trends in medical events at a health-system-wide or national level. 
+This package is using Achilles precomputed metadata to analyze trends. The intent is to do data quality inspection. It is an extenstion of the Data Quality study.  The package can  analyze trends in medical events at a health-system-wide or national level. It also works for non-OMOP sites. 
 
 ## Purpose
 This package is optimally designed to analyze trends in interesting medical events from datasets built under the OMOP Common Data Model. 
@@ -87,9 +87,8 @@ You will also need to identify the database schema from which to pull the result
 404 = conditions per decile per calendar year
 704 = drugExposure or drug product per decile per calendar year
 
-In addition, you will need to specify the pop_id  = 116, becuase this is the population id for OMOP sites.
 
-In addition, it is helpful to specify a date range for which you expect most of your data to be complete. For example a database may begin collecting information from 1985, but the data for 2017 is only for half (or part) of the year. In this instance, you'd want to select a date range from 1985-2016, so that the incomplete annual data in 2017 does not bias trends.
+In addition, it is required  to specify a date range for which you expect most of your data to be complete. For example a database may begin collecting information from 1985, but the data for 2017 is only for half (or part) of the year. In this instance, you'd want to select a date range from 1985-2016, so that the incomplete annual data in 2017 does not bias trends.
 
 Specify the path to an folder where you want all the result to go. Put a '/' at the end of this filepath.
 
@@ -118,15 +117,12 @@ concept <- DatabaseConnector::querySql(conn,
 
 mySchemas = c(db_schema1, db_schema2, db_schema3)
 
-result_event_ids  = c(904, 604, 404, 704) # 904 is drugEra (ingredient), 604 is procedure, 404 is condition, 704 = drugExposure (dose)
-
-pop_id = 116 # Always true for OMOP site
+result_event_ids  = c(904, 604, 404, 704) # 904 is drugEra (ingredient), 604 is procedure, 404 is condition, 704 = drugExposure
 
 dates = 1985:2016 # Appropriate for the example above
 
-user_folder = paste0('myFilePath', '/') # Path to an empty folder to put all the exciting results with a '/')
+user_folder = paste0('c:/myfolder/Trends', '/') # Path to an empty folder to put all the exciting results with a '/')
 
-OMOP = T # I am an OMOP site. F if false
 ```
 Now, you are ready for step_2.
 
@@ -135,11 +131,20 @@ Now, you are ready for step_2.
 The best way to do this step is using the function wrapper OHDSITrends, by running this command:
 
 ```r
-OHDSITrends(connectionDetails = myConnDetails, resultsDatabaseSchema = mySchemas, result_event_ids, user_folder, OMOP, concept_file, dates)
+OHDSITrends(connectionDetails = myConnDetails, resultsDatabaseSchema = mySchemas, result_event_ids, user_folder, OMOP=TRUE, concept_file, dates)
 ```
 * The program may take a while to run. Conservatively estimate about 20 minutes to process each analysis_id in each database_schma you pass to the program. It may be slower or faster, depending on the size of the data being analyzed.
 
-** if you are an OMOP site, there is nothing else for you to do. When the program is done, zip the export folder (if it isn't already) and email to the study coordinators.
+
+The function creates input in two folders. Result folder includes detailed output for local user to inspect. A much smaller subset of data (in the second folder (named export) is for doing a trend component of the Data Quality study (to be shared with the study PI).
+To submit data, inspect the extrac folder, zip the content and send by email (encrypted) to the study coordinator. You may also use the S3 bucket OHDSI mechanism. Email the study PI for the key and secret to submit data for this mechanism.
+
+
+# Using the package with non-OMOP data
+
+Specify OMOP = FALSE when calling the 
+
+To create compliant input data for the package, you need to provide data in .csv format and your vocabulary
 
 This function, which requires minimal user input, will:
 
