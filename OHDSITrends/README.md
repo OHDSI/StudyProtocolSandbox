@@ -79,7 +79,6 @@ In addition, it is required  to specify a date range for which you expect most o
 
 Specify the path to an folder where you want all the result to go. Put a '/' at the end of this filepath.
 
-Indicate if your site uses OMOP or not setting an OMOP variable to T or F
 
 Putting it all together, your code should look  like this:
 
@@ -94,15 +93,19 @@ myConnDetails <- createConnectionDetails(dbms="postgresql"
                                      ,user='my_user_name', password = 'my_password'
                                              ,server='server/database')
 
+#create concept data.frame 
+#either by reading it from a file
+concept <- readr::read_csv('CONCEPT.csv')
 
-concept <- readr::read_csv(CONCEPT.csv)
+#of fetching it from your database
+ conn <-  conn<-DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
+ concept <- DatabaseConnector::querySql(conn,'select * from concept')
+ 
 
-conn <-  conn<-DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
-concept <- DatabaseConnector::querySql(conn,
-'select * from concept')
+#specify your results database (or databases if you want to analyze more than one
 
+mySchemas = c('your_results_schema_with_achilles_tables')
 
-mySchemas = c(db_schema1, db_schema2, db_schema3)
 
 result_event_ids  = c(904, 604, 404, 704) # 904 is drugEra (ingredient), 604 is procedure, 404 is condition, 704 = drugExposure
 
@@ -129,7 +132,7 @@ OHDSITrends(connectionDetails = myConnDetails,
 * The program may take a while to run. Conservatively estimate about 20 minutes to process each analysis_id in each database_schma you pass to the program. It may be slower or faster, depending on the size of the data being analyzed.
 
 
-The function creates input in two folders. Result folder includes detailed output for local user to inspect. A much smaller subset of data (in the second folder (named export) is for doing a trend component of the Data Quality study (to be shared with the study PI).
+The function creates output in two subfolders inside the user folder defined by the user. Result subfolder includes detailed output for local user to inspect (not to be shared). A much smaller subset of data (in the second folder (named export) is for doing a trend component of the Data Quality study (to be shared with the study PI).
 To submit data, inspect the extrac folder, zip the content and send by email (encrypted) to the study coordinator. You may also use the S3 bucket OHDSI mechanism. Email the study PI for the key and secret to submit data for this mechanism.
 
 
