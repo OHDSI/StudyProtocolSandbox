@@ -14,29 +14,25 @@ plyr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, and DatabaseConnector
 # Installation
 Run this code to install:
 ```r
-devtools::install_github('ohdsi/StudyProtocolSandbox/OHDSITrends')
+
 ```
 
-## How to run (OMOP site)
 
 # Step 1 -- Setting up
 
-The best way to get the data for this program to analyze is automatically, as the package will create a sensible and well-organized hierarchy of all your data files. In fact, the code will not work well unless your data is well orgnanized. SO
+The best way to get the data for this program to analyze is automatically, as the package will create a sensible and well-organized hierarchy of all your data files. In fact, the code will not work well unless your data is well orgnanized. 
 
 The steps below will help you set up your workstation to allow the package to automatically fetch all the data of interest from your server and save it in sensible folders with just one commmand in R. 
 
-To Begin:
-Open a fresh R session with no loaded packages (best is to open the .Rproj file included in this package in a fresh R session by double-clicking that file.)
-
 ```r
-options(java.parameters = "-Xmx8000m")
-```
 
-This command allocates allows R to collect a lot of data from your server without running into java.lang.OutOfMemoryErrors. It's imparative that you run this line BEFORE loading any packages. If you've loaded packages, restart R, or open a fresh R session.
+options(java.parameters = "-Xmx8000m") #avoids out of memory errors
 
-Next, load database connections, by running these lines.
+#This command allocates allows R to collect a lot of data from your server without running into java.lang.OutOfMemoryErrors. It's imparative that you run this line BEFORE loading any packages. If you've loaded packages, restart R, or open a fresh R session.
 
-```r
+#install the trends package
+devtools::install_github('ohdsi/StudyProtocolSandbox/OHDSITrends',args="--no-multiarch")
+
 library(OHDSITrends)
 library(DatabaseConnector)
 #have your connection details ready 
@@ -46,9 +42,8 @@ myConnDetails <- createConnectionDetails(dbms="postgresql"
                                              ,server='server/database')
 ```
 
-Alternatively, you can store your database connection details in a conn.R file, as recommended elsewhere. 
-
-Next, get your concept file, which is necessary for grouping medical evnets by ancestor-relationships. Two ways to get this file:
+At OMOP site, the package needs vocabulary data. At non-OMOP sites, this data must be provided by user somehow.
+At OMOP site, getting vocabulary data is easy. 
 
 Method 1: From your OMOP Database.
 If you have the concept file on your database, then run these lines:
@@ -93,7 +88,7 @@ myConnDetails <- createConnectionDetails(dbms="postgresql"
                                      ,user='my_user_name', password = 'my_password'
                                              ,server='server/database')
 
-#create concept data.frame 
+#create concept data.frame   (these steps are duplicate of the steps above)
 #either by reading it from a file
 concept <- readr::read_csv('CONCEPT.csv')
 
