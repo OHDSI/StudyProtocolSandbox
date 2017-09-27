@@ -1088,11 +1088,11 @@ step_4 <- function(full_cids, dest_path, event_type = 'unkown', db_schema)
   out_2.0 <- skim_rollup_2.0(xxx, box, num = 100) # overall most interesting
   out_1.0 <- skim_rollup_1.0(xxx, box, num = 50) #top rising, sinking
 
-  fname <- paste("Overall_interesting", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
-  readr::write_tsv(out_2.0, path = paste0(dest_path, fname))
+#  fname <- paste("Overall_interesting", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
+#  readr::write_tsv(out_2.0, path = paste0(dest_path, fname))
 
-  fname <- paste("Top_trending", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
-  readr::write_tsv(out_1.0, path = paste0(dest_path, fname))
+#  fname <- paste("Top_trending", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
+#  readr::write_tsv(out_1.0, path = paste0(dest_path, fname))
   l <- list(rollup1.0 = out_1.0, rollup2.0 = out_2.0)
   return(l)
 }
