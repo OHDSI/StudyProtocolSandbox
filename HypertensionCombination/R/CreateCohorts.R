@@ -735,7 +735,6 @@ ON coh.subject_id = per.person_id
   
   DatabaseConnector::executeSql(conn, renderedSql)
   
-  RJDBC::dbDisconnect(conn)
 }
 
 addCohortNames <- function(data, IdColumnName = "outcomeId", nameColumnName = "outcomeName") {
