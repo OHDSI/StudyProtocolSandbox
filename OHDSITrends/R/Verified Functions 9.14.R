@@ -1471,7 +1471,7 @@ step_3.2 <- function(eventM2, dataExportFolder, db)
   # write bad to .csv file in a sub-folder of the user-input dir
   bad <- lin_list$bad
 
-  badDir <- paste0(dataExportFolder, '/', 'Severe Data Problem/')
+  badDir <- paste0(dataExportFolder, '/', 'Data Problem/')
   if(!dir.exists(badDir)) dir.create(badDir)
 
   fpath <- paste0(badDir, db, '_bad_event_age_combinations.csv')
@@ -1600,9 +1600,9 @@ analyze_grouped_events <- function(full_cids, eventM2, dg, kb2.csv, analysis_id,
 
   print("done 2")
 
-  print("plotting group_by graphs")
-  pdf.name <- paste(analysis_id, db_schema, 'grouped_by_concept_ancestor.pdf', sep = '_')
-  pdf.path <- paste0(folder, pdf.name)
-
-  plot_group_pdf(plot_table1, dg, pdf.path)
+  # print("plotting group_by graphs")
+  # pdf.name <- paste(analysis_id, db_schema, 'grouped_by_concept_ancestor.pdf', sep = '_')
+  # pdf.path <- paste0(folder, pdf.name)
+  # 
+  # plot_group_pdf(plot_table1, dg, pdf.path)
 }

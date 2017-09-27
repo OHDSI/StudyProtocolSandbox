@@ -16,10 +16,18 @@ OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_id
   exportFolder <- paste0(user_folder, 'export/')
   kbFolder <- paste0(user_folder, 'kb/')
   print(resultsDatabaseSchema)
-  #make dirs
-
+ 
+   #make dirs
   for(dr in c(user_folder, dataExportFolder, resultsFolder, exportFolder, kbFolder))
     if(!dir.exists(dr)) dir.create(dr)
+  
+  # Write export and result readme files
+  file.copy(from = system.file("export.txt", package = "OHDSITrends"), 
+            to = system.file(exportFolder, 'export.txt'))
+  file.copy(from = system.file("Results.txt", package = "OHDSITrends"), 
+            to = system.file(resultsFolder, 'Results.txt'))
+  
+  # Business part
   medical_event_ids <- c(result_event_ids, pop_id)
   getData2(connectionDetails,resultsDatabaseSchema, dataExportFolder, medical_event_ids)
 

@@ -54,9 +54,9 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
   graph_df_1 <- subset_big_by_small_ids(eventM2, out_1)
   graph_df_2 <- subset_big_by_small_ids(eventM2, out_2)
 
-  print('plotting export')
-  plot_pdf(graph_df_1, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Overall_interesting_events.pdf", sep = '_')))
-  plot_pdf(graph_df_2, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Top_trending_events.pdf", sep = '_')))
+  # print('plotting export')
+  # plot_pdf(graph_df_1, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Overall_interesting_events.pdf", sep = '_')))
+  # plot_pdf(graph_df_2, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Top_trending_events.pdf", sep = '_')))
 
 
   # Group By
