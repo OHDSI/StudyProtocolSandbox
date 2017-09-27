@@ -12,11 +12,11 @@ plyr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, and DatabaseConnector
 
 
 
-# Step 1 -- Setting up
+# Step 1 -- Setting up and installing
 
 The best way to get the data for this program to analyze is automatically, as the package will create a sensible and well-organized hierarchy of all your data files. In fact, the code will not work well unless your data is well orgnanized. 
 
-The steps below will help you set up your workstation to allow the package to automatically fetch all the data of interest from your server and save it in sensible folders with just one commmand in R. 
+Start by executing these lines:
 
 ```r
 
@@ -40,7 +40,7 @@ At OMOP site, the package needs vocabulary data. At non-OMOP sites, this data mu
 At OMOP site, getting vocabulary data is easy. 
 
 Method 1: From your OMOP Database.
-If you have the concept file on your database, then run these lines:
+If you have the concept file on your database, then run these lines: (then skip to the next code chunk)
  ```r
  conn <-  conn<-DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
  concept <- DatabaseConnector::querySql(conn,
@@ -57,17 +57,9 @@ If you have the concept file on your database, then run these lines:
  
 You can pass in either the concept R data.frame() object OR the filepath to a CONCEPT.csv file. The function will work with both approaches.
 
-You will also need to identify the database schema from which to pull the results. This code will analyze the analysis_ids
-904 = drugEra or drug ingredient per decile per calendar year
-604 = procedures per decile per calendar year
-404 = conditions per decile per calendar year
-704 = drugExposure or drug product per decile per calendar year
-
-
 In addition, it is required  to specify a date range for which you expect most of your data to be complete. For example a database may begin collecting information from 1985, but the data for 2017 is only for half (or part) of the year. In this instance, you'd want to select a date range from 1985-2016, so that the incomplete annual data in 2017 does not bias trends.
 
-Specify the path to an folder where you want all the result to go. Put a '/' at the end of this filepath.
-
+Specify the path to an folder where you want all the result to go. Put a '/' at the end of this filepath. Note: The code will work better if the folder already exists.
 
 Putting it all together, your code should look  like this:
 
@@ -103,6 +95,12 @@ dates = 1985:2016 # Appropriate for the example above
 user_folder = paste0('c:/myfolder/Trends', '/') # Path to an empty folder to put all the exciting results with a '/')
 
 ```
+This code will analyze the analysis_ids.
+904 = drugEra or drug ingredient per decile per calendar year
+604 = procedures per decile per calendar year
+404 = conditions per decile per calendar year
+704 = drugExposure or drug product per decile per calendar year
+
 Now, you are ready for step_2.
 
 ## Step 2: Run the analysis
