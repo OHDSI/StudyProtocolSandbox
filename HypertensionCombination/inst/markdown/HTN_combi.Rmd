@@ -16,6 +16,9 @@ library(dplyr)
 library(knitr)
 library(forestplot)
 library(EmpiricalCalibration)
+library(reshape2)
+library(ggplot2)
+
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -257,6 +260,175 @@ FP_list_all=rbind(FP_list(neg_outcome_AC_vs_AD, name = "AC vs AD"),
                   )
 kable(FP_list_all)
 
+```
+
+#Baseline characteristics
+```{r Age group distribtuion prep, include=FALSE}
+multiplot <- function(..., plotlist=NULL, cols) {
+    require(grid)
+    
+    # Make a list from the ... arguments and plotlist
+    plots <- c(list(...), plotlist)
+    
+    numPlots = length(plots)
+    
+    # Make the panel
+    plotCols = cols                          # Number of columns of plots
+    plotRows = ceiling(numPlots/plotCols) # Number of rows needed, calculated from # of cols
+    
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(plotRows, plotCols)))
+    vplayout <- function(x, y)
+        viewport(layout.pos.row = x, layout.pos.col = y)
+    
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+        curRow = ceiling(i/plotCols)
+        curCol = (i-1) %% plotCols + 1
+        print(plots[[i]], vp = vplayout(curRow, curCol ))
+    }
+}
+cols<-c("cornflowerblue","coral1","chartreuse4")
+cols<-c("blue","coral1","chartreuse4")
+cols<-c("royalblue","coral1","black")
+```
+
+### Age group distribution - AC vs AD
+
+```{r Age group distribution AC(treat) vs AD(comparator), echo=FALSE}
+pop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t13180_c14180_o0.csv"))
+cohortName<-c("A+C","A+D")
+before<-pop[grep("[Aa]ge",pop$group),c("group","beforefractionTreated","beforefractionComparator")]
+before.m<-melt(before,id.vars='group')
+before.m$value<-before.m$value * (-100)
+
+after<-pop[grep("[Aa]ge",pop$group),c("group","afterfractionTreated","afterfractionComparator")]
+after.m<-melt(after,id.vars='group')
+after.m$value<-after.m$value * (100)
+
+plot.before<-ggplot(data=before.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("Before matching")+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(1,2)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+plot.after<-ggplot(data=after.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("After matching")+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(1,2)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+multiplot(plot.before, plot.after,cols=2)
+```
+
+### Age group distribution - CD vs AC
+
+```{r Age group distribution CD(treat) vs AC(comparator), echo=FALSE}
+pop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t34180_c13180_o0.csv"))
+cohortName<-c("C+D","A+C")
+
+before<-pop[grep("[Aa]ge",pop$group),c("group","beforefractionTreated","beforefractionComparator")]
+before.m<-melt(before,id.vars='group')
+before.m$value<-before.m$value * (-100)
+
+after<-pop[grep("[Aa]ge",pop$group),c("group","afterfractionTreated","afterfractionComparator")]
+after.m<-melt(after,id.vars='group')
+after.m$value<-after.m$value * (100)
+
+plot.before<-ggplot(data=before.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("Before matching")+
+    #scale_fill_grey()+
+    scale_fill_manual(labels = cohortName,values=cols[c(3,1)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+plot.after<-ggplot(data=after.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("After matching")+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(3,1)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+multiplot(plot.before, plot.after,cols=2)
+```
+
+### Age group distribution - CD vs AD
+
+```{r Age group distribution CD(treat) vs AD(comparator), echo=FALSE}
+pop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t34180_c14180_o0.csv"))
+cohortName<-c("C+D","A+D")
+
+before<-pop[grep("[0-9][0-9][0-9][0-9]",pop$group),c("group","beforefractionTreated","beforefractionComparator")]
+before.m<-melt(before,id.vars='group')
+before.m$value<-before.m$value * (-100)
+
+after<-pop[grep("[0-9][0-9][0-9][0-9]",pop$group),c("group","afterfractionTreated","afterfractionComparator")]
+after.m<-melt(after,id.vars='group')
+after.m$value<-after.m$value * (100)
+
+plot.before<-ggplot(data=before.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("Before matching")+
+    #scale_fill_grey()+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(3,2)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+plot.after<-ggplot(data=after.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("After matching")+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(3,2)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+multiplot(plot.before, plot.after,cols=2)
+```
+
+### Baseline characteristics comparison
+##Table
+### Age group distribution - AC vs AD
+
+```{r baseline characteristics- AC vs AD, echo=FALSE}
+baselinePop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t13180_c14180_o0.csv"))
+baselineCor<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopComor_a180_t13180_c14180_o0.csv"))
+base<-rbind(baselinePop,baselineCor)
+kable(base)
+```
+### Age group distribution - CD vs AC
+```{r baseline characteristics- CD vs AC, echo=FALSE}
+baselinePop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t34180_c13180_o0.csv"))
+baselineCor<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopComor_a180_t34180_c13180_o0.csv"))
+base<-rbind(baselinePop,baselineCor)
+kable(base)
+```
+
+### Age group distribution - CD vs AD
+```{r baseline characteristics- CD vs AD, echo=FALSE}
+baselinePop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t34180_c13180_o0.csv"))
+baselineCor<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopComor_a180_t34180_c13180_o0.csv"))
+base<-rbind(baselinePop,baselineCor)
+kable(base)
 ```
 
 #Results: Primary endpoint(All-cause mortality)
