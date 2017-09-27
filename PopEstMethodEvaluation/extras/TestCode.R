@@ -20,22 +20,39 @@ library(PopEstMethodEvaluation)
 options('fftempdir' = 'r:/fftemp')
 options(java.parameters = "-Xmx8000m")
 
-workFolder <- "r:/PopEstMethodEvaluation"
-maxCores <- 32
 
 pw <- NULL
 dbms <- "pdw"
 user <- NULL
 server <- "JRDUSAPSCTL01"
-cdmDatabaseSchema <- "CDM_Truven_MDCD_V569.dbo"
+cdmDatabaseSchema <- "CDM_Truven_MDCD_V610.dbo"
 databaseName <- "MDCD"
 oracleTempSchema <- NULL
 outcomeDatabaseSchema <- "scratch.dbo"
-outcomeTable <- "mschuemi_ohdsi_hois"
+outcomeTable <- "mschuemi_ohdsi_hois2"
 nestingCohortDatabaseSchema <- "scratch.dbo"
 nestingCohortTable <- "mschuemi_ohdsi_nesting"
 port <- 17001
 cdmVersion <- "5"
+workFolder <- "r:/PopEstMethodEvaluation"
+maxCores <- 32
+
+
+pw <- NULL
+dbms <- "pdw"
+user <- NULL
+server <- "JRDUSAPSCTL01"
+cdmDatabaseSchema <- "CDM_Truven_CCAE_V608.dbo"
+databaseName <- "CCAE"
+oracleTempSchema <- NULL
+outcomeDatabaseSchema <- "scratch.dbo"
+outcomeTable <- "mschuemi_ohdsi_hois_ccae"
+nestingCohortDatabaseSchema <- "scratch.dbo"
+nestingCohortTable <- "mschuemi_ohdsi_nesting_ccae"
+port <- 17001
+cdmVersion <- "5"
+workFolder <- "r:/PopEstMethodEvaluation_ccae"
+maxCores <- 32
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,

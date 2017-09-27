@@ -208,6 +208,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     sccsEstimates <- merge(fullGrid, sccsEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
     sccsEstimates$method <- "SCCS"
     sccsEstimates$cer <- FALSE
+    sccsEstimates$nesting <- FALSE
     estimates <- rbind(estimates, sccsEstimates)
 
     # CohortMethod #
@@ -231,6 +232,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     cmEstimates <- merge(fullGrid, cmEstimates[, c("targetId", "comparatorId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
     cmEstimates$method <- "Cohort method"
     cmEstimates$cer <- TRUE
+    cmEstimates$nesting <- FALSE
     estimates <- rbind(estimates, cmEstimates)
 
 
@@ -239,7 +241,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     sccAnalysisList <- SelfControlledCohort::loadSccAnalysisList(sccAnalysisListFile)
     analysisId <- unlist(OhdsiRTools::selectFromList(sccAnalysisList, "analysisId"))
     description <- unlist(OhdsiRTools::selectFromList(sccAnalysisList, "description"))
-    json <- sapply(sccsAnalysisList, toJson)
+    json <- sapply(sccAnalysisList, toJson)
     analysisRef <- rbind(analysisRef, data.frame(method = "Self-controlled cohort",
                                                  analysisId = analysisId,
                                                  description = description,
@@ -258,6 +260,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     sccEstimates <- merge(fullGrid, sccEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
     sccEstimates$method <- "Self-controlled cohort"
     sccEstimates$cer <- FALSE
+    sccEstimates$nesting <- FALSE
     estimates <- rbind(estimates, sccEstimates)
 
 
@@ -284,6 +287,8 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     ccEstimates <- merge(fullGrid, ccEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
     ccEstimates$method <- "Case-control"
     ccEstimates$cer <- FALSE
+    ccEstimates$nesting <- FALSE
+    ccEstimates$nesting[ccEstimates$analysisId %in% c(3, 4)] <- TRUE
     estimates <- rbind(estimates, ccEstimates)
 
 
@@ -309,6 +314,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     ccrEstimates <- merge(fullGrid, ccrEstimates[, c("targetId", "outcomeId", "analysisId", "logRr", "seLogRr", "ci95lb", "ci95ub")], all.x = TRUE)
     ccrEstimates$method <- "Case-crossover"
     ccrEstimates$cer <- FALSE
+    ccrEstimates$nesting <- FALSE
     estimates <- rbind(estimates, ccrEstimates)
 
     estimates$db <- databaseName
