@@ -1,7 +1,6 @@
 negative_control_result <- function(connectionDetails, cdmDatabaseSchema, outputFolder) {
     exportFolder <- file.path(outputFolder, "export")
     cmOutputFolder <- file.path(outputFolder, "cmOutput")
-    MainresultFolder<-file.path(exportFolder, "Mainresult")
     
     if (!file.exists(exportFolder))
         dir.create(exportFolder)
