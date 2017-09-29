@@ -7,22 +7,76 @@
 #' Either can work, just makes a computer reading-in the file_name a bit harder.
 #' @export
 
-
-
-
-exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, event_type, dest_path)
+exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, event_type,
+                          kbFolder,dest_path, Share_Data = F, concept)
 {
   # Print Rollups - these are laid out easy for human, not computer to read.
   full_cids$db_schema = db_schema
 
-  fname <- paste("Overall_interesting", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
-  readr::write_tsv(rollup2.0, path = paste0(dest_path, fname))
-
-  fname <- paste("Top_trending", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
-  readr::write_tsv(rollup1.0, path = paste0(dest_path, fname))
+  # fname <- paste("Overall_interesting", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
+  # readr::write_tsv(rollup2.0, path = paste0(dest_path, fname))
+  #
+  # fname <- paste("Top_trending", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
+  # readr::write_tsv(rollup1.0, path = paste0(dest_path, fname))
 
   #----------------------------------------------------------------------------------------------
 
+  if(Share_Data)
+  {
+    fname <- paste(event_type, db_schema, 'eventM2.csv', sep = '_')
+    readr::write_csv(eventM2, paste0(dest_path,fname))
+  }
+
+  fname <- paste(event_type, db_schema, "full_cids.csv", sep = '_')
+  readr::write_csv(full_cids, paste0(dest_path, fname))
+
+
+  # Print analysis_friendly files (same information as rollup, but comes from full_cids)
+  fname <- paste(event_type, db_schema, "Overall_interesting_events.csv", sep = '_')
+  out_1 <- subset_big_by_small_ids(full_cids, rollup1.0)
+  readr::write_csv(out_1, path = paste0(dest_path, fname))
+
+  fname <- paste(event_type, db_schema, "Overall_interesting_data.csv")
+  out_1.d <- subset_big_by_small_ids(eventM2, rollup1.0)
+  out_1.d %<>% dplyr::select(-c(pt_count, population_count))
+  readr::write_csv(out_1.d, path = paste0(dest_path, fname))
+
+  fname <- paste(event_type, db_schema, "Top_trending_events.csv", sep = '_')
+  out_2 <- subset_big_by_small_ids(full_cids, rollup2.0)
+  readr::write_csv(out_2, path = paste0(dest_path, fname))
+
+  fname <- paste(event_type, db_schema, "Overall_interesting_data.csv")
+  out_2.d <- subset_big_by_small_ids(eventM2, rollup2.0)
+  out_2.d %<>% dplyr::select(-c(pt_count, population_count))
+  readr::write_csv(out_2.d, path = paste0(dest_path, fname))
+
+  # Print graphs using out_1, out_2, and eventM2 (use these dfs to make pdf graphs)
+  graph_df_1 <- subset_big_by_small_ids(eventM2, out_1)
+  graph_df_2 <- subset_big_by_small_ids(eventM2, out_2)
+
+  # print('plotting export')
+  # plot_pdf(graph_df_1, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Overall_interesting_events.pdf", sep = '_')))
+  # plot_pdf(graph_df_2, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Top_trending_events.pdf", sep = '_')))
+
+
+  # Group By
+  if(event_type %in% c(904, 604))
+  {
+    if(event_type == 904)
+    {
+      # Edit this line; should just be /inst/kb-drug_era3.csv
+      kb3_path <- system.file("csv", "kb-drug_era3.csv", package = "OHDSITrends")
+      kb2.csv <- make_and_save_kb(kb3_path, concept, kbFolder)
+      dg <- OHDSI_shiny_dg(kb2.csv, eventM2, event_type)
+      analyze_grouped_events(full_cids, eventM2, dg, kb2.csv, event_type, db_schema, dest_path)
+    }
+  }
+
+}
+#' @description Print graphs of all the rollup items
+#' @export
+print_Rollup_Graphs <- function(event_type, db_schema, full_cids, rollup1.0, rollup2.0, dest_path, eventM2)
+{
   # Print analysis_friendly files (same information as rollup, but comes from full_cids)
   fname <- paste(event_type, db_schema, "Overall_interesting_events.csv", sep = '_')
   out_1 <- subset_big_by_small_ids(full_cids, rollup1.0)
@@ -39,9 +93,7 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
   print('plotting')
   plot_pdf(graph_df_1, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Overall_interesting_events.pdf", sep = '_')))
   plot_pdf(graph_df_2, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Top_trending_events.pdf", sep = '_')))
-
 }
-
 
 #' @param site_id This has to come from Super.Do; either we give the site_id to each site, OR it is randomly generated
 #' by Super.Do
@@ -83,10 +135,8 @@ subset_big_by_small_ids <- function(big, small)
     tta <- dplyr::filter(data, stratum_1 == cid)
     plot_group_by_decile_by_concept_id(name = concept_name %>% tolower() %>% capitalize(),
                                        tta,
-                                       sub = '',
+                                       sub = paste(cid, tta$concept_code[[1]], sep = " | "),
                                        y_lab = 'Prevalence per 1000')
-    if(i >= 5) break
-
   }
   dev.off()
 }

@@ -9,5 +9,5 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Imports: magrittr
+Imports: magrittr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, DatabaseConnector
 RoxygenNote: 6.0.1

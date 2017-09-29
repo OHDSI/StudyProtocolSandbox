@@ -1,3 +1,4 @@
+#' Decile classification
 #' @description uses exponential decay function with standard deviation of classification score
 #' to evalute consistency. If consistency is < 36, then there are at least a few deciles that have a trend
 #' strongly counter to the general trend of the medical event.
@@ -22,7 +23,6 @@ decile_classification2 <- function(x)
   }
 }
 
-#'
 #'  @description Qualitative consistency. This calculates the percent difference between
 #' the number of deciles that are rising and sinking. 100 means all deciles are rising or sinking.
 #' 0 means there as equal numbers of rising and sinking deciles.

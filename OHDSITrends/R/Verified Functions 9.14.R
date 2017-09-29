@@ -686,12 +686,12 @@ lmp <- function(modelobject)
 #' @note Internal function only
 #' @export
 # obj <- event
-makeMediumFrame <- function(obj = data.frame(), pop = data.frame(), concept = NULL)
+makeMediumFrame <- function(obj = data.frame(), pop = data.frame(), concept = NULL, dates)
 {
 
   colnames(obj) <- c("stratum_1", "concept_name",
                      "stratum_2", "gender", "decile",
-                     "stratum_5", "pt_cont")
+                     "stratum_5", "pt_count")
 
   colnames(pop) %<>% tolower()
 
@@ -699,7 +699,6 @@ makeMediumFrame <- function(obj = data.frame(), pop = data.frame(), concept = NU
 
 
   obj <- obj[-6] #drop stratum_5, bc. it is only 0s
-
 
 
   obj <- dplyr::left_join(obj, pop, by = c("stratum_2" = "stratum_1",
@@ -721,17 +720,16 @@ makeMediumFrame <- function(obj = data.frame(), pop = data.frame(), concept = NU
 
   #Trying to re-order columns; want same order as others
   obj2 %<>% dplyr::rename(population_count = count_value)
-  obj2 %<>% dplyr::rename(pt_count = pt_cont)
-  obj2 %<>% dplyr::select(stratum_1, concept_name, decile, stratum_2, gender, pt_count, population_count)
+  obj2 %<>% dplyr::select(stratum_1, concept_name, concept_code, decile, stratum_2, gender, pt_count, population_count)
 
 
   #Collapse by gender and get count_value
-  obj3 <- dplyr::group_by(obj2, stratum_1, concept_name, decile, stratum_2) %>%
+  obj3 <- dplyr::group_by(obj2, stratum_1, concept_name, concept_code, decile, stratum_2) %>%
     dplyr::summarise(pt_count = sum(pt_count), population_count = sum(population_count))
   obj3$count_value = obj3$pt_count/obj3$population_count * 1000 # Persons per thousand
 
   #Remove concept_id = 0 and year 2015
-  obj3 %<>% dplyr::filter(stratum_1 != 0, stratum_2 != 2015)
+  obj3 %<>% dplyr::filter(stratum_1 != 0, stratum_2 %in% dates)
 
   #Make deciles strings not integers
   decis <- obj3$decile %>% as.character() %>% as.factor()
@@ -806,7 +804,7 @@ get_event <- function(data_folder, event_type)
 #'
 #'
 
-step_2 <- function(event, pop, event_type=704, OMOP = FALSE, concept_file=NULL)
+step_2 <- function(event, pop, event_type=704, OMOP = FALSE, concept_file=NULL, dates)
 {
 
   #Replace this file path with the correct one, because the R package
@@ -815,10 +813,8 @@ step_2 <- function(event, pop, event_type=704, OMOP = FALSE, concept_file=NULL)
   {
     if(OMOP)
     {
-      print('loading Athena concept table')
-      concept <- OHDSIVocab::concept
-      colnames(concept) %<>% tolower()
-      eventM <- makeMediumFrame(event, pop, concept)
+      print('STOP!!! Download concept file')
+      break
     }
   }
   #set up event data to be analyzed
@@ -830,17 +826,17 @@ step_2 <- function(event, pop, event_type=704, OMOP = FALSE, concept_file=NULL)
       concept <- readr::read_csv(concept_file)
 
     colnames(concept) %<>% tolower()
-    eventM <- makeMediumFrame(event, pop, concept)
+    eventM <- makeMediumFrame(event, pop, concept, dates)
   }
 
   if(is.null(concept) | is.null(eventM))
-    eventM <- makeMediumFrame(event, pop, concept = NULL)
+    eventM <- makeMediumFrame(event, pop, concept = NULL, dates)
 
   eventM <- eventM %>%  dplyr::ungroup()
-  eventM2 <- impute_zeros_trends(eventM, items)
+  eventM2 <- impute_zeros_trends(eventM, dates = dates)
 
   eventM2$analysis_id = event_type
-  eventM2 %<>% dplyr::select(analysis_id, stratum_1, concept_name, stratum_2, decile, count_value, pt_count, population_count)
+  eventM2 %<>% dplyr::select(analysis_id, stratum_1, concept_name, concept_code, stratum_2, decile, count_value, pt_count, population_count)
   eventM2 %<>% dplyr::arrange(stratum_1)
 
   probs <- ifelse(is.na(eventM2$pt_count), yes = 1, no = 0)
@@ -849,24 +845,26 @@ step_2 <- function(event, pop, event_type=704, OMOP = FALSE, concept_file=NULL)
   return(eventM2)
 }
 
-#'
+#' @description  This function imputes zeros for missing data
+#' @export
 
-impute_zeros_trends <- function(eventM, items)
+impute_zeros_trends <- function(eventM, dates)
 {
   #Procees: 1) make data.frame of 0s that is size of output data.frame 2) left_join this array by stratum_1 = concept_id
   # Get the unique cids and concept_names
-  heads <- eventM %>% dplyr::select(stratum_1, concept_name) %>% unique()
+  heads <- eventM %>% dplyr::select(stratum_1, concept_name, concept_code) %>% unique()
   cids <- heads$stratum_1
   names <- heads$concept_name
+  codes <- heads$concept_code %>% as.character()
 
   # get deciles and dates
   decis <- dplyr::select(eventM, decile) %>% unique() %>% lapply(as.character)
-  dates <- 2003:2014
 
 
   # Makes zeros data.frame that is size of destination data.frame, where count_value = 0 everywhere
   zeros <- data.frame(stratum_1 = rep(cids, each = length(dates) * length(decis[[1]])),
                       concept_name = rep(names, each = length(dates) * length(decis[[1]])),
+                      concept_code = rep(codes, each = length(dates) * length(decis[[1]])),
                       stratum_2 = rep(dates, each = length(decis[[1]])))
   zeros$decile = decis[[1]]
   zeros$concept_name %<>% as.character()
@@ -890,6 +888,7 @@ impute_zeros_trends <- function(eventM, items)
 
   return(eventM2)
 }
+
 
 #' @note not used
 find_data_quality_problems <- function(eventM2)
@@ -1015,8 +1014,8 @@ skim_rollup <- function(events, rollup_folder)
     file = paste(event, "full_events", "rollup_1.2", sep = "_") %>% paste0(".tsv")
     print(file)
     data <- readr::read_tsv(paste0(rollup_folder, file))
-    top <- data %>% dplyr::arrange(dplyr::desc(very_strongly_rising)) %>% dplyr::slice(1:25)
-    bottom <- data %>% dplyr::arrange(dplyr::desc(very_strongly_sinking)) %>% dplyr::slice(1:25)
+    top <- data %>% dplyr::arrange(dplyr::desc(very_strongly_rising)) %>% dplyr::slice(1:50)
+    bottom <- data %>% dplyr::arrange(dplyr::desc(very_strongly_sinking)) %>% dplyr::slice(1:50)
     out_file = paste("interesting", event, "events", sep = "_") %>% paste0(".tsv")
     readr::write_tsv(x = rbind(top, bottom), path = paste0(rollup_folder, out_file))
 
@@ -1086,14 +1085,14 @@ step_4 <- function(full_cids, dest_path, event_type = 'unkown', db_schema)
 
   xxx <- full_cids %>% summarise_full_cids()
   box <- xxx %>% rollup_2.0()
-  out_2.0 <- skim_rollup_2.0(xxx, box) # overall most interesting
-  out_1.0 <- skim_rollup_1.0(xxx, box) #top rising, sinking
+  out_2.0 <- skim_rollup_2.0(xxx, box, num = 100) # overall most interesting
+  out_1.0 <- skim_rollup_1.0(xxx, box, num = 50) #top rising, sinking
 
-  fname <- paste("Overall_interesting", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
-  readr::write_tsv(out_2.0, path = paste0(dest_path, fname))
+#  fname <- paste("Overall_interesting", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
+#  readr::write_tsv(out_2.0, path = paste0(dest_path, fname))
 
-  fname <- paste("Top_trending", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
-  readr::write_tsv(out_1.0, path = paste0(dest_path, fname))
+#  fname <- paste("Top_trending", db_schema, event_type, "events", sep = '_') %>% paste0('.tsv')
+#  readr::write_tsv(out_1.0, path = paste0(dest_path, fname))
   l <- list(rollup1.0 = out_1.0, rollup2.0 = out_2.0)
   return(l)
 }
@@ -1257,10 +1256,9 @@ OHDSI_shiny_dg <- function(kb.csv, eventM2, analysis_id)
 {
   # Read kb
   kb <- readr::read_csv(kb.csv)
+  kb$CONCEPT_CODE %<>% as.character()
 
   colnames(kb) %<>% tolower()
-  print(colnames(kb))
-  print(head(kb))
   print("Is knowledge base set up with concept_id, concept_name, ancestor_concept_id, and ancestor_concept_name?")
   print("If not, errors will result. Verify and re-run")
 
@@ -1281,8 +1279,7 @@ OHDSI_shiny_dg <- function(kb.csv, eventM2, analysis_id)
   kb %<>% dplyr::filter(stratum_1 %in% mycids)
 
   eventKB <- dplyr::left_join(eventM2, dplyr::select(kb, stratum_1, ancestor_concept_id, ancestor_concept_name,
-                                                     concept_class_id, concept_code))
-
+                                                     concept_class_id ))
   # Get rid of all unmatched events
   dg <-  eventKB %>% dplyr::filter(!is.na(ancestor_concept_id))
 
@@ -1307,15 +1304,15 @@ OHDSI_shiny_dg <- function(kb.csv, eventM2, analysis_id)
 OHDSI_shiny_plot_score <- function(clf_gb, kb)
 {
   events_per_ancestor <- kb %>% dplyr::group_by(ancestor_concept_id, ancestor_concept_name,
-                                                concept_class_id, concept_code) %>%
+                                                concept_class_id) %>%
     dplyr::summarise(event_count = n())
 
   clf_gb %<>% dplyr::left_join(events_per_ancestor)
   clf_gb %<>% dplyr::filter(p.value < 0.05)
 
-  foo <- clf_gb %>% dplyr:::group_by(ancestor_concept_id, ancestor_concept_name, concept_class_id,
-                                     concept_code, event_count) %>%
-    dplyr::summarise(plot_sum = sum(abs(slope)*score2))
+  foo <- clf_gb %>% dplyr::group_by(ancestor_concept_id, ancestor_concept_name, concept_class_id,
+                                     event_count) %>%
+    dplyr::summarise(plot_sum = sum(abs(slope)*abs(score)))
 
   foo$plot_score = foo$plot_sum/foo$event_count
 
@@ -1338,7 +1335,7 @@ OHDSI_shiny_plot_1 <- function(dg, acid)
 
   aname <- tdg$ancestor_concept_name[[1]] %<>% substr(1, 60)
   acode <- tdg$concept_code[[1]]
-  gname <- paste(aname, acode, sep = '_')
+  gname <- paste(acode, aname, sep = '_')
 
   # output plot 1
   return(plot_group_by_decile_by_concept_id(gname, tdg,
@@ -1360,7 +1357,7 @@ OHDSI_shiny_plot_2 <- function(dg, acid)
 
   aname <- tdg$ancestor_concept_name[[1]] %<>% substr(1, 60)
   acode <- tdg$concept_code[[1]]
-  gname <- paste(aname, acode, sep = '_')
+  gname <- paste(acode, aname, sep = '_')
 
   if(tdg$stratum_1 %>% unique() %>% length() > 15)
   {
@@ -1393,7 +1390,16 @@ OHDSI_shiny_plot_2 <- function(dg, acid)
 
 lin_filter2 <- function(eventM2, alpha = 0.1, m = 2/2000)
 {
-  xxx <- eventM2 %>% dplyr::group_by(stratum_1, concept_name, decile) %>% #dplyr::summarise(sum(count_value))
+  flt <- eventM2 %>% dplyr::group_by(stratum_1, concept_name, concept_code, decile) %>% dplyr::summarise(max = max(count_value)) %>%
+    dplyr::filter(max != 0)
+
+  x <- quantile(flt$max)[[2]] # Take top 75% of items
+
+  flt %<>% dplyr::filter(max >= x)
+
+  mycids <- flt$stratum_1 %>% unique()
+  xxx <- eventM2 %>% dplyr::filter(stratum_1 %in% mycids) %>%
+    dplyr::group_by(stratum_1, concept_name, concept_code, decile) %>% #dplyr::summarise(max(count_value)) %>%
     dplyr::summarise(slope = as.double(lm(count_value~stratum_2)$coefficients[2]),
                      p.value = as.double(lmp(lm(count_value~stratum_2))))
 
@@ -1411,7 +1417,7 @@ lin_filter2 <- function(eventM2, alpha = 0.1, m = 2/2000)
   xxx %<>% dplyr::ungroup()
 
   # 3. Have slope and p.value for everything cleanly. Want p.vale <= alpha to have classification = 0
-  xxx2 <- xxx %>% dplyr::group_by(stratum_1, concept_name, decile, p.value, slope) %>%
+  xxx2 <- xxx %>% dplyr::group_by(stratum_1, concept_name, concept_code, decile, p.value, slope) %>%
     dplyr::summarise(score = ifelse(p.value >= alpha, yes = 0, no = 999),
                      classification = ifelse(p.value >= alpha, yes = 'No trend', no = 'Ambiguous trend'))
 
@@ -1452,6 +1458,7 @@ lin_filter2 <- function(eventM2, alpha = 0.1, m = 2/2000)
   return(lin_list)
 }
 
+
 #' @description This funciton creates a "sever data quality problem" folder and write .csv with
 # stratum_1, concept_name, deciles for the events in bad. At end, zip this file.
 #' @param db will come from higher-level wrapper. The function that calls step_3 will ask for resultsDatabaseSchema;
@@ -1464,7 +1471,7 @@ step_3.2 <- function(eventM2, dataExportFolder, db)
   # write bad to .csv file in a sub-folder of the user-input dir
   bad <- lin_list$bad
 
-  badDir <- paste0(dataExportFolder, '/', 'Severe Data Problem/')
+  badDir <- paste0(dataExportFolder, '/', 'Data Problem/')
   if(!dir.exists(badDir)) dir.create(badDir)
 
   fpath <- paste0(badDir, db, '_bad_event_age_combinations.csv')
@@ -1512,11 +1519,11 @@ rollup_2.0 <- function(xxx)
 #' @param n Number of events to return
 #' @export
 
-skim_rollup_2.0 <- function(xxx, rollup, n=50)
+skim_rollup_2.0 <- function(xxx, rollup, num = 100)
 {
   # Now, I need to know how many deciles are in each score. This part is easy, becuase that information is in xxx$count
   rank <- xxx %>% dplyr::group_by(stratum_1, concept_name) %>% dplyr::summarize(rank = sum(count * abs(score))) %>%
-    dplyr::arrange(desc(rank)) %>% head(n)
+    dplyr::arrange(desc(rank)) %>% head(num)
 
   out <- dplyr::left_join(rank %>% dplyr::select(stratum_1, concept_name), rollup)
   return(out)
@@ -1529,16 +1536,73 @@ skim_rollup_2.0 <- function(xxx, rollup, n=50)
 #' @param n Number of events to return
 #' @export
 
-skim_rollup_1.0 <- function(xxx, rollup, n = 25)
+skim_rollup_1.0 <- function(xxx, rollup, num = 50)
 {
-  rising <- xxx %>% dplyr::select(stratum_1, concept_name, score, classification, count) %>%
-    dplyr::filter(score==3) %>% dplyr::arrange(dplyr::desc(count)) %>% head(n)
+  rank <- xxx %>% dplyr::group_by(stratum_1, concept_name) %>% dplyr::summarize(rank = sum(count * (score))) %>%
+    dplyr::arrange(desc(rank))
 
-  sinking <- xxx %>% dplyr::select(stratum_1, concept_name, score, classification, count) %>%
-    dplyr::filter(score==-3) %>% dplyr::arrange(dplyr::desc(count)) %>% head(n)
+  rising <- rank %>% head(num) %>% dplyr::select(stratum_1, concept_name) %>% dplyr::left_join(rollup)
+  sinking <- rank %>% tail(num) %>% dplyr::select(stratum_1, concept_name) %>% dplyr::left_join(rollup)
 
-  events <- rbind(rising, sinking) %>% dplyr::select(stratum_1, concept_name) %>% unique()
-
-  out <- dplyr::left_join(events, rollup)
+  out <- rbind(rising, sinking) #%>% dplyr::select(stratum_1, concept_name) %>% unique()
   return(out)
+
+  #out <- dplyr::left_join(events, rollup)
+}
+
+#' @name Plot_group_pdf Plots pdf file of group_by events (top 100)
+#' @param plot_table1 Top 100 events to plot
+#' @param dg Processed data joined to group_by knowledge base
+#' @export
+#' @param plot_table1
+#' @param dg
+plot_group_pdf <- function(plot_table1, dg, pdf.name)
+{
+  acids <- (plot_table1 %>% dplyr::arrange(desc(plot_score)) %>% dplyr::select(ancestor_concept_id) %>%
+              unique() %>% unlist() %>% as.integer())
+  pdf(pdf.name)
+  for(acid in acids)
+  {
+    OHDSI_shiny_plot_1(dg, acid)
+    OHDSI_shiny_plot_2(dg, acid)
+    tbl <- gridExtra::tableGrob(dg %>% dplyr::filter(ancestor_concept_id == acid) %>%
+                                  dplyr::select(ID = stratum_1, Name = concept_name) %>% unique())
+    gridExtra::grid.arrange(tbl)
+  }
+  dev.off()
+}
+
+#' @param dg
+#' @param kb2.csv
+#' @param analysis_id
+#' @param db_schema Both ananonymized and normal should work
+#' @param folder Where to put the outputs
+#' @export
+
+analyze_grouped_events <- function(full_cids, eventM2, dg, kb2.csv, analysis_id,
+                                   db_schema, folder)
+{
+  kb <- dg %>% dplyr::select(stratum_1, concept_name, ancestor_concept_id, ancestor_concept_name,
+                             concept_class_id, concept_code) %>% unique()
+
+  print("joining classification ----------")
+  clf_gb <- join_classification_to_kb(full_cids, kb, eventM2) # replace kb with input$kb.csv
+  print("done 1")
+
+  print("plot score -------------")
+  # print(head(kb))
+  # print(head(clf_gb))
+  plot_table1 <- OHDSI_shiny_plot_score(clf_gb, kb)
+
+  csv.name <- paste(analysis_id, db_schema, 'grouped_by_concept_ancestor.csv', sep = '_')
+  csv.path <- paste0(folder, csv.name)
+  readr::write_csv(plot_table1, csv.path)
+
+  print("done 2")
+
+  # print("plotting group_by graphs")
+  # pdf.name <- paste(analysis_id, db_schema, 'grouped_by_concept_ancestor.pdf', sep = '_')
+  # pdf.path <- paste0(folder, pdf.name)
+  # 
+  # plot_group_pdf(plot_table1, dg, pdf.path)
 }
