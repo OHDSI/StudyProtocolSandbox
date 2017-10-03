@@ -50,6 +50,16 @@ runCohortMethod <- function(connectionDetails,
         }
         cmAnalysisListFile <- system.file("settings", "cmAnalysisSettings.txt", package = "PopEstMethodEvaluation")
         cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
+        mailSettings <- list(from = Sys.getenv("mailAddress"),
+                             to = c(Sys.getenv("mailAddress")),
+                             smtp = list(host.name = "smtp.gmail.com", port = 465,
+                                         user.name = Sys.getenv("mailAddress"),
+                                         passwd = Sys.getenv("mailPassword"), ssl = TRUE),
+                             authenticate = TRUE,
+                             send = TRUE)
+
+        result <- OhdsiRTools::runAndNotify({
+
         cmResult <- CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
                                                 cdmDatabaseSchema = cdmDatabaseSchema,
                                                 oracleTempSchema = oracleTempSchema,
@@ -69,6 +79,7 @@ runCohortMethod <- function(connectionDetails,
                                                 fitOutcomeModelThreads = min(max(1, floor(maxCores/4)), 4),
                                                 outcomeCvThreads = min(4, maxCores),
                                                 refitPsForEveryOutcome = FALSE)
+        }, mailSettings = mailSettings, label = "wprdusmjtglay")
         cmSummary <- CohortMethod::summarizeAnalyses(cmResult)
         saveRDS(cmSummary, cmSummaryFile)
     }
@@ -78,39 +89,7 @@ runCohortMethod <- function(connectionDetails,
 
 #' @export
 createCohortMethodSettings <- function(fileName) {
-    covariateSettings <- FeatureExtraction::createCovariateSettings(useDemographicsGender = TRUE,
-                                                                    useDemographicsAge = TRUE,
-                                                                    useDemographicsIndexYear = TRUE,
-                                                                    useDemographicsIndexMonth = TRUE,
-                                                                    useConditionOccurrenceLongTerm = TRUE,
-                                                                    useConditionOccurrenceShortTerm = TRUE,
-                                                                    useConditionEraLongTerm = TRUE,
-                                                                    useConditionEraShortTerm = TRUE,
-                                                                    useConditionGroupEraLongTerm = TRUE,
-                                                                    useConditionGroupEraShortTerm = TRUE,
-                                                                    useDrugExposureLongTerm = TRUE,
-                                                                    useDrugExposureShortTerm = TRUE,
-                                                                    useDrugEraLongTerm = TRUE,
-                                                                    useDrugEraShortTerm = TRUE,
-                                                                    useDrugGroupEraLongTerm = TRUE,
-                                                                    useDrugGroupEraShortTerm = TRUE,
-                                                                    useProcedureOccurrenceLongTerm = TRUE,
-                                                                    useProcedureOccurrenceShortTerm = TRUE,
-                                                                    useDeviceExposureLongTerm = TRUE,
-                                                                    useDeviceExposureShortTerm = TRUE,
-                                                                    useMeasurementLongTerm = TRUE,
-                                                                    useMeasurementShortTerm = TRUE,
-                                                                    useObservationLongTerm = TRUE,
-                                                                    useObservationShortTerm = TRUE,
-                                                                    useCharlsonIndex = TRUE,
-                                                                    longTermDays = 365,
-                                                                    shortTermDays = 30,
-                                                                    windowEndDays = 0,
-                                                                    excludedCovariateConceptIds = c(),
-                                                                    addDescendantsToExclude = FALSE,
-                                                                    includedCovariateConceptIds = c(),
-                                                                    addDescendantsToInclude = FALSE,
-                                                                    includedCovariateIds = c())
+    covariateSettings <- FeatureExtraction::createDefaultCovariateSettings()
 
     getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(washoutPeriod = 365,
                                                                      firstExposureOnly = TRUE,

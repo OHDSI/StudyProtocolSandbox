@@ -47,24 +47,25 @@ runCaseControl <- function(connectionDetails,
         }
         ccAnalysisListFile <- system.file("settings", "ccAnalysisSettings.txt", package = "PopEstMethodEvaluation")
         ccAnalysisList <- CaseControl::loadCcAnalysisList(ccAnalysisListFile)
-        ccResult <- CaseControl::runCcAnalyses(connectionDetails = connectionDetails,
-                                               cdmDatabaseSchema = cdmDatabaseSchema,
-                                               oracleTempSchema = oracleTempSchema,
-                                               exposureTable = "drug_era",
-                                               outcomeDatabaseSchema = outcomeDatabaseSchema,
-                                               outcomeTable = outcomeTable,
-                                               nestingCohortDatabaseSchema = nestingCohortDatabaseSchema,
-                                               nestingCohortTable = nestingCohortTable,
-                                               ccAnalysisList = ccAnalysisList,
-                                               exposureOutcomeNestingCohortList = eonList,
-                                               outputFolder = ccFolder,
-                                               getDbCaseDataThreads = 1,
-                                               selectControlsThreads = min(3, maxCores),
-                                               getDbExposureDataThreads = min(3, maxCores),
-                                               createCaseControlDataThreads = min(5, maxCores),
-                                               fitCaseControlModelThreads = min(5, maxCores),
-                                               cvThreads = min(2,maxCores),
-                                               prefetchExposureData = TRUE)
+            ccResult <- CaseControl::runCcAnalyses(connectionDetails = connectionDetails,
+                                                   cdmDatabaseSchema = cdmDatabaseSchema,
+                                                   oracleTempSchema = oracleTempSchema,
+                                                   exposureTable = "drug_era",
+                                                   outcomeDatabaseSchema = outcomeDatabaseSchema,
+                                                   outcomeTable = outcomeTable,
+                                                   nestingCohortDatabaseSchema = nestingCohortDatabaseSchema,
+                                                   nestingCohortTable = nestingCohortTable,
+                                                   ccAnalysisList = ccAnalysisList,
+                                                   exposureOutcomeNestingCohortList = eonList,
+                                                   outputFolder = ccFolder,
+                                                   getDbCaseDataThreads = 1,
+                                                   selectControlsThreads = min(3, maxCores),
+                                                   getDbExposureDataThreads = min(3, maxCores),
+                                                   createCaseControlDataThreads = min(5, maxCores),
+                                                   fitCaseControlModelThreads = min(5, maxCores),
+                                                   cvThreads = min(2,maxCores),
+                                                   prefetchExposureData = TRUE)
+
         ccSummary <- CaseControl::summarizeCcAnalyses(ccResult)
         saveRDS(ccSummary, ccSummaryFile)
     }

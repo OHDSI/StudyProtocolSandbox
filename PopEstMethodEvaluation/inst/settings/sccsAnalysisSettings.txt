@@ -37,6 +37,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },
@@ -131,6 +132,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },
@@ -210,6 +212,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },
@@ -289,6 +292,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": true,
       "attr_class": "args"
     },
@@ -382,6 +386,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },

@@ -37,33 +37,26 @@ runCaseCrossover <- function(connectionDetails,
 
     ccrSummaryFile <- file.path(workFolder, "ccrSummary.rds")
     if (!file.exists(ccrSummaryFile)) {
-        ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
-
-        injectionSummaryFile <- file.path(workFolder, "injectionSummary.rds")
-        if (!file.exists(injectionSummaryFile))
-            stop("Cannot find injection summary file. Please run injectSignals first.")
-        injectedSignals <- readRDS(injectionSummaryFile)
-        # Add nesting Id:
-        injectedSignals$targetId <- injectedSignals$exposureId
-        injectedSignals <- merge(injectedSignals, ohdsiNegativeControls[, c("targetId", "outcomeId", "nestingId")])
-
+        allControls <- read.csv(file.path(workFolder , "allControls.csv"))
+        allControls <- unique(allControls[, c("targetId", "outcomeId", "nestingId")])
         eonList <- list()
-        for (i in 1:nrow(injectedSignals)) {
-            if (injectedSignals$trueEffectSize[i] != 0) {
-                eonList[[length(eonList)+1]] <- CaseCrossover::createExposureOutcomeNestingCohort(exposureId = injectedSignals$exposureId[i],
-                                                                                                  outcomeId = injectedSignals$newOutcomeId[i],
-                                                                                                  nestingCohortId = injectedSignals$nestingId[i])
-            }
+        for (i in 1:nrow(allControls)) {
+            eonList[[length(eonList)+1]] <- CaseCrossover::createExposureOutcomeNestingCohort(exposureId = allControls$targetId[i],
+                                                                                            outcomeId = allControls$outcomeId[i],
+                                                                                            nestingCohortId = allControls$nestingId[i])
         }
-        ohdsiNegativeControls <- unique(ohdsiNegativeControls[,c("targetId", "outcomeId", "nestingId")])
-        for (i in 1:nrow(ohdsiNegativeControls)) {
-            eonList[[length(eonList)+1]] <- CaseCrossover::createExposureOutcomeNestingCohort(exposureId = ohdsiNegativeControls$targetId[i],
-                                                                                              outcomeId = ohdsiNegativeControls$outcomeId[i],
-                                                                                              nestingCohortId = ohdsiNegativeControls$nestingId[i])
-        }
-
         ccrAnalysisListFile <- system.file("settings", "ccrAnalysisSettings.txt", package = "PopEstMethodEvaluation")
         ccrAnalysisList <- CaseCrossover::loadCcrAnalysisList(ccrAnalysisListFile)
+
+        mailSettings <- list(from = Sys.getenv("mailAddress"),
+                             to = c(Sys.getenv("mailAddress")),
+                             smtp = list(host.name = "smtp.gmail.com", port = 465,
+                                         user.name = Sys.getenv("mailAddress"),
+                                         passwd = Sys.getenv("mailPassword"), ssl = TRUE),
+                             authenticate = TRUE,
+                             send = TRUE)
+
+        result <- OhdsiRTools::runAndNotify({
         ccrResult <- CaseCrossover::runCcrAnalyses(connectionDetails = connectionDetails,
                                                    cdmDatabaseSchema = cdmDatabaseSchema,
                                                    oracleTempSchema = oracleTempSchema,
@@ -79,6 +72,7 @@ runCaseCrossover <- function(connectionDetails,
                                                    selectSubjectsToIncludeThreads = min(5, maxCores),
                                                    getExposureStatusThreads = min(5, maxCores),
                                                    fitCaseCrossoverModelThreads = min(5, maxCores))
+        }, mailSettings = mailSettings, label = "wprdusmjtglay")
         ccrSummary <- CaseCrossover::summarizeCcrAnalyses(ccrResult)
         saveRDS(ccrSummary, ccrSummaryFile)
     }

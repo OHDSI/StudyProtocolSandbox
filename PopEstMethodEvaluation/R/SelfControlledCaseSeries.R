@@ -40,6 +40,15 @@ runSelfControlledCaseSeries <- function(connectionDetails,
         }
         sccsAnalysisListFile <- system.file("settings", "sccsAnalysisSettings.txt", package = "PopEstMethodEvaluation")
         sccsAnalysisList <- SelfControlledCaseSeries::loadSccsAnalysisList(sccsAnalysisListFile)
+        mailSettings <- list(from = Sys.getenv("mailAddress"),
+                             to = c(Sys.getenv("mailAddress")),
+                             smtp = list(host.name = "smtp.gmail.com", port = 465,
+                                         user.name = Sys.getenv("mailAddress"),
+                                         passwd = Sys.getenv("mailPassword"), ssl = TRUE),
+                             authenticate = TRUE,
+                             send = TRUE)
+
+        result <- OhdsiRTools::runAndNotify({
 
         sccsResult <- SelfControlledCaseSeries::runSccsAnalyses(connectionDetails = connectionDetails,
                                                                 cdmDatabaseSchema = cdmDatabaseSchema,
@@ -52,12 +61,16 @@ runSelfControlledCaseSeries <- function(connectionDetails,
                                                                 cdmVersion = cdmVersion,
                                                                 outputFolder = sccsFolder,
                                                                 combineDataFetchAcrossOutcomes = TRUE,
+                                                                compressSccsEraDataFiles = TRUE,
                                                                 getDbSccsDataThreads = 1,
                                                                 createSccsEraDataThreads = 5,
-                                                                fitSccsModelThreads = 4,
+                                                                fitSccsModelThreads = 5,
                                                                 cvThreads = 10)
+
         sccsSummary <- SelfControlledCaseSeries::summarizeSccsAnalyses(sccsResult)
         saveRDS(sccsSummary, sccsSummaryFile)
+        }, mailSettings = mailSettings, label = "wprdusmjtglay")
+
     }
     delta <- Sys.time() - start
     writeLines(paste("Completed SCCS analyses in", signif(delta, 3), attr(delta, "units")))
@@ -115,7 +128,8 @@ createSccsSettings <- function(fileName) {
                                                                                     firstOutcomeOnly = FALSE,
                                                                                     covariateSettings = covarExposureOfInt,
                                                                                     ageSettings = ageSettings,
-                                                                                    seasonalitySettings = seasonalitySettings)
+                                                                                    seasonalitySettings = seasonalitySettings,
+                                                                                    minCasesForAgeSeason = 10000)
 
     sccsAnalysis3 <- SelfControlledCaseSeries::createSccsAnalysis(analysisId = 3,
                                                                   description = "Using age and season",
