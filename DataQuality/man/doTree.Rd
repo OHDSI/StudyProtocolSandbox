@@ -11,4 +11,3 @@ doTree(connectionDetails, cdmDatabaseSchema,
 \description{
 experimental funtion with graphic output
 }
-

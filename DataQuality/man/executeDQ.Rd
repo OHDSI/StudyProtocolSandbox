@@ -12,4 +12,3 @@ executeDQ(connectionDetails, cdmDatabaseSchema,
 \description{
 Execute all components of the DataQuality study (resultsDatabaseSchema is where Achilles results are)
 }
-

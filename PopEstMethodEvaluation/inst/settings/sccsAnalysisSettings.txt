@@ -11,7 +11,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": {
         "includeCovariateIds": "exposureId",
@@ -37,6 +37,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },
@@ -90,7 +91,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": [
         {
@@ -131,6 +132,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },
@@ -184,7 +186,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": {
         "includeCovariateIds": "exposureId",
@@ -210,6 +212,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },
@@ -263,7 +266,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": {
         "includeCovariateIds": "exposureId",
@@ -289,6 +292,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": true,
       "attr_class": "args"
     },
@@ -332,7 +336,7 @@
   },
   {
     "analysisId": 5,
-    "description": "Using event-dependent observation",
+    "description": "Using all other exposures",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
       "deleteCovariatesSmallCount": 100,
@@ -342,7 +346,7 @@
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": [
         {
@@ -382,6 +386,7 @@
         "allowRegularization": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },

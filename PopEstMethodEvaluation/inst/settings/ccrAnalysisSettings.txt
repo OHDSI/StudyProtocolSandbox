@@ -1,0 +1,93 @@
+[
+  {
+    "analysisId": 1,
+    "description": "Simple case-crossover",
+    "getDbCaseCrossoverDataArgs": {
+      "useNestingCohort": false,
+      "useObservationEndAsNestingEndDate": true,
+      "getVisits": false,
+      "studyStartDate": "",
+      "studyEndDate": "",
+      "getTimeControlData": false,
+      "attr_class": "args"
+    },
+    "selectSubjectsToIncludeArgs": {
+      "firstOutcomeOnly": false,
+      "washoutPeriod": 180,
+      "attr_class": "args"
+    },
+    "getExposureStatusArgs": {
+      "firstExposureOnly": false,
+      "riskWindowStart": 0,
+      "riskWindowEnd": 0,
+      "controlWindowOffsets": -30,
+      "attr_class": "args"
+    },
+    "attr_class": "ccrAnalysis"
+  },
+  {
+    "analysisId": 2,
+    "description": "Nested case-crossover",
+    "getDbCaseCrossoverDataArgs": {
+      "useNestingCohort": true,
+      "useObservationEndAsNestingEndDate": true,
+      "getVisits": false,
+      "studyStartDate": "",
+      "studyEndDate": "",
+      "getTimeControlData": true,
+      "attr_class": "args"
+    },
+    "selectSubjectsToIncludeArgs": {
+      "firstOutcomeOnly": false,
+      "washoutPeriod": 180,
+      "attr_class": "args"
+    },
+    "getExposureStatusArgs": {
+      "firstExposureOnly": false,
+      "riskWindowStart": 0,
+      "riskWindowEnd": 0,
+      "controlWindowOffsets": -30,
+      "attr_class": "args"
+    },
+    "attr_class": "ccrAnalysis"
+  },
+  {
+    "analysisId": 3,
+    "description": "Nested case-time-control, matching on age and gender",
+    "getDbCaseCrossoverDataArgs": {
+      "useNestingCohort": true,
+      "useObservationEndAsNestingEndDate": true,
+      "getVisits": false,
+      "studyStartDate": "",
+      "studyEndDate": "",
+      "getTimeControlData": true,
+      "attr_class": "args"
+    },
+    "selectSubjectsToIncludeArgs": {
+      "firstOutcomeOnly": false,
+      "washoutPeriod": 180,
+      "matchingCriteria": {
+        "controlsPerCase": 1,
+        "matchOnAge": true,
+        "ageCaliper": 2,
+        "matchOnGender": true,
+        "matchOnProvider": false,
+        "matchOnCareSite": false,
+        "matchOnVisitDate": false,
+        "visitDateCaliper": 30,
+        "matchOnTimeInCohort": false,
+        "daysInCohortCaliper": 30,
+        "attr_class": "matchingCriteria"
+      },
+      "attr_class": "args"
+    },
+    "getExposureStatusArgs": {
+      "firstExposureOnly": false,
+      "riskWindowStart": 0,
+      "riskWindowEnd": 0,
+      "controlWindowOffsets": -30,
+      "attr_class": "args"
+    },
+    "attr_class": "ccrAnalysis"
+  }
+]

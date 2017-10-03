@@ -1,0 +1,152 @@
+[
+  {
+    "targetId": 43013024,
+    "comparatorId": 1331270,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1133732,
+    "comparatorId": 1130585,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 795113,
+    "comparatorId": 704943,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1517070,
+    "comparatorId": 918906,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 943634,
+    "comparatorId": 1136422,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 757352,
+    "comparatorId": 704599,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 756349,
+    "comparatorId": 781182,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1784444,
+    "comparatorId": 922868,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 985708,
+    "comparatorId": 1741309,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1136422,
+    "comparatorId": 1103006,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1589795,
+    "comparatorId": 1563600,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 915855,
+    "comparatorId": 943634,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1110942,
+    "comparatorId": 1105775,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 918906,
+    "comparatorId": 916005,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 19025115,
+    "comparatorId": 987366,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 40163718,
+    "comparatorId": 43013024,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 951279,
+    "comparatorId": 732893,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 781182,
+    "comparatorId": 965748,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1136487,
+    "comparatorId": 732893,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 965748,
+    "comparatorId": 757352,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1336926,
+    "comparatorId": 918906,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1341238,
+    "comparatorId": 989482,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1741309,
+    "comparatorId": 940864,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 704599,
+    "comparatorId": 965748,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  },
+  {
+    "targetId": 1311276,
+    "comparatorId": 1336926,
+    "outcomeIds": 2,
+    "attr_class": "drugComparatorOutcomes"
+  }
+]

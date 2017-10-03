@@ -1,0 +1,1217 @@
+---
+title: "HTN combination"
+author: "SC You"
+date: "12 July 2017"
+output:
+  html_document: default
+  pdf_document: default
+params: 
+    exportFolder: ""
+---
+
+```{r setup, include=FALSE}
+library(png)
+library(grid)
+library(dplyr)
+library(knitr)
+library(forestplot)
+library(EmpiricalCalibration)
+library(reshape2)
+library(ggplot2)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r initial_setting, include=FALSE}
+exportFolder<-params$exportFolder
+outcomeName=c("0.all death", "1.MACCE", "2.CV death", "3.MI", "4.HF", "5.stroke")
+
+result30<-read.csv(paste0(exportFolder,"/30/tablesAndFigures/EmpiricalCalibration.csv"))
+result180<-read.csv(paste0(exportFolder,"/180/tablesAndFigures/EmpiricalCalibration.csv"))
+result365<-read.csv(paste0(exportFolder,"/365/tablesAndFigures/EmpiricalCalibration.csv"))
+result730<-read.csv(paste0(exportFolder,"/730/tablesAndFigures/EmpiricalCalibration.csv"))
+male<-read.csv(paste0(exportFolder,"/18001/tablesAndFigures/EmpiricalCalibration.csv"))
+female<-read.csv(paste0(exportFolder,"/18002/tablesAndFigures/EmpiricalCalibration.csv"))
+old<-read.csv(paste0(exportFolder,"/18061/tablesAndFigures/EmpiricalCalibration.csv"))
+young<-read.csv(paste0(exportFolder,"/18059/tablesAndFigures/EmpiricalCalibration.csv"))
+woDM<-read.csv(paste0(exportFolder,"/18011/tablesAndFigures/EmpiricalCalibration.csv"))
+result.forest.plot<-function(data=data, comparatorName="AC", targetName= "CD", analysisName="30days",outcomeIdset = c(4320,0,1,2,3,4), outcomeName){
+    data<-data [grepl(comparatorName,data$comparatorName) & grepl(targetName,data$targetName) & data$outcomeId %in% c(0,1,2,3,4,4320),]
+    data<-data[match(outcomeIdset,data$outcomeId),]
+    title=paste0("t",targetName," vs ","c",comparatorName,analysisName)
+    return (plotForest(logRr=data$logRr,seLogRr=data$seLogRr,names=outcomeName,xLabel="Relative risk",title=title) )
+}
+
+```
+
+#Inclusion Flow Chart
+
+###AC(treat) vs AD(comparator)
+```{r inclusion flow chart1, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/Attrition_a180_t13180_c14180_o0.png"))
+grid.raster(img)
+```
+
+###CD(treat) vs AC(comparator)
+```{r inclusion flow chart2, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/Attrition_a180_t34180_c13180_o0.png"))
+grid.raster(img)
+```
+
+###CD(treat) vs AD(comparator)
+```{r inclusion flow chart3, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/Attrition_a180_t34180_c14180_o0.png"))
+grid.raster(img)
+```
+
+#Propensiy score plot before and after matching 
+###AC(treat) vs AD(comparator)
+```{r Propensiy score plot1, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/PsPrefScale_a180_t13180_c14180_o0.png"))
+grid.raster(img)
+```
+
+```{r Propensiy score plot2, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/PsAfterVarRatioMatchingPrefScale_a180_t13180_c14180_o0.png"))
+grid.raster(img)
+```
+
+###CD(treat) vs AC(comparator)
+```{r Propensiy score plot3, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/PsPrefScale_a180_t34180_c13180_o0.png"))
+grid.raster(img)
+```
+
+```{r Propensiy score plot4, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/PsAfterVarRatioMatchingPrefScale_a180_t34180_c13180_o0.png"))
+grid.raster(img)
+```
+
+###CD(treat) vs AD(comparator)
+```{r Propensiy score plot5, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/PsPrefScale_a180_t34180_c14180_o0.png"))
+grid.raster(img)
+```
+
+```{r Propensiy score plot6, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/PsAfterVarRatioMatchingPrefScale_a180_t34180_c14180_o0.png"))
+grid.raster(img)
+```
+
+#Balance scatter plot
+
+###AC(treat) vs AD(comparator)
+
+```{r Balance scatter plot1, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/BalanceScatterPlot_a180_t13180_c14180_o0.png"))
+grid.raster(img)
+```
+
+###CD(treat) vs AC(comparator)
+
+```{r Balance scatter plot2, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/BalanceScatterPlot_a180_t34180_c13180_o0.png"))
+grid.raster(img)
+```
+
+###CD(treat) vs AD(comparator)
+
+```{r Balance scatter plot3, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/BalanceScatterPlot_a180_t34180_c14180_o0.png"))
+grid.raster(img)
+```
+
+#Negative controls
+```{r Negatve Control1, echo=FALSE}
+negative_concept_id<-c(434272,
+               378424,
+               380038,
+               380731,
+               4329707,
+               4280726,
+               4288544,
+               4253054,
+               381581,
+               194997,
+               195862,
+               4271016,
+               134870,
+               135473,
+               137053,
+               138102,
+               139099,
+               434872,
+               140480,
+               140641,
+               373478,
+               375552,
+               376415,
+               80809,
+               133141,
+               4142905,
+               75344,
+               4267582,
+               192367,
+               4004352,
+               437409,
+               198075,
+               199067,
+               200169,
+               4153877,
+               29735,
+               74396,
+               74855)
+negative_concept_name = c("Varicella",
+                          "Astigmatism",
+                          "Viral conjunctivitis",
+                          "Otitis externa",
+                          "Strabismus",
+                          "Seasonal allergic rhinitis",
+                          "Inguinal hernia",
+                          "Fibrosis of the skin",
+                          "Chalazion",
+                          "Prostatitis",
+                          "Urethritis",
+                          "Disorder of skin of trunk",
+                          "Pityriasis versicolor",
+                          "Dermatophytosis",
+                          "Seborrheic dermatitis",
+                          "Benign neoplasm of skin",
+                          "Ingrowing nail",
+                          "Infection by Trichomonas",
+                          "Impetigo",
+                          "Verruca vulgaris",
+                          "Presbyopia",
+                          "Pterygium",
+                          "Hypermetropia",
+                          "Rheumatoid arthritis",
+                          "Tinea pedis",
+                          "Fracture of rib",
+                          "Intervertebral disc disorder",
+                          "Infestation by Sarcoptes",
+                          "Dysplasia of cervix",
+                          "Irritant contact dermatitis",
+                          "Intracranial injury",
+                          "Condyloma acuminatum",
+                          "Female pelvic inflammatory disease",
+                          "Pruritus ani",
+                          "Post-traumatic wound infection",
+                          "Candidiasis of mouth",
+                          "Temporomandibular joint disorder",
+                          "Genital herpes simplex")
+neg_controls = data.frame(concept_id = negative_concept_id, concept_name = negative_concept_name)
+kable(neg_controls)
+#Target outcomes for adding their names
+target_outcome_concept_id = c(0,1,2,3,4,4320)
+target_outcome_concept_name = c("overall death",
+                         "CV death",
+                         "MI",
+                         "HF",
+                         "Stroke",
+                         
+                         "MACCE"
+                         )
+target_outcomes = data.frame(concept_id = target_outcome_concept_id, concept_name = target_outcome_concept_name)
+outcomes=rbind(target_outcomes,neg_controls)
+
+#show how many p-values of negative controls over 0.05
+
+result<-read.csv(file.path(exportFolder,"180/MainResults.csv"))
+result<-merge(result,outcomes,by.x="outcomeId",by.y="concept_id")
+
+#functions for false-positive probability and lists of false-positive
+FP_prop<-function(data=data,name){
+    df<-data.frame(
+        Target.vs.Comparator = name,
+        TotalNumber = sum(!is.na(data$p)),
+        FalsePositiveNumber = sum(data$p<0.05,na.rm=TRUE),
+        FalsePositiveProportion= (sum(data$p<0.05,na.rm=TRUE)/sum(!is.na(data$p)))
+    )
+    return(df)
+}
+
+
+FP_list<-function(data=data,name){
+    df<-data %>%
+               filter(p<0.05) %>%
+               arrange(p) %>%
+               mutate(Target.vs.Comparator = name)%>%
+               select (Target.vs.Comparator,outcomeId,concept_name, treated,comparator,rr,ci95lb,ci95ub,p)
+    return(df)
+}
+
+#AC_vs_AD
+neg_outcome_AC_vs_AD<-result[grepl("AD",result$comparatorName) & grepl("AC",result$targetName) & !(result$outcomeId %in% c(0,1,2,3,4,4320)),]
+
+#CD_vs_AD
+neg_outcome_CD_vs_AD<-result[grepl("AD",result$comparatorName) & grepl("CD",result$targetName) & !(result$outcomeId %in% c(0,1,2,3,4,4320)),]
+
+#CD_vs_AC
+neg_outcome_CD_vs_AC<-result[grepl("AC",result$comparatorName) & grepl("CD",result$targetName) & !(result$outcomeId %in% c(0,1,2,3,4,4320)),]
+
+FP_prop_all=rbind(FP_prop(neg_outcome_AC_vs_AD, name = "AC vs AD"),
+      FP_prop(neg_outcome_CD_vs_AD, name = "CD vs AD"),
+      FP_prop(neg_outcome_CD_vs_AC, name = "CD vs AC"))
+kable(FP_prop_all)
+
+FP_list_all=rbind(FP_list(neg_outcome_AC_vs_AD, name = "AC vs AD"),
+                  FP_list(neg_outcome_CD_vs_AD, name = "CD vs AD"),
+                  FP_list(neg_outcome_CD_vs_AC, name = "CD vs AC")
+                  )
+kable(FP_list_all)
+
+```
+
+#Baseline characteristics
+```{r Age group distribtuion prep, include=FALSE}
+multiplot <- function(..., plotlist=NULL, cols) {
+    require(grid)
+    
+    # Make a list from the ... arguments and plotlist
+    plots <- c(list(...), plotlist)
+    
+    numPlots = length(plots)
+    
+    # Make the panel
+    plotCols = cols                          # Number of columns of plots
+    plotRows = ceiling(numPlots/plotCols) # Number of rows needed, calculated from # of cols
+    
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(plotRows, plotCols)))
+    vplayout <- function(x, y)
+        viewport(layout.pos.row = x, layout.pos.col = y)
+    
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+        curRow = ceiling(i/plotCols)
+        curCol = (i-1) %% plotCols + 1
+        print(plots[[i]], vp = vplayout(curRow, curCol ))
+    }
+}
+cols<-c("cornflowerblue","coral1","chartreuse4")
+cols<-c("blue","coral1","chartreuse4")
+cols<-c("royalblue","coral1","black")
+```
+
+### Age group distribution - AC vs AD
+
+```{r Age group distribution AC(treat) vs AD(comparator), echo=FALSE}
+pop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t13180_c14180_o0.csv"))
+cohortName<-c("A+C","A+D")
+before<-pop[grep("[Aa]ge",pop$group),c("group","beforefractionTreated","beforefractionComparator")]
+before.m<-melt(before,id.vars='group')
+before.m$value<-before.m$value * (-100)
+
+after<-pop[grep("[Aa]ge",pop$group),c("group","afterfractionTreated","afterfractionComparator")]
+after.m<-melt(after,id.vars='group')
+after.m$value<-after.m$value * (100)
+
+plot.before<-ggplot(data=before.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("Before matching")+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(1,2)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+plot.after<-ggplot(data=after.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("After matching")+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(1,2)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+multiplot(plot.before, plot.after,cols=2)
+```
+
+### Age group distribution - CD vs AC
+
+```{r Age group distribution CD(treat) vs AC(comparator), echo=FALSE}
+pop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t34180_c13180_o0.csv"))
+cohortName<-c("C+D","A+C")
+
+before<-pop[grep("[Aa]ge",pop$group),c("group","beforefractionTreated","beforefractionComparator")]
+before.m<-melt(before,id.vars='group')
+before.m$value<-before.m$value * (-100)
+
+after<-pop[grep("[Aa]ge",pop$group),c("group","afterfractionTreated","afterfractionComparator")]
+after.m<-melt(after,id.vars='group')
+after.m$value<-after.m$value * (100)
+
+plot.before<-ggplot(data=before.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("Before matching")+
+    #scale_fill_grey()+
+    scale_fill_manual(labels = cohortName,values=cols[c(3,1)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+plot.after<-ggplot(data=after.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("After matching")+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(3,1)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+multiplot(plot.before, plot.after,cols=2)
+```
+
+### Age group distribution - CD vs AD
+
+```{r Age group distribution CD(treat) vs AD(comparator), echo=FALSE}
+pop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t34180_c14180_o0.csv"))
+cohortName<-c("C+D","A+D")
+
+before<-pop[grep("[0-9][0-9][0-9][0-9]",pop$group),c("group","beforefractionTreated","beforefractionComparator")]
+before.m<-melt(before,id.vars='group')
+before.m$value<-before.m$value * (-100)
+
+after<-pop[grep("[0-9][0-9][0-9][0-9]",pop$group),c("group","afterfractionTreated","afterfractionComparator")]
+after.m<-melt(after,id.vars='group')
+after.m$value<-after.m$value * (100)
+
+plot.before<-ggplot(data=before.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("Before matching")+
+    #scale_fill_grey()+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(3,2)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+plot.after<-ggplot(data=after.m, aes(x=group,y=value,fill=factor(variable))) +
+    geom_bar(position="dodge",stat="identity") + 
+    coord_flip() +
+    ggtitle("After matching")+
+    #scale_fill_grey(labels = cohortName)+
+    scale_fill_manual(labels = cohortName,values=cols[c(3,2)])+
+    theme_bw()+
+    theme(legend.position="top")+
+    ylab("proportion (%)")
+
+multiplot(plot.before, plot.after,cols=2)
+```
+
+### Baseline characteristics comparison
+##Table
+### Age group distribution - AC vs AD
+
+```{r baseline characteristics- AC vs AD, echo=FALSE}
+baselinePop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t13180_c14180_o0.csv"))
+baselineCor<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopComor_a180_t13180_c14180_o0.csv"))
+base<-rbind(baselinePop,baselineCor)
+kable(base)
+```
+### Age group distribution - CD vs AC
+```{r baseline characteristics- CD vs AC, echo=FALSE}
+baselinePop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t34180_c13180_o0.csv"))
+baselineCor<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopComor_a180_t34180_c13180_o0.csv"))
+base<-rbind(baselinePop,baselineCor)
+kable(base)
+```
+
+### Age group distribution - CD vs AD
+```{r baseline characteristics- CD vs AD, echo=FALSE}
+baselinePop<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopChar_a180_t34180_c13180_o0.csv"))
+baselineCor<-read.csv(file.path(exportFolder,"180/tablesAndFigures/PopComor_a180_t34180_c13180_o0.csv"))
+base<-rbind(baselinePop,baselineCor)
+kable(base)
+```
+
+#Results: Primary endpoint(All-cause mortality)
+##Table
+
+```{r result_table, echo=FALSE}
+result<-read.csv(paste0(exportFolder,"/180/tablesAndFigures/EmpiricalCalibration.csv"))
+main<-result
+main<-result %>% filter(outcomeId ==0)
+
+maintable<-data.frame(active_drug=main$targetName,
+           comparator_drug = main$comparatorName,
+           No_treat=main$treated,
+           No_comparator=main$treated,
+           HR = round(main$rr,2),
+           CI=paste(round(main$ci95lb,2),round(main$ci95ub,2),sep="-"),
+           p=round(main$p,3),
+           calibratedP=round(main$calibratedP,3)
+           )
+kable(maintable)
+```
+
+##Survival Curve
+###AC(treat) vs AD(comparator)
+
+```{r Survival Curve AD vs AD, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/KaplanMeier_a180_t13180_c14180_o0.png"))
+grid.raster(img)
+```
+
+###CD(treat) vs AC(comparator)
+
+```{r Survival Curve CD vs AC, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/KaplanMeier_a180_t34180_c13180_o0.png"))
+grid.raster(img)
+```
+
+###CD(treat) vs AD(comparator)
+
+```{r Survival Curve CD vs AD, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/KaplanMeier_a180_t34180_c14180_o0.png"))
+grid.raster(img)
+```
+
+#Results: Secondary endpoint
+###180days
+```{r secondary endpoint 180 days, echo=FALSE}
+outcome_id=c(4320,1,2,3,4)
+#AC_vs_AD
+tabletext= c("MACCE", 'CV death', 'MI', 'HF', 'Stroke')
+outcome<-result[grepl("AD",result$comparatorName) & grepl("AC",result$targetName) & (result$outcomeId %in% outcome_id),]
+match_order=match(outcome_id,outcome$outcomeId)
+matched_outcome=outcome[match_order,]
+
+forestplot(labeltext=tabletext,
+           mean=matched_outcome$rr,
+           lower=matched_outcome$ci95lb,
+           upper=matched_outcome$ci95ub,
+           col=fpColors(box="royalblue",line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="AC favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0)
+)
+
+#CD_vs_AD
+outcome<-result[grepl("AD",result$comparatorName) & grepl("CD",result$targetName) & (result$outcomeId %in% outcome_id),]
+match_order=match(outcome_id,outcome$outcomeId)
+matched_outcome=outcome[match_order,]
+
+forestplot(labeltext=tabletext,
+           mean=matched_outcome$rr,
+           lower=matched_outcome$ci95lb,
+           upper=matched_outcome$ci95ub,
+           col=fpColors(box="royalblue",line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0)
+)
+
+#CD_vs_AC
+outcome<-result[grepl("AC",result$comparatorName) & grepl("CD",result$targetName) & (result$outcomeId %in% outcome_id),]
+match_order=match(outcome_id,outcome$outcomeId)
+matched_outcome=outcome[match_order,]
+
+forestplot(labeltext=tabletext,
+           mean=matched_outcome$rr,
+           lower=matched_outcome$ci95lb,
+           upper=matched_outcome$ci95ub,
+           col=fpColors(box="royalblue",line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AC favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0)
+)
+```
+
+###Primary and Secondary endpoint according to the drug period
+```{r Primary and Secondary endpoint according to the drug period, echo = FALSE}
+result30<-read.csv(file.path(exportFolder,"30/MainResults.csv"))
+result30<-merge(result30,outcomes,by.x="outcomeId",by.y="concept_id")
+
+result180<-read.csv(file.path(exportFolder,"180/MainResults.csv"))
+result180<-merge(result180,outcomes,by.x="outcomeId",by.y="concept_id")
+
+result365<-read.csv(file.path(exportFolder,"365/MainResults.csv"))
+result365<-merge(result365,outcomes,by.x="outcomeId",by.y="concept_id")
+
+result730<-read.csv(file.path(exportFolder,"730/MainResults.csv"))
+result730<-merge(result730,outcomes,by.x="outcomeId",by.y="concept_id")
+
+outcome_id=c(0,4320,1,2,3,4)
+tabletext= c("Any death","MACCE", 'CV death', 'MI', 'HF', 'Stroke')
+#AC_vs_AD
+outcome30<-result30[grepl("AD",result30$comparatorName) & grepl("AC",result30$targetName) & (result30$outcomeId %in% outcome_id),]
+outcome180<-result180[grepl("AD",result180$comparatorName) & grepl("AC",result180$targetName) & (result180$outcomeId %in% outcome_id),]
+outcome365<-result365[grepl("AD",result365$comparatorName) & grepl("AC",result365$targetName) & (result365$outcomeId %in% outcome_id),]
+outcome730<-result730[grepl("AD",result730$comparatorName) & grepl("AC",result730$targetName) & (result730$outcomeId %in% outcome_id),]
+
+match_order30=match(outcome_id,outcome30$outcomeId)
+match_order180=match(outcome_id,outcome180$outcomeId)
+match_order365=match(outcome_id,outcome365$outcomeId)
+match_order730=match(outcome_id,outcome730$outcomeId)
+
+matched_outcome30=outcome30[match_order30,]
+matched_outcome180=outcome180[match_order180,]
+matched_outcome365=outcome365[match_order365,]
+matched_outcome730=outcome730[match_order730,]
+
+bound_rr=cbind(matched_outcome30$rr,matched_outcome180$rr,matched_outcome365$rr,matched_outcome730$rr)
+bound_lower=cbind(matched_outcome30$ci95lb,matched_outcome180$ci95lb,matched_outcome365$ci95lb,matched_outcome730$ci95lb)
+bound_upper=cbind(matched_outcome30$ci95ub,matched_outcome180$ci95ub,matched_outcome365$ci95ub,matched_outcome730$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("black","royalblue","darkred","darkgreen"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="AC favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.2,
+           legend=c("30days","180days","365days", "730days")
+)
+
+#CD_vs_AD
+
+outcome30<-result30[grepl("AD",result30$comparatorName) & grepl("CD",result30$targetName) & (result30$outcomeId %in% outcome_id),]
+outcome180<-result180[grepl("AD",result180$comparatorName) & grepl("CD",result180$targetName) & (result180$outcomeId %in% outcome_id),]
+outcome365<-result365[grepl("AD",result365$comparatorName) & grepl("CD",result365$targetName) & (result365$outcomeId %in% outcome_id),]
+outcome730<-result730[grepl("AD",result730$comparatorName) & grepl("CD",result730$targetName) & (result730$outcomeId %in% outcome_id),]
+
+match_order30=match(outcome_id,outcome30$outcomeId)
+match_order180=match(outcome_id,outcome180$outcomeId)
+match_order365=match(outcome_id,outcome365$outcomeId)
+match_order730=match(outcome_id,outcome730$outcomeId)
+
+matched_outcome30=outcome30[match_order30,]
+matched_outcome180=outcome180[match_order180,]
+matched_outcome365=outcome365[match_order365,]
+matched_outcome730=outcome730[match_order730,]
+
+bound_rr=cbind(matched_outcome30$rr,matched_outcome180$rr,matched_outcome365$rr,matched_outcome730$rr)
+bound_lower=cbind(matched_outcome30$ci95lb,matched_outcome180$ci95lb,matched_outcome365$ci95lb,matched_outcome730$ci95lb)
+bound_upper=cbind(matched_outcome30$ci95ub,matched_outcome180$ci95ub,matched_outcome365$ci95ub,matched_outcome730$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("black","royalblue","darkred","darkgreen"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.2,
+           legend=c("30days","180days","365days", "730days")
+)
+
+#CD_vs_AC
+
+outcome30<-result30[grepl("AC",result30$comparatorName) & grepl("CD",result30$targetName) & (result30$outcomeId %in% outcome_id),]
+outcome180<-result180[grepl("AC",result180$comparatorName) & grepl("CD",result180$targetName) & (result180$outcomeId %in% outcome_id),]
+outcome365<-result365[grepl("AC",result365$comparatorName) & grepl("CD",result365$targetName) & (result365$outcomeId %in% outcome_id),]
+outcome730<-result730[grepl("AC",result730$comparatorName) & grepl("CD",result730$targetName) & (result730$outcomeId %in% outcome_id),]
+
+match_order30=match(outcome_id,outcome30$outcomeId)
+match_order180=match(outcome_id,outcome180$outcomeId)
+match_order365=match(outcome_id,outcome365$outcomeId)
+match_order730=match(outcome_id,outcome730$outcomeId)
+
+matched_outcome30=outcome30[match_order30,]
+matched_outcome180=outcome180[match_order180,]
+matched_outcome365=outcome365[match_order365,]
+matched_outcome730=outcome730[match_order730,]
+
+bound_rr=cbind(matched_outcome30$rr,matched_outcome180$rr,matched_outcome365$rr,matched_outcome730$rr)
+bound_lower=cbind(matched_outcome30$ci95lb,matched_outcome180$ci95lb,matched_outcome365$ci95lb,matched_outcome730$ci95lb)
+bound_upper=cbind(matched_outcome30$ci95ub,matched_outcome180$ci95ub,matched_outcome365$ci95ub,matched_outcome730$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("black","royalblue","darkred","darkgreen"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AC favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.2,
+           legend=c("30days","180days","365days", "730days")
+)
+```
+
+###Subgroup analysis - sex
+```{r Primary and secondary endpoint in subgroups-sex, echo=FALSE}
+result18001<-read.csv(file.path(exportFolder,"18001/MainResults.csv"))
+result18001<-merge(result18001,outcomes,by.x="outcomeId",by.y="concept_id")
+
+result18002<-read.csv(file.path(exportFolder,"18002/MainResults.csv"))
+result18002<-merge(result18002,outcomes,by.x="outcomeId",by.y="concept_id")
+ 
+#AC_vs_AD
+outcome18001<-result18001[grepl("AD",result18001$comparatorName) & grepl("AC",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
+outcome18002<-result18002[grepl("AD",result18002$comparatorName) & grepl("AC",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
+
+match_order18001=match(outcome_id,outcome18001$outcomeId)
+match_order18002=match(outcome_id,outcome18002$outcomeId)
+
+matched_outcome18001=outcome18001[match_order18001,]
+matched_outcome18002=outcome18002[match_order18002,]
+
+bound_rr=cbind(matched_outcome18001$rr,matched_outcome18002$rr)
+bound_lower=cbind(matched_outcome18001$ci95lb,matched_outcome18002$ci95lb)
+bound_upper=cbind(matched_outcome18001$ci95ub,matched_outcome18002$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="AC favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.3,
+           legend=c("Male","Female")
+)
+
+#CD_vs_AD
+
+outcome18001<-result18001[grepl("AD",result18001$comparatorName) & grepl("CD",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
+outcome18002<-result18002[grepl("AD",result18002$comparatorName) & grepl("CD",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
+
+match_order18001=match(outcome_id,outcome18001$outcomeId)
+match_order18002=match(outcome_id,outcome18002$outcomeId)
+
+matched_outcome18001=outcome18001[match_order18001,]
+matched_outcome18002=outcome18002[match_order18002,]
+
+bound_rr=cbind(matched_outcome18001$rr,matched_outcome18002$rr)
+bound_lower=cbind(matched_outcome18001$ci95lb,matched_outcome18002$ci95lb)
+bound_upper=cbind(matched_outcome18001$ci95ub,matched_outcome18002$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.3,
+           legend=c("Male","Female")
+)
+
+#CD_vs_AC
+
+outcome18001<-result18001[grepl("AC",result18001$comparatorName) & grepl("CD",result18001$targetName) & (result18001$outcomeId %in% outcome_id),]
+outcome18002<-result18002[grepl("AC",result18002$comparatorName) & grepl("CD",result18002$targetName) & (result18002$outcomeId %in% outcome_id),]
+
+
+match_order18001=match(outcome_id,outcome18001$outcomeId)
+match_order18002=match(outcome_id,outcome18002$outcomeId)
+
+matched_outcome18001=outcome18001[match_order18001,]
+matched_outcome18002=outcome18002[match_order18002,]
+
+bound_rr=cbind(matched_outcome18001$rr,matched_outcome18002$rr)
+bound_lower=cbind(matched_outcome18001$ci95lb,matched_outcome18002$ci95lb)
+bound_upper=cbind(matched_outcome18001$ci95ub,matched_outcome18002$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AC favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.3,
+           legend=c("Male","Female")
+)
+
+```
+
+###Subgroup analysis - age
+
+```{r Primary and secondary endpoint in subgroups-age, echo=FALSE}
+result18059<-read.csv(file.path(exportFolder,"18059/MainResults.csv"))
+result18059<-merge(result18059,outcomes,by.x="outcomeId",by.y="concept_id")
+
+result18061<-read.csv(file.path(exportFolder,"18061/MainResults.csv"))
+result18061<-merge(result18061,outcomes,by.x="outcomeId",by.y="concept_id")
+
+#AC_vs_AD
+outcome18059<-result18059[grepl("AD",result18059$comparatorName) & grepl("AC",result18059$targetName) & (result18059$outcomeId %in% outcome_id),]
+outcome18061<-result18061[grepl("AD",result18061$comparatorName) & grepl("AC",result18061$targetName) & (result18061$outcomeId %in% outcome_id),]
+
+match_order18059=match(outcome_id,outcome18059$outcomeId)
+match_order18061=match(outcome_id,outcome18061$outcomeId)
+
+matched_outcome18059=outcome18059[match_order18059,]
+matched_outcome18061=outcome18061[match_order18061,]
+
+bound_rr=cbind(matched_outcome18059$rr,matched_outcome18061$rr)
+bound_lower=cbind(matched_outcome18059$ci95lb,matched_outcome18061$ci95lb)
+bound_upper=cbind(matched_outcome18059$ci95ub,matched_outcome18061$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="AC favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.3,
+           legend=c("<60 years", ">=60 years")
+)
+
+#CD_vs_AD
+
+outcome18059<-result18059[grepl("AD",result18059$comparatorName) & grepl("CD",result18059$targetName) & (result18059$outcomeId %in% outcome_id),]
+outcome18061<-result18061[grepl("AD",result18061$comparatorName) & grepl("CD",result18061$targetName) & (result18061$outcomeId %in% outcome_id),]
+
+match_order18059=match(outcome_id,outcome18059$outcomeId)
+match_order18061=match(outcome_id,outcome18061$outcomeId)
+
+matched_outcome18059=outcome18059[match_order18059,]
+matched_outcome18061=outcome18061[match_order18061,]
+
+bound_rr=cbind(matched_outcome18059$rr,matched_outcome18061$rr)
+bound_lower=cbind(matched_outcome18059$ci95lb,matched_outcome18061$ci95lb)
+bound_upper=cbind(matched_outcome18059$ci95ub,matched_outcome18061$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.3,
+           legend=c("<60 years", ">=60 years")
+)
+
+#CD_vs_AC
+
+outcome18059<-result18059[grepl("AC",result18059$comparatorName) & grepl("CD",result18059$targetName) & (result18059$outcomeId %in% outcome_id),]
+outcome18061<-result18061[grepl("AC",result18061$comparatorName) & grepl("CD",result18061$targetName) & (result18061$outcomeId %in% outcome_id),]
+
+match_order18059=match(outcome_id,outcome18059$outcomeId)
+match_order18061=match(outcome_id,outcome18061$outcomeId)
+
+matched_outcome18059=outcome18059[match_order18059,]
+matched_outcome18061=outcome18061[match_order18061,]
+
+bound_rr=cbind(matched_outcome18059$rr,matched_outcome18061$rr)
+bound_lower=cbind(matched_outcome18059$ci95lb,matched_outcome18061$ci95lb)
+bound_upper=cbind(matched_outcome18059$ci95ub,matched_outcome18061$ci95ub)
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box=c("royalblue","darkred"),line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AC favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0),
+           line.margin = 0.3,
+           legend=c("<60 years", ">=60 years")
+)
+
+```
+
+
+###Subgroup analysis - w/o diabetes mellitus
+
+```{r Primary and secondary endpoint in subgroups-dm, echo=FALSE}
+result18011<-read.csv(file.path(exportFolder,"18011/MainResults.csv"))
+result18011<-merge(result18011,outcomes,by.x="outcomeId",by.y="concept_id")
+
+#AC_vs_AD
+outcome18011<-result18011[grepl("AD",result18011$comparatorName) & grepl("AC",result18011$targetName) & (result18011$outcomeId %in% outcome_id),]
+
+match_order18011=match(outcome_id,outcome18011$outcomeId)
+
+matched_outcome18011=outcome18011[match_order18011,]
+
+bound_rr=matched_outcome18011$rr
+bound_lower=matched_outcome18011$ci95lb
+bound_upper=matched_outcome18011$ci95ub
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box="royalblue",line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="AC favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0)#,
+           #line.margin = 0.3,
+           #legend=c("without diabetes mellitus")
+)
+
+#CD_vs_AD
+
+outcome18011<-result18011[grepl("AD",result18011$comparatorName) & grepl("CD",result18011$targetName) & (result18011$outcomeId %in% outcome_id),]
+
+match_order18011=match(outcome_id,outcome18011$outcomeId)
+
+matched_outcome18011=outcome18011[match_order18011,]
+
+bound_rr=matched_outcome18011$rr
+bound_lower=matched_outcome18011$ci95lb
+bound_upper=matched_outcome18011$ci95ub
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box="royalblue",line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AD favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0)#,
+           #line.margin = 0.3,
+           #legend=c("without diabetes mellitus")
+)
+
+#CD_vs_AC
+
+outcome18011<-result18011[grepl("AC",result18011$comparatorName) & grepl("CD",result18011$targetName) & (result18011$outcomeId %in% outcome_id),]
+
+match_order18011=match(outcome_id,outcome18011$outcomeId)
+
+matched_outcome18011=outcome18011[match_order18011,]
+
+bound_rr=matched_outcome18011$rr
+bound_lower=matched_outcome18011$ci95lb
+bound_upper=matched_outcome18011$ci95ub
+
+forestplot(labeltext=tabletext,
+           mean=bound_rr,
+           lower=bound_lower,
+           upper=bound_upper,
+           col=fpColors(box="royalblue",line='darkblue'),
+           f.ci_norm = c(fpDrawCircleCI),
+           boxsize=0.1,
+           xlog=TRUE,
+           xlab="HR (95% CI)",
+           title="CD favor                             AC favor",
+           clip=c(0.25,4.0),
+           xticks=c(0.25,0.5,1.0,1.5,2.0,3.0,4.0)#,
+           #line.margin = 0.3,
+           #legend=c("without diabetes mellitus")
+)
+```
+
+
+#Empirical Calibration
+
+###180days
+```{r Empirical Calibration 180 days, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/180/tablesAndFigures/CalEffect_a180.png"))
+grid.raster(img)
+```
+
+
+###30days
+```{r Empirical Calibration 30 days, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/30/tablesAndFigures/CalEffect_a30.png"))
+grid.raster(img)
+```
+
+
+###365days
+```{r Empirical Calibration3, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/365/tablesAndFigures/CalEffect_a365.png"))
+grid.raster(img)
+```
+
+###730days
+```{r Empirical Calibration4, echo=FALSE}
+img<-readPNG(paste0(exportFolder,"/730/tablesAndFigures/CalEffect_a730.png"))
+grid.raster(img)
+```
+
+
+#Results: Secondary endpoint(calibrated)
+
+###AC(treat) vs AD(comparator)
+
+```{r result_forest_plot AC AD 30, echo=FALSE}
+result.forest.plot(data=result30,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="30days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot AC AD 180, echo=FALSE}
+result.forest.plot(data=result180,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="180days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot AC AD 365, echo=FALSE}
+result.forest.plot(data=result365,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="365days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot AC AD 730, echo=FALSE}
+result.forest.plot(data=result730,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="730days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot AC AD male, echo=FALSE}
+result.forest.plot(data=male,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="male",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot AC AD female, echo=FALSE}
+result.forest.plot(data=female,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="female",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot AC AD old, echo=FALSE}
+result.forest.plot(data=old,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="old",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot AC AD young, echo=FALSE}
+result.forest.plot(data=young,
+                   comparatorName="AD",
+                   targetName="AC",
+                   analysisName="young",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+###CD(treat) vs AC(comparator)
+
+```{r result_forest_plot CD AC 30, echo=FALSE}
+result.forest.plot(data=result30,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="30days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AC 180, echo=FALSE}
+result.forest.plot(data=result180,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="180days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AC 365, echo=FALSE}
+result.forest.plot(data=result365,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="365days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AC 730, echo=FALSE}
+result.forest.plot(data=result730,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="730days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+
+```{r result_forest_plot CD AC male, echo=FALSE}
+result.forest.plot(data=male,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="male",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AC female, echo=FALSE}
+result.forest.plot(data=female,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="female",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AC old, echo=FALSE}
+result.forest.plot(data=old,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="old",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AC young, echo=FALSE}
+result.forest.plot(data=young,
+                   comparatorName="AC",
+                   targetName="CD",
+                   analysisName="young",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+
+###CD(treat) vs AD(comparator)
+
+```{r result_forest_plot CD AD 30, echo=FALSE}
+result.forest.plot(data=result30,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="30days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AD 180, echo=FALSE}
+result.forest.plot(data=result180,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="180days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AD 365, echo=FALSE}
+result.forest.plot(data=result365,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="365days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AD 730, echo=FALSE}
+result.forest.plot(data=result730,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="730days",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AD male, echo=FALSE}
+result.forest.plot(data=male,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="male",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AD female, echo=FALSE}
+result.forest.plot(data=female,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="female",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AD old, echo=FALSE}
+result.forest.plot(data=old,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="old",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```
+
+```{r result_forest_plot CD AD young, echo=FALSE}
+result.forest.plot(data=young,
+                   comparatorName="AD",
+                   targetName="CD",
+                   analysisName="young",
+                   outcomeIdset = c(0,4320,1,2,3,4),
+                   outcomeName = outcomeName)
+```

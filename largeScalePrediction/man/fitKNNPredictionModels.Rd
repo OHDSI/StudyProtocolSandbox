@@ -17,6 +17,6 @@ in the subdirectory named knnModels
 This function creates the K-nearest neighbours models for all outcomes
 }
 \details{
-The patient level prediction RunPlp function is called for each outcome to train
+The patient level prediction runPlp function is called for each outcome to train
 a K-nearest neighbours model
 }

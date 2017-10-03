@@ -22,7 +22,7 @@
 #' This function creates the random forest models for all outcomes
 #'
 #' @details
-#' The patient level prediction RunPlp function is called for each outcome to train
+#' The patient level prediction runPlp function is called for each outcome to train
 #' a random forest model
 #'
 #' @param workFolder                   The directory where the plpData and population are saved to
@@ -48,7 +48,7 @@ fitRFPredictionModels <- function(workFolder){
                                                                      mtries = c(-1,50,500),
                                                                      max_depth=c(4,10,17),
                                                                      varImp=T)#c(T,F))
-            trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
+            trainedModel <- PatientLevelPrediction::runPlp(population,plpData,
                                                            modelSettings,
                                                            testSplit='time',
                                                            testFraction=0.25,

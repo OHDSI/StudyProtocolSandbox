@@ -22,7 +22,7 @@
 #' This function creates the gradient boosting machine models for all outcomes
 #'
 #' @details
-#' The patient level prediction RunPlp function is called for each outcome to train
+#' The patient level prediction runPlp function is called for each outcome to train
 #' a gradient boosting machine model
 #'
 #' @param workFolder                   The directory where the plpData and population are saved to
@@ -45,7 +45,7 @@ fitGBMPredictionModels <- function(workFolder){
             modelSettings <- PatientLevelPrediction::setGradientBoostingMachine(ntrees=c(50,100,250),
                                                                                 max_depth = c(4,7,16),
                                                                                 min_rows = c(1,20))
-            trainedModel <- PatientLevelPrediction::RunPlp(population,plpData,
+            trainedModel <- PatientLevelPrediction::runPlp(population,plpData,
                                                            modelSettings,
                                                            testSplit='time',
                                                            testFraction=0.25,
