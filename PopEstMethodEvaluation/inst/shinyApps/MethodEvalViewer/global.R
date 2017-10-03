@@ -1,4 +1,5 @@
-estimates <- readRDS(file.path("data", "calibrated.rds"))
+# estimates <- readRDS(file.path("data", "calibrated.rds"))
+estimates <- read.csv(file.path("data", "calibrated.csv"))
 z <- estimates$logRr/estimates$seLogRr
 estimates$p <- 2 * pmin(pnorm(z), 1 - pnorm(z))
 idx <- is.na(estimates$logRr) | is.infinite(estimates$logRr) | is.na(estimates$seLogRr) | is.infinite(estimates$seLogRr)
@@ -18,7 +19,8 @@ methods <- unique(estimates[, c("method", "cer")])
 strata <- as.character(unique(estimates$stratum))
 strata <- strata[order(strata)]
 strata <- c("All", strata)
-analysisRef <- readRDS(file.path("data", "analysisRef.rds"))
+# analysisRef <- readRDS(file.path("data", "analysisRef.rds"))
+analysisRef <- read.csv(file.path("data", "AnalysisRef.csv"))
 trueRrs <- unique(estimates$targetEffectSize)
 trueRrs <- trueRrs[order(trueRrs)]
 trueRrs <- c("Overall", trueRrs)

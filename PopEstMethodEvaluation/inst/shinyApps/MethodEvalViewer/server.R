@@ -9,7 +9,7 @@ shinyServer(function(input, output, session) {
   previousPage <- NULL
   
   observe({
-    if (input$evalType == "Comparative effect estimation") {
+    if (input$evalType == "Comparative effect est.") {
       choices = methods$method[methods$cer == TRUE]
     } else {
       choices = methods$method
@@ -34,6 +34,14 @@ shinyServer(function(input, output, session) {
       subset$p <- subset$calP
     }
     return(subset)
+  })
+  
+  output$controlCount <- renderText({
+    subset <- filterEstimates()
+    subset <- unique(subset[, c("targetId", "comparatorId", "oldOutcomeId", "targetEffectSize")])
+    ncCount <- sum(subset$targetEffectSize == 1)
+    pcCount <- sum(subset$targetEffectSize != 1)
+    return(paste0("Metrics based on ", ncCount, " negative and ", pcCount, " positive controls"))
   })
   
   performanceMetrics <- reactive({
@@ -67,14 +75,16 @@ shinyServer(function(input, output, session) {
           auc <- NA
           type1 <- round(mean(forEval$p < 0.05), 2)  
           type2 <- NA
+          missing <- round(mean(forEval$seLogRr == 999), 2)
         } else {
           negAndPos <- subset[subset$method == combis$method[i] & subset$analysisId == combis$analysisId[i] & (subset$targetEffectSize == trueRr | subset$targetEffectSize == 1), ]
           roc <- pROC::roc(negAndPos$targetEffectSize > 1, negAndPos$logRr, algorithm = 3)
           auc <- round(pROC::auc(roc), 2)
           type1 <- NA
           type2 <- round(mean(forEval$p[forEval$targetEffectSize > 1] >= 0.05), 2)  
+          missing <- round(mean(forEval$seLogRr == 999), 2)
         }
-        return(c(auc = auc, coverage = coverage, meanP = meanP, mse = mse, type1 = type1, type2 = type2))
+        return(c(auc = auc, coverage = coverage, meanP = meanP, mse = mse, type1 = type1, type2 = type2, missing = missing))
       }
       combis <- cbind(combis, as.data.frame(t(sapply(1:nrow(combis), computeMetrics))))
     }
@@ -98,7 +108,7 @@ shinyServer(function(input, output, session) {
     isolate(
       if (!is.null(input$performanceMetrics_rows_selected)) {
         selection$selected = input$performanceMetrics_rows_selected
-        options$displayStart = floor(input$performanceMetrics_rows_selected[1] / 10) * 10 + 1
+        options$displayStart = floor(input$performanceMetrics_rows_selected[1] / 10) * 10 
       }
     )
     data <- performanceMetrics()
@@ -130,7 +140,7 @@ shinyServer(function(input, output, session) {
       if (nrow(subset) == 0) {
         return(NULL)
       }
-      subset$trueRr <- subset$targetEffectSize
+      subset$Group <- as.factor(paste("True hazard ratio =", subset$targetEffectSize))
       return(plotScatter(subset))
     }
     
@@ -159,6 +169,80 @@ shinyServer(function(input, output, session) {
       footer = NULL,
       size = "l"
     ))
+  })
+  
+  output$rocCurves <- renderPlot({
+    if (is.null(input$performanceMetrics_rows_selected)) {
+      return(NULL)
+    } else {
+      subset <- filterEstimates()
+      subset <- subset[subset$method == performanceMetrics()$Method[input$performanceMetrics_rows_selected] & subset$analysisId == performanceMetrics()$ID[input$performanceMetrics_rows_selected], ]
+      if (nrow(subset) == 0) {
+        return(NULL)
+      }
+      subset$trueLogRr <- log(subset$targetEffectSize)
+      return(plotRocsInjectedSignals(logRr = subset$logRr, trueLogRr = subset$trueLogRr, showAucs = TRUE))
+    }
+    
+  })
+  
+  output$hoverInfoEstimates <- renderUI({
+    # Hover-over adapted from https://gitlab.com/snippets/16220
+    if (is.null(input$performanceMetrics_rows_selected)) {
+      return(NULL)
+    }
+    subset <- filterEstimates()
+    subset <- subset[subset$method == performanceMetrics()$Method[input$performanceMetrics_rows_selected] & subset$analysisId == performanceMetrics()$ID[input$performanceMetrics_rows_selected], ]
+    if (nrow(subset) == 0) {
+      return(NULL)
+    }
+    
+    subset$Group <- as.factor(paste("True hazard ratio =", subset$targetEffectSize))
+    hover <- input$plotHoverInfoEstimates
+    
+    point <- nearPoints(subset, hover, threshold = 50, maxpoints = 1, addDist = TRUE)
+    if (nrow(point) == 0) return(NULL)
+    
+    
+    # calculate point position INSIDE the image as percent of total dimensions
+    # from left (horizontal) and from top (vertical)
+    left_pct <- (hover$x - hover$domain$left) / (hover$domain$right - hover$domain$left)
+    top_pct <- (hover$domain$top - hover$y) / (hover$domain$top - hover$domain$bottom)
+    
+    # calculate distance from left and bottom side of the picture in pixels
+    left_px <- hover$range$left + left_pct * (hover$range$right - hover$range$left)
+    top_px <- hover$range$top + top_pct * (hover$range$bottom - hover$range$top)
+    
+    # create style property fot tooltip
+    # background color is set so tooltip is a bit transparent
+    # z-index is set so we are sure are tooltip will be on top
+    style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
+                    "left:", left_px - 125, "px; top:", top_px - 150, "px; width:250px;")
+    
+    
+    # actual tooltip created as wellPanel
+    estimate <- paste0(formatC(exp(point$logRr), digits = 2, format = "f"),
+                       " (",
+                       formatC(point$ci95lb, digits = 2, format = "f"),
+                       "-",
+                       formatC(point$ci95ub, digits = 2, format = "f"),
+                       ")")
+    
+    if (point$cer) {
+      text <- paste0("<b> target: </b>", point$targetName, "<br/>", 
+                     "<b> comparator: </b>", point$comparatorName, "<br/>")
+    } else {
+      text <- paste0("<b> exposure: </b>", point$targetName, "<br/>")
+    }
+    if (point$nesting) {
+      text <- paste0(text, "<b> nesting: </b>", point$nestingName, "<br/>")
+    } 
+    text <- paste0(text, "<b> outcome: </b>", point$outcomeName, "<br/>",
+                   "<b> estimate: </b>", estimate, "<br/>")
+    div(
+      style="position: relative; width: 0; height: 0",
+      wellPanel(style = style, p(HTML(text)))
+    )
   })
 })
 
