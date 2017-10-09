@@ -188,7 +188,7 @@
     "createPs": true,
     "createPsArgs": {
       "errorOnHighCorrelation": false,
-      "stopOnError": true,
+      "stopOnError": false,
       "prior": {
         "priorType": "laplace",
         "variance": 1,
@@ -350,7 +350,7 @@
     "createPs": true,
     "createPsArgs": {
       "errorOnHighCorrelation": false,
-      "stopOnError": true,
+      "stopOnError": false,
       "prior": {
         "priorType": "laplace",
         "variance": 1,
@@ -511,7 +511,7 @@
     "createPs": true,
     "createPsArgs": {
       "errorOnHighCorrelation": false,
-      "stopOnError": true,
+      "stopOnError": false,
       "prior": {
         "priorType": "laplace",
         "variance": 1,
@@ -673,7 +673,7 @@
     "createPs": true,
     "createPsArgs": {
       "errorOnHighCorrelation": false,
-      "stopOnError": true,
+      "stopOnError": false,
       "prior": {
         "priorType": "laplace",
         "variance": 1,
