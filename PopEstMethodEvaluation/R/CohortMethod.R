@@ -79,7 +79,7 @@ runCohortMethod <- function(connectionDetails,
                                                 fitOutcomeModelThreads = min(max(1, floor(maxCores/4)), 4),
                                                 outcomeCvThreads = min(4, maxCores),
                                                 refitPsForEveryOutcome = FALSE)
-        }, mailSettings = mailSettings, label = "wprdusmjtglay")
+        }, mailSettings = mailSettings, label = "wprdusmjtglaz")
         cmSummary <- CohortMethod::summarizeAnalyses(cmResult)
         saveRDS(cmSummary, cmSummaryFile)
     }
@@ -118,6 +118,7 @@ createCohortMethodSettings <- function(fileName) {
                                                   fitOutcomeModelArgs = fitOutcomeModelArgs1)
 
     createPsArgs <- CohortMethod::createCreatePsArgs(errorOnHighCorrelation = FALSE,
+                                                     stopOnError = FALSE,
                                                      control = Cyclops::createControl(cvType = "auto",
                                                                                       startingVariance = 0.01,
                                                                                       noiseLevel = "quiet",
