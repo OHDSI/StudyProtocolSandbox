@@ -17,6 +17,7 @@ Imports:
     SelfControlledCaseSeries,
     IcTemporalPatternDiscovery,
     CaseControl,
+    CaseCrossover (>= 0.1.0),
     EmpiricalCalibration,
     OhdsiSharing
 Suggests:
