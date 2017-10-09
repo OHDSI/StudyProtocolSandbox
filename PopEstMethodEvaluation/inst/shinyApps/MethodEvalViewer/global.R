@@ -1,5 +1,6 @@
 # estimates <- readRDS(file.path("data", "calibrated.rds"))
 estimates <- read.csv(file.path("data", "calibrated.csv"))
+estimates$trueEffectSize[estimates$firstExposureOnly] <- estimates$trueEffectSizeFirstExposure[estimates$firstExposureOnly]
 z <- estimates$logRr/estimates$seLogRr
 estimates$p <- 2 * pmin(pnorm(z), 1 - pnorm(z))
 idx <- is.na(estimates$logRr) | is.infinite(estimates$logRr) | is.na(estimates$seLogRr) | is.infinite(estimates$seLogRr)
