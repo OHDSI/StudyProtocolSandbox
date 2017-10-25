@@ -209,6 +209,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     sccsEstimates$method <- "SCCS"
     sccsEstimates$cer <- FALSE
     sccsEstimates$nesting <- FALSE
+    sccsEstimates$firstExposureOnly <- FALSE
     estimates <- rbind(estimates, sccsEstimates)
 
     # CohortMethod #
@@ -233,6 +234,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     cmEstimates$method <- "Cohort method"
     cmEstimates$cer <- TRUE
     cmEstimates$nesting <- FALSE
+    cmEstimates$firstExposureOnly <- TRUE
     estimates <- rbind(estimates, cmEstimates)
 
 
@@ -261,6 +263,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     sccEstimates$method <- "Self-controlled cohort"
     sccEstimates$cer <- FALSE
     sccEstimates$nesting <- FALSE
+    sccEstimates$firstExposureOnly <- FALSE
     estimates <- rbind(estimates, sccEstimates)
 
 
@@ -289,6 +292,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     ccEstimates$cer <- FALSE
     ccEstimates$nesting <- FALSE
     ccEstimates$nesting[ccEstimates$analysisId %in% c(3, 4)] <- TRUE
+    ccEstimates$firstExposureOnly <- FALSE
     estimates <- rbind(estimates, ccEstimates)
 
 
@@ -315,6 +319,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, databaseName, w
     ccrEstimates$method <- "Case-crossover"
     ccrEstimates$cer <- FALSE
     ccrEstimates$nesting <- FALSE
+    ccrEstimates$firstExposureOnly <- FALSE
     estimates <- rbind(estimates, ccrEstimates)
 
     estimates$db <- databaseName

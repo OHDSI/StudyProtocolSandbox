@@ -21,6 +21,9 @@ shinyServer(function(input, output, session) {
     subset <- estimates[estimates$db == input$db, ]
     if (input$mdrr != "All") {
       subset <- subset[!is.na(subset$mdrrTarget) & subset$mdrrTarget < as.numeric(input$mdrr), ]
+      if (input$evalType == "Comparative effect est.") {
+        subset <- subset[!is.na(subset$mdrrComparator) & subset$mdrrComparator < as.numeric(input$mdrr), ]
+      }
     }
     subset <- subset[subset$method %in% input$method, ]
     if (input$stratum != "All") {
@@ -55,8 +58,10 @@ shinyServer(function(input, output, session) {
         forEval <- subset[subset$method == combis$method[i] & subset$analysisId == combis$analysisId[i], ]
         roc <- pROC::roc(forEval$targetEffectSize > 1, forEval$logRr, algorithm = 3)
         auc <- round(pROC::auc(roc), 2)
-        mse <- round(mean((forEval$logRr - log(forEval$targetEffectSize))^2), 2)
-        coverage <- round(mean(forEval$ci95lb < forEval$targetEffectSize & forEval$ci95ub > forEval$targetEffectSize), 2)
+        # mse <- round(mean((forEval$logRr - log(forEval$targetEffectSize))^2), 2)
+        mse <- round(mean((forEval$logRr - log(forEval$trueEffectSize))^2), 2)
+        # coverage <- round(mean(forEval$ci95lb < forEval$targetEffectSize & forEval$ci95ub > forEval$targetEffectSize), 2)
+        coverage <- round(mean(forEval$ci95lb < forEval$trueEffectSize & forEval$ci95ub > forEval$trueEffectSize), 2)
         meanP <- round(mean(1/(forEval$seLogRr^2)), 2)
         type1 <- round(mean(forEval$p[forEval$targetEffectSize == 1] < 0.05), 2)
         type2 <- round(mean(forEval$p[forEval$targetEffectSize > 1] >= 0.05), 2)
@@ -68,8 +73,10 @@ shinyServer(function(input, output, session) {
       trueRr <- input$trueRr
       computeMetrics <- function(i) {
         forEval <- subset[subset$method == combis$method[i] & subset$analysisId == combis$analysisId[i] & subset$targetEffectSize == trueRr, ]
-        mse <- round(mean((forEval$logRr - log(forEval$targetEffectSize))^2), 2)
-        coverage <- round(mean(forEval$ci95lb < forEval$targetEffectSize & forEval$ci95ub > forEval$targetEffectSize), 2)
+        # mse <- round(mean((forEval$logRr - log(forEval$targetEffectSize))^2), 2)
+        # coverage <- round(mean(forEval$ci95lb < forEval$targetEffectSize & forEval$ci95ub > forEval$targetEffectSize), 2)
+        mse <- round(mean((forEval$logRr - log(forEval$trueEffectSize))^2), 2)
+        coverage <- round(mean(forEval$ci95lb < forEval$trueEffectSize & forEval$ci95ub > forEval$trueEffectSize), 2)
         meanP <- round(mean(1/(forEval$seLogRr^2)), 2)
         if (input$trueRr == "1") {
           auc <- NA
@@ -130,7 +137,7 @@ shinyServer(function(input, output, session) {
     }
     return(table)
   })
-
+  
   output$estimates <- renderPlot({
     if (is.null(input$performanceMetrics_rows_selected)) {
       return(NULL)
