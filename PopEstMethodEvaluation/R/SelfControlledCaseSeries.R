@@ -69,7 +69,7 @@ runSelfControlledCaseSeries <- function(connectionDetails,
 
         sccsSummary <- SelfControlledCaseSeries::summarizeSccsAnalyses(sccsResult)
         saveRDS(sccsSummary, sccsSummaryFile)
-        }, mailSettings = mailSettings, label = "wprdusmjtglay")
+        }, mailSettings = mailSettings, label = "wprdusmjtglaz")
 
     }
     delta <- Sys.time() - start
@@ -83,7 +83,8 @@ createSccsSettings <- function(fileName) {
                                                                             deleteCovariatesSmallCount = 100,
                                                                             studyStartDate = "",
                                                                             studyEndDate = "",
-                                                                            exposureIds = c())
+                                                                            exposureIds = c(),
+                                                                            maxCasesPerOutcome = 1000000)
 
     covarExposureOfInt <- SelfControlledCaseSeries::createCovariateSettings(label = "Exposure of interest",
                                                                             includeCovariateIds = "exposureId",

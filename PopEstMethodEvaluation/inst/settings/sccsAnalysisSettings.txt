@@ -7,6 +7,7 @@
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 1000000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
@@ -29,12 +30,14 @@
         "includeAge": false,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": false,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
       "minCasesForAgeSeason": 10000,
@@ -87,6 +90,7 @@
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 1000000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
@@ -124,12 +128,14 @@
         "includeAge": false,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": false,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
       "minCasesForAgeSeason": 10000,
@@ -182,6 +188,7 @@
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 1000000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
@@ -204,12 +211,14 @@
         "includeAge": true,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": true,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
       "minCasesForAgeSeason": 10000,
@@ -262,6 +271,7 @@
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 1000000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
@@ -284,12 +294,14 @@
         "includeAge": false,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": false,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
       "minCasesForAgeSeason": 10000,
@@ -342,6 +354,7 @@
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 1000000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
@@ -378,12 +391,14 @@
         "includeAge": false,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": false,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
       "minCasesForAgeSeason": 10000,
