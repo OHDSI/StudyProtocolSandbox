@@ -822,8 +822,8 @@ step_2 <- function(event, pop, event_type=704, OMOP = FALSE, concept_file=NULL, 
 
     if(class(concept_file) == 'data.frame')
       concept <- concept_file
-    else if(class(concept_file) == 'character' & grepl('/', concept_file))
-      concept <- readr::read_csv(concept_file)
+    else if(class(concept_file) == 'character' & grepl('.csv', concept_file))
+    concept <- read.delim(concept_file, as.is = T, quote = "")
 
     colnames(concept) %<>% tolower()
     eventM <- makeMediumFrame(event, pop, concept, dates)
