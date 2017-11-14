@@ -7,11 +7,11 @@ CREATE TABLE #Codesets (
 INSERT INTO #Codesets (codeset_id, concept_id)
 SELECT 0 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4141448)and invalid_reason is null
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (3030354,40764999,3053283,3049187)and invalid_reason is null
 UNION  select c.concept_id
   from @cdm_database_schema.CONCEPT c
   join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (4141448)
+  and ca.ancestor_concept_id in (3030354,40764999,3053283,3049187)
   and c.invalid_reason is null
 
 ) I
@@ -27,17 +27,17 @@ FROM
   select P.person_id, P.start_date, P.end_date, row_number() OVER (PARTITION BY person_id ORDER BY start_date ASC) ordinal, P.visit_occurrence_id
   FROM 
   (
-  -- Begin Procedure Occurrence Criteria
-select C.person_id, C.procedure_occurrence_id as event_id, C.procedure_date as start_date, DATEADD(d,1,C.procedure_date) as END_DATE, C.procedure_concept_id as TARGET_CONCEPT_ID, C.visit_occurrence_id
+  -- Begin Measurement Criteria
+select C.person_id, C.measurement_id as event_id, C.measurement_date as start_date, DATEADD(d,1,C.measurement_date) as END_DATE, C.measurement_concept_id as TARGET_CONCEPT_ID, C.visit_occurrence_id
 from 
 (
-  select po.*, row_number() over (PARTITION BY po.person_id ORDER BY po.procedure_date, po.procedure_occurrence_id) as ordinal
-  FROM @cdm_database_schema.PROCEDURE_OCCURRENCE po
-where po.procedure_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 0)
+  select m.*, row_number() over (PARTITION BY m.person_id ORDER BY m.measurement_date, m.measurement_id) as ordinal
+  FROM @cdm_database_schema.MEASUREMENT m
+where m.measurement_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 0)
 ) C
 
-
--- End Procedure Occurrence Criteria
+WHERE C.value_as_number > 0.0000
+-- End Measurement Criteria
 
   ) P
 ) P
