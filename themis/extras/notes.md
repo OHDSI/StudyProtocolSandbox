@@ -17,8 +17,19 @@ To test SQL based Arachne study, use this study to test the framework: https://w
 Execute the following SQL and email the resulting CSV to themis group reprentative for a given convention issue (vojtech.huser at nih dot gov )
 Name your CSV file with meaningless numerical 3 ditit ID for your site followed by dash and name of analysis. (e.g., 147-units-limited.csv)
 
+SQL is optimized to work in result schema. (written in specific dialect so some tweaking may be necessary)
+Email me is you need parametized SQL for this translation tool. http://data.ohdsi.org/SqlDeveloper/
+
 ### Measurements concepts
 
+```SQL
+select * from (
+    select * from (select analysis_id, stratum_1 from achilles_results where analysis_id = 1800 and count_value > 1000 order by count_value desc limit 100) a
+    union
+    select * from (select analysis_id, stratum_1 from achilles_results where analysis_id = 800 and count_value > 1000 order by count_value desc limit 100) b
+) c
+--order by stratum_1; --uncomment the last line to not to reveal ranking order of your concepts
+```
 
 ### Units-limited
 ```SQL
