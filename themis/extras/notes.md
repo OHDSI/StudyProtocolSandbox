@@ -8,7 +8,7 @@ Consider installing Arachne and run and submit the code in Arachne
 
 ## Plain SQL
 
-Execute the following SQL and email the resulting CSV to vojtech.huser@nih.gov
+Execute the following SQL and email the resulting CSV to vojtech.huser at nih dot gov
 
 ```SQL
 select e.analysis_id,e.stratum_1 as concept_id,e.stratum_2 as unit_concept_id,
