@@ -1,13 +1,15 @@
 Themis group (sub-group: measurements) aims to standardize lab tests and related issues (e.g., units)
 
 This effort will be based on real world data at OHDSI sites.
-Consider installing Arachne and run and submit the code in Arachne
+Consider installing Arachne and run and submit the code in Arachne (preferred)
+Alternatively, use Non-Arachne method.
+
 
 
 # Arachne execution
 To test SQL based Arachne study, use this study to test the framework: https://www.arachnenetwork.com/study-manager/studies/46
 
-# Non Arachne execution
+# Non-Arachne execution
 
 ## Plain SQL
 
