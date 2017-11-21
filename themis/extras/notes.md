@@ -1,7 +1,8 @@
-Themis group (measurements) aims to standardize units.
-This effort will be based on real world data at OHDSI sites.
+Themis group (sub-group: measurements) aims to standardize lab tests and related issues (e.g., units)
 
+This effort will be based on real world data at OHDSI sites.
 Consider installing Arachne and run and submit the code in Arachne
+
 
 # Arachne execution
 To test SQL based Arachne study, use this study to test the framework: https://www.arachnenetwork.com/study-manager/studies/46
@@ -11,9 +12,13 @@ To test SQL based Arachne study, use this study to test the framework: https://w
 ## Plain SQL
 
 
-Execute the following SQL and email the resulting CSV to vojtech.huser at nih dot gov
+Execute the following SQL and email the resulting CSV to themis group reprentative for a given convention issue (vojtech.huser at nih dot gov )
+Name your CSV file with meaningless numerical 3 ditit ID for your site followed by dash and name of analysis. (e.g., 147-units-limited.csv)
 
-### Units - limited export
+### Measurements concepts
+
+
+### Units-limited
 ```SQL
 select e.analysis_id,e.stratum_1 as concept_id,e.stratum_2 as unit_concept_id,
 1.0*count_value/denom as ratio
@@ -34,7 +39,7 @@ order by e.stratum_1, count_value desc
 ;
 ```
 
-### Units - larger export
+### Units-larger
 ```SQL
 select e.analysis_id,e.stratum_1 as concept_id,e.stratum_2 as unit_concept_id,
 1.0*count_value/denom as ratio
