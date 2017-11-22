@@ -74,7 +74,29 @@ order by e.stratum_1, count_value desc
 ```
 
 
-# Results
+### Unit Results
 
 Units poster at 2017 OHDSI symposium: http://www.ohdsi.org/web/wiki/lib/exe/fetch.php?media=resources:huser-2017-ohdsi-symp-units.pdf
+
 ## R package
+
+
+# General notes
+
+measurements in PCORNet
+http://pcornet.org/wp-content/uploads/2017/05/2017-05-01_Integrated-CDM-Specification-Implemeantion-Guidance-CDM-v....pdf
+A1C=Hemoglobin A1c
+CK=Creatine kinase total
+CK_MB=Creatine kinase MB
+CK_MBI=Creatine kinase
+MB/creatine kinase total
+CREATININE=Creatinine
+HGB=Hemoglobin
+LDL=Low-density lipoprotein
+INR=International normalized ratio
+TROP_I=Troponin I cardiac
+TROP_T_QL=Troponin T cardiac (qualitative)
+TROP_T_QN=Troponin T cardiac (quantitative)
+NI=No information
+UN=Unknown
+OT=Other
