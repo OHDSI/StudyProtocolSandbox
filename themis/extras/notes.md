@@ -85,6 +85,8 @@ Units poster at 2017 OHDSI symposium: http://www.ohdsi.org/web/wiki/lib/exe/fetc
 
 measurements in PCORNet
 http://pcornet.org/wp-content/uploads/2017/05/2017-05-01_Integrated-CDM-Specification-Implemeantion-Guidance-CDM-v....pdf
+
+```
 A1C=Hemoglobin A1c
 CK=Creatine kinase total
 CK_MB=Creatine kinase MB
@@ -100,3 +102,4 @@ TROP_T_QN=Troponin T cardiac (quantitative)
 NI=No information
 UN=Unknown
 OT=Other
+```
