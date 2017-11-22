@@ -20,7 +20,7 @@ Name your CSV file with meaningless numerical 3 ditit ID for your site followed 
 SQL is optimized to work in result schema. (written in specific dialect so some tweaking may be necessary)
 Email me is you need parametized SQL for this translation tool. http://data.ohdsi.org/SqlDeveloper/
 
-### Measurements concepts
+### Measurements-concepts
 
 ```SQL
 select * from (
@@ -73,4 +73,8 @@ order by e.stratum_1, count_value desc
 ;
 ```
 
+
+# Results
+
+Units poster at 2017 OHDSI symposium: http://www.ohdsi.org/web/wiki/lib/exe/fetch.php?media=resources:huser-2017-ohdsi-symp-units.pdf
 ## R package
