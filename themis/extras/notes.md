@@ -103,3 +103,8 @@ NI=No information
 UN=Unknown
 OT=Other
 ```
+
+
+# Centralized processing
+
+Each extracted data is compared accross several sites. That way we can arrive at common measurements and common units for them accross the network.
