@@ -105,6 +105,12 @@ OT=Other
 ```
 
 
+
 # Centralized processing
 
 Each extracted data is compared accross several sites. That way we can arrive at common measurements and common units for them accross the network.
+
+# Existing Achilles Heel infrustructure
+
+Look at analysis_id 1900 to see your local unmapped source_values for Measurements.
+Weight is subject to the existing Heel rule. LOINC concept is being targeted.
