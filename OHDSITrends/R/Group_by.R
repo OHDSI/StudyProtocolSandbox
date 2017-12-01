@@ -8,6 +8,7 @@
 
 make_group_by_kb <- function(kb3_path, concept)
 {
+  colnames(concept) %<>% toupper()
   kb3 <- readr::read_csv(kb3_path)
   kb3a <-kb3 %>% dplyr::left_join(dplyr::select(concept,CONCEPT_ID, CONCEPT_NAME, VOCABULARY_ID, CONCEPT_CODE), by= 'CONCEPT_ID')
   kb2 <- kb3a %>% dplyr::left_join(dplyr::select(concept, CONCEPT_ID, ANCESTOR_CONCEPT_NAME = CONCEPT_NAME, CONCEPT_CLASS_ID), by = c('ANCESTOR_CONCEPT_ID'= 'CONCEPT_ID'))
