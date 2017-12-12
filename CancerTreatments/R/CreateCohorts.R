@@ -57,8 +57,8 @@
   sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
   counts <- DatabaseConnector::querySql(connection, sql)
   names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
-  counts <- merge(counts, data.frame(cohortDefinitionId = cohortsToCreate$cohortId[i],
-                                     cohortName  = cohortsToCreate$name[i]))
+  counts <- merge(counts, data.frame(cohortDefinitionId = cohortsToCreate$cohortId,
+                                     cohortName  = cohortsToCreate$name))
   write.csv(counts, file.path(outputFolder, "CohortCounts.csv"))
   
   

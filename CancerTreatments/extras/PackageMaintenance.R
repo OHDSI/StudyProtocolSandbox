@@ -1,14 +1,14 @@
 # Format and check code ---------------------------------------------------
 
 library(devtools)
-install_github("ohdsi/SqlRender")
-install_github("ohdsi/DatabaseConnector")
+#install_github("ohdsi/SqlRender")
+#install_github("ohdsi/DatabaseConnector")
 install_github("ohdsi/OhdsiRTools")
 #OhdsiRTools::formatRFolder()
 #OhdsiRTools::checkUsagePackage("AlendronateVsRaloxifene")
 #OhdsiRTools::updateCopyrightYearFolder()
 
-
+library(OhdsiRTools)
 # Create manual and vignettes ---------------------------------------------
 #shell("rm extras/AlendronateVsRaloxifene.pdf")
 #shell("R CMD Rd2pdf ./ --output=extras/AlendronateVsRaloxifene.pdf")
@@ -16,7 +16,7 @@ install_github("ohdsi/OhdsiRTools")
 
 # Insert cohort definitions from ATLAS into package -----------------------
 OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv",
-                                                baseUrl = "http://api.ohdsi.org/WebAPI",
+                                                baseUrl = "http://api.ohdsi.org:80/WebAPI",
                                                 insertTableSql = TRUE,
                                                 insertCohortCreationR = TRUE,
                                                 generateStats = FALSE,
