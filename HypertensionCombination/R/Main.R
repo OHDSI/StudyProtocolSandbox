@@ -70,7 +70,7 @@ execute<-function(connectionDetails,
 			
 			CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
 										cdmDatabaseSchema = cdmDatabaseSchema,
-										#oracleTempSchema = oracleTempSchema,
+										oracleTempSchema = oracleTempSchema,
 										exposureDatabaseSchema = resultsDatabaseSchema,
 										exposureTable = exposureTable,
 										outcomeDatabaseSchema = resultsDatabaseSchema,
