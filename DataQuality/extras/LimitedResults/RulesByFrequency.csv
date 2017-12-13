@@ -1,0 +1,31 @@
+rule_id,n,rule_name,severity,rule_type,rule_description,threshold,rule_classification,rule_scope,linked_measure
+1,11,multiple checks for greater than zero,error,DQ,umbrella rule: this rule includes multiple error checks on over 35 analysis_ids,>0,complex,NA,NA
+6,11,data with unmapped concepts,warning,DQ,for multiple analyses,NA,NA,NA,NA
+23,11,monthly trend,warning,DQ,monthly change > 100% at concept level,NA,fidelity,NA,NA
+24,10,too high days_supply,warning,DQ,days_supply > 180,NA,plausibility,NA,NA
+26,10,implausible quantity for drug,warning,DQ,quantity > 600,>600,plausibility,NA,717
+22,9,monthly trend,warning,DQ,monthly change > 100%,NA,fidelity,NA,NA
+25,9,too high number of refils,warning,DQ,refills > 10,>10,plausibility,NA,716
+27,9,more than 1 percent of unmapped rows (concept_0 rows),warning,DQ,for multiple analyses (4xx;6xx;7xx;8xx;18xx),>1,completeness,NA,UnmappedData:byDomain:Percentage
+34,9,Count of unmapped source values in a domain exceeds threshold,notification,DQ,"looks at values that are mapped to concept0 and their source values by table, rule 6 is related to this rule but it does not look at the size of the problem (only if unmapped data are present or not present)",NA,completeness,NA,UnmappedDataByDomain:SourceValueCnt
+20,8,age below 0,error,DQ,age < 0,<0,plausibility,NA,101
+2,7,multiple checks where minimum value of a measure should not be negative,error,DQ,umbrella rule: this rule includes multiple error checks on over 20 analysis_ids where min value in distribution should not be negative,NA,complex,NA,NA
+3,6,multiple checks related to death data where maximum value of a measure should not be positive,warning,DQ,death distributions where max should not be positive (using anlyses 511;512;513;514;515),NA,plausibility,NA,NA
+4,6,invalid concept_id,error,CDM conformance,invalid concept_id,NA,NA,NA,NA
+32,5,Percentage of patients with no visits exceeds threshold,notification,DQ,checks if the percentage of patients with no visits exceeds threshold,>5,plausibility,NA,ach_2003:Percentage
+12,4,Dx is not a SNOMED code,error,CDM conformance,"concept from the wrong vocabulary; Condition Occurrence, Condition Era (SNOMED)",NA,NA,NA,400;1000
+5,3,invalid type concept_id,error,CDM conformance,invalid type concept_id,NA,NA,NA,NA
+14,3,"Procedure is not CPT, ICD9Proc or HCPCS",error,CDM conformance,procedure - 4 CPT4/5 HCPCS/3 ICD9P,NA,NA,NA,600
+28,3,percentage of non-numerical measurement records exceeds general population threshold,warning,DQ,"typically, measurement data contans a significant proportion of rows with numerical result. This rule looks at rows in MEASUREMENT and alerts the user if a large proportion of rows lack any numerical result",>=80,completeness,GeneralPopulationOnly,Meas:NoNumValue:Percentage
+29,3,infant diagnosis at senior age of over 50yo,error,DQ,mecconium condition 195075; This rule is example of a terminology depended data quality tool,NA,plausibility,NA,404
+35,3,Count of measurement_ids with more than 5 distinct units  exceeds threshold,notification,DQ,"Idealy, each measurement would use only one unit. For example, kg for weight. This rule notifies the user if database has measurements that have 5 or more units. This rule has technically thresholds.",>=5;>=10,fidelity,NA,1807
+40,3,Death event outside observation period,error,DQ,death event should not be outside observation period; this rule was if previous versions subsumed in umbrella rule,NA,completeness,NA,510
+21,2,age too high,error,DQ,age > 150,>150,plausibility,NA,101
+38,2,Provider Specialty data density,notification,DQ,"in a general dataset, it is expected that more than providers with a wide range of specialties (at least more than just one specialty) is present; notification  may indicate that provider table is missing data on specialty,typical datat has at least 28 specialties present in provider table",<2,completeness,GeneralPopulationOnly,Provider:SpecialtyCnt
+39,2,Too high Born to Deceased Ratio in some years,notification,DQ,"Given lifetime record DQ assumption if more than 30k patients is born for every deceased patient the dataset may not be recording complete records for all senior patients in that year
+",>30000,completeness,GeneralPopulationOnly,Death:BornDeceasedRatio
+9,1,concept from the wrong vocabulary; ethnicity,error,CDM conformance,concept from the wrong vocabulary; ethnicity,NA,NA,NA,5
+18,1,year of birth is in the future,error,DQ,year of birth should not be in the future,NA,plausibility,NA,3
+19,1,year of birth is prior 1800,warning,DQ,year of birth < 1800,<1800,plausibility,NA,3
+33,1,[GeneralPopulationOnly] Not all deciles represented at first observation,notification,DQ,"in a general population, a database would observe first visit across all age groups. We at least expect deciles 0 to 8. Rule looks at the count of deciles.",<9,completeness,GeneralPopulationOnly,AgeAtFirstObsByDecile:DecileCnt
+41,1,No weight data in MEASUREMENT table,notification,DQ,implementation of similar Sentinel rule for certain vital signs; rule lukes at concept_id 3025315 (LOINC code 29463-7)),NA,completeness,NA,1800
