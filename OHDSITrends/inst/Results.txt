@@ -35,6 +35,11 @@ This is a 1 pager-view that lists the medical events that are interesting, eithe
 These files contain graphical outputs. The file names describe what they are.
 
 
+Within the results folder, there may also be a sub-folder called "bad data" with a few .csv files. These files denote the specific medical events (drug ingredients, procedures, diagnoses, etc.) that have significant data missing at the decile level. In general these are events with only 1 data point at the decile level within the study period. We denote these events in the 'Results' folder to help the curators of the datasets identify lapses in comprehensiveness (a key tennet of data quality). THESE RESULTS ARE PURELY INTERNAL! They are NOT meant to be shared with the OHDSI study authors; rather they are produced for the internal benefit of the site running the study.
+
+
+
 Additional files may be present, which indicates that this readme file was not kept 100% current.
 
 However, the file name should clearly indicate what data is inside it.
+

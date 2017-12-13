@@ -1,7 +1,7 @@
 This package is using Achilles precomputed metadata to analyze trends. The intent is to do data quality inspection. It is an extenstion of the Data Quality study.  The package can  analyze trends in medical events at a health-system-wide or national level. It also works for non-OMOP sites. 
 
 
-###### Version 0.0.2
+###### Version 0.0.5
 
 ## Purpose
 This package is optimally designed to analyze trends in interesting medical events from datasets built under the OMOP Common Data Model. 
@@ -42,7 +42,12 @@ myConnDetails <- createConnectionDetails(dbms="postgresql"
 At OMOP site, the package needs vocabulary data. At non-OMOP sites, this data must be provided by user somehow.
 At OMOP site, getting vocabulary data is easy. 
 
-Method 1: From your OMOP Database.
+Preferred Method: Set `concept_file` variable to the file path to the Athena concept file (or concept file from your database)
+```r
+concept_file = 'C:/path_to_concept_file.csv'
+```
+
+Alt Method 1: From your OMOP Database.
 If you have the concept file on your database, then run these lines: (then skip to the next code chunk)
  ```r
  conn <-  conn<-DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
@@ -51,11 +56,11 @@ If you have the concept file on your database, then run these lines: (then skip 
  
  ```
  
- Method 2:
+ Alt Method 2:
  Read Athena CONCEPT.csv file
  
  ```r
- concept <- readr::read_csv('CONCEPT.csv')
+ concept <- read.delim(file.path(folder,'concept.csv'),as.is=T,quote = "")
  ```
  
 You can pass in either the concept R data.frame() object OR the filepath to a CONCEPT.csv file. The function will work with both approaches.

@@ -16,17 +16,17 @@ OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_id
   exportFolder <- paste0(user_folder, 'export/')
   kbFolder <- paste0(user_folder, 'kb/')
   print(resultsDatabaseSchema)
- 
+
    #make dirs
   for(dr in c(user_folder, dataExportFolder, resultsFolder, exportFolder, kbFolder))
     if(!dir.exists(dr)) dir.create(dr)
-  
+
   # Write export and result readme files
-  file.copy(from = system.file("export.txt", package = "OHDSITrends"), 
-            to = system.file(exportFolder, 'export.txt'))
-  file.copy(from = system.file("Results.txt", package = "OHDSITrends"), 
-            to = system.file(resultsFolder, 'Results.txt'))
-  
+  file.copy(from = system.file("export.txt", package = "OHDSITrends"),
+            to = paste0(exportFolder, 'export.txt'))
+  file.copy(from = system.file("Results.txt", package = "OHDSITrends"),
+            to = paste0(resultsFolder, 'Results.txt'))
+
   # Business part
   medical_event_ids <- c(result_event_ids, pop_id)
   getData2(connectionDetails,resultsDatabaseSchema, dataExportFolder, medical_event_ids)
@@ -51,16 +51,37 @@ OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_id
 # (see comment in Analyze all trends.R)
 
 OHDSITrends2 <- function(pop_file_path, event_file_path, concept_file = NULL, analysis_id, db_schema,
-                         user_folder, write_full_cids = F, OMOP = F, dates)
+                         user_folder,  dates, write_full_cids = T, OMOP = F, Share_Data = F)
 {
+  # Assign  site_id randomly; used to anonymize dbs
+  site_id <- sample(1:1e6, 1)
+
   pop <- readr::read_csv(pop_file_path)
   event <- readr::read_csv(event_file_path)
 
+  # Initialize sub-folders in user_dir
   resultsFolder <- paste0(user_folder, 'Results/')
-  for(dr in c(user_folder, resultsFolder))
+  exportFolder <- paste0(user_folder, 'export/')
+  kbFolder <- paste0(user_folder, 'kb/')
+
+  # Make sub directories
+  for(dr in c(user_folder, resultsFolder, exportFolder, kbFolder))
     if(!dir.exists(dr)) dir.create(dr)
-  analyze_one(pop, event, analysis_id, db_schema, resultsFolder,
+
+  # Write export and result readme files
+  file.copy(from = system.file("export.txt", package = "OHDSITrends"),
+            to = paste0(exportFolder, 'export.txt'))
+  file.copy(from = system.file("Results.txt", package = "OHDSITrends"),
+            to = paste0(resultsFolder, 'Results.txt'))
+
+  print("Getting results")
+  l <- analyze_one(pop, event, analysis_id, db_schema, resultsFolder,
               write_full_cids, OMOP, concept_file, dates)
+
+  print("Exporting results")
+  anonym_db <- anonymize_db_schema(site_id, 1)
+  exportResults(l$eventM2, l$full_cids, l$rollup1.0, l$rollup2.0, anonym_db, analysis_id,
+                kbFolder, exportFolder, Share_Data = F, concept_file)
 }
 
 

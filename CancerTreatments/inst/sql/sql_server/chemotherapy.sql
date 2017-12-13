@@ -7,12 +7,25 @@ CREATE TABLE #Codesets (
 INSERT INTO #Codesets (codeset_id, concept_id)
 SELECT 0 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4141448)and invalid_reason is null
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4273629)and invalid_reason is null
 UNION  select c.concept_id
   from @cdm_database_schema.CONCEPT c
   join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (4141448)
+  and ca.ancestor_concept_id in (4273629)
   and c.invalid_reason is null
+UNION
+select distinct cr.concept_id_1 as concept_id
+FROM
+(
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4273629)and invalid_reason is null
+UNION  select c.concept_id
+  from @cdm_database_schema.CONCEPT c
+  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
+  and ca.ancestor_concept_id in (4273629)
+  and c.invalid_reason is null
+
+) C
+join @cdm_database_schema.concept_relationship cr on C.concept_id = cr.concept_id_2 and cr.relationship_id = 'Maps to' and cr.invalid_reason IS NULL
 
 ) I
 ) C;
@@ -42,7 +55,7 @@ where po.procedure_concept_id in (SELECT concept_id from  #Codesets where codese
   ) P
 ) P
 JOIN @cdm_database_schema.observation_period OP on P.person_id = OP.person_id and P.start_date >=  OP.observation_period_start_date and P.start_date <= op.observation_period_end_date
-WHERE DATEADD(day,0,OP.OBSERVATION_PERIOD_START_DATE) <= P.START_DATE AND DATEADD(day,0,P.START_DATE) <= OP.OBSERVATION_PERIOD_END_DATE AND P.ordinal = 1
+WHERE DATEADD(day,0,OP.OBSERVATION_PERIOD_START_DATE) <= P.START_DATE AND DATEADD(day,10,P.START_DATE) <= OP.OBSERVATION_PERIOD_END_DATE
 -- End Primary Events
 
 )

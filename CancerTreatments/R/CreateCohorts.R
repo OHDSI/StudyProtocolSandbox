@@ -14,13 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-createCohorts <- function(connection,
+.createCohorts <- function(connection,
                            cdmDatabaseSchema,
                            cohortDatabaseSchema,
                            cohortTable,
                            oracleTempSchema,
                            outputFolder) {
-
+  
   # Create study cohort table structure:
   sql <- SqlRender::loadRenderTranslateSql(sqlFilename = "CreateCohortTable.sql",
                                            packageName = "CancerTreatments",
@@ -29,9 +29,9 @@ createCohorts <- function(connection,
                                            cohort_database_schema = cohortDatabaseSchema,
                                            cohort_table = cohortTable)
   DatabaseConnector::executeSql(connection, sql, progressBar = FALSE, reportOverallTime = FALSE)
-
-
-
+  
+  
+  
   # Instantiate cohorts:
   pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "CancerTreatments")
   cohortsToCreate <- read.csv(pathToCsv)
@@ -42,13 +42,13 @@ createCohorts <- function(connection,
                                              dbms = attr(connection, "dbms"),
                                              oracleTempSchema = oracleTempSchema,
                                              cdm_database_schema = cdmDatabaseSchema,
-
+                                                
                                              target_database_schema = cohortDatabaseSchema,
                                              target_cohort_table = cohortTable,
                                              target_cohort_id = cohortsToCreate$cohortId[i])
     DatabaseConnector::executeSql(connection, sql)
   }
-
+  
   # Fetch cohort counts:
   sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @cohort_database_schema.@cohort_table GROUP BY cohort_definition_id"
   sql <- SqlRender::renderSql(sql,
@@ -57,11 +57,10 @@ createCohorts <- function(connection,
   sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
   counts <- DatabaseConnector::querySql(connection, sql)
   names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
-  #bug fixed below
-   counts <- merge(counts, data.frame(cohortDefinitionId = cohortsToCreate$cohortId,cohortName  = cohortsToCreate$name))
-   write.csv(counts, file.path(outputFolder, "CohortCounts.csv"))
-
-
-
+  counts <- merge(counts, data.frame(cohortDefinitionId = cohortsToCreate$cohortId,
+                                     cohortName  = cohortsToCreate$name))
+  write.csv(counts, file.path(outputFolder, "CohortCounts.csv"))
+  
+  
 }
 

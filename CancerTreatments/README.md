@@ -65,17 +65,17 @@ How to run
 5. Execute
 
     ```r
-    hello()
+    
     cdmDatabaseSchema='mycdm'
     workDatabaseSchema='usersandbox'
     studyCohortTable='cancercohort'
     workFolder='c:/b/cath'
-
-execute(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseSchema,
+    execute(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseSchema,
         workDatabaseSchema = workDatabaseSchema,studyCohortTable = studyCohortTable,outputFolder = workFolder)
 
     ```
-6. Upload the file ```export/studyResult.zip``` in the output folder to the study coordinator:
+6. Upload the file ```export/studyResult.zip``` in the output folder to the study coordinator. The output consist of several files. One file is called CohortCounts.csv. The third column in this file (called count) will have count of patients found for each Atlas phenotype listed in file [CohortsToCreate.csv](https://github.com/OHDSI/StudyProtocolSandbox/blob/master/CancerTreatments/inst/settings/CohortsToCreate.csv)
+
     ```r
     submitResults("c:/temp/study_results/export", key = "<key>", secret = "<secret>")
     ```
