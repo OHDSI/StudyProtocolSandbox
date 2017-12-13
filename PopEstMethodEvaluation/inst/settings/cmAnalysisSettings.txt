@@ -10,6 +10,7 @@
       "removeDuplicateSubjects": true,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
+      "maxCohortSize": 250000,
       "covariateSettings": {
         "temporal": false,
         "DemographicsGender": true,
@@ -20,9 +21,6 @@
         "DemographicsIndexMonth": true,
         "ConditionGroupEraLongTerm": true,
         "ConditionGroupEraShortTerm": true,
-        "DrugEraLongTerm": true,
-        "DrugEraShortTerm": true,
-        "DrugEraOverlapping": true,
         "DrugGroupEraLongTerm": true,
         "DrugGroupEraShortTerm": true,
         "DrugGroupEraOverlapping": true,
@@ -80,6 +78,7 @@
       "modelType": "cox",
       "stratified": false,
       "useCovariates": false,
+      "inversePsWeighting": false,
       "prior": {
         "priorType": "laplace",
         "variance": 1,
@@ -128,6 +127,7 @@
       "removeDuplicateSubjects": true,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
+      "maxCohortSize": 250000,
       "covariateSettings": {
         "temporal": false,
         "DemographicsGender": true,
@@ -138,9 +138,6 @@
         "DemographicsIndexMonth": true,
         "ConditionGroupEraLongTerm": true,
         "ConditionGroupEraShortTerm": true,
-        "DrugEraLongTerm": true,
-        "DrugEraShortTerm": true,
-        "DrugEraOverlapping": true,
         "DrugGroupEraLongTerm": true,
         "DrugGroupEraShortTerm": true,
         "DrugGroupEraOverlapping": true,
@@ -187,7 +184,8 @@
     },
     "createPs": true,
     "createPsArgs": {
-      "errorOnHighCorrelation": false,
+      "maxCohortSizeForFitting": 150000,
+      "errorOnHighCorrelation": true,
       "stopOnError": false,
       "prior": {
         "priorType": "laplace",
@@ -230,7 +228,7 @@
     "matchOnPsArgs": {
       "caliper": 0.2,
       "caliperScale": "standardized logit",
-      "maxRatio": 100,
+      "maxRatio": 1,
       "attr_class": "args"
     },
     "matchOnPsAndCovariates": false,
@@ -242,6 +240,7 @@
       "modelType": "cox",
       "stratified": false,
       "useCovariates": false,
+      "inversePsWeighting": false,
       "prior": {
         "priorType": "laplace",
         "variance": 1,
@@ -290,6 +289,7 @@
       "removeDuplicateSubjects": true,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
+      "maxCohortSize": 250000,
       "covariateSettings": {
         "temporal": false,
         "DemographicsGender": true,
@@ -300,9 +300,6 @@
         "DemographicsIndexMonth": true,
         "ConditionGroupEraLongTerm": true,
         "ConditionGroupEraShortTerm": true,
-        "DrugEraLongTerm": true,
-        "DrugEraShortTerm": true,
-        "DrugEraOverlapping": true,
         "DrugGroupEraLongTerm": true,
         "DrugGroupEraShortTerm": true,
         "DrugGroupEraOverlapping": true,
@@ -349,7 +346,8 @@
     },
     "createPs": true,
     "createPsArgs": {
-      "errorOnHighCorrelation": false,
+      "maxCohortSizeForFitting": 150000,
+      "errorOnHighCorrelation": true,
       "stopOnError": false,
       "prior": {
         "priorType": "laplace",
@@ -403,6 +401,7 @@
       "modelType": "cox",
       "stratified": true,
       "useCovariates": false,
+      "inversePsWeighting": false,
       "prior": {
         "priorType": "laplace",
         "variance": 1,
@@ -451,6 +450,7 @@
       "removeDuplicateSubjects": true,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
+      "maxCohortSize": 250000,
       "covariateSettings": {
         "temporal": false,
         "DemographicsGender": true,
@@ -461,9 +461,6 @@
         "DemographicsIndexMonth": true,
         "ConditionGroupEraLongTerm": true,
         "ConditionGroupEraShortTerm": true,
-        "DrugEraLongTerm": true,
-        "DrugEraShortTerm": true,
-        "DrugEraOverlapping": true,
         "DrugGroupEraLongTerm": true,
         "DrugGroupEraShortTerm": true,
         "DrugGroupEraOverlapping": true,
@@ -510,7 +507,8 @@
     },
     "createPs": true,
     "createPsArgs": {
-      "errorOnHighCorrelation": false,
+      "maxCohortSizeForFitting": 150000,
+      "errorOnHighCorrelation": true,
       "stopOnError": false,
       "prior": {
         "priorType": "laplace",
@@ -565,6 +563,7 @@
       "modelType": "cox",
       "stratified": true,
       "useCovariates": false,
+      "inversePsWeighting": false,
       "prior": {
         "priorType": "laplace",
         "variance": 1,
@@ -613,6 +612,7 @@
       "removeDuplicateSubjects": true,
       "restrictToCommonPeriod": false,
       "washoutPeriod": 365,
+      "maxCohortSize": 250000,
       "covariateSettings": {
         "temporal": false,
         "DemographicsGender": true,
@@ -623,9 +623,6 @@
         "DemographicsIndexMonth": true,
         "ConditionGroupEraLongTerm": true,
         "ConditionGroupEraShortTerm": true,
-        "DrugEraLongTerm": true,
-        "DrugEraShortTerm": true,
-        "DrugEraOverlapping": true,
         "DrugGroupEraLongTerm": true,
         "DrugGroupEraShortTerm": true,
         "DrugGroupEraOverlapping": true,
@@ -672,7 +669,8 @@
     },
     "createPs": true,
     "createPsArgs": {
-      "errorOnHighCorrelation": false,
+      "maxCohortSizeForFitting": 150000,
+      "errorOnHighCorrelation": true,
       "stopOnError": false,
       "prior": {
         "priorType": "laplace",
@@ -727,6 +725,7 @@
       "modelType": "cox",
       "stratified": true,
       "useCovariates": true,
+      "inversePsWeighting": false,
       "prior": {
         "priorType": "laplace",
         "variance": 1,

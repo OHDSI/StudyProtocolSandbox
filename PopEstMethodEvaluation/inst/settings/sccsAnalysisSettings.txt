@@ -4,10 +4,11 @@
     "description": "Simple SCCS",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
-      "maxCasesPerOutcome": 1000000,
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
@@ -87,10 +88,11 @@
     "description": "Using pre-exposure window",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
-      "maxCasesPerOutcome": 1000000,
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
@@ -185,10 +187,11 @@
     "description": "Using age and season",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
-      "maxCasesPerOutcome": 1000000,
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
@@ -268,10 +271,11 @@
     "description": "Using event-dependent observation",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
-      "maxCasesPerOutcome": 1000000,
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
@@ -351,10 +355,11 @@
     "description": "Using all other exposures",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
-      "maxCasesPerOutcome": 1000000,
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },

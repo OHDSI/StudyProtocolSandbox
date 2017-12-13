@@ -53,7 +53,6 @@ runSelfControlledCohort <- function(connectionDetails,
                                                           cdmVersion = cdmVersion,
                                                           outputFolder = sccFolder,
                                                           analysisThreads = min(10, maxCores))
-
         sccSummary <- SelfControlledCohort::summarizeAnalyses(sccResult)
         saveRDS(sccSummary, sccSummaryFile)
     }

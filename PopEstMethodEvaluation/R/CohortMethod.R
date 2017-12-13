@@ -50,16 +50,6 @@ runCohortMethod <- function(connectionDetails,
         }
         cmAnalysisListFile <- system.file("settings", "cmAnalysisSettings.txt", package = "PopEstMethodEvaluation")
         cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
-        mailSettings <- list(from = Sys.getenv("mailAddress"),
-                             to = c(Sys.getenv("mailAddress")),
-                             smtp = list(host.name = "smtp.gmail.com", port = 465,
-                                         user.name = Sys.getenv("mailAddress"),
-                                         passwd = Sys.getenv("mailPassword"), ssl = TRUE),
-                             authenticate = TRUE,
-                             send = TRUE)
-
-        result <- OhdsiRTools::runAndNotify({
-
         cmResult <- CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
                                                 cdmDatabaseSchema = cdmDatabaseSchema,
                                                 oracleTempSchema = oracleTempSchema,
@@ -76,11 +66,12 @@ runCohortMethod <- function(connectionDetails,
                                                 psCvThreads = min(10, floor(maxCores/3)),
                                                 computeCovarBalThreads = min(3, maxCores),
                                                 trimMatchStratifyThreads = min(10, maxCores),
-                                                fitOutcomeModelThreads = min(max(1, floor(maxCores/4)), 4),
-                                                outcomeCvThreads = min(4, maxCores),
+                                                fitOutcomeModelThreads = min(max(1, floor(maxCores/8)), 4),
+                                                outcomeCvThreads = min(10, maxCores),
                                                 refitPsForEveryOutcome = FALSE)
-        }, mailSettings = mailSettings, label = "wprdusmjtglaz")
+
         cmSummary <- CohortMethod::summarizeAnalyses(cmResult)
+        # write.csv(cmSummary, file.path(workFolder, "cmSummary.csv"), row.names = FALSE)
         saveRDS(cmSummary, cmSummaryFile)
     }
     delta <- Sys.time() - start
@@ -97,6 +88,7 @@ createCohortMethodSettings <- function(fileName) {
                                                                      studyStartDate = "",
                                                                      studyEndDate = "",
                                                                      excludeDrugsFromCovariates = TRUE,
+                                                                     maxCohortSize = 250000,
                                                                      covariateSettings = covariateSettings)
 
     createStudyPopArgs1 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
@@ -117,15 +109,16 @@ createCohortMethodSettings <- function(fileName) {
                                                   fitOutcomeModel = TRUE,
                                                   fitOutcomeModelArgs = fitOutcomeModelArgs1)
 
-    createPsArgs <- CohortMethod::createCreatePsArgs(errorOnHighCorrelation = FALSE,
+    createPsArgs <- CohortMethod::createCreatePsArgs(errorOnHighCorrelation = TRUE,
                                                      stopOnError = FALSE,
+                                                     maxCohortSizeForFitting = 150000,
                                                      control = Cyclops::createControl(cvType = "auto",
                                                                                       startingVariance = 0.01,
                                                                                       noiseLevel = "quiet",
                                                                                       tolerance  = 2e-07,
                                                                                       cvRepetitions = 1))
 
-    matchOnPsArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
+    matchOnPsArgs1 <- CohortMethod::createMatchOnPsArgs(maxRatio = 1)
 
     cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
                                                   description = "Matching plus simple outcome model",
@@ -134,7 +127,7 @@ createCohortMethodSettings <- function(fileName) {
                                                   createPs = TRUE,
                                                   createPsArgs = createPsArgs,
                                                   matchOnPs = TRUE,
-                                                  matchOnPsArgs = matchOnPsArgs,
+                                                  matchOnPsArgs = matchOnPsArgs1,
                                                   fitOutcomeModel = TRUE,
                                                   fitOutcomeModelArgs = fitOutcomeModelArgs1)
 
@@ -155,6 +148,8 @@ createCohortMethodSettings <- function(fileName) {
                                                   fitOutcomeModel = TRUE,
                                                   fitOutcomeModelArgs = fitOutcomeModelArgs2)
 
+    matchOnPsArgs2 <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
+
     cmAnalysis4 <- CohortMethod::createCmAnalysis(analysisId = 4,
                                                   description = "Matching plus stratified outcome model",
                                                   getDbCohortMethodDataArgs = getDbCmDataArgs,
@@ -162,7 +157,7 @@ createCohortMethodSettings <- function(fileName) {
                                                   createPs = TRUE,
                                                   createPsArgs = createPsArgs,
                                                   matchOnPs = TRUE,
-                                                  matchOnPsArgs = matchOnPsArgs,
+                                                  matchOnPsArgs = matchOnPsArgs2,
                                                   fitOutcomeModel = TRUE,
                                                   fitOutcomeModelArgs = fitOutcomeModelArgs2)
 
@@ -183,7 +178,7 @@ createCohortMethodSettings <- function(fileName) {
                                                   createPs = TRUE,
                                                   createPsArgs = createPsArgs,
                                                   matchOnPs = TRUE,
-                                                  matchOnPsArgs = matchOnPsArgs,
+                                                  matchOnPsArgs = matchOnPsArgs2,
                                                   fitOutcomeModel = TRUE,
                                                   fitOutcomeModelArgs = fitOutcomeModelArgs3)
 

@@ -47,16 +47,6 @@ runCaseCrossover <- function(connectionDetails,
         }
         ccrAnalysisListFile <- system.file("settings", "ccrAnalysisSettings.txt", package = "PopEstMethodEvaluation")
         ccrAnalysisList <- CaseCrossover::loadCcrAnalysisList(ccrAnalysisListFile)
-
-        mailSettings <- list(from = Sys.getenv("mailAddress"),
-                             to = c(Sys.getenv("mailAddress")),
-                             smtp = list(host.name = "smtp.gmail.com", port = 465,
-                                         user.name = Sys.getenv("mailAddress"),
-                                         passwd = Sys.getenv("mailPassword"), ssl = TRUE),
-                             authenticate = TRUE,
-                             send = TRUE)
-
-        result <- OhdsiRTools::runAndNotify({
         ccrResult <- CaseCrossover::runCcrAnalyses(connectionDetails = connectionDetails,
                                                    cdmDatabaseSchema = cdmDatabaseSchema,
                                                    oracleTempSchema = oracleTempSchema,
@@ -72,7 +62,6 @@ runCaseCrossover <- function(connectionDetails,
                                                    selectSubjectsToIncludeThreads = min(5, maxCores),
                                                    getExposureStatusThreads = min(5, maxCores),
                                                    fitCaseCrossoverModelThreads = min(5, maxCores))
-        }, mailSettings = mailSettings, label = "wprdusmjtglay")
         ccrSummary <- CaseCrossover::summarizeCcrAnalyses(ccrResult)
         saveRDS(ccrSummary, ccrSummaryFile)
     }
