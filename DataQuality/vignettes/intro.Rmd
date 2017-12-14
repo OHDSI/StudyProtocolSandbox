@@ -10,13 +10,11 @@ vignette: >
 ---
 
 # Local report
-Data Quality package can produce a local report about a dataset. The package generates a local .doc file with such report.
+
+Data Quality package can produce a local report about a dataset. The package generates a local .doc file with such a report.
+Under development functionality.
 
 ```{r, echo=FALSE, results='asis'}
-writeReport()
+#writeReport()
 ```
 
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))

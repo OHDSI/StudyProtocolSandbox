@@ -159,7 +159,7 @@ createMIADLevelOne <- function(connectionDetails,
     
     
   }
-  writeLinnes('Done generating MIAD')
+  writeLines('Done generating MIAD')
   #return value
   invisible(NULL)
 }
