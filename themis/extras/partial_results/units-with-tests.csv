@@ -1,0 +1,42 @@
+concept_id,unit_concept_id,n,concept_name.x,domain_id.x,vocabulary_id.x,concept_class_id.x,concept_code.x,concept_name.y,domain_id.y,vocabulary_id.y,concept_class_id.y,concept_code.y
+3025315,9529,4,kilogram,Unit,UCUM,Unit,kg,Body weight,Measurement,LOINC,Clinical Observation,29463-7
+3006923,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Alanine aminotransferase serum/plasma,Measurement,LOINC,Lab Test,1742-6
+3013721,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Aspartate aminotransferase serum/plasma,Measurement,LOINC,Lab Test,1920-8
+3014576,8753,3,millimole per liter,Unit,UCUM,Unit,mmol/L,Chloride serum/plasma,Measurement,LOINC,Lab Test,2075-0
+3016771,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Amylase [Enzymatic activity/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,1798-8
+3019550,8753,3,millimole per liter,Unit,UCUM,Unit,mmol/L,Sodium serum/plasma,Measurement,LOINC,Lab Test,2951-2
+3023103,8753,3,millimole per liter,Unit,UCUM,Unit,mmol/L,Potassium serum/plasma,Measurement,LOINC,Lab Test,2823-3
+3025547,8763,3,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Thyroglobulin Ab [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,8098-6
+3026910,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2324-2
+3027238,8763,3,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Thyroperoxidase Ab [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,8099-4
+3035995,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Alkaline phosphatase serum/plasma,Measurement,LOINC,Lab Test,6768-6
+3036277,8582,3,centimeter,Unit,UCUM,Unit,cm,Body height,Measurement,LOINC,Clinical Observation,8302-2
+3038553,9531,3,kilogram per square meter,Unit,UCUM,Unit,kg/m2,Body mass index,Measurement,LOINC,Clinical Observation,39156-5
+4152194,8876,3,millimeter mercury column,Unit,UCUM,Unit,mm[Hg],Systolic blood pressure,Observation,SNOMED,Observable Entity,271649006
+4154790,8876,3,millimeter mercury column,Unit,UCUM,Unit,mm[Hg],Diastolic blood pressure,Observation,SNOMED,Observable Entity,271650006
+0,8554,2,percent,Unit,UCUM,Unit,%,No matching concept,Metadata,None,Undefined,No matching concept
+3000963,8713,2,gram per deciliter,Unit,UCUM,Unit,g/dL,Hemoglobin,Measurement,LOINC,Lab Test,718-7
+3001122,8748,2,microgram per liter,Unit,UCUM,Unit,ug/L,Ferritin [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2276-4
+3001420,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Magnesium [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,19123-9
+3001784,8554,2,percent,Unit,UCUM,Unit,%,Free/Total PSA serum/plasme,Measurement,LOINC,Lab Test,12841-3
+3003785,8842,2,nanogram per milliliter,Unit,UCUM,Unit,ng/mL,Carcinoembryonic Ag [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2039-6
+3004905,8645,2,unit per liter,Unit,UCUM,Unit,[U]/L,Lipase [Enzymatic activity/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,3040-3
+3006588,8763,2,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Cancer Ag 15-3 [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,6875-9
+3007070,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Cholesterol in HDL [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2085-9
+3008295,8862,2,milliosmole per kilogram,Unit,UCUM,Unit,mosm/kg,Osmolality of Serum or Plasma,Measurement,LOINC,Lab Test,2692-2
+3009201,9040,2,milli-international unit per liter,Unit,UCUM,Unit,10*-3.[iU]/L,Thyrotropin [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,3016-3
+3015632,8753,2,millimole per liter,Unit,UCUM,Unit,mmol/L,Carbon dioxide serum/plasma,Measurement,LOINC,Lab Test,2028-9
+3017250,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Creatinine [Mass/volume] in Urine,Measurement,LOINC,Lab Test,2161-8
+3018010,8554,2,percent,Unit,UCUM,Unit,%,Neutrophils %,Measurement,LOINC,Lab Test,26511-6
+3019800,8842,2,nanogram per milliliter,Unit,UCUM,Unit,ng/mL,Troponin T.cardiac [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,6598-7
+3020416,8815,2,million per microliter,Unit,UCUM,Unit,10*6/uL,Erythrocytes [#/volume] in Blood by Automated count,Measurement,LOINC,Lab Test,789-8
+3022192,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Triglyceride [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2571-8
+3022250,8645,2,unit per liter,Unit,UCUM,Unit,[U]/L,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,Measurement,LOINC,Lab Test,14804-9
+3022914,8763,2,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Cancer Ag 19-9 [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,24108-3
+3027597,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Direct bilirubin serum/plasma,Measurement,LOINC,Lab Test,1968-7
+3028286,8636,2,gram per liter,Unit,UCUM,Unit,g/L,Albumin [Mass/volume] in Serum or Plasma by Electrophoresis,Measurement,LOINC,Lab Test,2862-1
+3036535,8842,2,nanogram per milliliter,Unit,UCUM,Unit,ng/mL,Thyroglobulin [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,3013-0
+3037110,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Fasting glucose [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,1558-6
+3037551,8763,2,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Cancer Ag 125 [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,10334-1
+3045716,8753,2,millimole per liter,Unit,UCUM,Unit,mmol/L,Anion gap serum/plasma,Measurement,LOINC,Lab Test,33037-3
+40766929,44777556,2,per 24 hours,Unit,UCUM,Unit,/(24.h),How many cigarettes do you smoke per day now [PhenX],Measurement,LOINC,Clinical Observation,64218-1
