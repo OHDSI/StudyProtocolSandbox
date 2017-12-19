@@ -21,8 +21,8 @@ This file is optional to run. See separate miad.md file for descriptions of what
 ## Plain SQL
 
 
-Execute the following SQL and email the resulting CSV to themis group reprentative for a given convention issue (vojtech.huser at nih dot gov for measurement analysis)
-Name your CSV file with meaningless numerical 3 ditit ID for your site (e.g., 147) followed by dash and name of analysis. (e.g., 147-measurements-concepts.csv and 147-units-larger.csv). Your chosen anonymous site ID will remain the same for all exported files. Please make sure you use a standard .csv file (which can be read by R's read.csv or read_csv). 
+Execute the following SQL and email the resulting CSV to the themis group representative for a given convention issue (vojtech.huser at nih dot gov for measurement analysis)
+Name your CSV file with meaningless numerical 3 digit ID for your dataset (e.g., 147) followed by dash and name of analysis(which also may have dashes in the name (all lowercase)). (e.g., 147-measurements-concepts.csv and 147-units-larger.csv). Note that your chosen anonymous dataset ID will remain the same for all exported files. Please make sure you use a standard .csv file (which can be read by R's read.csv or read_csv). If you have multiple datasets to analyze, simply repeat the process for the second or third dataset chosing a different dataset ID.
 
 SQL is optimized to work in result schema. (written in specific dialect so some tweaking may be necessary)
 Email me is you need parametized SQL for this translation tool. http://data.ohdsi.org/SqlDeveloper/. In fact a draft of the parametized SQL is being created in the other folder but untill fuly finished, use the SQL code in this document.
@@ -41,6 +41,9 @@ select * from (
 
 
 ### units-larger
+
+As you explore the SQL, you can turn on the commented out columns to better understand the exported data. Centralized processing with work even if you leave the concept name columns in the query and export tham in the CSV (as long as you don't change column names for key columns needed by centralized processing.
+
 ```SQL
 select e.analysis_id,e.stratum_1 as concept_id,e.stratum_2 as unit_concept_id,
 1.0*count_value/denom as ratio
