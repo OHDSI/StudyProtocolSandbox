@@ -11,16 +11,23 @@ To test SQL based Arachne study, use this study to test the framework: https://w
 
 # Non-Arachne execution
 
+
+## R package
+Themis study is not yet fully implemented using R package. Only isolated pieces of code exist in the R subfolder. The core of the study is in the section 'plain SQL'.
+
+### miad.R
+This file is optional to run. See separate miad.md file for descriptions of what it is.
+
 ## Plain SQL
 
 
-Execute the following SQL and email the resulting CSV to themis group reprentative for a given convention issue (vojtech.huser at nih dot gov )
-Name your CSV file with meaningless numerical 3 ditit ID for your site followed by dash and name of analysis. (e.g., 147-units-limited.csv)
+Execute the following SQL and email the resulting CSV to themis group reprentative for a given convention issue (vojtech.huser at nih dot gov for measurement analysis)
+Name your CSV file with meaningless numerical 3 ditit ID for your site (e.g., 147) followed by dash and name of analysis. (e.g., 147-measurements-concepts.csv and 147-units-larger.csv). Your chosen anonymous site ID will remain the same for all exported files. Please make sure you use a standard .csv file (which can be read by R's read.csv or read_csv). 
 
 SQL is optimized to work in result schema. (written in specific dialect so some tweaking may be necessary)
-Email me is you need parametized SQL for this translation tool. http://data.ohdsi.org/SqlDeveloper/
+Email me is you need parametized SQL for this translation tool. http://data.ohdsi.org/SqlDeveloper/. In fact a draft of the parametized SQL is being created in the other folder but untill fuly finished, use the SQL code in this document.
 
-### Measurements-concepts
+### measurements-concepts
 
 ```SQL
 select * from (
@@ -31,28 +38,9 @@ select * from (
 --order by stratum_1; --uncomment the last line to not to reveal ranking order of your concepts
 ```
 
-### Units-limited
-```SQL
-select e.analysis_id,e.stratum_1 as concept_id,e.stratum_2 as unit_concept_id,
-1.0*count_value/denom as ratio
---,count_value,denom   --comment this back in to see absolute numbers
---,c1.concept_name,c2.concept_name as unit_name
-from achilles_results e 
-join --query below is to compute totals for each stratum
-  (select e.analysis_id,e.stratum_1,sum(count_value) as denom from achilles_results e where analysis_id in (1807) group by e.analysis_id,e.stratum_1) s 
-    on e.analysis_id = s.analysis_id and e.stratum_1 = s.stratum_1
---join public.concept c1 on cast(e.stratum_1 as int) = c1.concept_id  
---join public.concept c2 on cast(e.stratum_2 as int) = c2.concept_id 
-where e.analysis_id in (1807) 
-  and 1.0*count_value/denom <= 0.95 --measurements with just one major unit are excluded to minimize the sharing
-  and 1.0*count_value/denom >= 0.10 --smaller ratio rows are not included in the extract
-  and e.stratum_2 <> '0' --exclude data where unit is not mapped to a formal concept
-  and s.denom > 1000 --minumum number of rows for a test to be included, tweak this up to reduce the size of shared data
-order by e.stratum_1, count_value desc
-;
-```
 
-### Units-larger
+
+### units-larger
 ```SQL
 select e.analysis_id,e.stratum_1 as concept_id,e.stratum_2 as unit_concept_id,
 1.0*count_value/denom as ratio
@@ -73,12 +61,34 @@ order by e.stratum_1, count_value desc
 ;
 ```
 
+### units-limited
+
+This SQL is not required if you executed the units-larger SQL. The limited code is nearly a watered down version of the larger query.
+
+```SQL
+select e.analysis_id,e.stratum_1 as concept_id,e.stratum_2 as unit_concept_id,
+1.0*count_value/denom as ratio
+--,count_value,denom   --comment this back in to see absolute numbers
+--,c1.concept_name,c2.concept_name as unit_name
+from achilles_results e 
+join --query below is to compute totals for each stratum
+  (select e.analysis_id,e.stratum_1,sum(count_value) as denom from achilles_results e where analysis_id in (1807) group by e.analysis_id,e.stratum_1) s 
+    on e.analysis_id = s.analysis_id and e.stratum_1 = s.stratum_1
+--join public.concept c1 on cast(e.stratum_1 as int) = c1.concept_id  
+--join public.concept c2 on cast(e.stratum_2 as int) = c2.concept_id 
+where e.analysis_id in (1807) 
+  and 1.0*count_value/denom <= 0.95 --measurements with just one major unit are excluded to minimize the sharing
+  and 1.0*count_value/denom >= 0.10 --smaller ratio rows are not included in the extract
+  and e.stratum_2 <> '0' --exclude data where unit is not mapped to a formal concept
+  and s.denom > 1000 --minumum number of rows for a test to be included, tweak this up to reduce the size of shared data
+order by e.stratum_1, count_value desc
+;
+```
 
 ### Unit Results
 
 Units poster at 2017 OHDSI symposium: http://www.ohdsi.org/web/wiki/lib/exe/fetch.php?media=resources:huser-2017-ohdsi-symp-units.pdf
 
-## R package
 
 
 # General notes
