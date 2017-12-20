@@ -4,8 +4,9 @@
 #' @param
 #'
 #' @export
-OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_ids, user_folder,
-                        OMOP = F, concept_file = NULL, dates, Share_Data = F, pop_id = 116)
+OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_ids = c(904, 704, 1804, 604, 404),
+                        user_folder='c:/temp/',
+                        OMOP = TRUE, concept_file = NULL, dates, Share_Data = FALSE, pop_id = 116)
   #other params)
 {
   # If we don't give sites an ID number, then one will be randomly chosen.
@@ -32,7 +33,7 @@ OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_id
   getData2(connectionDetails,resultsDatabaseSchema, dataExportFolder, medical_event_ids)
 
   analyze_all(site_id, all_ids = result_event_ids, pop_id = pop_id, resultsDatabaseSchema, dataExportFolder,
-          resultsFolder, exportFolder, kbFolder, write_full_cids = T, OMOP = T, concept_file, Share_Data, dates)
+          resultsFolder, exportFolder, kbFolder, write_full_cids = TRUE, OMOP = TRUE, concept_file, Share_Data, dates)
 }
 
 #' @description This function will analyze all analysis_ids for all schemas you ask of it.
@@ -74,12 +75,20 @@ OHDSITrends2 <- function(pop_file_path, event_file_path, concept_file = NULL, an
   file.copy(from = system.file("Results.txt", package = "OHDSITrends"),
             to = paste0(resultsFolder, 'Results.txt'))
 
+  #using pop data arrive at exclude rows
+  #exclude<- pop %>% dplyr::filter(cnt<10000)
+
   print("Getting results")
   l <- analyze_one(pop, event, analysis_id, db_schema, resultsFolder,
               write_full_cids, OMOP, concept_file, dates)
 
+
   print("Exporting results")
   anonym_db <- anonymize_db_schema(site_id, 1)
+
+  #reduce l$evemtM2 to not have exclude rows
+  #antijoin with exclude
+
   exportResults(l$eventM2, l$full_cids, l$rollup1.0, l$rollup2.0, anonym_db, analysis_id,
                 kbFolder, exportFolder, Share_Data = F, concept_file)
 }
@@ -87,3 +96,11 @@ OHDSITrends2 <- function(pop_file_path, event_file_path, concept_file = NULL, an
 
 
 
+#step1 get the data
+#step2 pre processing
+#step 3_2 lin filter application
+
+
+#analazy all file
+ #analaze_one  does one event
+ #trend call the above

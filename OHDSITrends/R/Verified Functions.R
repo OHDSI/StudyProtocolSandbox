@@ -1454,6 +1454,13 @@ lin_filter2 <- function(eventM2, alpha = 0.1, m = 2/2000)
 
   xxx2 %<>% dplyr::mutate(score = ifelse(slope < dec_m3, -3, score),
                           classification = ifelse(slope < dec_m3, "Very Strongly Sinking", classification)) #Filter 3
+
+
+
+  #reduce size of xxx
+
+
+
   lin_list <- list('bad' = bad, 'good' = xxx2)
   return(lin_list)
 }
@@ -1603,6 +1610,6 @@ analyze_grouped_events <- function(full_cids, eventM2, dg, kb2.csv, analysis_id,
   # print("plotting group_by graphs")
   # pdf.name <- paste(analysis_id, db_schema, 'grouped_by_concept_ancestor.pdf', sep = '_')
   # pdf.path <- paste0(folder, pdf.name)
-  # 
+  #
   # plot_group_pdf(plot_table1, dg, pdf.path)
 }
