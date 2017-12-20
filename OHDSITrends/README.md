@@ -1,7 +1,7 @@
 This package is using Achilles precomputed metadata to analyze trends. The intent is to do data quality inspection. It is an extenstion of the Data Quality study.  The package can  analyze trends in medical events at a health-system-wide or national level. It also works for non-OMOP sites. 
 
 
-###### Version 0.0.5
+
 
 ## Purpose
 This package is optimally designed to analyze trends in interesting medical events from datasets built under the OMOP Common Data Model. 
@@ -96,7 +96,7 @@ concept <- readr::read_csv('CONCEPT.csv')
 mySchemas = c('your_results_schema_with_achilles_tables')
 
 
-result_event_ids  = c(904, 604, 404, 704) # 904 is drugEra (ingredient), 604 is procedure, 404 is condition, 704 = drugExposure
+result_event_ids  = c(904, 704, 1804, 604, 404) # 904 is drugEra (ingredient), 604 is procedure, 404 is condition, 704 = drugExposure, 1804 = measurements
 
 dates = 1985:2016 # Appropriate for the example above
 
@@ -120,7 +120,6 @@ OHDSITrends(connectionDetails = myConnDetails,
    resultsDatabaseSchema = mySchemas, 
    result_event_ids,
    user_folder,
-   OMOP=TRUE,
    concept, 
    dates)
 ```
