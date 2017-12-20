@@ -11,7 +11,7 @@ This package is optimally designed to analyze trends in interesting medical even
 This package was built using R 3.4.1 and dplyr version 0.7.2.
 
 Additionally, the following packages must be installed, but not loaded with the library() command:
-plyr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, and DatabaseConnector; DatabaseConnector depends on SQLReadr and RJava.
+plyr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, and DatabaseConnector; DatabaseConnector depends on SQLRender and RJava.
 
 
 
