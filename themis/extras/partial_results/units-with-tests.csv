@@ -1,42 +1,166 @@
-concept_id,unit_concept_id,n,concept_name.x,domain_id.x,vocabulary_id.x,concept_class_id.x,concept_code.x,concept_name.y,domain_id.y,vocabulary_id.y,concept_class_id.y,concept_code.y
-3025315,9529,4,kilogram,Unit,UCUM,Unit,kg,Body weight,Measurement,LOINC,Clinical Observation,29463-7
-3006923,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Alanine aminotransferase serum/plasma,Measurement,LOINC,Lab Test,1742-6
-3013721,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Aspartate aminotransferase serum/plasma,Measurement,LOINC,Lab Test,1920-8
-3014576,8753,3,millimole per liter,Unit,UCUM,Unit,mmol/L,Chloride serum/plasma,Measurement,LOINC,Lab Test,2075-0
-3016771,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Amylase [Enzymatic activity/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,1798-8
-3019550,8753,3,millimole per liter,Unit,UCUM,Unit,mmol/L,Sodium serum/plasma,Measurement,LOINC,Lab Test,2951-2
-3023103,8753,3,millimole per liter,Unit,UCUM,Unit,mmol/L,Potassium serum/plasma,Measurement,LOINC,Lab Test,2823-3
-3025547,8763,3,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Thyroglobulin Ab [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,8098-6
-3026910,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2324-2
-3027238,8763,3,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Thyroperoxidase Ab [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,8099-4
-3035995,8645,3,unit per liter,Unit,UCUM,Unit,[U]/L,Alkaline phosphatase serum/plasma,Measurement,LOINC,Lab Test,6768-6
-3036277,8582,3,centimeter,Unit,UCUM,Unit,cm,Body height,Measurement,LOINC,Clinical Observation,8302-2
-3038553,9531,3,kilogram per square meter,Unit,UCUM,Unit,kg/m2,Body mass index,Measurement,LOINC,Clinical Observation,39156-5
-4152194,8876,3,millimeter mercury column,Unit,UCUM,Unit,mm[Hg],Systolic blood pressure,Observation,SNOMED,Observable Entity,271649006
-4154790,8876,3,millimeter mercury column,Unit,UCUM,Unit,mm[Hg],Diastolic blood pressure,Observation,SNOMED,Observable Entity,271650006
-0,8554,2,percent,Unit,UCUM,Unit,%,No matching concept,Metadata,None,Undefined,No matching concept
-3000963,8713,2,gram per deciliter,Unit,UCUM,Unit,g/dL,Hemoglobin,Measurement,LOINC,Lab Test,718-7
-3001122,8748,2,microgram per liter,Unit,UCUM,Unit,ug/L,Ferritin [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2276-4
-3001420,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Magnesium [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,19123-9
-3001784,8554,2,percent,Unit,UCUM,Unit,%,Free/Total PSA serum/plasme,Measurement,LOINC,Lab Test,12841-3
-3003785,8842,2,nanogram per milliliter,Unit,UCUM,Unit,ng/mL,Carcinoembryonic Ag [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2039-6
-3004905,8645,2,unit per liter,Unit,UCUM,Unit,[U]/L,Lipase [Enzymatic activity/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,3040-3
-3006588,8763,2,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Cancer Ag 15-3 [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,6875-9
-3007070,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Cholesterol in HDL [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2085-9
-3008295,8862,2,milliosmole per kilogram,Unit,UCUM,Unit,mosm/kg,Osmolality of Serum or Plasma,Measurement,LOINC,Lab Test,2692-2
-3009201,9040,2,milli-international unit per liter,Unit,UCUM,Unit,10*-3.[iU]/L,Thyrotropin [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,3016-3
-3015632,8753,2,millimole per liter,Unit,UCUM,Unit,mmol/L,Carbon dioxide serum/plasma,Measurement,LOINC,Lab Test,2028-9
-3017250,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Creatinine [Mass/volume] in Urine,Measurement,LOINC,Lab Test,2161-8
-3018010,8554,2,percent,Unit,UCUM,Unit,%,Neutrophils %,Measurement,LOINC,Lab Test,26511-6
-3019800,8842,2,nanogram per milliliter,Unit,UCUM,Unit,ng/mL,Troponin T.cardiac [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,6598-7
-3020416,8815,2,million per microliter,Unit,UCUM,Unit,10*6/uL,Erythrocytes [#/volume] in Blood by Automated count,Measurement,LOINC,Lab Test,789-8
-3022192,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Triglyceride [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2571-8
-3022250,8645,2,unit per liter,Unit,UCUM,Unit,[U]/L,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,Measurement,LOINC,Lab Test,14804-9
-3022914,8763,2,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Cancer Ag 19-9 [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,24108-3
-3027597,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Direct bilirubin serum/plasma,Measurement,LOINC,Lab Test,1968-7
-3028286,8636,2,gram per liter,Unit,UCUM,Unit,g/L,Albumin [Mass/volume] in Serum or Plasma by Electrophoresis,Measurement,LOINC,Lab Test,2862-1
-3036535,8842,2,nanogram per milliliter,Unit,UCUM,Unit,ng/mL,Thyroglobulin [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,3013-0
-3037110,8840,2,milligram per deciliter,Unit,UCUM,Unit,mg/dL,Fasting glucose [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,1558-6
-3037551,8763,2,unit per milliliter,Unit,UCUM,Unit,[U]/mL,Cancer Ag 125 [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,10334-1
-3045716,8753,2,millimole per liter,Unit,UCUM,Unit,mmol/L,Anion gap serum/plasma,Measurement,LOINC,Lab Test,33037-3
-40766929,44777556,2,per 24 hours,Unit,UCUM,Unit,/(24.h),How many cigarettes do you smoke per day now [PhenX],Measurement,LOINC,Clinical Observation,64218-1
+concept_id,unit_concept_id,n,mean_ratio,concept_name.x,concept_name.y,concept_code.y,vocabulary_id.x,concept_code.x
+3014576,8753,4,0.915590162127351,Chloride serum/plasma,millimole per liter,mmol/L,LOINC,2075-0
+3019550,8753,4,0.9125469629078422,Sodium serum/plasma,millimole per liter,mmol/L,LOINC,2951-2
+3023103,8753,4,0.9060884496561895,Potassium serum/plasma,millimole per liter,mmol/L,LOINC,2823-3
+3025315,9529,4,0.833007209650264,Body weight,kilogram,kg,LOINC,29463-7
+3000963,8713,3,0.6452222172457961,Hemoglobin,gram per deciliter,g/dL,LOINC,718-7
+3001420,8840,3,0.6858153925156025,Magnesium [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,19123-9
+3001784,8554,3,0.7693048612251266,Free/Total PSA serum/plasme,percent,%,LOINC,12841-3
+3003785,8842,3,0.6605020169312317,Carcinoembryonic Ag [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,2039-6
+3006923,8645,3,0.9525654174540078,Alanine aminotransferase serum/plasma,unit per liter,[U]/L,LOINC,1742-6
+3007070,8840,3,0.986188111143189,Cholesterol in HDL [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,2085-9
+3008295,8862,3,0.4693411727731412,Osmolality of Serum or Plasma,milliosmole per kilogram,mosm/kg,LOINC,2692-2
+3013721,8645,3,0.9446346110525145,Aspartate aminotransferase serum/plasma,unit per liter,[U]/L,LOINC,1920-8
+3015632,8753,3,0.8902768075712661,Carbon dioxide serum/plasma,millimole per liter,mmol/L,LOINC,2028-9
+3016771,8645,3,0.9120020541180083,Amylase [Enzymatic activity/volume] in Serum or Plasma,unit per liter,[U]/L,LOINC,1798-8
+3017250,8840,3,0.980129915510958,Creatinine [Mass/volume] in Urine,milligram per deciliter,mg/dL,LOINC,2161-8
+3018010,8554,3,0.5035285937090843,Neutrophils %,percent,%,LOINC,26511-6
+3019800,8842,3,0.6977477618078524,Troponin T.cardiac [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,6598-7
+3022192,8840,3,0.9776781994303997,Triglyceride [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,2571-8
+3025547,8763,3,0.7180100949724381,Thyroglobulin Ab [Units/volume] in Serum or Plasma,unit per milliliter,[U]/mL,LOINC,8098-6
+3026910,8645,3,0.9271042174947476,Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma,unit per liter,[U]/L,LOINC,2324-2
+3027238,8763,3,0.7573568433099233,Thyroperoxidase Ab [Units/volume] in Serum or Plasma,unit per milliliter,[U]/mL,LOINC,8099-4
+3027597,8840,3,0.9961588768907413,Direct bilirubin serum/plasma,milligram per deciliter,mg/dL,LOINC,1968-7
+3035995,8645,3,0.9467700877345296,Alkaline phosphatase serum/plasma,unit per liter,[U]/L,LOINC,6768-6
+3036277,8582,3,0.7153780872824976,Body height,centimeter,cm,LOINC,8302-2
+3036535,8842,3,0.6646622711750012,Thyroglobulin [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,3013-0
+3037110,8840,3,0.9676757048052363,Fasting glucose [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,1558-6
+3038553,9531,3,1,Body mass index,kilogram per square meter,kg/m2,LOINC,39156-5
+3045716,8753,3,0.6803274312935317,Anion gap serum/plasma,millimole per liter,mmol/L,LOINC,33037-3
+4152194,8876,3,0.8979523677692063,Systolic blood pressure,millimeter mercury column,mm[Hg],SNOMED,271649006
+4154790,8876,3,0.8892318095007576,Diastolic blood pressure,millimeter mercury column,mm[Hg],SNOMED,271650006
+3000034,8840,2,0.553627281100142,Microalbumin urine,milligram per deciliter,mg/dL,LOINC,14957-5
+3000067,8845,2,0.9780942047588079,Parathyrin.intact [Mass/volume] in Serum or Plasma,picogram per milliliter,pg/mL,LOINC,2731-8
+3000185,8554,2,0.8739270344040315,Iron saturation [Mass Fraction] in Serum or Plasma,percent,%,LOINC,2502-3
+3000285,8753,2,0.6279210496134837,Sodium [Moles/volume] in Blood,millimole per liter,mmol/L,LOINC,2947-0
+3000620,8840,2,0.7326864213376405,Complement C3 [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,4485-9
+3000666,8554,2,0.4403371537111965,Metamyelocytes/100 leukocytes in Blood by Manual count,percent,%,LOINC,740-1
+3000787,8751,2,0.1337508069015545,Salicylates [Mass/volume] in Serum or Plasma,milligram per liter,mg/L,LOINC,4024-6
+3000787,8840,2,0.3894047995259065,Salicylates [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,4024-6
+3000787,8859,2,0.410212269220207,Salicylates [Mass/volume] in Serum or Plasma,microgram per milliliter,ug/mL,LOINC,4024-6
+3000905,8848,2,0.5155012830410095,Leukocytes [#/volume] in Blood by Automated count,thousand per microliter,10*3/uL,LOINC,6690-2
+3001122,8748,2,0.656943700710739,Ferritin [Mass/volume] in Serum or Plasma,microgram per liter,ug/L,LOINC,2276-4
+3001122,8842,2,0.8153347994729985,Ferritin [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,2276-4
+3001138,8842,2,0.9534427034324755,Prostate Specific Ag Free [Units/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,19201-3
+3002400,8837,2,0.884622155453468,Iron [Mass/volume] in Serum or Plasma,microgram per deciliter,ug/dL,LOINC,2498-4
+3002666,8840,2,0.653993721660272,Glucose [Mass/volume] in Serum or Plasma --baseline,milligram per deciliter,mg/dL,LOINC,1547-9
+3003181,8753,2,0.8450209871182515,Sodium [Moles/volume] in Urine,millimole per liter,mmol/L,LOINC,2955-3
+3003458,8840,2,1,Phosphate [Moles/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,14879-1
+3004248,8736,2,0.990017710915282,Sex hormone binding globulin [Moles/volume] in Serum or Plasma,nanomole per liter,nmol/L,LOINC,13967-5
+3004410,8554,2,0.7111001289819225,Hemoglobin A1c (Glycated),percent,%,LOINC,4548-4
+3004501,8840,2,0.971291165178109,Glucose lab,milligram per deciliter,mg/dL,LOINC,2345-7
+3004722,8842,2,0.9606118165155375,Prolactin [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,2842-3
+3004905,8645,2,0.976567588371129,Lipase [Enzymatic activity/volume] in Serum or Plasma,unit per liter,[U]/L,LOINC,3040-3
+3005446,8554,2,0.795789850319041,Hemoglobin A1/Hemoglobin.total in Blood,percent,%,LOINC,4547-6
+3005456,8753,2,0.5122561925316171,Potassium [Moles/volume] in Blood,millimole per liter,mmol/L,LOINC,6298-4
+3005715,8859,2,0.7864084507042255,Vancomycin [Mass/volume] in Serum or Plasma,microgram per milliliter,ug/mL,LOINC,20578-1
+3005719,8840,2,0.9764949042654916,IgG [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,2465-3
+3005770,8795,2,0.7395485944326265,Creatinine renal clearance in 24 hour,milliliter per minute,mL/min,LOINC,2164-2
+3005791,8748,2,0.6868419825907475,Eosinophil cationic protein (ECP) [Mass/volume] in Serum,microgram per liter,ug/L,LOINC,25638-8
+3006588,8763,2,0.926670792079208,Cancer Ag 15-3 [Units/volume] in Serum or Plasma,unit per milliliter,[U]/mL,LOINC,6875-9
+3006661,8840,2,0.73166065310336,Calcium [Mass/volume] in Urine,milligram per deciliter,mg/dL,LOINC,17862-4
+3007124,8554,2,0.678147943592887,Reticulocytes/100 erythrocytes in Blood by Automated count,percent,%,LOINC,17849-1
+3007164,8840,2,0.9848085171224235,IgA [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,2458-8
+3007461,8848,2,0.6777195332216801,Platelet count,thousand per microliter,10*3/uL,LOINC,26515-7
+3007733,8753,2,0.8114754098360655,Chloride [Moles/volume] in Urine,millimole per liter,mmol/L,LOINC,2078-4
+3007950,8840,2,0.5312877942644956,Urobilinogen [Mass/volume] in Urine,milligram per deciliter,mg/dL,LOINC,3107-0
+3008598,8817,2,0.9840121436738555,Thyroxine (T4) free [Mass/volume] in Serum or Plasma,nanogram per deciliter,ng/dL,LOINC,3024-7
+3009201,9040,2,0.38164142024593417,Thyrotropin [Units/volume] in Serum or Plasma,milli-international unit per liter,10*-3.[iU]/L,LOINC,3016-3
+3009306,8842,2,0.9493749156066205,Alpha-1-Fetoprotein [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,1834-1
+3009508,8753,2,0.13597586409735551,Creatinine [Moles/volume] in Urine,millimole per liter,mmol/L,LOINC,14683-7
+3009542,8554,2,0.9892007694338625,Hematocrit,percent,%,LOINC,20570-8
+3009682,8837,2,0.8192893888413031,Cortisol [Mass/volume] in Serum or Plasma,microgram per deciliter,ug/dL,LOINC,2143-6
+3009744,8713,2,0.4760452790491331,Erythrocyte mean corpuscular hemoglobin concentration [Mass/volume] by Automated count,gram per deciliter,g/dL,LOINC,786-4
+3010084,8842,2,0.9739033540845166,C peptide [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,1986-9
+3010156,8751,2,0.9934933827031305,C reactive protein [Mass/volume] in Serum or Plasma by High sensitivity method,milligram per liter,mg/L,LOINC,30522-7
+3010340,8817,2,0.9727311107174395,Triiodothyronine (T3) [Mass/volume] in Serum or Plasma,nanogram per deciliter,ng/dL,LOINC,3053-6
+3010375,8842,2,0.9046716797915805,Cyclosporine [Mass/volume] in Blood,nanogram per milliliter,ng/mL,LOINC,3520-4
+3010989,8845,2,0.9730296563396865,Calcitonin [Mass/volume] in Serum or Plasma,picogram per milliliter,pg/mL,LOINC,1992-7
+3011099,8736,2,0.997680815884582,Sex hormone binding globulin [Mass/volume] in Serum or Plasma,nanomole per liter,nmol/L,LOINC,2942-1
+3011185,8554,2,0.8059208731241475,Granulocytes/100 leukocytes in Blood by Automated count,percent,%,LOINC,19023-1
+3011335,8842,2,0.875391128290079,Digoxin [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,10535-3
+3011587,8554,2,0.4436799262148645,Promyelocytes/100 leukocytes in Blood by Manual count,percent,%,LOINC,783-1
+3012030,8564,2,0.9615711479174616,Erythrocyte mean corpuscular hemoglobin [Entitic mass] by Automated count,picogram,pg,LOINC,785-6
+3012501,8753,2,0.6561848875088921,Base excess of blood,millimole per liter,mmol/L,LOINC,11555-0
+3013201,8751,2,0.5462764608033555,Beta-2-Microglobulin [Mass/volume] in Serum or Plasma,milligram per liter,mg/L,LOINC,1952-1
+3013682,8840,2,0.971514628652876,Urea nitrogen serum/plasma,milligram per deciliter,mg/dL,LOINC,3094-0
+3013707,8752,2,0.5307278862223137,Erythrocyte sedimentation rate by Westergren method,millimeter per hour,mm/h,LOINC,4537-7
+3013784,8753,2,0.927738050432819,Calcium.ionized [Moles/volume] in Serum or Plasma by Ion-selective membrane electrode (ISE),millimole per liter,mmol/L,LOINC,12180-6
+3015182,8554,2,0.20413656920468498,Erythrocyte distribution width [Entitic volume] by Automated count,percent,%,LOINC,21000-5
+3015183,8752,2,0.5360777510897607,Erythrocyte sedimentation rate,millimeter per hour,mm/h,LOINC,30341-2
+3015377,8840,2,0.9760228444265315,Calcium [Moles/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,2000-8
+3015745,8554,2,0.92846339987900794,Hemoglobin F [Presence] in Blood,percent,%,LOINC,4579-9
+3015884,8837,2,0.8973111198535825,Dehydroepiandrosterone sulfate (DHEA-S) [Mass/volume] in Serum or Plasma,microgram per deciliter,ug/dL,LOINC,2191-5
+3015956,8554,2,0.7351024781123012,Eosinophils/100 leukocytes in Blood by Manual count,percent,%,LOINC,714-6
+3016038,8753,2,0.915151199327928,Potassium [Moles/volume] in Urine,millimole per liter,mmol/L,LOINC,2828-2
+3016201,8751,2,0.3790691199128105,Valproate serum/plasma,milligram per liter,mg/L,LOINC,4086-5
+3016723,8840,2,0.9629051334726485,Creatinine serum/plasma,milligram per deciliter,mg/dL,LOINC,2160-0
+3016724,8749,2,0.887208867437004,Homocysteine [Moles/volume] in Serum or Plasma,micromole per liter,umol/L,LOINC,13965-9
+3016991,8837,2,0.4336898691206385,Thyroxine (T4) [Mass/volume] in Serum or Plasma,microgram per deciliter,ug/dL,LOINC,3026-2
+3016999,8985,2,0.4652320398246639,Rubella virus IgG,international unit per milliliter,[iU]/mL,LOINC,8014-3
+3018229,8554,2,0.40961146133068,Myelocytes/100 leukocytes in Blood by Manual count,percent,%,LOINC,749-2
+3018572,8753,2,0.6962026976712092,Chloride [Moles/volume] in Blood,millimole per liter,mmol/L,LOINC,2069-3
+3018738,8554,2,0.9470569024311625,Hemoglobin F/Hemoglobin.total in Blood,percent,%,LOINC,4576-5
+3019800,8748,2,0.1386544620512132,Troponin T.cardiac [Mass/volume] in Serum or Plasma,microgram per liter,ug/L,LOINC,6598-7
+3019839,8749,2,0.9514428523163145,Fructosamine [Moles/volume] in Serum or Plasma,micromole per liter,umol/L,LOINC,15069-8
+3019897,8554,2,0.65424300504982,Erythrocyte distribution width [Ratio] by Automated count,percent,%,LOINC,788-0
+3019900,8753,2,0.9861378708080825,Cholesterol [Moles/volume] in Serum or Plasma,millimole per liter,mmol/L,LOINC,14647-2
+3020416,8815,2,0.977077587571539,Erythrocytes [#/volume] in Blood by Automated count,million per microliter,10*6/uL,LOINC,789-8
+3020460,8751,2,0.852946564813861,C reactive protein [Mass/volume] in Serum or Plasma,milligram per liter,mg/L,LOINC,1988-5
+3020630,8713,2,0.9607829793445091,Protein serum/plasma,gram per deciliter,g/dL,LOINC,2885-2
+3020784,8554,2,0.7219203457857365,Hemoglobin A2/Hemoglobin.total in Blood,percent,%,LOINC,4551-8
+3021119,8753,2,0.849461593682699,Calcium.ionized [Moles/volume] in Blood,millimole per liter,mmol/L,LOINC,1994-3
+3021337,8842,2,0.985386106007209,Troponin I.cardiac [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,10839-9
+3021800,8753,2,0.35642059142817634,Base deficit in Blood,millimole per liter,mmol/L,LOINC,30318-0
+3022250,8645,2,0.8586609414120996,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,unit per liter,[U]/L,LOINC,14804-9
+3022407,8554,2,0.7848804933219482,Monocytes/100 leukocytes in Blood by Manual count,percent,%,LOINC,744-3
+3022616,8751,2,0.390949014853088,Phenytoin serum/plasma,milligram per liter,mg/L,LOINC,3968-5
+3022914,8763,2,0.966914613358128,Cancer Ag 19-9 [Units/volume] in Serum or Plasma,unit per milliliter,[U]/mL,LOINC,24108-3
+3023314,8554,2,0.4775990372174243,Hematocrit [Volume Fraction] of Blood by Automated count,percent,%,LOINC,4544-3
+3023599,8583,2,0.9682262054734461,Erythrocyte mean corpuscular volume [Entitic volume] by Automated count,femtoliter,fL,LOINC,787-2
+3023602,8753,2,0.5382691345672836,Cholesterol in HDL [Moles/volume] in Serum or Plasma,millimole per liter,mmol/L,LOINC,14646-4
+3023643,8554,2,0.470985998192329,Blasts/100 leukocytes in Blood by Manual count,percent,%,LOINC,709-6
+3023709,8842,2,0.9756292306005205,Somatotropin [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,2963-7
+3024128,8840,2,0.969771721818794,Total Bilirubin serum/plasma,milligram per deciliter,mg/dL,LOINC,1975-2
+3024561,8713,2,0.9507917108567805,Albumin serum/plasma,gram per deciliter,g/dL,LOINC,1751-7
+3024666,8753,2,0.873266880158766,Lithium [Moles/volume] in Serum or Plasma,millimole per liter,mmol/L,LOINC,14334-7
+3024929,8848,2,0.515209796102429,Platelets [#/volume] in Blood by Automated count,thousand per microliter,10*3/uL,LOINC,777-3
+3025285,8845,2,0.9779313141121204,Estradiol (E2) [Mass/volume] in Serum or Plasma,picogram per milliliter,pg/mL,LOINC,2243-4
+3026250,8842,2,0.8647245585146766,Tacrolimus [Mass/volume] in Blood,nanogram per milliliter,ng/mL,LOINC,11253-2
+3026729,8840,2,0.9197940883427436,Phosphate [Mass/volume] in Urine,milligram per deciliter,mg/dL,LOINC,2778-9
+3026782,8862,2,0.6260553890157035,Osmolality of Urine,milliosmole per kilogram,mosm/kg,LOINC,2695-5
+3027114,8840,2,0.9561684505772465,Cholesterol [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,2093-3
+3027370,8751,2,0.866864197530864,Insulin-like growth factor binding protein 3 [Mass/volume] in Serum or Plasma,milligram per liter,mg/L,LOINC,2483-6
+3027694,8840,2,0.972457627118644,Calcium.ionized [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,17863-2
+3028286,8636,2,0.9898600449848545,Albumin [Mass/volume] in Serum or Plasma by Electrophoresis,gram per liter,g/L,LOINC,2862-1
+3028437,8840,2,0.947821325158878,Cholesterol in LDL [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,2089-1
+3028639,8751,2,0.385841579518524,Carbamazepine serum/plasma,milligram per liter,mg/L,LOINC,3432-2
+3028639,8859,2,0.789072603635049,Carbamazepine serum/plasma,microgram per milliliter,ug/mL,LOINC,3432-2
+3028772,8842,2,0.9762969588550985,Osteocalcin [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,2697-1
+3029187,8845,2,0.9511990925785889,NT proBNP serum/plasma,picogram per milliliter,pg/mL,LOINC,33762-6
+3030354,8795,2,0.0456634464333282,Glomerular filtration rate/1.73 sq M.predicted [Volume Rate/Area] in Serum or Plasma by Creatinine-based formula (MDRD),milliliter per minute,mL/min,LOINC,33914-3
+3031248,8753,2,1,Chloride [Moles/volume] in Arterial blood,millimole per liter,mmol/L,LOINC,41650-3
+3031569,8845,2,0.9493014394580865,Natriuretic peptide B [Mass/volume] in Blood,picogram per milliliter,pg/mL,LOINC,42637-9
+3033526,8840,2,0.842680067001675,Urate [Mass/volume] in Urine,milligram per deciliter,mg/dL,LOINC,3086-6
+3033670,8729,2,0.9782274854135284,Parathyrin related protein [Moles/volume] in Serum or Plasma,picomole per liter,pmol/L,LOINC,15087-0
+3035510,8751,2,0.1730387787387475,Gentamicin [Mass/volume] in Serum or Plasma,milligram per liter,mg/L,LOINC,35668-3
+3035637,8845,2,0.8941930873478585,Corticotropin [Mass/volume] in Plasma,picogram per milliliter,pg/mL,LOINC,2141-0
+3036603,8587,2,0.8264623685570515,Volume of Urine,milliliter,mL,LOINC,28009-9
+3036987,8842,2,0.985027076920802,Folate [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,2284-8
+3037043,8751,2,0.8689567430025444,Immunoglobulin light chains.lambda.free [Mass/volume] in Urine,milligram per liter,mg/L,LOINC,38178-0
+3037185,8840,2,0.6357880038709015,Protein [Presence] in Urine,milligram per deciliter,mg/dL,LOINC,2887-8
+3037278,8753,2,0.7489737371655631,Anion gap 4 in Serum or Plasma,millimole per liter,mmol/L,LOINC,1863-0
+3037511,8554,2,0.680291307263689,Lymphocytes/100 leukocytes in Blood by Automated count,percent,%,LOINC,736-9
+3037551,8763,2,0.895801671732523,Cancer Ag 125 [Units/volume] in Serum or Plasma,unit per milliliter,[U]/mL,LOINC,10334-1
+3037556,8840,2,0.962655926315801,Urate [Mass/volume] in Serum or Plasma,milligram per deciliter,mg/dL,LOINC,3084-1
+3038058,8554,2,0.6456959463776071,Lymphocytes/100 leukocytes in Blood by Manual count,percent,%,LOINC,737-7
+3043111,8583,2,0.9707692909829866,Platelet mean volume [Entitic volume] in Blood by Automated count,femtoliter,fL,LOINC,32623-1
+3043409,8753,2,0.905116909522196,Potassium [Moles/volume] in Arterial blood,millimole per liter,mmol/L,LOINC,32713-0
+3043706,8753,2,0.8677822728944464,Sodium [Moles/volume] in Arterial blood,millimole per liter,mmol/L,LOINC,32717-1
+3050746,8554,2,0.7986878132185605,Hematocrit [Volume Fraction] of Blood by Estimated,percent,%,LOINC,48703-3
+3051714,8842,2,0.1403294774604813,Fibrin D-dimer FEU,nanogram per milliliter,ng/mL,LOINC,48065-7
+40758583,8554,2,0.643590639189661,Hemoglobin A1c in Blood,percent,%,LOINC,55454-3
+40763528,8554,2,0.5480802792321117,Reticulocytes [#/volume] in Blood by Automated count,percent,%,LOINC,60474-4
+40765040,8842,2,0.9322841083161795,25-Hydroxyvitamin D2+25-Hydroxyvitamin D3 [Mass/volume] in Serum or Plasma,nanogram per milliliter,ng/mL,LOINC,62292-8
+40766929,44777556,2,1,How many cigarettes do you smoke per day now [PhenX],per 24 hours,/(24.h),LOINC,64218-1
+40771922,8795,2,0.645038149579367,Glomerular filtration rate/1.73 sq M.predicted [Volume Rate/Area] in Serum or Plasma,milliliter per minute,mL/min,LOINC,69405-9
