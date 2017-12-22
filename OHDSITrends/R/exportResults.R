@@ -27,6 +27,11 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
     readr::write_csv(eventM2, paste0(dest_path,fname))
   }
 
+  # copy full_cids to new DF
+  copy_fc <- full_cids
+  # Drop extraneous columns
+  full_cids %<>% dplyr::select = -c(concept_name, classification, concept_code, db_schema)
+
   fname <- paste(event_type, db_schema, "full_cids.csv", sep = '_')
   readr::write_csv(full_cids, paste0(dest_path, fname))
 
@@ -50,6 +55,10 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
   out_2.d %<>% dplyr::select(-c(pt_count, population_count))
   #readr::write_csv(out_2.d, path = paste0(dest_path, fname))
 
+  # After printing, PUT FULL CIDS BACK!!!!
+
+  full_cids <- copy_fc
+
   # -------------------------------------------------------------------------
   # Print graphs using out_1, out_2, and eventM2 (use these dfs to make pdf graphs)
   graph_df_1 <- subset_big_by_small_ids(eventM2, out_1)
@@ -58,9 +67,8 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
   # print('plotting export')
   # plot_pdf(graph_df_1, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Overall_interesting_events.pdf", sep = '_')))
   # plot_pdf(graph_df_2, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Top_trending_events.pdf", sep = '_')))
-
-
   # Group By
+
   if(event_type %in% c(904, 604))
   {
     if(event_type == 904)
@@ -72,8 +80,8 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
       analyze_grouped_events(full_cids, eventM2, dg, kb2.csv, event_type, db_schema, dest_path)
     }
   }
-
 }
+
 #' @description Print graphs of all the rollup items
 #' @export
 print_Rollup_Graphs <- function(event_type, db_schema, full_cids, rollup1.0, rollup2.0, dest_path, eventM2)
