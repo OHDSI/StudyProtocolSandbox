@@ -29,6 +29,10 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
 
   # copy full_cids to new DF
   copy_fc = full_cids
+  deciles_to_kill <- eventM2 %>% dplyr::select(stratum_2, decile, population_count) %>%
+                      dplyr::distinct() %>% dplyr::filter(population_count < 10000)
+  full_cids %<>% dplyr::anti_join(deciles_to_kill)
+
   # Drop extraneous columns
   full_cids %<>% dplyr::select(-c(concept_name, classification, concept_code, db_schema))
 
