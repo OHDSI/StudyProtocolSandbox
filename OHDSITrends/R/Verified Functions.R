@@ -1079,9 +1079,9 @@ step_3 <- function(objM2, dest_folder, event_type, sep='_', extension='.csv')
 #'
 #' @export
 
-step_4 <- function(full_cids, dest_path, event_type = 'unkown', db_schema)
+step_4 <- function(full_cids)
 {
-  if(is.character(class(event_type))) event_type %<>% capitalize()
+  #if(is.character(class(event_type))) event_type %<>% capitalize()
 
   xxx <- full_cids %>% summarise_full_cids()
   box <- xxx %>% rollup_2.0()
