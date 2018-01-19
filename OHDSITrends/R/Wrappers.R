@@ -75,9 +75,6 @@ OHDSITrends2 <- function(pop_file_path, event_file_path, concept_file = NULL, an
   file.copy(from = system.file("Results.txt", package = "OHDSITrends"),
             to = paste0(resultsFolder, 'Results.txt'))
 
-  #using pop data arrive at exclude rows
-  #exclude<- pop %>% dplyr::filter(cnt<10000)
-
   print("Getting results")
   l <- analyze_one(pop, event, analysis_id, db_schema, resultsFolder,
               write_full_cids, OMOP, concept_file, dates)
@@ -88,6 +85,8 @@ OHDSITrends2 <- function(pop_file_path, event_file_path, concept_file = NULL, an
 
   #reduce l$evemtM2 to not have exclude rows
   #antijoin with exclude
+
+  l$eventM2 %<>% dplyr::filter(population_count >= 10000)
 
   exportResults(l$eventM2, l$full_cids, l$rollup1.0, l$rollup2.0, anonym_db, analysis_id,
                 kbFolder, exportFolder, Share_Data = F, concept_file)

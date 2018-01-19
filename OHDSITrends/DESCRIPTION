@@ -1,7 +1,7 @@
 Package: OHDSITrends
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 1.1
+Version: 1.1.1
 Author: Yohan Sumathipala
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)

@@ -686,46 +686,33 @@ lmp <- function(modelobject)
 #' @note Internal function only
 #' @export
 # obj <- event
+
+
 makeMediumFrame <- function(obj = data.frame(), pop = data.frame(), concept = NULL, dates)
 {
 
-  colnames(obj) <- c("stratum_1", "concept_name",
-                     "stratum_2", "gender", "decile",
-                     "stratum_5", "pt_count")
+  colnames(concept) %<>% tolower()
+  concept %<>% dplyr::select(concept_id, concept_name, concept_code)
 
-  colnames(pop) %<>% tolower()
+  obj %<>% dplyr::select(STRATUM_1, STRATUM_2, gender = STRATUM_3, decile = STRATUM_4, COUNT_VALUE)
+  colnames(obj) %<>% tolower()
+  obj %<>% dplyr::group_by(stratum_1, stratum_2, decile) %>%
+    dplyr::summarise(pt_count = sum(count_value)) %>% dplyr::ungroup()
 
-  unique(obj$stratum_5) #returns only 0, so stratum_5 has straight zeros.... strange
-
-
-  obj <- obj[-6] #drop stratum_5, bc. it is only 0s
-
-
-  obj <- dplyr::left_join(obj, pop, by = c("stratum_2" = "stratum_1",
-                                           "decile" = "stratum_3",
-                                           "gender" = "stratum_2"))
-  obj
-  obj2 <- obj[,c(1:6, 10)]
-
-  #stratum_1 is ascutally the Achilles analysis id, and concept_name is really stratum_1
-  obj2 <- dplyr::rename(obj2, analysis_id = stratum_1, stratum_1 = concept_name)
-
-  # Now need to get concept_names from Athena concept.csv file, if applicable
-  if(!is.null(concept))
-    obj2 %<>% dplyr::left_join(concept, by = c('stratum_1' = 'concept_id'))
-  else
-    obj2$concept_name <- paste0(obj2$stratum_1, "-UNKNOWN")
-
-  obj2 <- obj2[-1]
-
-  #Trying to re-order columns; want same order as others
-  obj2 %<>% dplyr::rename(population_count = count_value)
-  obj2 %<>% dplyr::select(stratum_1, concept_name, concept_code, decile, stratum_2, gender, pt_count, population_count)
+  pop %<>% dplyr::select(stratum_2 = STRATUM_1, gender = STRATUM_2, decile = STRATUM_3,
+                         population_count = COUNT_VALUE) %>%
+           dplyr::group_by(stratum_2, decile) %>%
+            dplyr::summarise(population_count = sum(population_count)) %>%
+              dplyr::ungroup()
 
 
-  #Collapse by gender and get count_value
-  obj3 <- dplyr::group_by(obj2, stratum_1, concept_name, concept_code, decile, stratum_2) %>%
-    dplyr::summarise(pt_count = sum(pt_count), population_count = sum(population_count))
+  # join event and pop
+  obj2 <- dplyr::left_join(obj, pop)
+
+  # join to concept for concept_name and concept_code
+  obj3 <- dplyr::left_join(obj2, concept, by = c('stratum_1' = 'concept_id'))
+  # change column order to make easier to read
+  obj3 %<>% dplyr::select(stratum_1, concept_name, concept_code, decile, stratum_2, pt_count, population_count)
   obj3$count_value = obj3$pt_count/obj3$population_count * 1000 # Persons per thousand
 
   #Remove concept_id = 0 and year 2015
@@ -1079,9 +1066,9 @@ step_3 <- function(objM2, dest_folder, event_type, sep='_', extension='.csv')
 #'
 #' @export
 
-step_4 <- function(full_cids, dest_path, event_type = 'unkown', db_schema)
+step_4 <- function(full_cids)
 {
-  if(is.character(class(event_type))) event_type %<>% capitalize()
+  #if(is.character(class(event_type))) event_type %<>% capitalize()
 
   xxx <- full_cids %>% summarise_full_cids()
   box <- xxx %>% rollup_2.0()

@@ -89,7 +89,7 @@ analyze_one <- function(pop, event, analysis_id, db_schema, resultsFolder,
   # 4
   if(OMOP) event_type <- get_omop_event_name(analysis_id)
   else event_type <- 'unknown'
-  l <- step_4(full_cids, dest_path = output_folder , event_type, db_schema)
+  l <- step_4(full_cids)
   print(paste0("step 4 ------ done. new files in: ", output_folder))
 
   print_Rollup_Graphs(analysis_id, db_schema, full_cids, l$rollup1.0, l$rollup2.0, dest_path = output_folder, eventM2)

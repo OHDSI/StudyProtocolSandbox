@@ -57,13 +57,13 @@ analyzeOneFileType <- function(sub_folder, fType, outFolder)
   df <- read_and_rbind_csv_files(myfiles, sub_folder)
 
   # at decile level
-  df_all2 <- df %>% dplyr::group_by(stratum_1, concept_name, decile) %>%
+  df_all2 <- df %>% dplyr::group_by(stratum_1, decile) %>%
     dplyr::summarise(n = n(), quant_consistency = decile_classification2(score),
                      qual_consistency = qualitative_consistency(score, n)) %>%
     dplyr::filter(n > 1)
 
   # at event level
-  df_all1 <- df %>% dplyr::group_by(stratum_1, concept_name) %>%
+  df_all1 <- df %>% dplyr::group_by(stratum_1) %>%
     dplyr::summarise(n = n(), quant_consistency = decile_classification2(score),
                      qual_consistency = qualitative_consistency(score, n)) %>%
     dplyr::filter(n > 1)
