@@ -3,6 +3,7 @@ Themis group (sub-group: measurements) aims to standardize lab tests and related
 This effort will be based on real world data at OHDSI sites.
 Consider installing Arachne and run and submit the results in Arachne (preferred)
 Alternatively, use Non-Arachne method.
+Partial interim themis study results can be found at https://github.com/OHDSI/StudyProtocolSandbox/tree/master/themis/extras/partial_results
 
 
 
@@ -14,6 +15,7 @@ To test SQL based Arachne study, use this study to test the framework: https://w
 
 ## R package
 Themis study is not yet fully implemented using R package. Only isolated pieces of code exist in the R subfolder. The core of the study is in the section 'plain SQL'.
+
 
 ### miad.R
 This file is optional to run. See separate miad.md file for descriptions of what it is.
@@ -30,14 +32,10 @@ Email me is you need parametized SQL for this translation tool. http://data.ohds
 ### measurements-concepts
 
 ```SQL
-select * from (
-    select * from (select analysis_id, stratum_1 from achilles_results where analysis_id = 1800 and count_value > 1000 order by count_value desc limit 100) a
+    select * from (select analysis_id, stratum_1 from achilles_results where analysis_id = 1800 and count_value > 500 order by count_value desc limit 200) a
     union
-    select * from (select analysis_id, stratum_1 from achilles_results where analysis_id = 800 and count_value > 1000 order by count_value desc limit 100) b
-) c
---order by stratum_1; --uncomment the last line to not to reveal ranking order of your concepts
+    select * from (select analysis_id, stratum_1 from achilles_results where analysis_id = 800 and count_value > 500 order by count_value desc limit 200) b
 ```
-
 
 
 ### units-larger
@@ -58,21 +56,16 @@ join --query below is to compute totals for each stratum
 where e.analysis_id in (1807) 
   and 1.0*count_value/denom <= 1.0 --measurements with just one major unit are excluded to minimize the sharing
   and 1.0*count_value/denom >= 0.02 --smaller ratio rows are not included in the extract
-  and e.stratum_2 <> '0' --exclude data where unit is not mapped to a formal concept
+  --and e.stratum_2 <> '0' --exclude data where unit is not mapped to a formal concept
   and s.denom > 500 --minumum number of rows for a test to be included, tweak this up to reduce the size of shared data
 order by e.stratum_1, count_value desc
 ;
 ```
 
-### units-limited
-
-This SQL is not required if you executed the units-larger SQL. The limited code is nearly a watered down version of the larger query above. Email the study PI if you need the limited SQL. Sites are encouraged to run the units-larger SQL extract.
-
 
 ### Unit Results
 
 Units poster at 2017 OHDSI symposium: http://www.ohdsi.org/web/wiki/lib/exe/fetch.php?media=resources:huser-2017-ohdsi-symp-units.pdf
-
 
 
 # General notes
