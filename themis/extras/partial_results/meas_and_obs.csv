@@ -1,9 +1,31 @@
 n,stratum_1,concept_name,vocabulary_id,concept_code,domain_id,analysis_id
+6,4015724,Vaccination required,SNOMED,170536002,Observation,800
+5,4047564,Routine antenatal care,SNOMED,134435003,Observation,800
+5,4186037,Aftercare,SNOMED,413467001,Observation,800
+5,4214956,History of clinical finding in subject,SNOMED,417662000,Observation,800
+5,4307024,Follow-up encounter,SNOMED,390906007,Observation,800
 5,3036277,Body height,LOINC,8302-2,Measurement,1800
 5,4034850,Laboratory test,SNOMED,15220000,Measurement,1800
+4,4167217,Family history of clinical finding,SNOMED,416471007,Observation,800
+4,4215685,Past history of procedure,SNOMED,416940007,Observation,800
+4,4305272,Contraception care,SNOMED,389095005,Observation,800
 4,3016723,Creatinine serum/plasma,LOINC,2160-0,Measurement,1800
 4,3025315,Body weight,LOINC,29463-7,Measurement,1800
 4,3038553,Body mass index,LOINC,39156-5,Measurement,1800
+3,141693,Elevated blood-pressure reading without diagnosis of hypertension,SNOMED,371622005,Observation,800
+3,437643,Abnormal gait,SNOMED,22325002,Observation,800
+3,440927,High risk drug monitoring status,SNOMED,243872007,Observation,800
+3,442165,Loss of appetite,SNOMED,79890006,Observation,800
+3,4014829,Consultation,SNOMED,11429006,Observation,800
+3,4047392,Postpartum care,SNOMED,133906008,Observation,800
+3,4074187,Healthcare services,SNOMED,224891009,Observation,800
+3,4082397,Repeated prescription,SNOMED,182918009,Observation,800
+3,4086928,IUCD status,SNOMED,243818000,Observation,800
+3,4148832,Certification procedure,SNOMED,310417005,Observation,800
+3,4174707,Dietary management surveillance,SNOMED,424928005,Observation,800
+3,4256343,Medical/dental care,SNOMED,410324006,Observation,800
+3,4298794,Smoker,SNOMED,77176002,Observation,800
+3,40485017,Exposure to communicable disease,SNOMED,444107005,Observation,800
 3,3000905,Leukocytes [#/volume] in Blood by Automated count,LOINC,6690-2,Measurement,1800
 3,3000963,Hemoglobin,LOINC,718-7,Measurement,1800
 3,3007070,Cholesterol in HDL [Mass/volume] in Serum or Plasma,LOINC,2085-9,Measurement,1800
@@ -18,9 +40,39 @@ n,stratum_1,concept_name,vocabulary_id,concept_code,domain_id,analysis_id
 3,4152194,Systolic blood pressure,SNOMED,271649006,Measurement,1800
 3,4154790,Diastolic blood pressure,SNOMED,271650006,Measurement,1800
 3,4212065,Erythrocyte sedimentation rate measurement,SNOMED,416838001,Measurement,1800
+2,432454,Excessive thirst,SNOMED,17173007,Observation,800
+2,433315,Feeding problems in newborn,SNOMED,72552008,Observation,800
+2,433316,Dizziness and giddiness,SNOMED,271789005,Condition,800
+2,433942,Accident while engaged in household activity,SNOMED,79573009,Observation,800
+2,439224,Drug allergy,SNOMED,416098002,Observation,800
+2,440279,Accident,SNOMED,55566008,Observation,800
+2,4005823,Tobacco user,SNOMED,110483000,Observation,800
+2,4014023,Palliative care,SNOMED,103735009,Observation,800
+2,4022569,Eating / feeding / drinking finding,SNOMED,116336009,Observation,800
+2,4022658,Discord in the workplace,SNOMED,105514006,Observation,800
+2,4027509,Contraception,SNOMED,13197004,Observation,800
+2,4046549,Preoperative care,SNOMED,133898004,Observation,800
+2,4046550,Postoperative care,SNOMED,133899007,Observation,800
+2,4058419,H/O: surgery,SNOMED,161615003,Observation,800
+2,4094126,Family problems,SNOMED,248539004,Observation,800
+2,4128331,Pregnancy,SNOMED,289908002,Observation,800
+2,4145111,Dental consultation and report,SNOMED,34043003,Observation,800
+2,4147169,Problems at work,SNOMED,266959008,Observation,800
 2,4152194,Systolic blood pressure,SNOMED,271649006,Measurement,800
 2,4154790,Diastolic blood pressure,SNOMED,271650006,Measurement,800
+2,4192676,Born by cesarean section,SNOMED,394699000,Observation,800
+2,4222303,Non-smoker,SNOMED,8392000,Observation,800
+2,4238738,Physical therapy procedure,SNOMED,91251008,Observation,800
+2,4254219,Breastfeeding support,SNOMED,408883002,Observation,800
+2,4296024,Family disruption due to divorce,SNOMED,76799001,Observation,800
+2,4299954,Feeding problem,SNOMED,78164000,Observation,800
 2,4301868,Pulse rate,SNOMED,78564009,Measurement,800
+2,4310250,Ex-smoker,SNOMED,8517006,Observation,800
+2,43020416,Problem with aged spouse or partner,SNOMED,105661000119103,Observation,800
+2,45765728,Supervision of high risk pregnancy,SNOMED,702738006,Observation,800
+2,434169,Abnormal findings on diagnostic imaging of breast,SNOMED,274530001,Condition,1800
+2,439141,Abnormal weight gain,SNOMED,161833006,Observation,1800
+2,439777,Anemia,SNOMED,271737000,Condition,1800
 2,3001122,Ferritin [Mass/volume] in Serum or Plasma,LOINC,2276-4,Measurement,1800
 2,3001420,Magnesium [Mass/volume] in Serum or Plasma,LOINC,19123-9,Measurement,1800
 2,3003458,Phosphate [Moles/volume] in Serum or Plasma,LOINC,14879-1,Measurement,1800
