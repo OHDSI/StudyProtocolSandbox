@@ -1,8 +1,8 @@
-OHDSI Patient Level Prediction for therapeutically treated depression
+OHDSI Patient Level Prediction of Heart Failure in patients with T2DM
 ======================================================================
 
-This study aims to generate prediction models for a large number of outcomes within
-a cohort of people with therapeutically treated depression
+This study aims to generate prediction models for heart failure within
+a cohort of people with Type 2 Diabetes.
 
 How to run
 ==========
@@ -19,7 +19,7 @@ How to run
 	install_packages("OhdsiSharing")
 	install.packages("devtools")
 	library(devtools)
-	install_github("ohdsi/StudyProtocolSandbox/LargeScalePrediction")
+	install_github("ohdsi/StudyProtocolSandbox/HFPredictionInT2DM")
 	```
 
 4. Once installed, you can execute the study by modifying and using the following code:
