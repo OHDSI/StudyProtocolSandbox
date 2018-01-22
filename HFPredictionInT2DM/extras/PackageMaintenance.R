@@ -16,24 +16,17 @@
 
 # Format and check code
 OhdsiRTools::formatRFolder()
-OhdsiRTools::checkUsagePackage("SomeBySomePrediction")
+OhdsiRTools::checkUsagePackage("HFPredictionInT2DM")
 
 # Create manual
-shell("rm extras/SomeBySomePrediction.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/SomeBySomePrediction.pdf")
+shell("rm extras/HFPredictionInT2DM.pdf")
+shell("R CMD Rd2pdf ./ --output=extras/HFPredictionInT2DM.pdf")
 
 
-#Import the 'at risk' definition:
-writeLines(paste0("Inserting at risk cohort "))
-OhdsiRTools::insertCirceDefinitionInPackage(2788, "PTD",
-                                            baseUrl = "http://hix.jnj.com:8080/WebAPI")
-
-
-# Import outcome definitions
-pathToCsv <- system.file("settings", "OutcomesOfInterest.csv", package = "SomeBySomePrediction")
-outcomes <- read.csv(pathToCsv)
-for (i in 1:nrow(outcomes)) {
-    writeLines(paste0("Inserting HOI: ", outcomes$name[i]))
-    OhdsiRTools::insertCirceDefinitionInPackage(outcomes$cohortDefinitionId[i], outcomes$name[i],
-                                                baseUrl = "http://hix.jnj.com:8080/WebAPI")
-}
+# Insert cohort definitions from ATLAS into package -----------------------
+OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv",
+                                                baseUrl = "https://epi.jnj.com:8443/WebAPI",
+                                                insertTableSql = TRUE,
+                                                insertCohortCreationR = TRUE,
+                                                generateStats = TRUE,
+                                                packageName = "HFPredictionInT2DM")
