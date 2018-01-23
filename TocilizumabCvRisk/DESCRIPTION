@@ -1,0 +1,25 @@
+Package: TocilizumabCvRisk
+Type: Package
+Title: Estimating the effect of tocilizumb compared to etanerceot on cardiovascular risk in rheumatoid arthritis
+Version: 0.0.1
+Author: Martijn Schuemie [aut, cre]
+Maintainer: Martijn J. Schuemie <schuemie@ohdsi.org>
+Description: A new-user cohort study comparing tocilizumb to etanerceot on cardiovascular risk in rheumatoid arthritis.
+Depends:
+    DatabaseConnector
+Imports:
+    SqlRender,
+    EmpiricalCalibration,
+    Cyclops,
+    FeatureExtraction,
+    CohortMethod,
+    rmarkdown,
+    ggplot2,
+    ff,
+    ffbase,
+    MethodEvaluation,
+    EvidenceSynthesis,
+	  OhdsiRTools (>= 1.5.0)
+License: Apache License 2.0
+LazyData: TRUE
+RoxygenNote: 6.0.1
