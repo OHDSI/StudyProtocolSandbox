@@ -1,0 +1,13 @@
+type,targetId,targetName,comparatorId,comparatorName,outcomeId,OutcomeName
+Outcome,1,Denosumab,2,ZoledronicAcid,313459,Sleep apnea
+Outcome,1,Denosumab,2,ZoledronicAcid,136661,Non-toxic nodular goiter
+Outcome,1,Denosumab,2,ZoledronicAcid,197672,Urinary incontinence
+Outcome,1,Denosumab,2,ZoledronicAcid,4209423,Nicotine dependence
+Outcome,1,Denosumab,2,ZoledronicAcid,437390,Hypoxemia
+Outcome,1,Denosumab,2,ZoledronicAcid,377575,Tinnitus
+Outcome,1,Denosumab,2,ZoledronicAcid,434005,Morbid obesity
+Outcome,1,Denosumab,2,ZoledronicAcid,432730,Difficulty speaking
+Outcome,1,Denosumab,2,ZoledronicAcid,441417,Incoordination
+Outcome,1,Denosumab,2,ZoledronicAcid,433454,Adjustment disorder with mixed emotional features
+Outcome,1,Denosumab,2,ZoledronicAcid,137977,Jaundice
+Outcome,1,Denosumab,2,ZoledronicAcid,193020,Incomplete emptying of bladder
