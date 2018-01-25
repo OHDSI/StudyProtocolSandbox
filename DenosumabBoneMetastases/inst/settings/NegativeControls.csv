@@ -1,13 +1,32 @@
 type,targetId,targetName,comparatorId,comparatorName,outcomeId,OutcomeName
+Outcome,1,Denosumab,2,ZoledronicAcid,195562,Hemorrhoids
+Outcome,1,Denosumab,2,ZoledronicAcid,318736,Migraine
+Outcome,1,Denosumab,2,ZoledronicAcid,4090425,Altered sensation of skin
 Outcome,1,Denosumab,2,ZoledronicAcid,313459,Sleep apnea
 Outcome,1,Denosumab,2,ZoledronicAcid,136661,Non-toxic nodular goiter
 Outcome,1,Denosumab,2,ZoledronicAcid,197672,Urinary incontinence
 Outcome,1,Denosumab,2,ZoledronicAcid,4209423,Nicotine dependence
 Outcome,1,Denosumab,2,ZoledronicAcid,437390,Hypoxemia
+Outcome,1,Denosumab,2,ZoledronicAcid,380094,Carpal tunnel syndrome
 Outcome,1,Denosumab,2,ZoledronicAcid,377575,Tinnitus
+Outcome,1,Denosumab,2,ZoledronicAcid,253796,Pneumothorax
+Outcome,1,Denosumab,2,ZoledronicAcid,4214376,Hyperglycemia
+Outcome,1,Denosumab,2,ZoledronicAcid,318556,Epistaxis
 Outcome,1,Denosumab,2,ZoledronicAcid,434005,Morbid obesity
 Outcome,1,Denosumab,2,ZoledronicAcid,432730,Difficulty speaking
+Outcome,1,Denosumab,2,ZoledronicAcid,439147,Amnesia
+Outcome,1,Denosumab,2,ZoledronicAcid,253797,Post-inflammatory pulmonary fibrosis
 Outcome,1,Denosumab,2,ZoledronicAcid,441417,Incoordination
 Outcome,1,Denosumab,2,ZoledronicAcid,433454,Adjustment disorder with mixed emotional features
+Outcome,1,Denosumab,2,ZoledronicAcid,376065,Neurologic disorder associated with type 2 diabetes mellitus
+Outcome,1,Denosumab,2,ZoledronicAcid,4239682,Chronic phototoxic dermatitis
+Outcome,1,Denosumab,2,ZoledronicAcid,30133,Acute laryngitis
+Outcome,1,Denosumab,2,ZoledronicAcid,73090,Contusion of foot
+Outcome,1,Denosumab,2,ZoledronicAcid,137951,Acquired keratoderma
+Outcome,1,Denosumab,2,ZoledronicAcid,257683,Posterior rhinorrhea
 Outcome,1,Denosumab,2,ZoledronicAcid,137977,Jaundice
+Outcome,1,Denosumab,2,ZoledronicAcid,139850,Acute frontal sinusitis
+Outcome,1,Denosumab,2,ZoledronicAcid,376229,Abnormal involuntary movement
 Outcome,1,Denosumab,2,ZoledronicAcid,193020,Incomplete emptying of bladder
+Outcome,1,Denosumab,2,ZoledronicAcid,376382,Tension-type headache
+Outcome,1,Denosumab,2,ZoledronicAcid,137063,Corns and callus

@@ -41,7 +41,7 @@ createAnalysesDetails <- function(workFolder) {
                                                                              covariateSettings = covariateSettings)
   
   createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(removeDuplicateSubjects = "keep first",
-                                                                      removeSubjectsWithPriorOutcome = TRUE,
+                                                                      removeSubjectsWithPriorOutcome = FALSE,
                                                                       riskWindowStart = 0,
                                                                       riskWindowEnd = round(40.5 * 30.5),
                                                                       addExposureDaysToEnd = FALSE)

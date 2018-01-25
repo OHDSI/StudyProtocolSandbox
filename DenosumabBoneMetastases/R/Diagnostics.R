@@ -59,7 +59,7 @@ generateDiagnostics <- function(outputFolder) {
     fileName <-  file.path(diagnosticsFolder, paste0("mdrr_a",analysisId,"_t",targetOfInterestId,"_c",comparatorOfInterestId, "_o", outcomeOfInterestId, ".csv"))
     write.csv(mdrr, fileName, row.names = FALSE)
     fileName <-  file.path(diagnosticsFolder, paste0("attrition_a",analysisId,"_t",targetOfInterestId,"_c",comparatorOfInterestId, "_o", outcomeOfInterestId, ".png"))
-    CohortMethod::drawAttritionDiagram(population, treatmentLabel = "Loop diuretics", comparatorLabel = "ACE inhibitors", fileName = fileName)
+    CohortMethod::drawAttritionDiagram(population, treatmentLabel = "Denosumab", comparatorLabel = "Zoledronic acid", fileName = fileName)
     
   
     # Outcome controls
@@ -94,30 +94,38 @@ generateDiagnostics <- function(outputFolder) {
                               reference$outcomeId == outcomeOfInterestId, ]
     
     ps <- readRDS(exampleRef$sharedPsFile)
-    fileName <-  file.path(diagnosticsFolder, paste0("psBeforeMatching_a",analysisId,".png"))
-    psPlot <- CohortMethod::plotPs(ps)
-    ggplot2::ggsave(filename = fileName, plot = psPlot, width = 6, height = 3.5, dpi = 400)
+    fileName <-  file.path(diagnosticsFolder, paste0("psBeforeStratification_a",analysisId,".png"))
+    psPlot <- CohortMethod::plotPs(data = ps,
+                                   treatmentLabel = "Denosumab",
+                                   comparatorLabel = "Zoledronic acid",
+                                   fileName = fileName)
     
     psAfterMatching <- readRDS(exampleRef$strataFile)
-    fileName <-  file.path(diagnosticsFolder, paste0("psAfterMatching_a",analysisId,".png"))
-    psPlot <- CohortMethod::plotPs(psAfterMatching, ps)
-    ggplot2::ggsave(filename = fileName, plot = psPlot, width = 6, height = 3.5, dpi = 400)
+    fileName <-  file.path(diagnosticsFolder, paste0("psAfterStratification_a",analysisId,".png"))
+    psPlot <- CohortMethod::plotPs(data = psAfterMatching,
+                                   treatmentLabel = "Denosumab",
+                                   comparatorLabel = "Zoledronic acid",
+                                   fileName = fileName)
     
     fileName = file.path(diagnosticsFolder, paste("followupDist_a",analysisId, ".png",sep=""))
     CohortMethod::plotFollowUpDistribution(psAfterMatching, 
-                                           targetLabel = as.character(analysisSummary$targetName[analysisSummary$targetId == targetOfInterestId][1]),
-                                           comparatorLabel = as.character(analysisSummary$comparatorName[analysisSummary$comparatorId == comparatorOfInterestId][1]),
+                                           targetLabel = "Denosumab",
+                                           comparatorLabel = "Zoledronic acid",
                                            fileName = fileName)
     
     cmdata <- CohortMethod::loadCohortMethodData(exampleRef$cohortMethodDataFolder)
     balance <- CohortMethod::computeCovariateBalance(psAfterMatching, cmdata)
     
     fileName = file.path(diagnosticsFolder, paste("balanceScatter_a",analysisId,".png",sep=""))
-    balanceScatterPlot <- CohortMethod::plotCovariateBalanceScatterPlot(balance)
-    ggplot2::ggsave(filename = fileName, plot = balanceScatterPlot, width = 4, height = 4, dpi = 400)
+    balanceScatterPlot <- CohortMethod::plotCovariateBalanceScatterPlot(balance = balance,
+                                                                        beforeLabel = "Before stratification",
+                                                                        afterLabel = "After stratification",
+                                                                        fileName = fileName)
     
     fileName = file.path(diagnosticsFolder, paste("balanceTop_a",analysisId,".png",sep=""))
-    balanceTopPlot <- CohortMethod::plotCovariateBalanceOfTopVariables(balance)
-    ggplot2::ggsave(filename = fileName, plot = balanceTopPlot, width = 10, height = 6, dpi = 400)
+    balanceTopPlot <- CohortMethod::plotCovariateBalanceOfTopVariables(balance = balance,
+                                                                       beforeLabel = "Before stratification",
+                                                                       afterLabel = "After stratification",
+                                                                       fileName = fileName)
   }
 }

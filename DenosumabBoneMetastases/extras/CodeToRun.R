@@ -1,8 +1,8 @@
 library(DenosumabBoneMetastases)
-options(fftempdir = "c:/FFtemp")
+options(fftempdir = "s:/FFtemp")
 
 maxCores <- 32
-studyFolder <- "c:/DenosumabBoneMetastases"
+studyFolder <- "s:/DenosumabBoneMetastases"
 dbms <- "pdw"
 user <- NULL
 pw <- NULL
