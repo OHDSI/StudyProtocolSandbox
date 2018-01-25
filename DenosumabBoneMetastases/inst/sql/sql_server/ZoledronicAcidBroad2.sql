@@ -79,11 +79,11 @@ UNION  select c.concept_id
 INSERT INTO #Codesets (codeset_id, concept_id)
 SELECT 6 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (40480852,4314693)and invalid_reason is null
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (40480852,4314693,46270478)and invalid_reason is null
 UNION  select c.concept_id
   from @cdm_database_schema.CONCEPT c
   join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (40480852,4314693)
+  and ca.ancestor_concept_id in (40480852,4314693,46270478)
   and c.invalid_reason is null
 
 ) I

@@ -17,18 +17,6 @@ UNION  select c.concept_id
 ) I
 ) C;
 INSERT INTO #Codesets (codeset_id, concept_id)
-SELECT 1 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
-( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4029715)and invalid_reason is null
-UNION  select c.concept_id
-  from @cdm_database_schema.CONCEPT c
-  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-  and ca.ancestor_concept_id in (4029715)
-  and c.invalid_reason is null
-
-) I
-) C;
-INSERT INTO #Codesets (codeset_id, concept_id)
 SELECT 2 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
   select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4216057,4266202,4035025,4263742,4198708,45889422,4209286)and invalid_reason is null
@@ -63,6 +51,24 @@ UNION  select c.concept_id
   and c.invalid_reason is null
 
 ) I
+) C;
+INSERT INTO #Codesets (codeset_id, concept_id)
+SELECT 5 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
+( 
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4029715)and invalid_reason is null
+UNION  select c.concept_id
+  from @cdm_database_schema.CONCEPT c
+  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
+  and ca.ancestor_concept_id in (4029715)
+  and c.invalid_reason is null
+
+) I
+LEFT JOIN
+(
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (2101788,4081755,4242118,2108704,4009266,2108677,4175622,4076563)and invalid_reason is null
+
+) E ON I.concept_id = E.concept_id
+WHERE E.concept_id is null
 ) C;
 
 
@@ -95,7 +101,7 @@ from
 (
   select po.*, row_number() over (PARTITION BY po.person_id ORDER BY po.procedure_date, po.procedure_occurrence_id) as ordinal
   FROM @cdm_database_schema.PROCEDURE_OCCURRENCE po
-where po.procedure_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 1)
+where po.procedure_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 5)
 ) C
 
 
@@ -115,7 +121,7 @@ from
 (
   select po.*, row_number() over (PARTITION BY po.person_id ORDER BY po.procedure_date, po.procedure_occurrence_id) as ordinal
   FROM @cdm_database_schema.PROCEDURE_OCCURRENCE po
-where po.procedure_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 1)
+where po.procedure_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 5)
 ) C
 
 
@@ -135,7 +141,7 @@ from
 (
   select po.*, row_number() over (PARTITION BY po.person_id ORDER BY po.procedure_date, po.procedure_occurrence_id) as ordinal
   FROM @cdm_database_schema.PROCEDURE_OCCURRENCE po
-where po.procedure_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 1)
+where po.procedure_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 5)
 ) C
 
 
