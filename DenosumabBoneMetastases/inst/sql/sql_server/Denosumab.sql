@@ -155,7 +155,7 @@ FROM
 --- Inclusion Rule Inserts
 
 select 0 as inclusion_rule_id, person_id, event_id
-INTO #InclusionRuleCohort_0
+INTO #Inclusion_0
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -188,7 +188,7 @@ GROUP BY e.person_id, e.event_id
 ;
 
 select 1 as inclusion_rule_id, person_id, event_id
-INTO #InclusionRuleCohort_1
+INTO #Inclusion_1
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -221,7 +221,7 @@ GROUP BY e.person_id, e.event_id
 ;
 
 select 2 as inclusion_rule_id, person_id, event_id
-INTO #InclusionRuleCohort_2
+INTO #Inclusion_2
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -268,7 +268,7 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) >= 1
 ;
 
 select 3 as inclusion_rule_id, person_id, event_id
-INTO #InclusionRuleCohort_3
+INTO #Inclusion_3
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -315,7 +315,7 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) >= 1
 ;
 
 select 4 as inclusion_rule_id, person_id, event_id
-INTO #InclusionRuleCohort_4
+INTO #Inclusion_4
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -362,7 +362,7 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) >= 1
 ;
 
 select 5 as inclusion_rule_id, person_id, event_id
-INTO #InclusionRuleCohort_5
+INTO #Inclusion_5
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -409,7 +409,7 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) = 0
 ;
 
 select 6 as inclusion_rule_id, person_id, event_id
-INTO #InclusionRuleCohort_6
+INTO #Inclusion_6
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -456,7 +456,7 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) = 0
 ;
 
 select 7 as inclusion_rule_id, person_id, event_id
-INTO #InclusionRuleCohort_7
+INTO #Inclusion_7
 FROM 
 (
   select pe.person_id, pe.event_id
@@ -503,45 +503,45 @@ HAVING COUNT(A.TARGET_CONCEPT_ID) = 0
 ;
 
 SELECT inclusion_rule_id, person_id, event_id
-INTO #inclusionRuleCohorts
-FROM (select inclusion_rule_id, person_id, event_id from #InclusionRuleCohort_0
+INTO #inclusion_events
+FROM (select inclusion_rule_id, person_id, event_id from #Inclusion_0
 UNION ALL
-select inclusion_rule_id, person_id, event_id from #InclusionRuleCohort_1
+select inclusion_rule_id, person_id, event_id from #Inclusion_1
 UNION ALL
-select inclusion_rule_id, person_id, event_id from #InclusionRuleCohort_2
+select inclusion_rule_id, person_id, event_id from #Inclusion_2
 UNION ALL
-select inclusion_rule_id, person_id, event_id from #InclusionRuleCohort_3
+select inclusion_rule_id, person_id, event_id from #Inclusion_3
 UNION ALL
-select inclusion_rule_id, person_id, event_id from #InclusionRuleCohort_4
+select inclusion_rule_id, person_id, event_id from #Inclusion_4
 UNION ALL
-select inclusion_rule_id, person_id, event_id from #InclusionRuleCohort_5
+select inclusion_rule_id, person_id, event_id from #Inclusion_5
 UNION ALL
-select inclusion_rule_id, person_id, event_id from #InclusionRuleCohort_6
+select inclusion_rule_id, person_id, event_id from #Inclusion_6
 UNION ALL
-select inclusion_rule_id, person_id, event_id from #InclusionRuleCohort_7) I;
-TRUNCATE TABLE #InclusionRuleCohort_0;
-DROP TABLE #InclusionRuleCohort_0;
+select inclusion_rule_id, person_id, event_id from #Inclusion_7) I;
+TRUNCATE TABLE #Inclusion_0;
+DROP TABLE #Inclusion_0;
 
-TRUNCATE TABLE #InclusionRuleCohort_1;
-DROP TABLE #InclusionRuleCohort_1;
+TRUNCATE TABLE #Inclusion_1;
+DROP TABLE #Inclusion_1;
 
-TRUNCATE TABLE #InclusionRuleCohort_2;
-DROP TABLE #InclusionRuleCohort_2;
+TRUNCATE TABLE #Inclusion_2;
+DROP TABLE #Inclusion_2;
 
-TRUNCATE TABLE #InclusionRuleCohort_3;
-DROP TABLE #InclusionRuleCohort_3;
+TRUNCATE TABLE #Inclusion_3;
+DROP TABLE #Inclusion_3;
 
-TRUNCATE TABLE #InclusionRuleCohort_4;
-DROP TABLE #InclusionRuleCohort_4;
+TRUNCATE TABLE #Inclusion_4;
+DROP TABLE #Inclusion_4;
 
-TRUNCATE TABLE #InclusionRuleCohort_5;
-DROP TABLE #InclusionRuleCohort_5;
+TRUNCATE TABLE #Inclusion_5;
+DROP TABLE #Inclusion_5;
 
-TRUNCATE TABLE #InclusionRuleCohort_6;
-DROP TABLE #InclusionRuleCohort_6;
+TRUNCATE TABLE #Inclusion_6;
+DROP TABLE #Inclusion_6;
 
-TRUNCATE TABLE #InclusionRuleCohort_7;
-DROP TABLE #InclusionRuleCohort_7;
+TRUNCATE TABLE #Inclusion_7;
+DROP TABLE #Inclusion_7;
 
 
 with cteIncludedEvents(event_id, person_id, start_date, end_date, op_start_date, op_end_date, ordinal) as
@@ -551,7 +551,7 @@ with cteIncludedEvents(event_id, person_id, start_date, end_date, op_start_date,
   (
     select Q.event_id, Q.person_id, Q.start_date, Q.end_date, Q.op_start_date, Q.op_end_date, SUM(coalesce(POWER(cast(2 as bigint), I.inclusion_rule_id), 0)) as inclusion_rule_mask
     from #qualified_events Q
-    LEFT JOIN #inclusionRuleCohorts I on I.person_id = Q.person_id and I.event_id = Q.event_id
+    LEFT JOIN #inclusion_events I on I.person_id = Q.person_id and I.event_id = Q.event_id
     GROUP BY Q.event_id, Q.person_id, Q.start_date, Q.end_date, Q.op_start_date, Q.op_end_date
   ) MG -- matching groups
 
@@ -655,8 +655,8 @@ DROP TABLE #cohort_rows;
 TRUNCATE TABLE #final_cohort;
 DROP TABLE #final_cohort;
 
-TRUNCATE TABLE #inclusionRuleCohorts;
-DROP TABLE #inclusionRuleCohorts;
+TRUNCATE TABLE #inclusion_events;
+DROP TABLE #inclusion_events;
 
 TRUNCATE TABLE #qualified_events;
 DROP TABLE #qualified_events;
