@@ -20,7 +20,7 @@ analyze_all <- function(site_id, all_ids, pop_id, resultsDatabaseSchema, dataExp
     {
       db <- resultsDatabaseSchema[i]
       print(db)
-      cat('doing:', analysis_id, db, '\n')
+      cat('----NOW DOING:', analysis_id, db, '\n')
       data_folder <- paste0(dataExportFolder, db, '/')
 
       # Get data
