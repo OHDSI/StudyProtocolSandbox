@@ -29,6 +29,7 @@ analyze_all <- function(site_id, all_ids, pop_id, resultsDatabaseSchema, dataExp
 
       l <- analyze_one(pop, event, analysis_id, db, output_folder, write_full_cids, OMOP, concept_file, dates = dates)
       anonym_db <- anonymize_db_schema(site_id, i)
+      l$eventM2 %<>% dplyr::filter(population_count >= 10000)
       exportResults(l$eventM2, l$full_cids, l$rollup1.0, l$rollup2.0, anonym_db, analysis_id,
                     kbFolder, export_folder, Share_Data, concept_file)
     }
