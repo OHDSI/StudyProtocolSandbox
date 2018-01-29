@@ -27,14 +27,12 @@
 #' @export
 generateDiagnostics <- function(outputFolder) {
   cmOutputFolder <- file.path(outputFolder, "cmOutput")
-  
   diagnosticsFolder <- file.path(outputFolder, "diagnostics")
   if (!file.exists(diagnosticsFolder))
     dir.create(diagnosticsFolder)
   
-  targetOfInterestId <- 1 # Denosumab
-  comparatorOfInterestId <- 2 # Zoledronic acid
-  outcomeOfInterestId <- 3 # Skeletal events
+  pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = "DenosumabBoneMetastases")
+  tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
   
   reference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
   analysisSummary <- CohortMethod::summarizeAnalyses(reference)
@@ -47,85 +45,90 @@ generateDiagnostics <- function(outputFolder) {
   }
   negativeControls <- read.csv(system.file("settings", "NegativeControls.csv", package = "DenosumabBoneMetastases"))
   negativeControlOutcomeIds <- negativeControls$outcomeId[negativeControls$type == "Outcome"]
-  negativeControlTargetComparators <- negativeControls[negativeControls$type == "Exposure", c("targetId", "comparatorId")]
-  for (analysisId in unique(reference$analysisId)) {
-    # Compute MDRR
-    strataFile <- reference$strataFile[reference$analysisId == analysisId &
-                                         reference$targetId == targetOfInterestId &
-                                         reference$comparatorId == comparatorOfInterestId &
-                                         reference$outcomeId == outcomeOfInterestId]
-    population <- readRDS(strataFile)
-    mdrr <- CohortMethod::computeMdrr(population, alpha = 0.05, power = 0.8, twoSided = TRUE, modelType = "cox")
-    fileName <-  file.path(diagnosticsFolder, paste0("mdrr_a",analysisId,"_t",targetOfInterestId,"_c",comparatorOfInterestId, "_o", outcomeOfInterestId, ".csv"))
-    write.csv(mdrr, fileName, row.names = FALSE)
-    fileName <-  file.path(diagnosticsFolder, paste0("attrition_a",analysisId,"_t",targetOfInterestId,"_c",comparatorOfInterestId, "_o", outcomeOfInterestId, ".png"))
-    CohortMethod::drawAttritionDiagram(population, treatmentLabel = "Denosumab", comparatorLabel = "Zoledronic acid", fileName = fileName)
-    
-  
-    # Outcome controls
-    label <- "OutcomeControls"
-    negControlSubset <- analysisSummary[analysisSummary$analysisId == analysisId &
-                                          analysisSummary$outcomeId %in% negativeControlOutcomeIds, ]
-    
-    validNcs <- sum(!is.na(negControlSubset$seLogRr))
-    if (validNcs >= 5) {
-      null <- EmpiricalCalibration::fitMcmcNull(negControlSubset$logRr, negControlSubset$seLogRr)
+  tcsOfInterest <- unique(tcosOfInterest[, c("targetId", "comparatorId")])
+  for (i in 1:nrow(tcsOfInterest)) {
+    targetId <- tcsOfInterest$targetId[i]
+    comparatorId <- tcsOfInterest$comparatorId[i]
+    outcomeIds <- tcosOfInterest$outcomeId[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId]
+    for (analysisId in unique(reference$analysisId)) {
+      # Outcome controls
+      label <- "OutcomeControls"
+      negControlSubset <- analysisSummary[analysisSummary$analysisId == analysisId &
+                                            analysisSummary$targetId == targetId &
+                                            analysisSummary$comparatorId == comparatorId &
+                                            analysisSummary$outcomeId %in% negativeControlOutcomeIds, ]
       
-      fileName <-  file.path(diagnosticsFolder, paste0("nullDistribution_a",analysisId,"_", label, ".png"))
-      EmpiricalCalibration::plotCalibrationEffect(logRrNegatives = negControlSubset$logRr,
-                                                  seLogRrNegatives = negControlSubset$seLogRr,
-                                                  null = null,
-                                                  showCis = TRUE,
-                                                  title = label,
-                                                  fileName = fileName)
+      validNcs <- sum(!is.na(negControlSubset$seLogRr))
+      if (validNcs >= 5) {
+        null <- EmpiricalCalibration::fitMcmcNull(negControlSubset$logRr, negControlSubset$seLogRr)
+        
+        fileName <-  file.path(diagnosticsFolder, paste0("nullDistribution_a",analysisId,"_t",targetId,"_c",comparatorId,"_", label, ".png"))
+        EmpiricalCalibration::plotCalibrationEffect(logRrNegatives = negControlSubset$logRr,
+                                                    seLogRrNegatives = negControlSubset$seLogRr,
+                                                    null = null,
+                                                    showCis = TRUE,
+                                                    title = label,
+                                                    fileName = fileName)
+        
+      }
+      for (outcomeId in outcomeIds) {
+        # Compute MDRR
+        strataFile <- reference$strataFile[reference$analysisId == analysisId &
+                                             reference$targetId == targetId &
+                                             reference$comparatorId == comparatorId &
+                                             reference$outcomeId == outcomeId]
+        population <- readRDS(strataFile)
+        mdrr <- CohortMethod::computeMdrr(population, alpha = 0.05, power = 0.8, twoSided = TRUE, modelType = "cox")
+        fileName <-  file.path(diagnosticsFolder, paste0("mdrr_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId, ".csv"))
+        write.csv(mdrr, fileName, row.names = FALSE)
+        fileName <-  file.path(diagnosticsFolder, paste0("attrition_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId, ".png"))
+        CohortMethod::drawAttritionDiagram(population, treatmentLabel = "Denosumab", comparatorLabel = "Zoledronic acid", fileName = fileName)
+        fileName <-  file.path(diagnosticsFolder, paste0("type1Error_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId,"_", label, ".png"))
+        EmpiricalCalibration::plotExpectedType1Error(seLogRrPositives = mdrr$se,
+                                                     null = null,
+                                                     showCis = TRUE,
+                                                     title = label,
+                                                     fileName = fileName)
+      }
+      exampleRef <- reference[reference$analysisId == analysisId &
+                                reference$targetId == targetId &
+                                reference$comparatorId == comparatorId &
+                                reference$outcomeId == outcomeIds[1], ]
       
-      fileName <-  file.path(diagnosticsFolder, paste0("type1Error_a",analysisId,"_", label, ".png"))
-      EmpiricalCalibration::plotExpectedType1Error(seLogRrPositives = mdrr$se,
-                                                   null = null,
-                                                   showCis = TRUE,
-                                                   title = label,
-                                                   fileName = fileName)
+      ps <- readRDS(exampleRef$sharedPsFile)
+      fileName <-  file.path(diagnosticsFolder, paste0("psBeforeStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
+      psPlot <- CohortMethod::plotPs(data = ps,
+                                     treatmentLabel = "Denosumab",
+                                     comparatorLabel = "Zoledronic acid",
+                                     fileName = fileName)
+      
+      psAfterMatching <- readRDS(exampleRef$strataFile)
+      fileName <-  file.path(diagnosticsFolder, paste0("psAfterStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
+      psPlot <- CohortMethod::plotPs(data = psAfterMatching,
+                                     treatmentLabel = "Denosumab",
+                                     comparatorLabel = "Zoledronic acid",
+                                     fileName = fileName)
+      
+      fileName = file.path(diagnosticsFolder, paste("followupDist_a",analysisId,"_t",targetId,"_c",comparatorId, ".png",sep=""))
+      CohortMethod::plotFollowUpDistribution(psAfterMatching, 
+                                             targetLabel = "Denosumab",
+                                             comparatorLabel = "Zoledronic acid",
+                                             fileName = fileName)
+      
+      cmdata <- CohortMethod::loadCohortMethodData(exampleRef$cohortMethodDataFolder)
+      balance <- CohortMethod::computeCovariateBalance(psAfterMatching, cmdata)
+      
+      fileName = file.path(diagnosticsFolder, paste("balanceScatter_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
+      balanceScatterPlot <- CohortMethod::plotCovariateBalanceScatterPlot(balance = balance,
+                                                                          beforeLabel = "Before stratification",
+                                                                          afterLabel = "After stratification",
+                                                                          fileName = fileName)
+      
+      fileName = file.path(diagnosticsFolder, paste("balanceTop_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
+      balanceTopPlot <- CohortMethod::plotCovariateBalanceOfTopVariables(balance = balance,
+                                                                         beforeLabel = "Before stratification",
+                                                                         afterLabel = "After stratification",
+                                                                         fileName = fileName)
     }
-    
-    
-    exampleRef <- reference[reference$analysisId == analysisId &
-                              reference$targetId == targetOfInterestId &
-                              reference$comparatorId == comparatorOfInterestId &
-                              reference$outcomeId == outcomeOfInterestId, ]
-    
-    ps <- readRDS(exampleRef$sharedPsFile)
-    fileName <-  file.path(diagnosticsFolder, paste0("psBeforeStratification_a",analysisId,".png"))
-    psPlot <- CohortMethod::plotPs(data = ps,
-                                   treatmentLabel = "Denosumab",
-                                   comparatorLabel = "Zoledronic acid",
-                                   fileName = fileName)
-    
-    psAfterMatching <- readRDS(exampleRef$strataFile)
-    fileName <-  file.path(diagnosticsFolder, paste0("psAfterStratification_a",analysisId,".png"))
-    psPlot <- CohortMethod::plotPs(data = psAfterMatching,
-                                   treatmentLabel = "Denosumab",
-                                   comparatorLabel = "Zoledronic acid",
-                                   fileName = fileName)
-    
-    fileName = file.path(diagnosticsFolder, paste("followupDist_a",analysisId, ".png",sep=""))
-    CohortMethod::plotFollowUpDistribution(psAfterMatching, 
-                                           targetLabel = "Denosumab",
-                                           comparatorLabel = "Zoledronic acid",
-                                           fileName = fileName)
-    
-    cmdata <- CohortMethod::loadCohortMethodData(exampleRef$cohortMethodDataFolder)
-    balance <- CohortMethod::computeCovariateBalance(psAfterMatching, cmdata)
-    
-    fileName = file.path(diagnosticsFolder, paste("balanceScatter_a",analysisId,".png",sep=""))
-    balanceScatterPlot <- CohortMethod::plotCovariateBalanceScatterPlot(balance = balance,
-                                                                        beforeLabel = "Before stratification",
-                                                                        afterLabel = "After stratification",
-                                                                        fileName = fileName)
-    
-    fileName = file.path(diagnosticsFolder, paste("balanceTop_a",analysisId,".png",sep=""))
-    balanceTopPlot <- CohortMethod::plotCovariateBalanceOfTopVariables(balance = balance,
-                                                                       beforeLabel = "Before stratification",
-                                                                       afterLabel = "After stratification",
-                                                                       fileName = fileName)
   }
 }

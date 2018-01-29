@@ -36,13 +36,10 @@ result <- OhdsiRTools::runAndNotify({
           cohortTable = cohortTable,
           oracleTempSchema = oracleTempSchema,
           outputFolder = outputFolder,
-          createCohorts = TRUE,
-          synthesizePositiveControls = TRUE,
+          createCohorts = FALSE,
+          synthesizePositiveControls = FALSE,
           runAnalyses = TRUE,
           runDiagnostics = TRUE,
           maxCores = 30)
 }, mailSettings = mailSettings, label = "denosumab")
 
-# combineAcrossDbs(folders = c("Mdcd", "Mdcr", "Optum", "Ccae"),
-#                  labels = c("MDCD", "MDCR", "Optum", "CCAE"),
-#                  outputFolder = "r:/Loop")

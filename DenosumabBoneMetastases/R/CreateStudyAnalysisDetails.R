@@ -77,25 +77,20 @@ createAnalysesDetails <- function(workFolder) {
 }
 
 createTcos <- function(outputFolder) {
-  targetOfInterestId <- 1 # Denosumab
-  comparatorOfInterestId <- 2 # Zoledronic acid
-  outcomeOfInterestId <- 3 # Skeletal events
-  excludedCovariateConceptIds <- c(1524674, 
-                                   967823, 
-                                   21600884, 
-                                   21601153, 
-                                   21601194, 
-                                   21601195, 
-                                   40222444, 
-                                   21601136)
-  
+  pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = "DenosumabBoneMetastases")
+  tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
   allControlsFile <- file.path(outputFolder, "AllControls.csv")
   allControls <- read.csv(allControlsFile)
   controlOutcomes <- allControls[allControls$type == "Outcome", ]
-  dcos <- CohortMethod::createDrugComparatorOutcomes(targetId = targetOfInterestId,
-                                                     comparatorId = comparatorOfInterestId,
-                                                     outcomeIds = c(outcomeOfInterestId, controlOutcomes$outcomeId),
-                                                     excludedCovariateConceptIds = excludedCovariateConceptIds) 
-  dcosList <- list(dcos)
+  dcosList <- list()
+  for (i in 1:nrow(tcosOfInterest)) {
+    controlOutcomeIds <- controlOutcomes$outcomeId[controlOutcomes$targetId == tcosOfInterest$targetId[i] & controlOutcomes$comparatorId == tcosOfInterest$comparatorId[i]]
+    excludeConceptIds <- as.numeric(strsplit(tcosOfInterest$excludedCovariateConceptIds[i], split = ",")[[1]])
+    dcos <- CohortMethod::createDrugComparatorOutcomes(targetId = tcosOfInterest$targetId[i],
+                                                       comparatorId = tcosOfInterest$comparatorId[i],
+                                                       outcomeIds = c(tcosOfInterest$outcomeId[i], controlOutcomeIds),
+                                                       excludedCovariateConceptIds =  excludeConceptIds)
+    dcosList[[length(dcosList) + 1]] <- dcos
+  }
   return(dcosList)
 }
