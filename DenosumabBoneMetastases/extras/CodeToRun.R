@@ -17,6 +17,7 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
 cdmDatabaseSchema <- "cdm_optum_extended_dod_v654.dbo"
 cohortDatabaseSchema <- "scratch.dbo"
 cohortTable <- "mschuemi_denosumab_optum"
+
 oracleTempSchema <- NULL
 outputFolder <- file.path(studyFolder, "optum")
 
@@ -37,9 +38,28 @@ result <- OhdsiRTools::runAndNotify({
           oracleTempSchema = oracleTempSchema,
           outputFolder = outputFolder,
           createCohorts = FALSE,
-          synthesizePositiveControls = FALSE,
+          synthesizePositiveControls = TRUE,
           runAnalyses = TRUE,
           runDiagnostics = TRUE,
           maxCores = 30)
 }, mailSettings = mailSettings, label = "denosumab")
 
+
+# Some custom code to generate custom tables and figures:
+
+mdrrFiles <- list.files(file.path(outputFolder, "diagnostics"), pattern = "mdrr.*.csv")
+mdrr <- lapply(mdrrFiles, function(x) read.csv(file.path(outputFolder, "diagnostics", x)))
+mdrr <- do.call(rbind, mdrr)
+mdrr$file <- mdrrFiles
+write.csv(mdrr, file.path(outputFolder, "diagnostics", "allMdrrs.csv"), row.names = FALSE)
+
+conn <- connect(connectionDetails)
+sql <- "SELECT MIN(cohort_start_date) FROM scratch.dbo.mschuemi_denosumab_optum WHERE cohort_definition_id = 1"
+querySql(conn, sql)
+
+
+fileName <-  file.path(outputFolder, paste0("simplifiedNullDistribution.png"))
+EvidenceSynthesis::plotEmpiricalNulls(logRr = negControlSubset$logRr,
+                                      seLogRr = negControlSubset$seLogRr,
+                                      labels = rep("Optum", nrow(negControlSubset)),
+                                      fileName = fileName)

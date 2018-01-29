@@ -81,14 +81,20 @@ createTcos <- function(outputFolder) {
   tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
   allControlsFile <- file.path(outputFolder, "AllControls.csv")
   allControls <- read.csv(allControlsFile)
-  controlOutcomes <- allControls[allControls$type == "Outcome", ]
   dcosList <- list()
-  for (i in 1:nrow(tcosOfInterest)) {
-    controlOutcomeIds <- controlOutcomes$outcomeId[controlOutcomes$targetId == tcosOfInterest$targetId[i] & controlOutcomes$comparatorId == tcosOfInterest$comparatorId[i]]
-    excludeConceptIds <- as.numeric(strsplit(tcosOfInterest$excludedCovariateConceptIds[i], split = ",")[[1]])
-    dcos <- CohortMethod::createDrugComparatorOutcomes(targetId = tcosOfInterest$targetId[i],
-                                                       comparatorId = tcosOfInterest$comparatorId[i],
-                                                       outcomeIds = c(tcosOfInterest$outcomeId[i], controlOutcomeIds),
+  tcs <- unique(rbind(tcosOfInterest[, c("targetId", "comparatorId")],
+                      allControls[, c("targetId", "comparatorId")]))
+  for (i in 1:nrow(tcs)) {
+    targetId <- tcs$targetId[i]
+    comparatorId <- tcs$comparatorId[i]
+    outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
+    outcomeIds <- as.numeric(strsplit(outcomeIds, split = ",")[[1]])
+    outcomeIds <- c(outcomeIds, allControls$outcomeId[allControls$targetId == targetId & allControls$comparatorId == comparatorId])
+    excludeConceptIds <- tcosOfInterest$excludedCovariateConceptIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId]
+    excludeConceptIds <- as.numeric(strsplit(excludeConceptIds, split = ",")[[1]])
+    dcos <- CohortMethod::createDrugComparatorOutcomes(targetId = targetId,
+                                                       comparatorId = comparatorId,
+                                                       outcomeIds = outcomeIds,
                                                        excludedCovariateConceptIds =  excludeConceptIds)
     dcosList[[length(dcosList) + 1]] <- dcos
   }

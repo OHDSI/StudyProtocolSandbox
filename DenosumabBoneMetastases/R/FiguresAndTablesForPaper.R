@@ -25,20 +25,69 @@
 #'                             performance.
 #'
 #' @export
-generateDiagnostics <- function(outputFolder) {
-  packageName <- "DenosumabBoneMetastases"
-  modelType <- "cox" # For MDRR computation
-  psStrategy <- "stratification" # For covariate balance labels
+createFiguresAndTables <- function(outputFolder,
+                                   connectionDetails,
+                                   cohortDatabaseSchema = cdmDatabaseSchema,
+                                   cohortTable = "cohort",
+                                   oracleTempSchema = cohortDatabaseSchema) {
   cmOutputFolder <- file.path(outputFolder, "cmOutput")
-  diagnosticsFolder <- file.path(outputFolder, "diagnostics")
-  if (!file.exists(diagnosticsFolder))
-    dir.create(diagnosticsFolder)
+  figuresAndTablesFolder <- file.path(outputFolder, "figuresAndTables")
+  if (!file.exists(figuresAndTablesFolder))
+    dir.create(figuresAndTablesFolder)
   
-  pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = packageName)
-  tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
-  
+
   reference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
   analysisSummary <- CohortMethod::summarizeAnalyses(reference)
+  
+  
+  # Break up outcomes into components --------------------------------------------------------------
+  conn <- DatabaseConnector::connect(connectionDetails)
+  strataFile <- reference$strataFile[reference$analysisId == 1 &
+                                       reference$targetId == 1 &
+                                       reference$comparatorId == 2 &
+                                       reference$outcomeId == 3]
+  population <- readRDS(strataFile)
+  population <- population[population$outcomeCount > 0, ]
+  population$cohortStartDate <- population$cohortStartDate + population$daysToEvent
+  population <- population[, c("subjectId", "cohortStartDate", "treatment")]
+  colnames(population) <- SqlRender::camelCaseToSnakeCase(colnames(population))
+  DatabaseConnector::insertTable(connection = conn,
+                                 tableName = "#temp",
+                                 data = population,
+                                 dropTableIfExists = TRUE,
+                                 createTable = TRUE,
+                                 tempTable = TRUE,
+                                 oracleTempSchema = oracleTempSchema)
+  sql <- "SELECT dedupe.cohort_definition_id,
+    treatment,
+    COUNT(*) AS event_count
+  FROM (SELECT MAX(cohort.cohort_definition_id) AS cohort_definition_id,
+      treatment,
+      cohort.cohort_start_date,
+      cohort.subject_id
+    FROM #temp temp
+    INNER JOIN @cohort_database_schema.@cohort_table cohort
+    ON temp.subject_id = cohort.subject_id
+    AND temp.cohort_start_date = cohort.cohort_start_date
+    WHERE cohort.cohort_definition_id IN (12,13,14,15)
+    GROUP BY treatment,
+      cohort.cohort_start_date,
+      cohort.subject_id
+  ) dedupe
+  GROUP BY dedupe.cohort_definition_id,
+    treatment;"
+  sql <- SqlRender::renderSql(sql = sql,
+                              cohort_database_schema = cohortDatabaseSchema,
+                              cohort_table = cohortTable)$sql
+  sql <- SqlRender::translateSql(sql = sql, targetDialect = connectionDetails$dbms, oracleTempSchema = oracleTempSchema)$sql
+  counts <- DatabaseConnector::querySql(conn, sql)
+  colnames(counts) <- SqlRender::snakeCaseToCamelCase(colnames(counts))
+  counts <- addCohortNames(counts)
+  write.csv(counts, file.path(figuresAndTablesFolder, "EventBreakout.csv"), row.names = FALSE)
+  sum(counts$eventCount)
+  nrow(population)
+  counts
+  
   analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
   analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
   analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
@@ -46,10 +95,8 @@ generateDiagnostics <- function(outputFolder) {
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
   }
-  # negativeControls <- read.csv(system.file("settings", "NegativeControls.csv", package = packageName))
-  # negativeControlOutcomeIds <- negativeControls$outcomeId[negativeControls$type == "Outcome"]
-  allControlsFile <- file.path(outputFolder, "AllControls.csv")
-  allControls <- read.csv(allControlsFile)
+  negativeControls <- read.csv(system.file("settings", "NegativeControls.csv", package = packageName))
+  negativeControlOutcomeIds <- negativeControls$outcomeId[negativeControls$type == "Outcome"]
   tcsOfInterest <- unique(tcosOfInterest[, c("targetId", "comparatorId")])
   for (i in 1:nrow(tcsOfInterest)) {
     targetId <- tcsOfInterest$targetId[i]
@@ -59,13 +106,12 @@ generateDiagnostics <- function(outputFolder) {
     outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
     outcomeIds <- as.numeric(strsplit(outcomeIds, split = ",")[[1]])
     for (analysisId in unique(reference$analysisId)) {
-      controlSubset <- allControls[allControls$targetId == targetId & allControls$comparatorId == comparatorId, ]
-      controlSubset <- merge(controlSubset[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")], analysisSummary)
-      
       # Outcome controls
       label <- "OutcomeControls"
-      
-      negControlSubset <- controlSubset[controlSubset$targetEffectSize == 1, ]
+      negControlSubset <- analysisSummary[analysisSummary$analysisId == analysisId &
+                                            analysisSummary$targetId == targetId &
+                                            analysisSummary$comparatorId == comparatorId &
+                                            analysisSummary$outcomeId %in% negativeControlOutcomeIds, ]
       
       validNcs <- sum(!is.na(negControlSubset$seLogRr))
       if (validNcs >= 5) {
@@ -80,25 +126,6 @@ generateDiagnostics <- function(outputFolder) {
       } else {
         null <- NULL
       }
-      fileName <-  file.path(diagnosticsFolder, paste0("trueAndObs_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".png"))
-      EmpiricalCalibration::plotTrueAndObserved(logRr = controlSubset$logRr, 
-                                                seLogRr = controlSubset$seLogRr, 
-                                                trueLogRr = log(controlSubset$targetEffectSize),
-                                                fileName = fileName)
-      validPcs <- sum(!is.na(controlSubset$seLogRr))
-      if (validPcs >= 5) {
-        model <- EmpiricalCalibration::fitSystematicErrorModel(controlSubset$logRr, controlSubset$seLogRr, log(controlSubset$targetEffectSize), estimateCovarianceMatrix = FALSE)
-        class(model) <- "vector"
-        fileName <-  file.path(diagnosticsFolder, paste0("systematicErrorModel_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".csv"))
-        write.csv(t(model), fileName, row.names = FALSE)
-        
-        EmpiricalCalibration::plotCiCoverage(logRr = controlSubset$logRr, 
-                                                seLogRr = controlSubset$seLogRr, 
-                                                trueLogRr = log(controlSubset$targetEffectSize),
-                                                crossValidationGroup = controlSubset$oldOutcomeId)
-      } 
-      
-          
       for (outcomeId in outcomeIds) {
         # Compute MDRR
         strataFile <- reference$strataFile[reference$analysisId == analysisId &

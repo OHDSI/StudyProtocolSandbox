@@ -10,3 +10,7 @@ cohortId,atlasId,name
 9,5772,ZoledronicAcidBroad2
 10,5773,ZoledronicAcidBroad3
 11,5774,ZoledronicAcidBroad4
+12,5807,PathologicalFracture
+13,5808,RadiationTherapyOfBone
+14,5809,SurgeryToBone
+15,5810,SpinalCordCompression
