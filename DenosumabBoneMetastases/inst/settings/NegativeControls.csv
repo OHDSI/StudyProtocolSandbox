@@ -1,0 +1,156 @@
+type,targetId,targetName,comparatorId,comparatorName,outcomeId,OutcomeName
+Outcome,1,Denosumab,2,ZoledronicAcid,195562,Hemorrhoids
+Outcome,1,Denosumab,2,ZoledronicAcid,318736,Migraine
+Outcome,1,Denosumab,2,ZoledronicAcid,4090425,Altered sensation of skin
+Outcome,1,Denosumab,2,ZoledronicAcid,313459,Sleep apnea
+Outcome,1,Denosumab,2,ZoledronicAcid,136661,Non-toxic nodular goiter
+Outcome,1,Denosumab,2,ZoledronicAcid,197672,Urinary incontinence
+Outcome,1,Denosumab,2,ZoledronicAcid,4209423,Nicotine dependence
+Outcome,1,Denosumab,2,ZoledronicAcid,437390,Hypoxemia
+Outcome,1,Denosumab,2,ZoledronicAcid,380094,Carpal tunnel syndrome
+Outcome,1,Denosumab,2,ZoledronicAcid,377575,Tinnitus
+Outcome,1,Denosumab,2,ZoledronicAcid,253796,Pneumothorax
+Outcome,1,Denosumab,2,ZoledronicAcid,4214376,Hyperglycemia
+Outcome,1,Denosumab,2,ZoledronicAcid,318556,Epistaxis
+Outcome,1,Denosumab,2,ZoledronicAcid,434005,Morbid obesity
+Outcome,1,Denosumab,2,ZoledronicAcid,432730,Difficulty speaking
+Outcome,1,Denosumab,2,ZoledronicAcid,439147,Amnesia
+Outcome,1,Denosumab,2,ZoledronicAcid,253797,Post-inflammatory pulmonary fibrosis
+Outcome,1,Denosumab,2,ZoledronicAcid,441417,Incoordination
+Outcome,1,Denosumab,2,ZoledronicAcid,433454,Adjustment disorder with mixed emotional features
+Outcome,1,Denosumab,2,ZoledronicAcid,376065,Neurologic disorder associated with type 2 diabetes mellitus
+Outcome,1,Denosumab,2,ZoledronicAcid,4239682,Chronic phototoxic dermatitis
+Outcome,1,Denosumab,2,ZoledronicAcid,30133,Acute laryngitis
+Outcome,1,Denosumab,2,ZoledronicAcid,73090,Contusion of foot
+Outcome,1,Denosumab,2,ZoledronicAcid,137951,Acquired keratoderma
+Outcome,1,Denosumab,2,ZoledronicAcid,257683,Posterior rhinorrhea
+Outcome,1,Denosumab,2,ZoledronicAcid,137977,Jaundice
+Outcome,1,Denosumab,2,ZoledronicAcid,139850,Acute frontal sinusitis
+Outcome,1,Denosumab,2,ZoledronicAcid,376229,Abnormal involuntary movement
+Outcome,1,Denosumab,2,ZoledronicAcid,193020,Incomplete emptying of bladder
+Outcome,1,Denosumab,2,ZoledronicAcid,376382,Tension-type headache
+Outcome,1,Denosumab,2,ZoledronicAcid,137063,Corns and callus
+Outcome,4,Denosumab,8,ZoledronicAcid,195562,Hemorrhoids
+Outcome,4,Denosumab,8,ZoledronicAcid,318736,Migraine
+Outcome,4,Denosumab,8,ZoledronicAcid,4090425,Altered sensation of skin
+Outcome,4,Denosumab,8,ZoledronicAcid,313459,Sleep apnea
+Outcome,4,Denosumab,8,ZoledronicAcid,136661,Non-toxic nodular goiter
+Outcome,4,Denosumab,8,ZoledronicAcid,197672,Urinary incontinence
+Outcome,4,Denosumab,8,ZoledronicAcid,4209423,Nicotine dependence
+Outcome,4,Denosumab,8,ZoledronicAcid,437390,Hypoxemia
+Outcome,4,Denosumab,8,ZoledronicAcid,380094,Carpal tunnel syndrome
+Outcome,4,Denosumab,8,ZoledronicAcid,377575,Tinnitus
+Outcome,4,Denosumab,8,ZoledronicAcid,253796,Pneumothorax
+Outcome,4,Denosumab,8,ZoledronicAcid,4214376,Hyperglycemia
+Outcome,4,Denosumab,8,ZoledronicAcid,318556,Epistaxis
+Outcome,4,Denosumab,8,ZoledronicAcid,434005,Morbid obesity
+Outcome,4,Denosumab,8,ZoledronicAcid,432730,Difficulty speaking
+Outcome,4,Denosumab,8,ZoledronicAcid,439147,Amnesia
+Outcome,4,Denosumab,8,ZoledronicAcid,253797,Post-inflammatory pulmonary fibrosis
+Outcome,4,Denosumab,8,ZoledronicAcid,441417,Incoordination
+Outcome,4,Denosumab,8,ZoledronicAcid,433454,Adjustment disorder with mixed emotional features
+Outcome,4,Denosumab,8,ZoledronicAcid,376065,Neurologic disorder associated with type 2 diabetes mellitus
+Outcome,4,Denosumab,8,ZoledronicAcid,4239682,Chronic phototoxic dermatitis
+Outcome,4,Denosumab,8,ZoledronicAcid,30133,Acute laryngitis
+Outcome,4,Denosumab,8,ZoledronicAcid,73090,Contusion of foot
+Outcome,4,Denosumab,8,ZoledronicAcid,137951,Acquired keratoderma
+Outcome,4,Denosumab,8,ZoledronicAcid,257683,Posterior rhinorrhea
+Outcome,4,Denosumab,8,ZoledronicAcid,137977,Jaundice
+Outcome,4,Denosumab,8,ZoledronicAcid,139850,Acute frontal sinusitis
+Outcome,4,Denosumab,8,ZoledronicAcid,376229,Abnormal involuntary movement
+Outcome,4,Denosumab,8,ZoledronicAcid,193020,Incomplete emptying of bladder
+Outcome,4,Denosumab,8,ZoledronicAcid,376382,Tension-type headache
+Outcome,4,Denosumab,8,ZoledronicAcid,137063,Corns and callus
+Outcome,5,Denosumab,9,ZoledronicAcid,195562,Hemorrhoids
+Outcome,5,Denosumab,9,ZoledronicAcid,318736,Migraine
+Outcome,5,Denosumab,9,ZoledronicAcid,4090425,Altered sensation of skin
+Outcome,5,Denosumab,9,ZoledronicAcid,313459,Sleep apnea
+Outcome,5,Denosumab,9,ZoledronicAcid,136661,Non-toxic nodular goiter
+Outcome,5,Denosumab,9,ZoledronicAcid,197672,Urinary incontinence
+Outcome,5,Denosumab,9,ZoledronicAcid,4209423,Nicotine dependence
+Outcome,5,Denosumab,9,ZoledronicAcid,437390,Hypoxemia
+Outcome,5,Denosumab,9,ZoledronicAcid,380094,Carpal tunnel syndrome
+Outcome,5,Denosumab,9,ZoledronicAcid,377575,Tinnitus
+Outcome,5,Denosumab,9,ZoledronicAcid,253796,Pneumothorax
+Outcome,5,Denosumab,9,ZoledronicAcid,4214376,Hyperglycemia
+Outcome,5,Denosumab,9,ZoledronicAcid,318556,Epistaxis
+Outcome,5,Denosumab,9,ZoledronicAcid,434005,Morbid obesity
+Outcome,5,Denosumab,9,ZoledronicAcid,432730,Difficulty speaking
+Outcome,5,Denosumab,9,ZoledronicAcid,439147,Amnesia
+Outcome,5,Denosumab,9,ZoledronicAcid,253797,Post-inflammatory pulmonary fibrosis
+Outcome,5,Denosumab,9,ZoledronicAcid,441417,Incoordination
+Outcome,5,Denosumab,9,ZoledronicAcid,433454,Adjustment disorder with mixed emotional features
+Outcome,5,Denosumab,9,ZoledronicAcid,376065,Neurologic disorder associated with type 2 diabetes mellitus
+Outcome,5,Denosumab,9,ZoledronicAcid,4239682,Chronic phototoxic dermatitis
+Outcome,5,Denosumab,9,ZoledronicAcid,30133,Acute laryngitis
+Outcome,5,Denosumab,9,ZoledronicAcid,73090,Contusion of foot
+Outcome,5,Denosumab,9,ZoledronicAcid,137951,Acquired keratoderma
+Outcome,5,Denosumab,9,ZoledronicAcid,257683,Posterior rhinorrhea
+Outcome,5,Denosumab,9,ZoledronicAcid,137977,Jaundice
+Outcome,5,Denosumab,9,ZoledronicAcid,139850,Acute frontal sinusitis
+Outcome,5,Denosumab,9,ZoledronicAcid,376229,Abnormal involuntary movement
+Outcome,5,Denosumab,9,ZoledronicAcid,193020,Incomplete emptying of bladder
+Outcome,5,Denosumab,9,ZoledronicAcid,376382,Tension-type headache
+Outcome,5,Denosumab,9,ZoledronicAcid,137063,Corns and callus
+Outcome,6,Denosumab,10,ZoledronicAcid,195562,Hemorrhoids
+Outcome,6,Denosumab,10,ZoledronicAcid,318736,Migraine
+Outcome,6,Denosumab,10,ZoledronicAcid,4090425,Altered sensation of skin
+Outcome,6,Denosumab,10,ZoledronicAcid,313459,Sleep apnea
+Outcome,6,Denosumab,10,ZoledronicAcid,136661,Non-toxic nodular goiter
+Outcome,6,Denosumab,10,ZoledronicAcid,197672,Urinary incontinence
+Outcome,6,Denosumab,10,ZoledronicAcid,4209423,Nicotine dependence
+Outcome,6,Denosumab,10,ZoledronicAcid,437390,Hypoxemia
+Outcome,6,Denosumab,10,ZoledronicAcid,380094,Carpal tunnel syndrome
+Outcome,6,Denosumab,10,ZoledronicAcid,377575,Tinnitus
+Outcome,6,Denosumab,10,ZoledronicAcid,253796,Pneumothorax
+Outcome,6,Denosumab,10,ZoledronicAcid,4214376,Hyperglycemia
+Outcome,6,Denosumab,10,ZoledronicAcid,318556,Epistaxis
+Outcome,6,Denosumab,10,ZoledronicAcid,434005,Morbid obesity
+Outcome,6,Denosumab,10,ZoledronicAcid,432730,Difficulty speaking
+Outcome,6,Denosumab,10,ZoledronicAcid,439147,Amnesia
+Outcome,6,Denosumab,10,ZoledronicAcid,253797,Post-inflammatory pulmonary fibrosis
+Outcome,6,Denosumab,10,ZoledronicAcid,441417,Incoordination
+Outcome,6,Denosumab,10,ZoledronicAcid,433454,Adjustment disorder with mixed emotional features
+Outcome,6,Denosumab,10,ZoledronicAcid,376065,Neurologic disorder associated with type 2 diabetes mellitus
+Outcome,6,Denosumab,10,ZoledronicAcid,4239682,Chronic phototoxic dermatitis
+Outcome,6,Denosumab,10,ZoledronicAcid,30133,Acute laryngitis
+Outcome,6,Denosumab,10,ZoledronicAcid,73090,Contusion of foot
+Outcome,6,Denosumab,10,ZoledronicAcid,137951,Acquired keratoderma
+Outcome,6,Denosumab,10,ZoledronicAcid,257683,Posterior rhinorrhea
+Outcome,6,Denosumab,10,ZoledronicAcid,137977,Jaundice
+Outcome,6,Denosumab,10,ZoledronicAcid,139850,Acute frontal sinusitis
+Outcome,6,Denosumab,10,ZoledronicAcid,376229,Abnormal involuntary movement
+Outcome,6,Denosumab,10,ZoledronicAcid,193020,Incomplete emptying of bladder
+Outcome,6,Denosumab,10,ZoledronicAcid,376382,Tension-type headache
+Outcome,6,Denosumab,10,ZoledronicAcid,137063,Corns and callus
+Outcome,7,Denosumab,11,ZoledronicAcid,195562,Hemorrhoids
+Outcome,7,Denosumab,11,ZoledronicAcid,318736,Migraine
+Outcome,7,Denosumab,11,ZoledronicAcid,4090425,Altered sensation of skin
+Outcome,7,Denosumab,11,ZoledronicAcid,313459,Sleep apnea
+Outcome,7,Denosumab,11,ZoledronicAcid,136661,Non-toxic nodular goiter
+Outcome,7,Denosumab,11,ZoledronicAcid,197672,Urinary incontinence
+Outcome,7,Denosumab,11,ZoledronicAcid,4209423,Nicotine dependence
+Outcome,7,Denosumab,11,ZoledronicAcid,437390,Hypoxemia
+Outcome,7,Denosumab,11,ZoledronicAcid,380094,Carpal tunnel syndrome
+Outcome,7,Denosumab,11,ZoledronicAcid,377575,Tinnitus
+Outcome,7,Denosumab,11,ZoledronicAcid,253796,Pneumothorax
+Outcome,7,Denosumab,11,ZoledronicAcid,4214376,Hyperglycemia
+Outcome,7,Denosumab,11,ZoledronicAcid,318556,Epistaxis
+Outcome,7,Denosumab,11,ZoledronicAcid,434005,Morbid obesity
+Outcome,7,Denosumab,11,ZoledronicAcid,432730,Difficulty speaking
+Outcome,7,Denosumab,11,ZoledronicAcid,439147,Amnesia
+Outcome,7,Denosumab,11,ZoledronicAcid,253797,Post-inflammatory pulmonary fibrosis
+Outcome,7,Denosumab,11,ZoledronicAcid,441417,Incoordination
+Outcome,7,Denosumab,11,ZoledronicAcid,433454,Adjustment disorder with mixed emotional features
+Outcome,7,Denosumab,11,ZoledronicAcid,376065,Neurologic disorder associated with type 2 diabetes mellitus
+Outcome,7,Denosumab,11,ZoledronicAcid,4239682,Chronic phototoxic dermatitis
+Outcome,7,Denosumab,11,ZoledronicAcid,30133,Acute laryngitis
+Outcome,7,Denosumab,11,ZoledronicAcid,73090,Contusion of foot
+Outcome,7,Denosumab,11,ZoledronicAcid,137951,Acquired keratoderma
+Outcome,7,Denosumab,11,ZoledronicAcid,257683,Posterior rhinorrhea
+Outcome,7,Denosumab,11,ZoledronicAcid,137977,Jaundice
+Outcome,7,Denosumab,11,ZoledronicAcid,139850,Acute frontal sinusitis
+Outcome,7,Denosumab,11,ZoledronicAcid,376229,Abnormal involuntary movement
+Outcome,7,Denosumab,11,ZoledronicAcid,193020,Incomplete emptying of bladder
+Outcome,7,Denosumab,11,ZoledronicAcid,376382,Tension-type headache
+Outcome,7,Denosumab,11,ZoledronicAcid,137063,Corns and callus

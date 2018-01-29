@@ -1,0 +1,16 @@
+cohortId,atlasId,name
+1,5652,Denosumab
+2,5665,ZoledronicAcid
+3,5729,SkeletalEvents
+4,5766,DenosumabBroad1
+5,5767,DenosumabBroad2
+6,5768,DenosumabBroad3
+7,5770,DenosumabBroad4
+8,5771,ZoledronicAcidBroad1
+9,5772,ZoledronicAcidBroad2
+10,5773,ZoledronicAcidBroad3
+11,5774,ZoledronicAcidBroad4
+12,5807,PathologicalFracture
+13,5808,RadiationTherapyOfBone
+14,5809,SurgeryToBone
+15,5810,SpinalCordCompression

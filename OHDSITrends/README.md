@@ -50,7 +50,7 @@ concept_file = 'C:/path_to_concept_file.csv'
 Alt Method 1: From your OMOP Database.
 If you have the concept file on your database, then run these lines: (then skip to the next code chunk)
  ```r
- conn <-  conn<-DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
+ conn <-  DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
  concept <- DatabaseConnector::querySql(conn,
              'select * from concept')
  

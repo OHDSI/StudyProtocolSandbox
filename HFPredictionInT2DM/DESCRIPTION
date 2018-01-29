@@ -1,0 +1,20 @@
+Package: LargeScalePrediction
+Title: Preliminary large scale prediction models analysis
+Version: 0.0.1
+Author: Jenna M. Reps, Martijn J. Schuemie [aut, cre]
+Maintainer: Jenna M. Reps <jreps@its.jnj.com>
+Description: This study generates prediction models for various outcomes within a cohort of theraputically treated depression
+Depends:
+    R (>= 3.1),
+    DatabaseConnector (>= 1.2.1)
+Imports:
+    RJDBC,
+    FeatureExtraction,
+    PatientLevelPrediction,
+    OhdsiSharing,
+    futile.logger
+Suggests:
+    testthat
+License: Apache License 2.0
+LazyData: true
+RoxygenNote: 6.0.1
