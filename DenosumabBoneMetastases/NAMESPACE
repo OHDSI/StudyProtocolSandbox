@@ -2,6 +2,7 @@
 
 export(createAnalysesDetails)
 export(createCohorts)
+export(createFiguresAndTables)
 export(execute)
 export(generateDiagnostics)
 export(synthesizePositiveControls)

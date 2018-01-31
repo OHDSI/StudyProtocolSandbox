@@ -49,7 +49,7 @@ createAnalysesDetails <- function(workFolder) {
   control <- Cyclops::createControl(noiseLevel = "quiet", 
                                     cvType = "auto", 
                                     tolerance = 2e-07, 
-                                    cvRepetitions = 1, 
+                                    cvRepetitions = 10, 
                                     startingVariance = 0.01,
                                     seed = 123)
   createPsArgs <- CohortMethod::createCreatePsArgs(control = control)

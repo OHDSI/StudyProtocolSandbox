@@ -86,16 +86,19 @@ generateDiagnostics <- function(outputFolder) {
                                                 trueLogRr = log(controlSubset$targetEffectSize),
                                                 fileName = fileName)
       validPcs <- sum(!is.na(controlSubset$seLogRr))
-      if (validPcs >= 5) {
+      if (validPcs >= 10) {
         model <- EmpiricalCalibration::fitSystematicErrorModel(controlSubset$logRr, controlSubset$seLogRr, log(controlSubset$targetEffectSize), estimateCovarianceMatrix = FALSE)
         class(model) <- "vector"
         fileName <-  file.path(diagnosticsFolder, paste0("systematicErrorModel_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".csv"))
         write.csv(t(model), fileName, row.names = FALSE)
         
-        EmpiricalCalibration::plotCiCoverage(logRr = controlSubset$logRr, 
-                                                seLogRr = controlSubset$seLogRr, 
-                                                trueLogRr = log(controlSubset$targetEffectSize),
-                                                crossValidationGroup = controlSubset$oldOutcomeId)
+        fileName <-  file.path(diagnosticsFolder, paste0("ciCoverage_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".png"))
+        evaluation <- EmpiricalCalibration::evaluateCiCalibration(logRr = controlSubset$logRr, 
+                                                                  seLogRr = controlSubset$seLogRr, 
+                                                                  trueLogRr = log(controlSubset$targetEffectSize),
+                                                                  crossValidationGroup = controlSubset$oldOutcomeId)
+        EmpiricalCalibration::plotCiCoverage(evaluation = evaluation,
+                                             fileName = fileName)
       } 
       
           
