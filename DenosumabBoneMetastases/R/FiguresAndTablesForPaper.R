@@ -55,7 +55,7 @@ createFiguresAndTables <- function(outputFolder,
   strataFile <- reference$strataFile[reference$analysisId == 1 &
                                        reference$targetId == 1 &
                                        reference$comparatorId == 2 &
-                                       reference$outcomeId == 3]
+                                       reference$outcomeId == 21]
   population <- readRDS(strataFile)
   population <- population[population$outcomeCount > 0, ]
   population$cohortStartDate <- population$cohortStartDate + population$daysToEvent
@@ -79,7 +79,7 @@ createFiguresAndTables <- function(outputFolder,
     INNER JOIN @cohort_database_schema.@cohort_table cohort
     ON temp.subject_id = cohort.subject_id
     AND temp.cohort_start_date = cohort.cohort_start_date
-    WHERE cohort.cohort_definition_id IN (12,13,14,15)
+    WHERE cohort.cohort_definition_id IN (22,23,24,25)
     GROUP BY treatment,
       cohort.cohort_start_date,
       cohort.subject_id

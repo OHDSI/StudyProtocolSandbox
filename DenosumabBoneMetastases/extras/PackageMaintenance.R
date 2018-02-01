@@ -31,10 +31,79 @@ OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv"
                                                 generateStats = FALSE,
                                                 packageName = "DenosumabBoneMetastases")
 
+# Hack: create new cohort definitions by dropping inclusion criteria:
+source("extras/ModifyCohortDefinition.R")
+insertModifiedCohortDefinitionInPackage(definitionId = 5652, 
+                                        name = "DenosumabProstateCancerBroad1", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(8))
+insertModifiedCohortDefinitionInPackage(definitionId = 5652, 
+                                        name = "DenosumabProstateCancerBroad2", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(7, 8))
+insertModifiedCohortDefinitionInPackage(definitionId = 5652, 
+                                        name = "DenosumabProstateCancerBroad3", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(6, 7, 8))
+insertModifiedCohortDefinitionInPackage(definitionId = 5652, 
+                                        name = "DenosumabProstateCancerBroad4", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(5, 6, 7, 8))
+
+insertModifiedCohortDefinitionInPackage(definitionId = 5665, 
+                                        name = "ZoledronicAcidProstateCancerBroad1", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(8))
+insertModifiedCohortDefinitionInPackage(definitionId = 5665, 
+                                        name = "ZoledronicAcidProstateCancerBroad2", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(7, 8))
+insertModifiedCohortDefinitionInPackage(definitionId = 5665, 
+                                        name = "ZoledronicAcidProstateCancerBroad3", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(6, 7, 8))
+insertModifiedCohortDefinitionInPackage(definitionId = 5665, 
+                                        name = "ZoledronicAcidProstateCancerBroad4", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(5, 6, 7, 8))
+
+insertModifiedCohortDefinitionInPackage(definitionId = 5847, 
+                                        name = "DenosumabBreastCancerBroad1", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(6))
+insertModifiedCohortDefinitionInPackage(definitionId = 5847, 
+                                        name = "DenosumabBreastCancerBroad2", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(5, 6))
+
+insertModifiedCohortDefinitionInPackage(definitionId = 5848, 
+                                        name = "ZoledronicAcidBreastCancerBroad1", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(6))
+insertModifiedCohortDefinitionInPackage(definitionId = 5848, 
+                                        name = "ZoledronicAcidBreastCancerBroad2", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(5, 6))
+
+insertModifiedCohortDefinitionInPackage(definitionId = 5866, 
+                                        name = "DenosumabOtherCancerBroad1", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(6))
+insertModifiedCohortDefinitionInPackage(definitionId = 5867, 
+                                        name = "ZoledronicAcidOtherCancerBroad1", 
+                                        baseUrl = Sys.getenv("baseUrl"), 
+                                        inclusionRulesToDrop = c(6))
+
+# Another hack: negative controls are valid for all TCs of interest. Automatically create union:
+tcosOfInterest <- read.csv("inst/settings/TcosOfInterest.csv")
+ncOutcomes <- read.csv("extras/NegativeControlOutcomes.csv")
+ncs <- merge(tcosOfInterest[, c("targetId", "targetName", "comparatorId", "comparatorName")], ncOutcomes)
+ncs$type <- "Outcome"
+write.csv(ncs, "inst/settings/NegativeControls.csv", row.names = FALSE)
+
 # Create analysis details -------------------------------------------------
 source("R/CreateStudyAnalysisDetails.R")
 createAnalysesDetails("inst/settings/")
-
 
 # Store environment in which the study was executed -----------------------
 OhdsiRTools::insertEnvironmentSnapshotInPackage("DenosumabBoneMetastases")
