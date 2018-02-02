@@ -17,19 +17,29 @@
 #' Generate diagnostics
 #'
 #' @details
-#' This function generates analyses diagnostics. Requires the study to be executed first.
+#' This function generates figures and tables for the paper. Requires the study to be executed first.
 #'
-
 #' @param outputFolder         Name of local folder where the results were generated; make sure to use forward slashes
 #'                             (/). Do not use a folder on a network drive since this greatly impacts
 #'                             performance.
+#' @param connectionDetails    An object of type \code{connectionDetails} as created using the
+#'                             \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+#'                             DatabaseConnector package.
+#' @param cohortDatabaseSchema   Schema name where intermediate data can be stored. You will need to have
+#'                             write priviliges in this schema. Note that for SQL Server, this should
+#'                             include both the database and schema name, for example 'cdm_data.dbo'.
+#' @param cohortTable     The name of the table that will be created in the work database schema.
+#'                             This table will hold the exposure and outcome cohorts used in this
+#'                             study.
+#' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
+#'                             priviliges for storing temporary tables.
 #'
 #' @export
 createFiguresAndTables <- function(outputFolder,
                                    connectionDetails,
-                                   cohortDatabaseSchema = cdmDatabaseSchema,
-                                   cohortTable = "cohort",
-                                   oracleTempSchema = cohortDatabaseSchema) {
+                                   cohortDatabaseSchema,
+                                   cohortTable,
+                                   oracleTempSchema = oracleTempSchema) {
   cmOutputFolder <- file.path(outputFolder, "cmOutput")
   figuresAndTablesFolder <- file.path(outputFolder, "figuresAndTables")
   if (!file.exists(figuresAndTablesFolder))
@@ -45,7 +55,7 @@ createFiguresAndTables <- function(outputFolder,
   strataFile <- reference$strataFile[reference$analysisId == 1 &
                                        reference$targetId == 1 &
                                        reference$comparatorId == 2 &
-                                       reference$outcomeId == 3]
+                                       reference$outcomeId == 21]
   population <- readRDS(strataFile)
   population <- population[population$outcomeCount > 0, ]
   population$cohortStartDate <- population$cohortStartDate + population$daysToEvent
@@ -69,7 +79,7 @@ createFiguresAndTables <- function(outputFolder,
     INNER JOIN @cohort_database_schema.@cohort_table cohort
     ON temp.subject_id = cohort.subject_id
     AND temp.cohort_start_date = cohort.cohort_start_date
-    WHERE cohort.cohort_definition_id IN (12,13,14,15)
+    WHERE cohort.cohort_definition_id IN (22,23,24,25)
     GROUP BY treatment,
       cohort.cohort_start_date,
       cohort.subject_id
@@ -84,108 +94,29 @@ createFiguresAndTables <- function(outputFolder,
   colnames(counts) <- SqlRender::snakeCaseToCamelCase(colnames(counts))
   counts <- addCohortNames(counts)
   write.csv(counts, file.path(figuresAndTablesFolder, "EventBreakout.csv"), row.names = FALSE)
-  sum(counts$eventCount)
-  nrow(population)
-  counts
+
+  # MDRR across TCs -----------------------------------------------
+  mdrrFiles <- list.files(file.path(outputFolder, "diagnostics"), pattern = "mdrr.*.csv")
+  mdrr <- lapply(mdrrFiles, function(x) read.csv(file.path(outputFolder, "diagnostics", x)))
+  mdrr <- do.call(rbind, mdrr)
+  mdrr$file <- mdrrFiles
+  write.csv(mdrr, file.path(figuresAndTablesFolder, "allMdrrs.csv"), row.names = FALSE)
   
-  analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
-  analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
-  analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
-  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = packageName))
-  for (i in 1:length(cmAnalysisList)) {
-    analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
-  }
-  negativeControls <- read.csv(system.file("settings", "NegativeControls.csv", package = packageName))
+  # Study start date -------------------------------------------
+  conn <- connect(connectionDetails)
+  sql <- "SELECT MIN(cohort_start_date) FROM scratch.dbo.mschuemi_denosumab_optum WHERE cohort_definition_id = 1"
+  print(querySql(conn, sql))
+  
+  # Simplified null distribution -------------------------------------------
+  negativeControls <- read.csv(system.file("settings", "NegativeControls.csv", package = "DenosumabBoneMetastases"))
   negativeControlOutcomeIds <- negativeControls$outcomeId[negativeControls$type == "Outcome"]
-  tcsOfInterest <- unique(tcosOfInterest[, c("targetId", "comparatorId")])
-  for (i in 1:nrow(tcsOfInterest)) {
-    targetId <- tcsOfInterest$targetId[i]
-    comparatorId <- tcsOfInterest$comparatorId[i]
-    targetLabel <- tcosOfInterest$targetName[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId][1]
-    comparatorLabel <- tcosOfInterest$comparatorName[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId][1]
-    outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
-    outcomeIds <- as.numeric(strsplit(outcomeIds, split = ",")[[1]])
-    for (analysisId in unique(reference$analysisId)) {
-      # Outcome controls
-      label <- "OutcomeControls"
-      negControlSubset <- analysisSummary[analysisSummary$analysisId == analysisId &
-                                            analysisSummary$targetId == targetId &
-                                            analysisSummary$comparatorId == comparatorId &
-                                            analysisSummary$outcomeId %in% negativeControlOutcomeIds, ]
-      
-      validNcs <- sum(!is.na(negControlSubset$seLogRr))
-      if (validNcs >= 5) {
-        null <- EmpiricalCalibration::fitMcmcNull(negControlSubset$logRr, negControlSubset$seLogRr)
-        
-        fileName <-  file.path(diagnosticsFolder, paste0("nullDistribution_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".png"))
-        EmpiricalCalibration::plotCalibrationEffect(logRrNegatives = negControlSubset$logRr,
-                                                    seLogRrNegatives = negControlSubset$seLogRr,
-                                                    null = null,
-                                                    showCis = TRUE,
-                                                    fileName = fileName)
-      } else {
-        null <- NULL
-      }
-      for (outcomeId in outcomeIds) {
-        # Compute MDRR
-        strataFile <- reference$strataFile[reference$analysisId == analysisId &
-                                             reference$targetId == targetId &
-                                             reference$comparatorId == comparatorId &
-                                             reference$outcomeId == outcomeId]
-        population <- readRDS(strataFile)
-        mdrr <- CohortMethod::computeMdrr(population, alpha = 0.05, power = 0.8, twoSided = TRUE, modelType = modelType)
-        fileName <-  file.path(diagnosticsFolder, paste0("mdrr_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId, ".csv"))
-        write.csv(mdrr, fileName, row.names = FALSE)
-        fileName <-  file.path(diagnosticsFolder, paste0("attrition_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId, ".png"))
-        CohortMethod::drawAttritionDiagram(population, treatmentLabel = targetLabel, comparatorLabel = comparatorLabel, fileName = fileName)
-        if (!is.null(null)) {
-          fileName <-  file.path(diagnosticsFolder, paste0("type1Error_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId,"_", label, ".png"))
-          EmpiricalCalibration::plotExpectedType1Error(seLogRrPositives = mdrr$se,
-                                                       null = null,
-                                                       showCis = TRUE,
-                                                       title = label,
-                                                       fileName = fileName)
-        }
-      }
-      exampleRef <- reference[reference$analysisId == analysisId &
-                                reference$targetId == targetId &
-                                reference$comparatorId == comparatorId &
-                                reference$outcomeId == outcomeIds[1], ]
-      
-      ps <- readRDS(exampleRef$sharedPsFile)
-      fileName <-  file.path(diagnosticsFolder, paste0("psBeforeStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
-      psPlot <- CohortMethod::plotPs(data = ps,
-                                     treatmentLabel = targetLabel,
-                                     comparatorLabel = comparatorLabel,
-                                     fileName = fileName)
-      
-      psAfterMatching <- readRDS(exampleRef$strataFile)
-      fileName <-  file.path(diagnosticsFolder, paste0("psAfterStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
-      psPlot <- CohortMethod::plotPs(data = psAfterMatching,
-                                     treatmentLabel = targetLabel,
-                                     comparatorLabel = comparatorLabel,
-                                     fileName = fileName)
-      
-      fileName = file.path(diagnosticsFolder, paste("followupDist_a",analysisId,"_t",targetId,"_c",comparatorId, ".png",sep=""))
-      CohortMethod::plotFollowUpDistribution(psAfterMatching, 
-                                             targetLabel = targetLabel,
-                                             comparatorLabel = comparatorLabel,
-                                             fileName = fileName)
-      
-      cmdata <- CohortMethod::loadCohortMethodData(exampleRef$cohortMethodDataFolder)
-      balance <- CohortMethod::computeCovariateBalance(psAfterMatching, cmdata)
-      
-      fileName = file.path(diagnosticsFolder, paste("balanceScatter_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
-      balanceScatterPlot <- CohortMethod::plotCovariateBalanceScatterPlot(balance = balance,
-                                                                          beforeLabel = paste("Before", psStrategy),
-                                                                          afterLabel =  paste("After", psStrategy),
-                                                                          fileName = fileName)
-      
-      fileName = file.path(diagnosticsFolder, paste("balanceTop_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
-      balanceTopPlot <- CohortMethod::plotCovariateBalanceOfTopVariables(balance = balance,
-                                                                         beforeLabel = paste("Before", psStrategy),
-                                                                         afterLabel =  paste("After", psStrategy),
-                                                                         fileName = fileName)
-    }
-  }
+  
+  negControlSubset <- analysisSummary[analysisSummary$targetId == 1 & 
+                                        analysisSummary$comparatorId == 2 & 
+                                        analysisSummary$outcomeId %in% negativeControlOutcomeIds, ]
+  fileName <-  file.path(figuresAndTablesFolder, paste0("simplifiedNullDistribution.png"))
+  EvidenceSynthesis::plotEmpiricalNulls(logRr = negControlSubset$logRr,
+                                        seLogRr = negControlSubset$seLogRr,
+                                        labels = rep("Optum", nrow(negControlSubset)),
+                                        fileName = fileName)
 }

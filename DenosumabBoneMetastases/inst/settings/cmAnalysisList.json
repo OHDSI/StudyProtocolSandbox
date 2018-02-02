@@ -76,7 +76,7 @@
         "upperLimit": 20,
         "gridSteps": 10,
         "minCVData": 100,
-        "cvRepetitions": 1,
+        "cvRepetitions": 10,
         "noiseLevel": "quiet",
         "threads": 1,
         "seed": 123,
