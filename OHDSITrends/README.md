@@ -1,10 +1,6 @@
-This package is using Achilles precomputed metadata to analyze trends. The intent is to do data quality inspection. It is an extenstion of the Data Quality study.  The package can  analyze trends in medical events at a health-system-wide or national level. It also works for non-OMOP sites. 
+This package is using Achilles precomputed metadata to analyze trends. The intent is to do data quality inspection. It is an extenstion of the Data Quality study.  The package can  analyze trends in medical events at a health-system-wide or national level. This package is optimally designed to analyze trends in interesting medical events from datasets built under the OMOP Common Data Model but can also be used on data in other models (see section at the end). 
 
-
-
-
-## Purpose
-This package is optimally designed to analyze trends in interesting medical events from datasets built under the OMOP Common Data Model. 
+A site running this package can run the analysis localy with no requiremnt to share any data with the study coordinating center. The package will generate data on events that may be interesting from Data Quality perspective to review localy. Sharing of data is optional step 4.
 
 
 ## Dependencies and R Version
@@ -39,15 +35,28 @@ myConnDetails <- createConnectionDetails(dbms="postgresql"
                                              ,server='server/database')
 ```
 
-At OMOP site, the package needs vocabulary data. At non-OMOP sites, this data must be provided by user somehow.
-At OMOP site, getting vocabulary data is easy. 
+## Vocabulary
+
+The graphical output of the package looks better if dictionary for codes are provided. At OMOP site, the package needs vocabulary data. 
 
 Preferred Method: Set `concept_file` variable to the file path to the Athena concept file (or concept file from your database)
 ```r
-concept_file = 'C:/path_to_concept_file.csv'
+#modify the path to point to vocabulary CSV files
+concept_file = 'C:/modify_path/athena/concept.csv'
+
+
 ```
 
-Alt Method 1: From your OMOP Database.
+ 
+Alt Method 1:
+ Read Athena CONCEPT.csv file
+ 
+ ```r
+ concept <- read.delim(file.path(folder,'concept.csv'),as.is=T,quote = "")
+ ```
+
+
+Alt Method 2: From your OMOP Database.
 If you have the concept file on your database, then run these lines: (then skip to the next code chunk)
  ```r
  conn <-  DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
@@ -55,17 +64,11 @@ If you have the concept file on your database, then run these lines: (then skip 
              'select * from concept')
  
  ```
- 
- Alt Method 2:
- Read Athena CONCEPT.csv file
- 
- ```r
- concept <- read.delim(file.path(folder,'concept.csv'),as.is=T,quote = "")
- ```
- 
-You can pass in either the concept R data.frame() object OR the filepath to a CONCEPT.csv file. The function will work with both approaches.
 
-In addition, it is required  to specify a date range for which you expect most of your data to be complete. For example a database may begin collecting information from 1985, but the data for 2017 is only for half (or part) of the year. In this instance, you'd want to select a date range from 1985-2016, so that the incomplete annual data in 2017 does not bias trends.
+
+## Other input data
+
+It is required  to specify a date range for which you expect most of your data to be complete. For example a database may begin collecting information from 1985, but the data for 2017 is only for half (or part) of the year. In this instance, you'd want to select a date range from 1985-2016, so that the incomplete annual data in 2017 does not bias trends.
 
 Specify the path to an folder where you want all the result to go. Put a '/' at the end of this filepath. Note: The code will work better if the folder already exists.
 
@@ -82,14 +85,8 @@ myConnDetails <- createConnectionDetails(dbms="postgresql"
                                      ,user='my_user_name', password = 'my_password'
                                              ,server='server/database')
 
-#create concept data.frame   (these steps are duplicate of the steps above)
-#either by reading it from a file
-concept <- readr::read_csv('CONCEPT.csv')
 
-#of fetching it from your database
- conn <-  conn<-DatabaseConnector::connect(myConnDetails, schema = ConceptSchema)
- concept <- DatabaseConnector::querySql(conn,'select * from concept')
- 
+
 
 #specify your results database (or databases if you want to analyze more than one
 
@@ -103,11 +100,13 @@ dates = 1985:2016 # Appropriate for the example above
 user_folder = paste0('c:/myfolder/Trends', '/') # Path to an empty folder to put all the exciting results with a '/')
 
 ```
-This code will analyze the analysis_ids.
-904 = drugEra or drug ingredient per decile per calendar year
+This code will analyze the following analysis_ids.
+
+904 = drugEra (ingredients) or drug ingredient per decile per calendar year
 604 = procedures per decile per calendar year
 404 = conditions per decile per calendar year
-704 = drugExposure or drug product per decile per calendar year
+704 = drugExposure (clinical drugs)  per decile per calendar year
+1804 = measurements per decile per calendar year
 
 Now, you are ready for step_2.
 

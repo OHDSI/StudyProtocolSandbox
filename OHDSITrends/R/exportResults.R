@@ -29,9 +29,12 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
 
   # copy full_cids to new DF
   copy_fc = full_cids
-  deciles_to_kill <- eventM2 %>% dplyr::select(stratum_2, decile, population_count) %>%
-                      dplyr::distinct() %>% dplyr::filter(population_count < 10000)
-  full_cids %<>% dplyr::anti_join(deciles_to_kill)
+  # deciles_to_kill <- eventM2 %>% dplyr::select(stratum_2, decile, population_count) %>%
+  #                     dplyr::distinct() %>% dplyr::filter(population_count < 10000)
+  # cat('    deciles\n')
+  # str(deciles_to_kill)
+  #
+  # full_cids %<>% dplyr::anti_join(deciles_to_kill)
 
   # Drop extraneous columns
   full_cids %<>% dplyr::select(-c(concept_name, classification, concept_code, db_schema))
@@ -74,24 +77,24 @@ exportResults <- function(eventM2, full_cids, rollup1.0, rollup2.0, db_schema, e
   # plot_pdf(graph_df_2, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Top_trending_events.pdf", sep = '_')))
   # -------------------------------------------------------------------------
 
-  # Group By
+  # Group By (VH REMOVED FOR NOW)
 
-  if(event_type %in% c(904, 604))
-  {
-    if(event_type == 904)
-    {
-      # Edit this line; should just be /inst/kb-drug_era3.csv
-      kb3_path <- system.file("csv", "kb-drug_era3.csv", package = "OHDSITrends")
-      kb2.csv <- make_and_save_kb(kb3_path, concept, kbFolder)
-      dg <- OHDSI_shiny_dg(kb2.csv, eventM2, event_type)
-      analyze_grouped_events(full_cids, eventM2, dg, kb2.csv, event_type, db_schema, dest_path)
-    }
-  }
+  # if(event_type %in% c(904, 604))
+  # {
+  #   if(event_type == 904)
+  #   {
+  #     # Edit this line; should just be /inst/kb-drug_era3.csv
+  #     kb3_path <- system.file("csv", "kb-drug_era3.csv", package = "OHDSITrends")
+  #     kb2.csv <- make_and_save_kb(kb3_path, concept, kbFolder)
+  #     dg <- OHDSI_shiny_dg(kb2.csv, eventM2, event_type)
+  #     analyze_grouped_events(full_cids, eventM2, dg, kb2.csv, event_type, db_schema, dest_path)
+  #   }
+  # }
 }
 
 #' @description Print graphs of all the rollup items
 #' @export
-print_Rollup_Graphs <- function(event_type, db_schema, full_cids, rollup1.0, rollup2.0, dest_path, eventM2)
+print_Rollup_Graphs <- function(event_type, db_schema, full_cids, rollup1.0, rollup2.0, dest_path, eventM2,skip_plot_generation=FALSE)
 {
   # Print analysis_friendly files (same information as rollup, but comes from full_cids)
   fname <- paste(event_type, db_schema, "Overall_interesting_events.csv", sep = '_')
@@ -106,11 +109,13 @@ print_Rollup_Graphs <- function(event_type, db_schema, full_cids, rollup1.0, rol
   graph_df_1 <- subset_big_by_small_ids(eventM2, out_1)
   graph_df_2 <- subset_big_by_small_ids(eventM2, out_2)
 
-  print(paste('plotting Overall_interesting_events to', dest_path))
-  plot_pdf(graph_df_1, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Overall_interesting_events.pdf", sep = '_')))
+  if (!skip_plot_generation){
+    print(paste('plotting Overall_interesting_events to', dest_path))
+    plot_pdf(graph_df_1, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Overall_interesting_events.pdf", sep = '_')))
 
-  print(paste('plotting Top_trending_events to', dest_path))
-  plot_pdf(graph_df_2, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Top_trending_events.pdf", sep = '_')))
+    print(paste('plotting Top_trending_events to', dest_path))
+    plot_pdf(graph_df_2, out.pdf = paste0(dest_path, paste(event_type, db_schema, "Top_trending_events.pdf", sep = '_')))
+  }
 }
 
 #' @param site_id This has to come from Super.Do; either we give the site_id to each site, OR it is randomly generated

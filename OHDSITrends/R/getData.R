@@ -87,7 +87,7 @@ getData2 <- function(connectionDetails,resultsDatabaseSchema, dataExportFolder,
     connectionDetails$schema = db
     conn<-DatabaseConnector::connect(connectionDetails,schema = db)
 
-    print(db)
+    #print(db)
 
     for(j in 1:length(SQL_commands))
     {
@@ -97,9 +97,11 @@ getData2 <- function(connectionDetails,resultsDatabaseSchema, dataExportFolder,
       write.csv(d, paste0(fpath, 'a', aid, '.csv'), row.names = F)
 
 
-      print(aid)
+      #print(aid)
     }
     rm(d)
+    DatabaseConnector::disconnect(conn)
+    #done with one database
   }
   #gc()
 }
