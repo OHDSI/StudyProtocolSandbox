@@ -75,7 +75,8 @@ getData2 <- function(connectionDetails,resultsDatabaseSchema, dataExportFolder,
     if (!dir.exists(fpath))
       dir.create(fpath)
 
-  SQL_commands <- paste('select * from achilles_results where analysis_id =', medical_event_ids)
+  #sql server needs prefix even though the database is set in connectionDetails
+  SQL_commands <- paste0('select * from ',resultsDatabaseSchema,'.achilles_results where analysis_id =', medical_event_ids)
 
   for(i in 1:length(resultsDatabaseSchema))
   {
