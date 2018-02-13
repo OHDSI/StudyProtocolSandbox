@@ -139,12 +139,31 @@ To submit data, inspect the extract folder (file names are identical to results 
 
 # Using the package with non-OMOP data
 
-To use the package on non-OMOP data it requires few more steps. (using  varying levels of Manual Mode for the package).  This mode requires limited input from the user and will do a full analysis of all the data you ask of it. This process is described below.
 
-If you do not use an OMOP dataset, you must use the Manual Mode described at the end of this document. It is quite a bit more complicated. 
+The preferred way to execute the study  is to transform your data to OMOP CDM. If this is not feasible, see instructions below.
+
+## Partialy converted OMOP data
+If a site has local data, it may be best to convert data to OMOP using the xxx_source_value fields extensively. All the xxxx_concept_id will be 0 (not mapped).
+To execute OHDSITrends with this data, queries need to be pointed to those xxx_source_value fields
+
+## non OMOP format 
+
+Prepare the data by producing analogous input data
+### Data input
+
+Analyze all relevant analysis_id that are required. E.g., population data in 116, and events data in 404,604,704,904,1804. Note that data type for all stratum_x is string.
+This SQL file has all the necessary details for each analysis: 116 example:https://github.com/OHDSI/Achilles/blob/master/inst/sql/sql_server/Achilles_v5.sql#L1954 (scroll down for other measures, such as 404) 
 
 
-Specify OMOP = FALSE when calling the main function.
+### Vocabulary input
+
+The trends package will work with just codes but for some pre-generated PDFs, having a file that explains all local codes is beneficial. Produce a two column file that has columns 
+concept_code and concept_name
+
+
+### non-OMOP Execution
+
+Function OHDSITrends() calls several modular function. See code for analyze_all() function (that calls analyze_one() function))
 Email the author for more instructions for non-OMOP sites.
 
 
