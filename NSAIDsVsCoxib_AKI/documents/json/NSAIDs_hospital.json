@@ -240,6 +240,66 @@
           }
         ]
       }
+    },
+    {
+      "id": 4,
+      "name": "eGFR",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 3045262,
+              "CONCEPT_NAME": "Creatinine and Glomerular filtration rate.predicted panel - Serum or Plasma",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "45066-8",
+              "DOMAIN_ID": "Measurement",
+              "VOCABULARY_ID": "LOINC",
+              "CONCEPT_CLASS_ID": "Lab Test",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "name": "chronic kidney disease",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 46271022,
+              "CONCEPT_NAME": "CKD - chronic kidney disease",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "709044004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 198185,
+              "CONCEPT_NAME": "Chronic renal failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "90688005",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
     }
   ],
   "PrimaryCriteria": {
@@ -270,8 +330,8 @@
   },
   "InclusionRules": [
     {
-      "name": "Without previous NSAIDs during 30 days",
-      "description": "Without previous NSAIDs  during 30 days",
+      "name": "Without previous NSAIDs inhibitor during 30 days",
+      "description": "Without previous NSAIDs inhibitor during 30 days",
       "expression": {
         "Type": "ALL",
         "CriteriaList": [
@@ -303,7 +363,7 @@
     },
     {
       "name": "Without selective COX2 inhibitor ",
-      "description": "Without selective COX2 inhibitor from 30 days before index date to 30 days after index date",
+      "description": "selective COX2 inhibitor ",
       "expression": {
         "Type": "ALL",
         "CriteriaList": [
@@ -315,7 +375,7 @@
             },
             "StartWindow": {
               "Start": {
-                "Days": 30,
+                "Days": 90,
                 "Coeff": -1
               },
               "End": {
@@ -334,8 +394,38 @@
       }
     },
     {
-      "name": "normal creatinine",
-      "description": "normal creatinine",
+      "name": "Without previous chronic kidney disease",
+      "expression": {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ConditionOccurrence": {
+                "CodesetId": 5
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 1,
+              "Count": 0
+            }
+          }
+        ],
+        "DemographicCriteriaList": [],
+        "Groups": []
+      }
+    },
+    {
+      "name": "Creatinine",
+      "description": "Creatinine",
       "expression": {
         "Type": "ALL",
         "CriteriaList": [

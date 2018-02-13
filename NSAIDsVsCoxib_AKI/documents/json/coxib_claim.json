@@ -221,22 +221,38 @@
     },
     {
       "id": 3,
-      "name": "creatinine",
+      "name": "chronic kidney disease",
       "expression": {
         "items": [
           {
             "concept": {
-              "CONCEPT_ID": 3016723,
-              "CONCEPT_NAME": "Creatinine serum/plasma",
+              "CONCEPT_ID": 198185,
+              "CONCEPT_NAME": "Chronic renal failure",
               "STANDARD_CONCEPT": "S",
               "INVALID_REASON": "V",
-              "CONCEPT_CODE": "2160-0",
-              "DOMAIN_ID": "Measurement",
-              "VOCABULARY_ID": "LOINC",
-              "CONCEPT_CLASS_ID": "Lab Test",
+              "CONCEPT_CODE": "90688005",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
               "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT_CAPTION": "Standard"
-            }
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46271022,
+              "CONCEPT_NAME": "CKD - chronic kidney disease",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "709044004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
           }
         ]
       }
@@ -255,7 +271,7 @@
       }
     ],
     "ObservationWindow": {
-      "PriorDays": 0,
+      "PriorDays": 365,
       "PostDays": 30
     },
     "PrimaryCriteriaLimit": {
@@ -315,7 +331,7 @@
             },
             "StartWindow": {
               "Start": {
-                "Days": 30,
+                "Days": 365,
                 "Coeff": -1
               },
               "End": {
@@ -334,24 +350,19 @@
       }
     },
     {
-      "name": "normal creatinine",
-      "description": "normal creatinine",
+      "name": "previous chronic kidney disease",
+      "description": "previous chronic kidney disease",
       "expression": {
         "Type": "ALL",
         "CriteriaList": [
           {
             "Criteria": {
-              "Measurement": {
-                "CodesetId": 3,
-                "ValueAsNumber": {
-                  "Value": 1.5,
-                  "Op": "lte"
-                }
+              "ConditionEra": {
+                "CodesetId": 3
               }
             },
             "StartWindow": {
               "Start": {
-                "Days": 90,
                 "Coeff": -1
               },
               "End": {
@@ -360,8 +371,8 @@
               }
             },
             "Occurrence": {
-              "Type": 2,
-              "Count": 1
+              "Type": 1,
+              "Count": 0
             }
           }
         ],
