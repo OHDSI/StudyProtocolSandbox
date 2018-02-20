@@ -39,13 +39,15 @@ generateLearningCurve <- function(workFolder){
   plpData <- PatientLevelPrediction::loadPlpData(file.path(workFolder, 'data'))
 
   outcomeIds <- plpData$metaData$call$outcomeIds
-  for (oid in outcomeIds) {
+  learningCurveList <- vector(mode = "list", length = length(outcomeIds))
+
+  for (i in seq_along(outcomeIds)) {
     tryCatch({
-      population <- readRDS(file.path(workFolder, 'Populations',paste0(oid,'.rds')))
+      population <- readRDS(file.path(workFolder, 'Populations',paste0(outcomeIds[i],'.rds')))
 
       modelSettings <- PatientLevelPrediction::setLassoLogisticRegression()
 
-      trainFraction <- seq(0.05, 0.8, 0.001)
+      trainFraction <- seq(0.01, 0.8, 0.01)
       learningCurve <-
         PatientLevelPrediction::createLearningCurvePar(
           population,
@@ -58,11 +60,13 @@ generateLearningCurve <- function(workFolder){
           timeStamp = FALSE,
           splitSeed = 1000
         )
-
+      learningCurveList[[i]] <- learningCurve
       print(PatientLevelPrediction::plotLearningCurve(learningCurve))
 
     },error = function(e) {
-      flog.info(paste0('Error for ', oid, ': ',e))
+      flog.info(paste0('Error for ', outcomeIds[i], ': ',e))
     })
   }
+
+  return(learningCurveList)
 }

@@ -16,17 +16,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 library(LearningCurve)
-options(fftempdir = "/tmp/tempff")
+options(fftempdir = "")
 
-workFolder <- "/work/Folder"
+workFolder <- ""
 
 pw <- ""
 dbms <- ""
 server <- ""
 user <- ""
 cdmDatabaseSchema <- ""
-oracleTempSchema <- ""
-workDatabaseSchema <- ""
+oracleTempSchema <- NULL
+workDatabaseSchema <- ""  # must have write access
 studyCohortTable <- ""
 
 
@@ -49,7 +49,7 @@ generateAllPopulations(workFolder)
 PatientLevelPrediction::registerParallelBackend()
 
 # generate the learning curves
-generateLearningCurve(workFolder)
+learningCurveList <- generateLearningCurve(workFolder)
 
 # de-register parallel backend by registering a sequential backend
 PatientLevelPrediction::registerSequentialBackend()
