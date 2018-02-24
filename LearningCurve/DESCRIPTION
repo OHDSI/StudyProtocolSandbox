@@ -1,0 +1,21 @@
+Package: LearningCurve
+Type: Package
+Title: Learning Curve
+Version: 0.0.1
+Author: Henrik John
+Maintainer: Henrik John <l.john@erasmusmc.nl>
+Description: Generates learning curves for large scale prediction studies.
+Depends:
+    R (>= 3.1),
+    DatabaseConnector (>= 1.2.1)
+Imports:
+    RJDBC,
+    FeatureExtraction,
+    PatientLevelPrediction,
+    futile.logger
+Suggests:
+    testthat
+License: Apache License 2.0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
