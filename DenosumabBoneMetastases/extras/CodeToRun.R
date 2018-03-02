@@ -37,7 +37,7 @@ result <- OhdsiRTools::runAndNotify({
           cohortTable = cohortTable,
           oracleTempSchema = oracleTempSchema,
           outputFolder = outputFolder,
-          createCohorts = TRUE,
+          createCohorts = FALSE,
           synthesizePositiveControls = TRUE,
           runAnalyses = TRUE,
           runDiagnostics = TRUE,

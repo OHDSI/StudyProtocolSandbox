@@ -43,7 +43,7 @@ createAnalysesDetails <- function(workFolder) {
   createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(removeDuplicateSubjects = "keep first",
                                                                       removeSubjectsWithPriorOutcome = FALSE,
                                                                       riskWindowStart = 0,
-                                                                      riskWindowEnd = round(40.5 * 30.5),
+                                                                      riskWindowEnd = round(34 * 30.5),
                                                                       addExposureDaysToEnd = FALSE)
   
   control <- Cyclops::createControl(noiseLevel = "quiet", 

@@ -46,7 +46,7 @@
       "minDaysAtRisk": 1,
       "riskWindowStart": 0,
       "addExposureDaysToStart": false,
-      "riskWindowEnd": 1235,
+      "riskWindowEnd": 1037,
       "addExposureDaysToEnd": false,
       "censorAtNewRiskWindow": false,
       "attr_class": "args"

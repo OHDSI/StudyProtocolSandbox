@@ -45,7 +45,7 @@ createFiguresAndTables <- function(outputFolder,
   if (!file.exists(figuresAndTablesFolder))
     dir.create(figuresAndTablesFolder)
   
-
+  
   reference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
   analysisSummary <- CohortMethod::summarizeAnalyses(reference)
   
@@ -56,7 +56,18 @@ createFiguresAndTables <- function(outputFolder,
                                        reference$targetId == 1 &
                                        reference$comparatorId == 2 &
                                        reference$outcomeId == 21]
-  population <- readRDS(strataFile)
+  popPc <- readRDS(strataFile)
+  strataFile <- reference$strataFile[reference$analysisId == 1 &
+                                       reference$targetId == 3 &
+                                       reference$comparatorId == 4 &
+                                       reference$outcomeId == 21]
+  popBc <- readRDS(strataFile)
+  strataFile <- reference$strataFile[reference$analysisId == 1 &
+                                       reference$targetId == 5 &
+                                       reference$comparatorId == 6 &
+                                       reference$outcomeId == 21]
+  popOther <- readRDS(strataFile)
+  population <- rbind(popPc, popBc, popOther)
   population <- population[population$outcomeCount > 0, ]
   population$cohortStartDate <- population$cohortStartDate + population$daysToEvent
   population <- population[, c("subjectId", "cohortStartDate", "treatment")]
@@ -93,13 +104,32 @@ createFiguresAndTables <- function(outputFolder,
   counts <- DatabaseConnector::querySql(conn, sql)
   colnames(counts) <- SqlRender::snakeCaseToCamelCase(colnames(counts))
   counts <- addCohortNames(counts)
+  counts <- aggregate(eventCount ~ cohortName, counts, sum)
   write.csv(counts, file.path(figuresAndTablesFolder, "EventBreakout.csv"), row.names = FALSE)
-
+  
   # MDRR across TCs -----------------------------------------------
   mdrrFiles <- list.files(file.path(outputFolder, "diagnostics"), pattern = "mdrr.*.csv")
   mdrr <- lapply(mdrrFiles, function(x) read.csv(file.path(outputFolder, "diagnostics", x)))
   mdrr <- do.call(rbind, mdrr)
   mdrr$file <- mdrrFiles
+  mdrr$targetId <- as.integer(gsub("_.*$", "", gsub("mdrr_a1_t", "", mdrr$file)))
+  mdrr$outcomeId <- as.integer(gsub(".csv", "", gsub("^.*_o", "", mdrr$file)))
+  mdrr <- mdrr[mdrr$outcomeId == 21, ]
+  ordered <- data.frame(targetId = c(1,7,9,11,13,3,15,17,5,19),2,
+                        description = c("All (prostate cancer)",
+                                        "-\t No other malignant diseases",
+                                        "-\t  No osteonecrosis or osteomyelitis of the jaw",
+                                        "-\t  No prior bisphosphonates",
+                                        "-\t  Prior hormonal therapy",
+                                        "All (breast cancer)",
+                                        "-\t  No other malignant diseases",
+                                        "-\t  No prior bisphosphonates",
+                                        "All (other cancer)",
+                                        "-\t  No prior bisphosphonates"))
+  mdrr[match(mdrr$targetId, ordered$targetId), ] <- mdrr
+  mdrr$description <- ordered$description
+  mdrr$mdrr <- 1/mdrr$mdrr
+  mdrr <- mdrr[, c("description", "targetPersons", "comparatorPersons", "totalOutcomes", "mdrr")]
   write.csv(mdrr, file.path(figuresAndTablesFolder, "allMdrrs.csv"), row.names = FALSE)
   
   # Study start date -------------------------------------------
@@ -111,12 +141,84 @@ createFiguresAndTables <- function(outputFolder,
   negativeControls <- read.csv(system.file("settings", "NegativeControls.csv", package = "DenosumabBoneMetastases"))
   negativeControlOutcomeIds <- negativeControls$outcomeId[negativeControls$type == "Outcome"]
   
-  negControlSubset <- analysisSummary[analysisSummary$targetId == 1 & 
-                                        analysisSummary$comparatorId == 2 & 
+  negControlSubset <- analysisSummary[analysisSummary$targetId %in% c(1,3,5) & 
+                                        analysisSummary$comparatorId %in% c(2,4,6) & 
                                         analysisSummary$outcomeId %in% negativeControlOutcomeIds, ]
+  negControlSubset$label <- "Prostate cancer"
+  negControlSubset$label[negControlSubset$targetId == 3] <- "Breast cancer"
+  negControlSubset$label[negControlSubset$targetId == 5] <- "Other cancers"
   fileName <-  file.path(figuresAndTablesFolder, paste0("simplifiedNullDistribution.png"))
   EvidenceSynthesis::plotEmpiricalNulls(logRr = negControlSubset$logRr,
                                         seLogRr = negControlSubset$seLogRr,
-                                        labels = rep("Optum", nrow(negControlSubset)),
+                                        labels = negControlSubset$label,
                                         fileName = fileName)
+  
+  # PS distributions --------------------------------------------------------------
+  psFile <- reference$sharedPsFile[reference$analysisId == 1 &
+                                     reference$targetId == 1 &
+                                     reference$comparatorId == 2 &
+                                     reference$outcomeId == 21]
+  ps <- readRDS(psFile)
+  psPc <- EvidenceSynthesis::preparePsPlot(ps)
+  psFile <- reference$sharedPsFile[reference$analysisId == 1 &
+                                     reference$targetId == 3 &
+                                     reference$comparatorId == 4 &
+                                     reference$outcomeId == 21]
+  ps <- readRDS(psFile)
+  psBc <- EvidenceSynthesis::preparePsPlot(ps)
+  psFile <- reference$sharedPsFile[reference$analysisId == 1 &
+                                     reference$targetId == 5 &
+                                     reference$comparatorId == 6 &
+                                     reference$outcomeId == 21]
+  ps <- readRDS(psFile)
+  psOther <- EvidenceSynthesis::preparePsPlot(ps)
+  ps <- list(psPc, psBc, psOther)
+  fileName <-  file.path(figuresAndTablesFolder, paste0("ps.png"))
+  EvidenceSynthesis::plotPreparedPs(preparedPsPlots = ps, 
+                                    labels = c("Prostate cancer", "Breast cancer", "Other cancers"), 
+                                    treatmentLabel = "Denosumab",
+                                    comparatorLabel = "Zoledronic acid",
+                                    fileName = fileName)
+  
+  # PS distributions --------------------------------------------------------------
+  cmDataFile <- reference$cohortMethodDataFolder[reference$analysisId == 1 &
+                                                   reference$targetId == 1 &
+                                                   reference$comparatorId == 2 &
+                                                   reference$outcomeId == 21]
+  strataFile <- reference$strataFile[reference$analysisId == 1 &
+                                       reference$targetId == 1 &
+                                       reference$comparatorId == 2 &
+                                       reference$outcomeId == 21]
+  cmData <- CohortMethod::loadCohortMethodData(cmDataFile)
+  strata <- readRDS(strataFile)
+  balPc <- CohortMethod::computeCovariateBalance(strata, cmData)
+  cmDataFile <- reference$cohortMethodDataFolder[reference$analysisId == 1 &
+                                                   reference$targetId == 3 &
+                                                   reference$comparatorId == 4 &
+                                                   reference$outcomeId == 21]
+  strataFile <- reference$strataFile[reference$analysisId == 1 &
+                                       reference$targetId == 3 &
+                                       reference$comparatorId == 4 &
+                                       reference$outcomeId == 21]
+  cmData <- CohortMethod::loadCohortMethodData(cmDataFile)
+  strata <- readRDS(strataFile)
+  balBc <- CohortMethod::computeCovariateBalance(strata, cmData)
+  cmDataFile <- reference$cohortMethodDataFolder[reference$analysisId == 1 &
+                                                   reference$targetId == 5 &
+                                                   reference$comparatorId == 6 &
+                                                   reference$outcomeId == 21]
+  strataFile <- reference$strataFile[reference$analysisId == 1 &
+                                       reference$targetId == 5 &
+                                       reference$comparatorId == 6 &
+                                       reference$outcomeId == 21]
+  cmData <- CohortMethod::loadCohortMethodData(cmDataFile)
+  strata <- readRDS(strataFile)
+  balOther <- CohortMethod::computeCovariateBalance(strata, cmData)
+  bal <- list(balPc, balBc, balOther)
+  fileName <-  file.path(figuresAndTablesFolder, paste0("balance.png"))
+  EvidenceSynthesis::plotCovariateBalances(balances = bal,
+                                           labels = c("Prostate cancer", "Breast cancer", "Other cancers"), 
+                                           beforeLabel = "Before straticiation",
+                                           afterLabel = "After stratification",
+                                           fileName = fileName)
 }
