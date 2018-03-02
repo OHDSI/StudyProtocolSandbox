@@ -110,7 +110,7 @@ synthesizePositiveControls <- function(connectionDetails,
                                               generationThreads = min(6, maxCores),
                                               covariateSettings = covariateSettings)
     write.csv(result, synthesisSummaryFile, row.names = FALSE)
-  }
+  } 
   OhdsiRTools::logTrace("Merging positive with negative controls ")
   pathToCsv <- system.file("settings", "NegativeControls.csv", package = "DenosumabBoneMetastases")
   negativeControls <- read.csv(pathToCsv)
@@ -119,7 +119,7 @@ synthesizePositiveControls <- function(connectionDetails,
   synthesisSummary$targetId <- synthesisSummary$exposureId
   synthesisSummary <- merge(synthesisSummary, negativeControls)
   synthesisSummary <- synthesisSummary[synthesisSummary$trueEffectSize != 0, ]
-  synthesisSummary$OutcomeName <- paste0(synthesisSummary$OutcomeName, ", RR=", synthesisSummary$targetEffectSize)
+  synthesisSummary$outcomeName <- paste0(synthesisSummary$OutcomeName, ", RR=", synthesisSummary$targetEffectSize)
   synthesisSummary$oldOutcomeId <- synthesisSummary$outcomeId
   synthesisSummary$outcomeId <- synthesisSummary$newOutcomeId
   negativeControls$targetEffectSize <- 1

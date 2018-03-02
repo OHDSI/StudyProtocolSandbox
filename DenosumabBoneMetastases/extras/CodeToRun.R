@@ -14,7 +14,7 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 password = pw,
                                                                 port = port)
 
-cdmDatabaseSchema <- "cdm_optum_extended_dod_v654.dbo"
+cdmDatabaseSchema <- "cdm_optum_extended_ses_v694.dbo"
 cohortDatabaseSchema <- "scratch.dbo"
 cohortTable <- "mschuemi_denosumab_optum"
 
@@ -37,9 +37,9 @@ result <- OhdsiRTools::runAndNotify({
           cohortTable = cohortTable,
           oracleTempSchema = oracleTempSchema,
           outputFolder = outputFolder,
-          createCohorts = FALSE,
-          synthesizePositiveControls = FALSE,
-          runAnalyses = FALSE,
+          createCohorts = TRUE,
+          synthesizePositiveControls = TRUE,
+          runAnalyses = TRUE,
           runDiagnostics = TRUE,
           maxCores = 30)
 }, mailSettings = mailSettings, label = "denosumab")

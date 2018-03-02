@@ -38,6 +38,7 @@ generateDiagnostics <- function(outputFolder) {
   tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
   
   reference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
+  reference <- unique(reference)
   analysisSummary <- CohortMethod::summarizeAnalyses(reference)
   analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
   analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
@@ -57,7 +58,7 @@ generateDiagnostics <- function(outputFolder) {
     targetLabel <- tcosOfInterest$targetName[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId][1]
     comparatorLabel <- tcosOfInterest$comparatorName[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId][1]
     outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
-    outcomeIds <- as.numeric(strsplit(outcomeIds, split = ",")[[1]])
+    outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
     for (analysisId in unique(reference$analysisId)) {
       controlSubset <- allControls[allControls$targetId == targetId & allControls$comparatorId == comparatorId, ]
       controlSubset <- merge(controlSubset[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")], analysisSummary)

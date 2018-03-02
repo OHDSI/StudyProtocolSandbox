@@ -96,7 +96,7 @@ addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumn
                          cohortName = c(as.character(cohortsToCreate$name), 
                                         as.character(negativeControls$targetName),
                                         as.character(negativeControls$comparatorName),
-                                        as.character(negativeControls$OutcomeName)))
+                                        as.character(negativeControls$outcomeName)))
   idToName <- idToName[order(idToName$cohortId), ]
   idToName <- idToName[!duplicated(idToName$cohortId), ]
   names(idToName)[1] <- IdColumnName
