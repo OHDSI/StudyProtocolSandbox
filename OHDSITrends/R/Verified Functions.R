@@ -65,7 +65,7 @@ lin_filter <- function(d, itemsA, alpha = 0.1, m = 2/2000)
       name = paste(dplyr::filter(items,stratum_1==cid)$concept_name,cid)
       tta <- d %>% dplyr::filter(stratum_1 == cid, decile == deci)
 
-      # Use data CIDs with only 10 years of data:
+      # Use data CIDs with only 10 years of data: #REVIEW
       x <- tta$stratum_2
       y <- tta$count_value
       lm <- lm(y~x)
@@ -718,28 +718,25 @@ makeMediumFrame <- function(obj = data.frame(), pop = data.frame(), concept = NU
   #Remove concept_id = 0 and year 2015
   obj3 %<>% dplyr::filter(stratum_1 != 0, stratum_2 %in% dates)
 
-  #Make deciles strings not integers
-  decis <- obj3$decile %>% as.character() %>% as.factor()
-  if(0 %in% decis)
-  {
-    decis %<>% plyr::revalue(c("0" = "0-9", "1" = "10-19", "2" = "20-29", "3" = "30-39",
-                               "4" = "40-49", "5" = "50-59", "6" = "60-69", "7" = "70-79",
-                               "8" = "80-89", "9" = "90-99"))
-  }
-  else
-  {
-    decis %<>% plyr::revalue(c("1" = "0-9", "2" = "10-19", "3" = "20-29", "4" = "30-39",
-                               "5" = "40-49", "6" = "50-59", "7" = "60-69", "8" = "70-79",
-                               "9" = "80-89", "10" = "90-99", "11" = "100+"))
-  }
-  # decis <- ifelse(0 %in% decis, revalue(decis, c("0" = "0-9", "1" = "10-19", "2" = "20-29", "3" = "30-39",
-  #                                                 "4" = "40-49", "5" = "50-59", "6" = "60-69", "7" = "70-79",
-  #                                                 "8" = "80-89", "9" = "90-99")),
-  #                  revalue(decis, c("1" = "0-9", "2" = "10-19", "3" = "20-29", "4" = "30-39",
-  #                                   "5" = "40-49", "6" = "50-59", "7" = "60-69", "8" = "70-79",
-  #                                   "9" = "80-89", "10" = "90-99", "11" = "100+")))
-  print("Made medium Frame")
-  obj3$decile = decis
+  #Make deciles strings not integers (REMOVED in FEB)
+  # decis <- obj3$decile %>% as.character() %>% as.factor()
+  # if(0 %in% decis)
+  # {
+  #   decis %<>% plyr::revalue(c("0" = "0-9", "1" = "10-19", "2" = "20-29", "3" = "30-39",
+  #                              "4" = "40-49", "5" = "50-59", "6" = "60-69", "7" = "70-79",
+  #                              "8" = "80-89", "9" = "90-99"))
+  # }
+  # else
+  # {
+  #   decis %<>% plyr::revalue(c("1" = "0-9", "2" = "10-19", "3" = "20-29", "4" = "30-39",
+  #                              "5" = "40-49", "6" = "50-59", "7" = "60-69", "8" = "70-79",
+  #                              "9" = "80-89", "10" = "90-99", "11" = "100+"))
+  # }
+  #
+  # #print("Made medium Frame")
+  # obj3$decile = decis
+
+
   obj3 %<>% dplyr::ungroup()
   return(obj3)
 }
@@ -751,7 +748,7 @@ get_pop <- function(data_folder, pop_id)
 {
   pop_file = paste0('a', pop_id)
   pop_path = paste0(data_folder, paste0(pop_file, ".csv"))
-  pop <- readr::read_csv(pop_path)
+  pop <- readr::read_csv(pop_path,col_types = cols())
 
   return(pop)
 }
@@ -766,7 +763,7 @@ get_event <- function(data_folder, event_type)
   # Update this file path with Dr. Huser's correct naming convention. E.G. WHY IS a at front?
   event_file = paste0("a", event_type, ".csv")
   event_path = paste0(data_folder, event_file)
-  event <- readr::read_csv(event_path)
+  event <- readr::read_csv(event_path,col_types = cols())
   return(event)
 }
 
@@ -869,20 +866,20 @@ impute_zeros_trends <- function(eventM, dates)
   # bind impute to eventM
   eventM2 <- dplyr::bind_rows(eventM, impute) %>% dplyr::arrange(stratum_1, stratum_2)
   eventM2$decile %<>% as.factor()
-  if(any(is.na(eventM2$pt_count))) print("Warning, NAs introduced by imputation")
+  #if(any(is.na(eventM2$pt_count))) print("Warning, NAs introduced by imputation")
   if(any(is.na(eventM2$count_value))) print("ERROR: count_value has NAs")
-  else print("Imputation successful")
+  #else print("Imputation successful")
 
   return(eventM2)
 }
 
 
-#' @note not used
-find_data_quality_problems <- function(eventM2)
-{
-  probs <- ifelse(is.na(eventM2$pt_count), yes = 1, no = 0)
-  eventM2$Data_Quality_Problem = probs
-}
+#' #' @note not used
+#' find_data_quality_problems <- function(eventM2)
+#' {
+#'   probs <- ifelse(is.na(eventM2$pt_count), yes = 1, no = 0)
+#'   eventM2$Data_Quality_Problem = probs
+#' }
 
 #' Rollups
 #'
@@ -1458,18 +1455,20 @@ lin_filter2 <- function(eventM2, alpha = 0.1, m = 2/2000)
 #' @param db will come from higher-level wrapper. The function that calls step_3 will ask for resultsDatabaseSchema;
 # each element of resultsDatabaseSchema will be pased to step_3 as db.
 #' @export
-step_3.2 <- function(eventM2, dataExportFolder, db)
+step_3.2 <- function(eventM2, dataExportFolder, db, output_problematic_events=FALSE)
 {
   lin_list <- lin_filter2(eventM2, alpha = 0.1, m = 2/2000)
 
-  # write bad to .csv file in a sub-folder of the user-input dir
-  bad <- lin_list$bad
+  if(output_problematic_events){
+        # write bad to .csv file in a sub-folder of the user-input dir
+        bad <- lin_list$bad
 
-  badDir <- paste0(dataExportFolder, '/', 'Data Problem/')
-  if(!dir.exists(badDir)) dir.create(badDir)
+        badDir <- paste0(dataExportFolder, '/', 'Data Problem/')
+        if(!dir.exists(badDir)) dir.create(badDir)
 
-  fpath <- paste0(badDir, db, '_bad_event_age_combinations.csv')
-  readr::write_csv(bad, fpath)
+        fpath <- paste0(badDir, db, '_bad_event_age_combinations.csv')
+        readr::write_csv(bad, fpath)
+  }
 
   good <- lin_list$good
   return(good)
@@ -1496,6 +1495,8 @@ rollup_2.0 <- function(xxx)
 {
   # Get deciles for each score value
   box <- xxx %>% dplyr::select(stratum_1, concept_name) %>% unique()
+  #REVIEW
+  #for each classification type compute
   for(i in -3:3)
   {
     xxx2 <- xxx %>% dplyr::filter(score == i)

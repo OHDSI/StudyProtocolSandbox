@@ -1,9 +1,21 @@
 Themis group (sub-group: measurements) aims to standardize lab tests and related issues (e.g., units)
 
+# Introduction
 This effort will be based on real world data at OHDSI sites.
+
+
+## Update 2018-02
+
+The result of the network study is ThemisUnits database (or knowledge base) (and other knowledge bases also looking at measurements (without regard to units)
+JAMIA Open allows publishing short article centered about database. Outcomes will be published under this framework (as ThemisUnits database)  
+
+## Update 2018-01
+Partial interim themis study results can be found at https://github.com/OHDSI/StudyProtocolSandbox/tree/master/themis/extras/partial_results
+
+
+# Execution details
 Consider installing Arachne and run and submit the results in Arachne (preferred)
 Alternatively, use Non-Arachne method.
-Partial interim themis study results can be found at https://github.com/OHDSI/StudyProtocolSandbox/tree/master/themis/extras/partial_results
 
 
 

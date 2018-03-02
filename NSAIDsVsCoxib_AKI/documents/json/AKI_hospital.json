@@ -44,13 +44,58 @@
           }
         ]
       }
+    },
+    {
+      "id": 2,
+      "name": "Renal failure",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 192359,
+              "CONCEPT_NAME": "Renal failure syndrome",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "42399005",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "name": "eGFR",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 3045262,
+              "CONCEPT_NAME": "Creatinine and Glomerular filtration rate.predicted panel - Serum or Plasma",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "45066-8",
+              "DOMAIN_ID": "Measurement",
+              "VOCABULARY_ID": "LOINC",
+              "CONCEPT_CLASS_ID": "Lab Test",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          }
+        ]
+      }
     }
   ],
   "PrimaryCriteria": {
     "CriteriaList": [
       {
         "ConditionOccurrence": {
-          "CodesetId": 0
+          "CodesetId": 2
         }
       }
     ],
@@ -70,8 +115,8 @@
   },
   "InclusionRules": [
     {
-      "name": "Creatinine > 1.5",
-      "description": "Creatinine > 1.5 from 30 days before the diagnosis to after the diagnosis, at least once",
+      "name": "Creatinine > 1.2",
+      "description": "Creatinine > 1.2 from 30 days before the diagnosis to after the diagnosis, at least once",
       "expression": {
         "Type": "ALL",
         "CriteriaList": [
@@ -80,7 +125,7 @@
               "Measurement": {
                 "CodesetId": 1,
                 "ValueAsNumber": {
-                  "Value": 1.5,
+                  "Value": 1.2,
                   "Op": "gt"
                 }
               }

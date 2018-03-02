@@ -75,7 +75,8 @@ getData2 <- function(connectionDetails,resultsDatabaseSchema, dataExportFolder,
     if (!dir.exists(fpath))
       dir.create(fpath)
 
-  SQL_commands <- paste('select * from achilles_results where analysis_id =', medical_event_ids)
+  #sql server needs prefix even though the database is set in connectionDetails
+  SQL_commands <- paste0('select * from ',resultsDatabaseSchema,'.achilles_results where analysis_id =', medical_event_ids)
 
   for(i in 1:length(resultsDatabaseSchema))
   {
@@ -87,7 +88,7 @@ getData2 <- function(connectionDetails,resultsDatabaseSchema, dataExportFolder,
     connectionDetails$schema = db
     conn<-DatabaseConnector::connect(connectionDetails,schema = db)
 
-    print(db)
+    #print(db)
 
     for(j in 1:length(SQL_commands))
     {
@@ -97,9 +98,11 @@ getData2 <- function(connectionDetails,resultsDatabaseSchema, dataExportFolder,
       write.csv(d, paste0(fpath, 'a', aid, '.csv'), row.names = F)
 
 
-      print(aid)
+      #print(aid)
     }
     rm(d)
+    DatabaseConnector::disconnect(conn)
+    #done with one database
   }
   #gc()
 }

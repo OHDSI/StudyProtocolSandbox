@@ -6,9 +6,10 @@
 #' @export
 OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_ids = c(904, 704, 1804, 604, 404),
                         user_folder='c:/temp/',
-                        OMOP = TRUE, concept_file = NULL, dates, Share_Data = FALSE, pop_id = 116)
+                        OMOP = TRUE, concept_file = NULL, dates, skip_plot_generation = FALSE,Share_Data = FALSE)
   #other params)
 {
+  pop_id = 116
   # If we don't give sites an ID number, then one will be randomly chosen.
   site_id <- sample(1:1e6, 1)
 
@@ -16,7 +17,7 @@ OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_id
   resultsFolder <- paste0(user_folder, 'Results/')
   exportFolder <- paste0(user_folder, 'export/')
   kbFolder <- paste0(user_folder, 'kb/')
-  print(resultsDatabaseSchema)
+  #print(resultsDatabaseSchema)
 
    #make dirs
   for(dr in c(user_folder, dataExportFolder, resultsFolder, exportFolder, kbFolder))
@@ -33,7 +34,8 @@ OHDSITrends <- function(connectionDetails,resultsDatabaseSchema, result_event_id
   getData2(connectionDetails,resultsDatabaseSchema, dataExportFolder, medical_event_ids)
 
   analyze_all(site_id, all_ids = result_event_ids, pop_id = pop_id, resultsDatabaseSchema, dataExportFolder,
-          resultsFolder, exportFolder, kbFolder, write_full_cids = TRUE, OMOP = TRUE, concept_file, Share_Data, dates)
+          resultsFolder, exportFolder, kbFolder, write_full_cids = TRUE, OMOP = TRUE, concept_file, Share_Data, dates,skip_plot_generation = skip_plot_generation)
+  cat('-----------EXECUTION FINISHED----------------- \n any warning below this line can safely be ignored.\n')
 }
 
 #' @description This function will analyze all analysis_ids for all schemas you ask of it.
