@@ -1,7 +1,7 @@
 Package: DenosumabBoneMetastases
 Type: Package
-Title: Study of Denosumab vs. Zoledronic Acid to Treat Bone Metastases in Men With Hormone-refractory Prostate Cancer
-Version: 0.0.1
+Title: Study of Denosumab vs. Zoledronic Acid to Treat Bone Metastases
+Version: 0.0.2
 Author: Martijn Schuemie [aut, cre]
 Maintainer: Martijn J. Schuemie <schuemie@ohdsi.org>
 Description: A new-user cohort study of denosumab vs. zoledronic acid to treat bone metastases in men with hormone-refractory prostate cancer.
@@ -18,7 +18,7 @@ Imports:
     ff,
     ffbase,
     MethodEvaluation,
-	 OhdsiRTools (>= 1.5.0)
+	  OhdsiRTools (>= 1.5.0)
 License: Apache License 2.0
 LazyData: TRUE
 RoxygenNote: 6.0.1

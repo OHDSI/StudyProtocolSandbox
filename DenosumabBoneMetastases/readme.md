@@ -1,8 +1,7 @@
-Study of Denosumab vs. Zoledronic Acid to Treat Bone Metastases in Men With Hormone-refractory Prostate Cancer
+Study of Denosumab vs. Zoledronic Acid to Treat Bone Metastases 
 ==============================================================================================================
 
-A new-user cohort study of denosumab vs. zoledronic acid to treat bone metastases in men with hormone-refractory prostate cancer. This study aims to replicate [this trial](https://clinicaltrials.gov/ct2/show/study/NCT00321620).
-
+This study aims to compare denosumab with zoledronic acid for prevention of skeletal-related events in patients with bone metastases. We will replicate three phase III trials, each focusing on one class of cancer (prostate cancer, breast cancer, other cancers). In this study, we will analyze data from one observational claims database using the OHDSI CohortMethod package framework to perform this comparative study.
 
 # How to run
 

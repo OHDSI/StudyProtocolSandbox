@@ -43,7 +43,7 @@ createAnalysesDetails <- function(workFolder) {
   createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(removeDuplicateSubjects = "keep first",
                                                                       removeSubjectsWithPriorOutcome = FALSE,
                                                                       riskWindowStart = 0,
-                                                                      riskWindowEnd = round(40.5 * 30.5),
+                                                                      riskWindowEnd = round(34 * 30.5),
                                                                       addExposureDaysToEnd = FALSE)
   
   control <- Cyclops::createControl(noiseLevel = "quiet", 
@@ -88,10 +88,10 @@ createTcos <- function(outputFolder) {
     targetId <- tcs$targetId[i]
     comparatorId <- tcs$comparatorId[i]
     outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
-    outcomeIds <- as.numeric(strsplit(outcomeIds, split = ",")[[1]])
+    outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
     outcomeIds <- c(outcomeIds, allControls$outcomeId[allControls$targetId == targetId & allControls$comparatorId == comparatorId])
     excludeConceptIds <- tcosOfInterest$excludedCovariateConceptIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId]
-    excludeConceptIds <- as.numeric(strsplit(excludeConceptIds, split = ",")[[1]])
+    excludeConceptIds <- as.numeric(strsplit(excludeConceptIds, split = ";")[[1]])
     dcos <- CohortMethod::createDrugComparatorOutcomes(targetId = targetId,
                                                        comparatorId = comparatorId,
                                                        outcomeIds = outcomeIds,
