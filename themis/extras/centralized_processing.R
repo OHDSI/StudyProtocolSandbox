@@ -10,8 +10,8 @@ library(magrittr)
 
 #concept<-read.delim(file.path('n:/athena','concept.csv'),as.is=TRUE,quote = "")
 
- # fname='c:/temp/concept.rds'
- # concept<-read_rds(fname)
+  fname='c:/temp/concept.rds'
+  concept<-read_rds(fname)
 
 names(concept)
 concept %<>% select(1,2,3,4,5,7)
@@ -128,10 +128,15 @@ af3<-af2 %>% group_by(concept_id,concept_name.x) %>%
 af2 %<>% left_join(af3)
 
 write_csv(af2,'extras/units-with-tests.csv')
+#db<-read_csv('extras/units-with-tests.csv')
+write_csv(af3,'extras/C-tests-aggregated.csv')
+#da<-read_csv('extras/C-tests-aggregated.csv')
+
 #write_csv(af2,'extras/units-with-tests-new.csv')
 exppath<-'C:/q/d/GitHub/StudyProtocolSandbox/themis/extras/partial_results'
 exppath
 write_csv(af2,file.path(exppath,'units-with-tests.csv'))
+write_csv(af3,file.path(exppath,'C-tests-aggregated.csv'))
 
 
 #sites statistics
@@ -208,37 +213,40 @@ write_csv(ab,'extras/meas_and_obs.csv')
 
 
 
-#one file fix
-# fname<-'au/UNSW_ePBRM_JJ_V2.csv'
-# ba<-read_csv(fname)
-# #some files
-# bb<-ba %>% select(labcid,unitcit) %>% distinct()
-# bb<-ba %>% select(count,labcid,unitcit,localname) 
-# bb$analysis_id<-1807
-# bb$ratio=1 #later do better group by and better logic
-# bc<-bb %>% select(analysis_id,concept_id=labcid,unit_concept_id=unitcit,ratio,count,localname) %>% filter(!is.na(unit_concept_id))
-# bc<-bb %>% select(analysis_id,concept_id=labcid,unit_concept_id=unitcit,ratio) %>% filter(!is.na(unit_concept_id))
-# bc %<>% left_join(bc %>% count(concept_id))
-# View(bc)
-# write_csv(bc,'260-units-larger.csv')
-# 
+#compare our db to Hauser work
+h<-read_delim('UnitEquations 20170210-courier.txt',delim = ']',col_names = FALSE)
+h$concept_code.x<-str_sub(h$X1,2)
+h
 
-# 
-# #another file fix
-# ca<-read_csv('826-measurement-concepts-units_larger.csv')
-# ca
-# #analysis_id,concept_id,unit_concept_id,ratio
-# cb<-ca %>%  filter(analysis_id==1807) %>% filter(stratum_1!=0)
-# cc<-cb %>% group_by(stratum_1) %>% summarize(cnt=n(),sumcnt=sum(count_value)) %>% ungroup()
-# options(scipen = 999) #disable exponent scientific notation
-# table(cc$sumcnt==0)
-# cd<-cb %>% left_join(cc) %>% mutate(ratio=count_value/sumcnt) %>%
-#     arrange(stratum_2) %>% 
-#     select(1,concept_id=stratum_1,unit_concept_id=stratum_2,ratio)
-# cd %<>% filter(concept_id!=0)
-# cd %<>% filter(!is.na(unit_concept_id))
-# cd %<>% filter(!is.na(ratio))
-# table(is.na(cd$ratio))
-# table(cd$analysis_id)
-# 
-# write_csv(cd,'826-units-larger.csv')
+commonH<-db %>% inner_join(h)
+nrow(commonH)
+nrow(commonH)/nrow(dbs)
+names(db)
+
+
+#compare to top2000 LOINC codes
+l1<-read_csv('LOINC_1.6_Top2000CommonLabResultsSI.csv')
+l2<-read_csv('LOINC_1.6_Top2000CommonLabResultsUS.csv')
+names(l1)
+names(l2)
+
+l3<-bind_rows(l1,l2)
+l3 %<>% rename(concept_code.x=`LOINC #`)
+l3$concept_code.y
+db$concept_code.x
+
+common<-db %>% inner_join(l3)
+
+names(db)
+l3s<-l3 %>%  select(concept_code.x,`Long Common Name`,`Short Name`) %>%  distinct()
+dbs<-db %>%  select(concept_code.x,concept_name.x,vocabulary_id.x) %>%  distinct()
+dbs %>% count(vocabulary_id.x)
+
+common<-dbs %>% inner_join(l3s)
+different<-dbs %>% anti_join(l3s)
+nrow(different)
+nrow(common)
+
+nrow(dbs)
+nrow(common)/nrow(dbs)
+nrow(different)/nrow(dbs)
