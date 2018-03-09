@@ -7,16 +7,16 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Ingredient",
-"CONCEPT_CODE": "77655",
-"CONCEPT_ID": 1.5247e+06,
+ "CONCEPT_ID": 1.5247e+06,
 "CONCEPT_NAME": "zoledronic acid",
-"DOMAIN_ID": "Drug",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "RxNorm" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "77655",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "RxNorm",
+"CONCEPT_CLASS_ID": "Ingredient",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -30,16 +30,16 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "94222008",
-"CONCEPT_ID":  78097,
+ "CONCEPT_ID":  78097,
 "CONCEPT_NAME": "Secondary malignant neoplasm of bone",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "94222008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -53,16 +53,16 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "ATC 4th",
-"CONCEPT_CODE": "M05BA",
-"CONCEPT_ID": 2.1604e+07,
+ "CONCEPT_ID": 2.1604e+07,
 "CONCEPT_NAME": "Bisphosphonates",
-"DOMAIN_ID": "Drug",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "C",
-"STANDARD_CONCEPT_CAPTION": "Classification",
-"VOCABULARY_ID": "ATC" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "M05BA",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "ATC",
+"CONCEPT_CLASS_ID": "ATC 4th",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Classification" 
 },
 "includeDescendants": true 
 } 
@@ -76,63 +76,63 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "372087000",
-"CONCEPT_ID": 4.3939e+05,
+ "CONCEPT_ID": 4.3939e+05,
 "CONCEPT_NAME": "Primary malignant neoplasm",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372087000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "126537000",
-"CONCEPT_ID": 4.442e+05,
+ "CONCEPT_ID": 4.442e+05,
 "CONCEPT_NAME": "Neoplasm of bone",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "126537000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "109356001",
-"CONCEPT_ID": 4.3692e+05,
+ "CONCEPT_ID": 4.3692e+05,
 "CONCEPT_NAME": "Primary malignant neoplasm of unspecified site",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "109356001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "372137005",
-"CONCEPT_ID": 4.1623e+06,
+ "CONCEPT_ID": 4.1623e+06,
 "CONCEPT_NAME": "Primary malignant neoplasm of breast",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372137005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
@@ -147,72 +147,72 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "HCPCS",
+ "CONCEPT_ID": 2.7187e+06,
+"CONCEPT_NAME": "Injection, zoledronic acid (reclast), 1 mg",
+"STANDARD_CONCEPT": "N",
+"INVALID_REASON": "D",
 "CONCEPT_CODE": "J3488",
-"CONCEPT_ID": 2.7187e+06,
-"CONCEPT_NAME": "Injection, zoledronic acid (reclast), 1 mg",
 "DOMAIN_ID": "Drug",
-"INVALID_REASON": "D",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
 "INVALID_REASON_CAPTION": "Invalid",
-"STANDARD_CONCEPT": "N",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"VOCABULARY_ID": "HCPCS" 
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "HCPCS",
+ "CONCEPT_ID": 2.7208e+06,
+"CONCEPT_NAME": "Injection, zoledronic acid (reclast), 1 mg",
+"STANDARD_CONCEPT": "N",
+"INVALID_REASON": "D",
 "CONCEPT_CODE": "Q4095",
-"CONCEPT_ID": 2.7208e+06,
-"CONCEPT_NAME": "Injection, zoledronic acid (reclast), 1 mg",
 "DOMAIN_ID": "Drug",
-"INVALID_REASON": "D",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
 "INVALID_REASON_CAPTION": "Invalid",
-"STANDARD_CONCEPT": "N",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"VOCABULARY_ID": "HCPCS" 
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "HCPCS",
-"CONCEPT_CODE": "J3487",
-"CONCEPT_ID": 2.7186e+06,
+ "CONCEPT_ID": 2.7186e+06,
 "CONCEPT_NAME": "Injection, zoledronic acid (zometa), 1 mg",
-"DOMAIN_ID": "Drug",
-"INVALID_REASON": "D",
-"INVALID_REASON_CAPTION": "Invalid",
 "STANDARD_CONCEPT": "N",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"VOCABULARY_ID": "HCPCS" 
+"INVALID_REASON": "D",
+"CONCEPT_CODE": "J3487",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "HCPCS",
-"CONCEPT_CODE": "J3489",
-"CONCEPT_ID": 4.4787e+07,
+ "CONCEPT_ID": 4.4787e+07,
 "CONCEPT_NAME": "Injection, zoledronic acid, 1 mg",
-"DOMAIN_ID": "Drug",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "N",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"VOCABULARY_ID": "HCPCS" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "J3489",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "HCPCS",
-"CONCEPT_CODE": "Q2051",
-"CONCEPT_ID": 4.4787e+07,
+ "CONCEPT_ID": 4.4787e+07,
 "CONCEPT_NAME": "Injection, zoledronic acid, not otherwise specified, 1mg",
-"DOMAIN_ID": "Drug",
-"INVALID_REASON": "D",
-"INVALID_REASON_CAPTION": "Invalid",
 "STANDARD_CONCEPT": "N",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"VOCABULARY_ID": "HCPCS" 
+"INVALID_REASON": "D",
+"CONCEPT_CODE": "Q2051",
+"DOMAIN_ID": "Procedure",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 } 
 ] 
@@ -225,16 +225,16 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Procedure",
-"CONCEPT_CODE": "81733005",
-"CONCEPT_ID": 4.305e+06,
+ "CONCEPT_ID": 4.305e+06,
 "CONCEPT_NAME": "Dental surgical procedure",
-"DOMAIN_ID": "Procedure",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "81733005",
+"DOMAIN_ID": "Procedure",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Procedure",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -248,111 +248,111 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "254701007",
-"CONCEPT_ID": 4.1128e+06,
+ "CONCEPT_ID": 4.1128e+06,
 "CONCEPT_NAME": "Basal cell carcinoma of skin",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "254701007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "HLT",
-"CONCEPT_CODE": "10018845",
-"CONCEPT_ID": 3.5102e+07,
+ "CONCEPT_ID": 3.5102e+07,
 "CONCEPT_NAME": "Haematologic neoplasms NEC",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "C",
-"STANDARD_CONCEPT_CAPTION": "Classification",
-"VOCABULARY_ID": "MedDRA" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "10018845",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "MedDRA",
+"CONCEPT_CLASS_ID": "HLT",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Classification" 
 },
 "isExcluded": true,
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "372244006",
-"CONCEPT_ID": 4.1623e+06,
+ "CONCEPT_ID": 4.1623e+06,
 "CONCEPT_NAME": "Malignant melanoma",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372244006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "363346000",
-"CONCEPT_ID": 4.4339e+05,
+ "CONCEPT_ID": 4.4339e+05,
 "CONCEPT_NAME": "Malignant neoplastic disease",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "363346000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "269475001",
-"CONCEPT_ID": 4.1472e+06,
+ "CONCEPT_ID": 4.1472e+06,
 "CONCEPT_NAME": "Malignant tumor of lymphoid hemopoietic and related tissue",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "269475001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "421696004",
-"CONCEPT_ID": 4.2283e+06,
+ "CONCEPT_ID": 4.2283e+06,
 "CONCEPT_NAME": "Precursor T-cell neoplasm",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "421696004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "254651007",
-"CONCEPT_ID": 4.1119e+06,
+ "CONCEPT_ID": 4.1119e+06,
 "CONCEPT_NAME": "Squamous cell carcinoma of skin",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "254651007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
@@ -367,16 +367,16 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "399068003",
-"CONCEPT_ID": 4.1633e+06,
+ "CONCEPT_ID": 4.1633e+06,
 "CONCEPT_NAME": "Malignant tumor of prostate",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "399068003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -398,10 +398,8 @@
 "DOMAIN_ID": "Condition",
 "VOCABULARY_ID": "SNOMED",
 "CONCEPT_CLASS_ID": "Clinical Finding",
-"STANDARD_CONCEPT_CAPTION": "Standard",
 "INVALID_REASON_CAPTION": "Valid",
-"RECORD_COUNT": "905",
-"DESCENDANT_RECORD_COUNT": "17,557,092" 
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -515,7 +513,8 @@
 },
 "StartWindow": {
  "Start": {
- "Coeff":     -1 
+ "Days":    365,
+"Coeff":     -1 
 },
 "End": {
  "Days":      0,

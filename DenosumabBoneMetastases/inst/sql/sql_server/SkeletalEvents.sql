@@ -161,7 +161,7 @@ FROM
   where co.condition_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 4)
 ) C
 
-WHERE C.condition_type_concept_id in (38000230,38000231)
+WHERE C.condition_type_concept_id in (38000230,38000199,38000250,44786627)
 -- End Condition Occurrence Criteria
 
 ) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= P.OP_START_DATE and A.START_DATE <= P.OP_END_DATE AND A.visit_occurrence_id = P.visit_occurrence_id

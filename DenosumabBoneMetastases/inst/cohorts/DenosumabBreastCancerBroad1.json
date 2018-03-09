@@ -7,16 +7,16 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Ingredient",
-"CONCEPT_CODE": "993449",
-"CONCEPT_ID": 4.0222e+07,
+ "CONCEPT_ID": 4.0222e+07,
 "CONCEPT_NAME": "denosumab",
-"DOMAIN_ID": "Drug",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "RxNorm" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "993449",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "RxNorm",
+"CONCEPT_CLASS_ID": "Ingredient",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -30,16 +30,16 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "94222008",
-"CONCEPT_ID":  78097,
+ "CONCEPT_ID":  78097,
 "CONCEPT_NAME": "Secondary malignant neoplasm of bone",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "94222008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -53,16 +53,16 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "ATC 4th",
-"CONCEPT_CODE": "M05BA",
-"CONCEPT_ID": 2.1604e+07,
+ "CONCEPT_ID": 2.1604e+07,
 "CONCEPT_NAME": "Bisphosphonates",
-"DOMAIN_ID": "Drug",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "C",
-"STANDARD_CONCEPT_CAPTION": "Classification",
-"VOCABULARY_ID": "ATC" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "M05BA",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "ATC",
+"CONCEPT_CLASS_ID": "ATC 4th",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Classification" 
 },
 "includeDescendants": true 
 } 
@@ -76,63 +76,63 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "372087000",
-"CONCEPT_ID": 4.3939e+05,
+ "CONCEPT_ID": 4.3939e+05,
 "CONCEPT_NAME": "Primary malignant neoplasm",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372087000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "126537000",
-"CONCEPT_ID": 4.442e+05,
+ "CONCEPT_ID": 4.442e+05,
 "CONCEPT_NAME": "Neoplasm of bone",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "126537000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "109356001",
-"CONCEPT_ID": 4.3692e+05,
+ "CONCEPT_ID": 4.3692e+05,
 "CONCEPT_NAME": "Primary malignant neoplasm of unspecified site",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "109356001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
 },
 {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "372137005",
-"CONCEPT_ID": 4.1623e+06,
+ "CONCEPT_ID": 4.1623e+06,
 "CONCEPT_NAME": "Primary malignant neoplasm of breast",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372137005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
@@ -147,17 +147,33 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Clinical Finding",
-"CONCEPT_CODE": "372137005",
-"CONCEPT_ID": 4.1623e+06,
+ "CONCEPT_ID": 4.1623e+06,
 "CONCEPT_NAME": "Primary malignant neoplasm of breast",
-"DOMAIN_ID": "Condition",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372137005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.3257e+05,
+"CONCEPT_NAME": "Malignant lymphoma",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "118600007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"isExcluded": true,
 "includeDescendants": true 
 } 
 ] 
@@ -170,16 +186,16 @@
  "items": [
  {
  "concept": {
- "CONCEPT_CLASS_ID": "Procedure",
-"CONCEPT_CODE": "81733005",
-"CONCEPT_ID": 4.305e+06,
+ "CONCEPT_ID": 4.305e+06,
 "CONCEPT_NAME": "Dental surgical procedure",
-"DOMAIN_ID": "Procedure",
-"INVALID_REASON": "V",
-"INVALID_REASON_CAPTION": "Valid",
 "STANDARD_CONCEPT": "S",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"VOCABULARY_ID": "SNOMED" 
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "81733005",
+"DOMAIN_ID": "Procedure",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Procedure",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -230,7 +246,7 @@
 },
 {
  "name": "Breast cancer",
-"description": "Histologically confirmed prostate cancer",
+"description": "Histologically confirmed breast cancer",
 "expression": {
  "Type": "ALL",
 "CriteriaList": [
@@ -242,7 +258,8 @@
 },
 "StartWindow": {
  "Start": {
- "Coeff":     -1 
+ "Days":    365,
+"Coeff":     -1 
 },
 "End": {
  "Days":      0,
@@ -273,7 +290,8 @@
 },
 "StartWindow": {
  "Start": {
- "Coeff":     -1 
+ "Days":    365,
+"Coeff":     -1 
 },
 "End": {
  "Days":      0,
@@ -339,8 +357,8 @@
  "Coeff":     -1 
 },
 "End": {
- "Days":      0,
-"Coeff":      1 
+ "Days":      1,
+"Coeff":     -1 
 } 
 },
 "Occurrence": {

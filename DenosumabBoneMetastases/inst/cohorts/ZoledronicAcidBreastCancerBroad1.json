@@ -15,8 +15,8 @@
 "DOMAIN_ID": "Drug",
 "VOCABULARY_ID": "RxNorm",
 "CONCEPT_CLASS_ID": "Ingredient",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"INVALID_REASON_CAPTION": "Valid" 
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -38,9 +38,25 @@
 "DOMAIN_ID": "Condition",
 "VOCABULARY_ID": "SNOMED",
 "CONCEPT_CLASS_ID": "Clinical Finding",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"INVALID_REASON_CAPTION": "Valid" 
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.3257e+05,
+"CONCEPT_NAME": "Malignant lymphoma",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "118600007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"isExcluded": true,
 "includeDescendants": true 
 } 
 ] 
@@ -61,8 +77,8 @@
 "DOMAIN_ID": "Condition",
 "VOCABULARY_ID": "SNOMED",
 "CONCEPT_CLASS_ID": "Clinical Finding",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"INVALID_REASON_CAPTION": "Valid" 
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -84,8 +100,8 @@
 "DOMAIN_ID": "Drug",
 "VOCABULARY_ID": "ATC",
 "CONCEPT_CLASS_ID": "ATC 4th",
-"STANDARD_CONCEPT_CAPTION": "Classification",
-"INVALID_REASON_CAPTION": "Valid" 
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Classification" 
 },
 "includeDescendants": true 
 } 
@@ -107,8 +123,8 @@
 "DOMAIN_ID": "Condition",
 "VOCABULARY_ID": "SNOMED",
 "CONCEPT_CLASS_ID": "Clinical Finding",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"INVALID_REASON_CAPTION": "Valid" 
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 },
@@ -122,8 +138,8 @@
 "DOMAIN_ID": "Condition",
 "VOCABULARY_ID": "SNOMED",
 "CONCEPT_CLASS_ID": "Clinical Finding",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"INVALID_REASON_CAPTION": "Valid" 
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
@@ -138,8 +154,8 @@
 "DOMAIN_ID": "Condition",
 "VOCABULARY_ID": "SNOMED",
 "CONCEPT_CLASS_ID": "Clinical Finding",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"INVALID_REASON_CAPTION": "Valid" 
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
@@ -154,8 +170,8 @@
 "DOMAIN_ID": "Condition",
 "VOCABULARY_ID": "SNOMED",
 "CONCEPT_CLASS_ID": "Clinical Finding",
-"STANDARD_CONCEPT_CAPTION": "Standard",
-"INVALID_REASON_CAPTION": "Valid" 
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "isExcluded": true,
 "includeDescendants": true 
@@ -178,8 +194,8 @@
 "DOMAIN_ID": "Drug",
 "VOCABULARY_ID": "HCPCS",
 "CONCEPT_CLASS_ID": "HCPCS",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"INVALID_REASON_CAPTION": "Invalid" 
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 },
 {
@@ -192,8 +208,8 @@
 "DOMAIN_ID": "Drug",
 "VOCABULARY_ID": "HCPCS",
 "CONCEPT_CLASS_ID": "HCPCS",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"INVALID_REASON_CAPTION": "Invalid" 
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 },
 {
@@ -206,8 +222,8 @@
 "DOMAIN_ID": "Drug",
 "VOCABULARY_ID": "HCPCS",
 "CONCEPT_CLASS_ID": "HCPCS",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"INVALID_REASON_CAPTION": "Invalid" 
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 },
 {
@@ -220,8 +236,8 @@
 "DOMAIN_ID": "Drug",
 "VOCABULARY_ID": "HCPCS",
 "CONCEPT_CLASS_ID": "HCPCS",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"INVALID_REASON_CAPTION": "Valid" 
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 },
 {
@@ -231,11 +247,11 @@
 "STANDARD_CONCEPT": "N",
 "INVALID_REASON": "D",
 "CONCEPT_CODE": "Q2051",
-"DOMAIN_ID": "Drug",
+"DOMAIN_ID": "Procedure",
 "VOCABULARY_ID": "HCPCS",
 "CONCEPT_CLASS_ID": "HCPCS",
-"STANDARD_CONCEPT_CAPTION": "Non-Standard",
-"INVALID_REASON_CAPTION": "Invalid" 
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
 } 
 } 
 ] 
@@ -256,10 +272,8 @@
 "DOMAIN_ID": "Procedure",
 "VOCABULARY_ID": "SNOMED",
 "CONCEPT_CLASS_ID": "Procedure",
-"STANDARD_CONCEPT_CAPTION": "Standard",
 "INVALID_REASON_CAPTION": "Valid",
-"RECORD_COUNT": "0",
-"DESCENDANT_RECORD_COUNT": "28,896" 
+"STANDARD_CONCEPT_CAPTION": "Standard" 
 },
 "includeDescendants": true 
 } 
@@ -361,7 +375,7 @@
 },
 {
  "name": "Breast cancer",
-"description": "Histologically confirmed prostate cancer",
+"description": "Histologically confirmed breast cancer",
 "expression": {
  "Type": "ALL",
 "CriteriaList": [
@@ -373,7 +387,8 @@
 },
 "StartWindow": {
  "Start": {
- "Coeff":     -1 
+ "Days":    365,
+"Coeff":     -1 
 },
 "End": {
  "Days":      0,
@@ -404,7 +419,8 @@
 },
 "StartWindow": {
  "Start": {
- "Coeff":     -1 
+ "Days":    365,
+"Coeff":     -1 
 },
 "End": {
  "Days":      0,

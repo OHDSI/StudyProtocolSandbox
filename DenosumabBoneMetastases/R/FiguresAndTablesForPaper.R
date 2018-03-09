@@ -124,7 +124,7 @@ createFiguresAndTables <- function(outputFolder,
                                         "All (breast cancer)",
                                         "-\t  No other malignant diseases",
                                         "-\t  No prior bisphosphonates",
-                                        "All (other cancer)",
+                                        "All (advanced cancer or multiple myeloma)",
                                         "-\t  No prior bisphosphonates"))
   mdrr[match(mdrr$targetId, ordered$targetId), ] <- mdrr
   mdrr$description <- ordered$description
@@ -146,7 +146,7 @@ createFiguresAndTables <- function(outputFolder,
                                         analysisSummary$outcomeId %in% negativeControlOutcomeIds, ]
   negControlSubset$label <- "Prostate cancer"
   negControlSubset$label[negControlSubset$targetId == 3] <- "Breast cancer"
-  negControlSubset$label[negControlSubset$targetId == 5] <- "Other cancers"
+  negControlSubset$label[negControlSubset$targetId == 5] <- "Advanced cancer or multiple myeloma"
   fileName <-  file.path(figuresAndTablesFolder, paste0("simplifiedNullDistribution.png"))
   EvidenceSynthesis::plotEmpiricalNulls(logRr = negControlSubset$logRr,
                                         seLogRr = negControlSubset$seLogRr,
@@ -175,7 +175,7 @@ createFiguresAndTables <- function(outputFolder,
   ps <- list(psPc, psBc, psOther)
   fileName <-  file.path(figuresAndTablesFolder, paste0("ps.png"))
   EvidenceSynthesis::plotPreparedPs(preparedPsPlots = ps, 
-                                    labels = c("Prostate cancer", "Breast cancer", "Other cancers"), 
+                                    labels = c("Prostate cancer", "Breast cancer", "Advanced cancer or multiple myeloma"), 
                                     treatmentLabel = "Denosumab",
                                     comparatorLabel = "Zoledronic acid",
                                     fileName = fileName)
@@ -217,7 +217,7 @@ createFiguresAndTables <- function(outputFolder,
   bal <- list(balPc, balBc, balOther)
   fileName <-  file.path(figuresAndTablesFolder, paste0("balance.png"))
   EvidenceSynthesis::plotCovariateBalances(balances = bal,
-                                           labels = c("Prostate cancer", "Breast cancer", "Other cancers"), 
+                                           labels = c("Prostate cancer", "Breast cancer", "Advanced cancer or multiple myeloma"), 
                                            beforeLabel = "Before straticiation",
                                            afterLabel = "After stratification",
                                            fileName = fileName)
