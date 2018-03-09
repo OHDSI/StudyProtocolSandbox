@@ -31,10 +31,10 @@
 #' @export
 createAnalysesDetails <- function(connectionDetails, cdmDatabaseSchema, workFolder) {
 
-  # Verbatim from ATLAS (except for explicit package refs,add. outcomes, and no balance)-----------------
+  # Almost verbatim from ATLAS
 
   targetCohortId <- 99321
-  comparatorCohortId <- 99322
+  comparatorCohortId <- 99322 # make comparatorCohortList <- c(X, Y, Z)
   outcomeList <- c(99323, 100791, 100792, 100793, 100794, 100795)
 
   # Default Prior & Control settings ----
@@ -50,25 +50,9 @@ createAnalysesDetails <- function(connectionDetails, cdmDatabaseSchema, workFold
                                            threads = 1,
                                            seed = 123)
 
+  # Get all  Concept IDs for exclusion ----
 
-
-  # Get all Sisyphus challenge: drugs to exclude Concept IDs for exclusion ----
-  sql <- paste("select distinct I.concept_id FROM
-               (
-               select concept_id from @cdm_database_schema.CONCEPT where concept_id in (1557272,44506794,21604148,1513103)and invalid_reason is null
-               UNION  select c.concept_id
-               from @cdm_database_schema.CONCEPT c
-               join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
-               and ca.ancestor_concept_id in (1557272,44506794,21604148,1513103)
-               and c.invalid_reason is null
-
-               ) I
-               ")
-  sql <- SqlRender::renderSql(sql, cdm_database_schema = cdmDatabaseSchema)$sql
-  sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-  connection <- DatabaseConnector::connect(connectionDetails)
-  excludedConcepts <- DatabaseConnector::querySql(connection, sql)
-  excludedConcepts <- excludedConcepts$CONCEPT_ID
+  excludedConcepts <- c()
 
   # Get all  Concept IDs for inclusion ----
 
@@ -84,16 +68,16 @@ createAnalysesDetails <- function(connectionDetails, cdmDatabaseSchema, workFold
   omIncludedConcepts <- c()
 
 
-  # Get all Sisyphus challenge:  negative controls for alendronate and raloxifenee Concept IDs for empirical calibration ----
+  # Get all Adjudicated negative controls for MMRV Concept IDs for empirical calibration ----
   sql <- paste("select distinct I.concept_id FROM
                (
-               select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4305080,45765647,4217633,198809,4133026,440083,376981,4207240,4312008,4080321,4145825,4081007,314054,137829,440448,261880,4281109,4193166,4224118,378425,256722,442013,197028,314658,374384,4189855,4134586,140057,4304484,440704,4104204,312723,4080664,193016,441267,432590,375801,443767,436641,4225726,4023319,433694,22350,4157036,4101350,4029295,196456,4007453,4295370,4055361,4263367,4195003,4163735,432868,195562,444429,4038835,4214376,438134,4124693,436375,4120621,433752,4080305,192964,4208784,4074815,139099,4092885,200588,4152163,437409,436659,75576,4004352,380397,4209145,197676,4199395,4103995,4175297,316084,4308125,4177067,439045,435785,440389,4271024,440631,4129886,4130375,40304526,4038838,198802,442274,372914,43531000,43531638,43531639,440087,313792,4106574,317309,441838,4304010,134870,44783617,4324261,4114158,198199,133547,4256228,73754,80809,4286201,435783,319826,196236,4021907,433967,4329707,437779,4279309,4077081,432436,4227653,4344040,4280071,4207615,138387,381839,4234533,43021132,4119796,4002659,379801,201254,4281232,4032424,195862,4082798,443605,312935,40457757,197036,4193875,439981)and invalid_reason is null
+               select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4132093,4148204,257011,257007,317009,4288734,75860,254761,374375,4080305,444207,24969,433701,4226263,255848,4170143,4283893,138455,4122115,440921,314754)and invalid_reason is null
 
                ) I
                ")
   sql <- SqlRender::renderSql(sql, cdm_database_schema = cdmDatabaseSchema)$sql
   sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-  # connection <- connect(connectionDetails)
+  connection <- DatabaseConnector::connect(connectionDetails)
   negativeControlConcepts <- DatabaseConnector::querySql(connection, sql)
   negativeControlConcepts <- negativeControlConcepts$CONCEPT_ID
 
@@ -108,6 +92,7 @@ createAnalysesDetails <- function(connectionDetails, cdmDatabaseSchema, workFold
   drugComparatorOutcomesList <- list(dcos)
 
 
+  # HAVE NOT UPDATED ANYTHING PAST HERE
 
   # Define which types of covariates must be constructed ----
   covariateSettings <- FeatureExtraction::createCovariateSettings(useCovariateDemographics = TRUE,
