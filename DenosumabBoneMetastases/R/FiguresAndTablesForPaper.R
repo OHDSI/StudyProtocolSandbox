@@ -109,32 +109,34 @@ createFiguresAndTables <- function(outputFolder,
   
   # MDRR across TCs -----------------------------------------------
   mdrrFiles <- list.files(file.path(outputFolder, "diagnostics"), pattern = "mdrr.*.csv")
-  mdrr <- lapply(mdrrFiles, function(x) read.csv(file.path(outputFolder, "diagnostics", x)))
-  mdrr <- do.call(rbind, mdrr)
-  mdrr$file <- mdrrFiles
-  mdrr$targetId <- as.integer(gsub("_.*$", "", gsub("mdrr_a1_t", "", mdrr$file)))
-  mdrr$outcomeId <- as.integer(gsub(".csv", "", gsub("^.*_o", "", mdrr$file)))
-  mdrr <- mdrr[mdrr$outcomeId == 21, ]
-  ordered <- data.frame(targetId = c(1,7,9,11,13,3,15,17,5,19),2,
-                        description = c("All (prostate cancer)",
-                                        "-\t No other malignant diseases",
-                                        "-\t  No osteonecrosis or osteomyelitis of the jaw",
-                                        "-\t  No prior bisphosphonates",
-                                        "-\t  Prior hormonal therapy",
-                                        "All (breast cancer)",
-                                        "-\t  No other malignant diseases",
-                                        "-\t  No prior bisphosphonates",
-                                        "All (advanced cancer or multiple myeloma)",
-                                        "-\t  No prior bisphosphonates"))
-  mdrr[match(mdrr$targetId, ordered$targetId), ] <- mdrr
-  mdrr$description <- ordered$description
-  mdrr$mdrr <- 1/mdrr$mdrr
-  mdrr <- mdrr[, c("description", "targetPersons", "comparatorPersons", "totalOutcomes", "mdrr")]
-  write.csv(mdrr, file.path(figuresAndTablesFolder, "allMdrrs.csv"), row.names = FALSE)
+  outcomeIds <- as.integer(gsub(".csv", "", gsub("^.*_o", "", mdrrFiles)))
+  for (outcomeId in unique(outcomeIds)) {
+    mdrr <- lapply(mdrrFiles[outcomeIds == outcomeId], function(x) read.csv(file.path(outputFolder, "diagnostics", x)))
+    mdrr <- do.call(rbind, mdrr)
+    mdrr$file <- mdrrFiles[outcomeIds == outcomeId]
+    mdrr$targetId <- as.integer(gsub("_.*$", "", gsub("mdrr_a1_t", "", mdrr$file)))
+    ordered <- data.frame(targetId = c(1,7,9,11,13,3,15,17,5,19),2,
+                          description = c("All (prostate cancer)",
+                                          "-\t No other malignant diseases",
+                                          "-\t  No osteonecrosis or osteomyelitis of the jaw",
+                                          "-\t  No prior bisphosphonates",
+                                          "-\t  Prior hormonal therapy",
+                                          "All (breast cancer)",
+                                          "-\t  No other malignant diseases",
+                                          "-\t  No prior bisphosphonates",
+                                          "All (advanced cancer or multiple myeloma)",
+                                          "-\t  No prior bisphosphonates"))
+    mdrr[match(mdrr$targetId, ordered$targetId), ] <- mdrr
+    mdrr$description <- ordered$description
+    mdrr$mdrr <- 1/mdrr$mdrr
+    mdrr <- mdrr[, c("description", "targetPersons", "comparatorPersons", "totalOutcomes", "mdrr")]
+    fileName <- file.path(figuresAndTablesFolder, paste0("allMdrrs_o", outcomeId, ".csv"))
+    write.csv(mdrr, fileName, row.names = FALSE)
+  }
   
   # Study start date -------------------------------------------
   conn <- connect(connectionDetails)
-  sql <- "SELECT MIN(cohort_start_date) FROM scratch.dbo.mschuemi_denosumab_optum WHERE cohort_definition_id = 1"
+  sql <- "SELECT MIN(cohort_start_date), cohort_definition_id FROM scratch.dbo.mschuemi_denosumab_optum WHERE cohort_definition_id IN (1, 3, 5) GROUP BY cohort_definition_id"
   print(querySql(conn, sql))
   
   # Simplified null distribution -------------------------------------------
@@ -146,7 +148,7 @@ createFiguresAndTables <- function(outputFolder,
                                         analysisSummary$outcomeId %in% negativeControlOutcomeIds, ]
   negControlSubset$label <- "Prostate cancer"
   negControlSubset$label[negControlSubset$targetId == 3] <- "Breast cancer"
-  negControlSubset$label[negControlSubset$targetId == 5] <- "Advanced cancer or multiple myeloma"
+  negControlSubset$label[negControlSubset$targetId == 5] <- "Advanced cancer"
   fileName <-  file.path(figuresAndTablesFolder, paste0("simplifiedNullDistribution.png"))
   EvidenceSynthesis::plotEmpiricalNulls(logRr = negControlSubset$logRr,
                                         seLogRr = negControlSubset$seLogRr,
@@ -175,12 +177,12 @@ createFiguresAndTables <- function(outputFolder,
   ps <- list(psPc, psBc, psOther)
   fileName <-  file.path(figuresAndTablesFolder, paste0("ps.png"))
   EvidenceSynthesis::plotPreparedPs(preparedPsPlots = ps, 
-                                    labels = c("Prostate cancer", "Breast cancer", "Advanced cancer or multiple myeloma"), 
+                                    labels = c("Prostate cancer", "Breast cancer", "Advanced cancer"), 
                                     treatmentLabel = "Denosumab",
                                     comparatorLabel = "Zoledronic acid",
                                     fileName = fileName)
   
-  # PS distributions --------------------------------------------------------------
+  # Balance --------------------------------------------------------------
   cmDataFile <- reference$cohortMethodDataFolder[reference$analysisId == 1 &
                                                    reference$targetId == 1 &
                                                    reference$comparatorId == 2 &
@@ -192,6 +194,7 @@ createFiguresAndTables <- function(outputFolder,
   cmData <- CohortMethod::loadCohortMethodData(cmDataFile)
   strata <- readRDS(strataFile)
   balPc <- CohortMethod::computeCovariateBalance(strata, cmData)
+  
   cmDataFile <- reference$cohortMethodDataFolder[reference$analysisId == 1 &
                                                    reference$targetId == 3 &
                                                    reference$comparatorId == 4 &
@@ -217,8 +220,35 @@ createFiguresAndTables <- function(outputFolder,
   bal <- list(balPc, balBc, balOther)
   fileName <-  file.path(figuresAndTablesFolder, paste0("balance.png"))
   EvidenceSynthesis::plotCovariateBalances(balances = bal,
-                                           labels = c("Prostate cancer", "Breast cancer", "Advanced cancer or multiple myeloma"), 
+                                           labels = c("Prostate cancer", "Breast cancer", "Adv. cancer"), 
                                            beforeLabel = "Before straticiation",
                                            afterLabel = "After stratification",
                                            fileName = fileName)
+  fileName <- system.file("settings", "Table1Specs.csv", package = "DenosumabBoneMetastases")
+  table1Specs <- read.csv(fileName)
+  table1 <- CohortMethod::createCmTable1(balance = balPc, 
+                                         specifications = table1Specs, 
+                                         beforeLabel = "Before stratification",
+                                         afterLabel = "After stratification",
+                                         targetLabel = "Deno-sumab",
+                                         comparatorLabel = "Zole-dronic acid",
+                                         percentDigits = 0)
+  write.csv(table1, file.path(figuresAndTablesFolder, "Table1_PC.csv"), row.names = FALSE)
+  table1 <- CohortMethod::createCmTable1(balance = balBc, 
+                                         specifications = table1Specs, 
+                                         beforeLabel = "Before stratification",
+                                         afterLabel = "After stratification",
+                                         targetLabel = "Deno-sumab",
+                                         comparatorLabel = "Zole-dronic acid",
+                                         percentDigits = 0)
+  write.csv(table1, file.path(figuresAndTablesFolder, "Table1_BC.csv"), row.names = FALSE)
+  table1 <- CohortMethod::createCmTable1(balance = balOther, 
+                                         specifications = table1Specs, 
+                                         beforeLabel = "Before stratification",
+                                         afterLabel = "After stratification",
+                                         targetLabel = "Deno-sumab",
+                                         comparatorLabel = "Zole-dronic acid",
+                                         percentDigits = 0)
+  write.csv(table1, file.path(figuresAndTablesFolder, "Table1_Other.csv"), row.names = FALSE)
+  
 }
