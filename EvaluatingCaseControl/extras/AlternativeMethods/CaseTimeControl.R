@@ -1,4 +1,4 @@
-# Copyright 2017 Observational Health Data Sciences and Informatics
+# Copyright 2018 Observational Health Data Sciences and Informatics
 #
 # This file is part of EvaluatingCaseControl
 #
@@ -49,6 +49,10 @@ runCaseTimeControlDesigns <- function(connectionDetails = connectionDetails,
   ccrSummary <- CaseCrossover::summarizeCcrAnalyses(ccrResult)
   ccrSummaryFile <- file.path(workFolder, "ccrSummaryAp.rds")
   saveRDS(ccrSummary, ccrSummaryFile)
+
+  ccrSummary <- readRDS(file.path(workFolder, "ccrSummaryAp.rds"))
+  ncs <- ccrSummary[ccrSummary$exposureId != 4, ]
+  EmpiricalCalibration::plotCalibrationEffect(ncs$logRr, ncs$seLogRr, showCis = TRUE)
 
   # Crockett replication --------------------------------------------------------
   ccrIbdFolder <- file.path(workFolder, "ccrIbd")

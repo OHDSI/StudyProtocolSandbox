@@ -1,4 +1,4 @@
-# Copyright 2017 Observational Health Data Sciences and Informatics
+# Copyright 2018 Observational Health Data Sciences and Informatics
 #
 # This file is part of EvaluatingCaseControl
 #
@@ -14,15 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runCaseControlDesigns <- function(connectionDetails = connectionDetails,
-                                  cdmDatabaseSchema = cdmDatabaseSchema,
-                                  workDatabaseSchema = workDatabaseSchema,
-                                  studyCohortTable = studyCohortTable,
-                                  oracleTempSchema = oracleTempSchema,
-                                  maxCores = maxCores,
-                                  workFolder) {
-  # Chou replication --------------------------------------------------------
-  ccApFolder <- file.path(workFolder, "ccAp")
+runCaseControlDesigns <- function(connectionDetails,
+                                  cdmDatabaseSchema,
+                                  cohortDatabaseSchema,
+                                  cohortTable,
+                                  outputFolder,
+                                  maxCores) {
+  OhdsiRTools::logInfo("Running Chou replication")
+  ccApFolder <- file.path(outputFolder, "ccAp")
   if (!file.exists(ccApFolder))
     dir.create(ccApFolder)
 
@@ -30,18 +29,19 @@ runCaseControlDesigns <- function(connectionDetails = connectionDetails,
   analysisList <- CaseControl::loadCcAnalysisList(analysisListFile)
   eonFile <- system.file("settings", "ccExposureOutcomeNestingAp.json", package = "EvaluatingCaseControl")
   eonList <- CaseControl::loadExposureOutcomeNestingCohortList(eonFile)
+
   ccResult <- CaseControl::runCcAnalyses(connectionDetails = connectionDetails,
                                          cdmDatabaseSchema = cdmDatabaseSchema,
                                          oracleTempSchema = oracleTempSchema,
-                                         exposureDatabaseSchema = workDatabaseSchema,
-                                         exposureTable = studyCohortTable,
-                                         outcomeDatabaseSchema = workDatabaseSchema,
-                                         outcomeTable = studyCohortTable,
-                                         nestingCohortDatabaseSchema = workDatabaseSchema,
-                                         nestingCohortTable = studyCohortTable,
+                                         exposureDatabaseSchema = cohortDatabaseSchema,
+                                         exposureTable = cohortTable,
+                                         outcomeDatabaseSchema = cohortDatabaseSchema,
+                                         outcomeTable = cohortTable,
+                                         nestingCohortDatabaseSchema = cohortDatabaseSchema,
+                                         nestingCohortTable = cohortTable,
                                          ccAnalysisList = analysisList,
                                          exposureOutcomeNestingCohortList = eonList,
-                                         outputFolder = ccApFolder,
+                                         outputFolder = outputFolder,
                                          getDbCaseDataThreads = 1,
                                          selectControlsThreads = min(3, maxCores),
                                          getDbExposureDataThreads = 1,
@@ -50,11 +50,11 @@ runCaseControlDesigns <- function(connectionDetails = connectionDetails,
                                          cvThreads = min(2,maxCores),
                                          prefetchExposureData = FALSE)
   ccSummary <- CaseControl::summarizeCcAnalyses(ccResult)
-  ccSummaryFile <- file.path(workFolder, "ccSummaryAp.rds")
+  ccSummaryFile <- file.path(outputFolder, "ccSummaryAp.rds")
   saveRDS(ccSummary, ccSummaryFile)
 
-  # Crockett replication --------------------------------------------------------
-  ccIbdFolder <- file.path(workFolder, "ccIbd")
+  OhdsiRTools::logInfo("Running Crockett replication")
+  ccIbdFolder <- file.path(outputFolder, "ccIbd")
   if (!file.exists(ccIbdFolder))
     dir.create(ccIbdFolder)
 
@@ -65,12 +65,12 @@ runCaseControlDesigns <- function(connectionDetails = connectionDetails,
   ccResult <- CaseControl::runCcAnalyses(connectionDetails = connectionDetails,
                                          cdmDatabaseSchema = cdmDatabaseSchema,
                                          oracleTempSchema = oracleTempSchema,
-                                         exposureDatabaseSchema = workDatabaseSchema,
-                                         exposureTable = studyCohortTable,
-                                         outcomeDatabaseSchema = workDatabaseSchema,
-                                         outcomeTable = studyCohortTable,
-                                         nestingCohortDatabaseSchema = workDatabaseSchema,
-                                         nestingCohortTable = studyCohortTable,
+                                         exposureDatabaseSchema = cohortDatabaseSchema,
+                                         exposureTable = cohortTable,
+                                         outcomeDatabaseSchema = cohortDatabaseSchema,
+                                         outcomeTable = cohortTable,
+                                         nestingCohortDatabaseSchema = cohortDatabaseSchema,
+                                         nestingCohortTable = cohortTable,
                                          ccAnalysisList = analysisList,
                                          exposureOutcomeNestingCohortList = eonList,
                                          outputFolder = ccIbdFolder,
@@ -81,16 +81,22 @@ runCaseControlDesigns <- function(connectionDetails = connectionDetails,
                                          fitCaseControlModelThreads = min(5, maxCores),
                                          prefetchExposureData = TRUE)
   ccSummary <- CaseControl::summarizeCcAnalyses(ccResult)
-  ccSummaryFile <- file.path(workFolder, "ccSummaryIbd.rds")
+  ccSummaryFile <- file.path(outputFolder, "ccSummaryIbd.rds")
   saveRDS(ccSummary, ccSummaryFile)
 
-  # model <- readRDS(ccResult$modelFile)
-  # ed <- loadCaseControlsExposure(ccResult$exposureDataFile)
-  # covs <- ff::as.ram(ed$covariates)
-  # sum(covs$covariateId == 4)
-  ccSummary <- readRDS(file.path(workFolder, "ccSummaryAp.rds"))
-  ncs <- ccSummary[ccSummary$exposureId != 4, ]
-  EmpiricalCalibration::plotCalibrationEffect(ncs$logRr, ncs$seLogRr, showCis = TRUE)
+  # # model <- readRDS(ccResult$modelFile)
+  # # ed <- loadCaseControlsExposure(ccResult$exposureDataFile)
+  # # covs <- ff::as.ram(ed$covariates)
+  # # sum(covs$covariateId == 4)
+  # ccSummary <- readRDS(file.path(outputFolder, "ccSummaryAp.rds"))
+  # ccSummary[ccSummary$exposureId == 4, ]
+  # ncs <- ccSummary[ccSummary$exposureId != 4, ]
+  # EmpiricalCalibration::plotCalibrationEffect(ncs$logRr, ncs$seLogRr, showCis = TRUE)
+  #
+  # ccSummary <- readRDS(file.path(outputFolder, "ccSummaryIbd.rds"))
+  # ncs <- ccSummary[ccSummary$exposureId != 5, ]
+  # EmpiricalCalibration::plotCalibrationEffect(ncs$logRr, ncs$seLogRr, showCis = TRUE)
+  # ccSummary[ccSummary$exposureId == 5, ]
 }
 
 #' Create the analyses details
@@ -98,11 +104,11 @@ runCaseControlDesigns <- function(connectionDetails = connectionDetails,
 #' @details
 #' This function creates files specifying the analyses that will be performed.
 #'
-#' @param workFolder        Name of local folder to place results; make sure to use forward slashes
+#' @param outputFolder        Name of local folder to place results; make sure to use forward slashes
 #'                            (/)
 #'
 #' @export
-createCaseControlAnalysesDetails <- function(workFolder) {
+createCaseControlAnalysesDetails <- function(outputFolder) {
 
   # Chou replication --------------------------------------------------------
   cdAp <- CaseControl::createGetDbCaseDataArgs(useNestingCohort = TRUE,
@@ -129,11 +135,8 @@ createCaseControlAnalysesDetails <- function(workFolder) {
   atcCovariateDefs <- read.csv(pathToCsv)
   atcCovariateSettings <- createAtcCovariateSettings(atcCovariateDefs)
 
-  defaultCovariateSettings = FeatureExtraction::createCovariateSettings(
-    useCovariateRiskScores = TRUE,
-    useCovariateRiskScoresDCSI = TRUE,
-    windowEndDays = 1
-  )
+  defaultCovariateSettings = FeatureExtraction::createCovariateSettings(useDcsi = TRUE,
+                                                                        endDays = -1)
 
   edAp <-  CaseControl::createGetDbExposureDataArgs(covariateSettings = list(icd9CovariateSettings,
                                                                              atcCovariateSettings,
@@ -155,7 +158,7 @@ createCaseControlAnalysesDetails <- function(workFolder) {
                                                 fitCaseControlModelArgs = mAp)
 
   ccAnalysisListAp <- list(ccAnalysisAp)
-  CaseControl::saveCcAnalysisList(ccAnalysisListAp, file.path(workFolder, "ccAnalysisListAp.json"))
+  CaseControl::saveCcAnalysisList(ccAnalysisListAp, file.path(outputFolder, "ccAnalysisListAp.json"))
 
   pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
   negativeControls <- read.csv(pathToCsv)
@@ -168,7 +171,7 @@ createCaseControlAnalysesDetails <- function(workFolder) {
                                                            nestingCohortId = negativeControls$nestingId[i])
     eonsAp[[length(eonsAp) + 1]] <- eon
   }
-  CaseControl::saveExposureOutcomeNestingCohortList(eonsAp, file.path(workFolder, "ccExposureOutcomeNestingAp.json"))
+  CaseControl::saveExposureOutcomeNestingCohortList(eonsAp, file.path(outputFolder, "ccExposureOutcomeNestingAp.json"))
 
 
   # Crockett replication ----------------------------------------------------
@@ -204,7 +207,7 @@ createCaseControlAnalysesDetails <- function(workFolder) {
                                                  fitCaseControlModelArgs = mIbd)
 
   ccAnalysisListIbd <- list(ccAnalysisIbd)
-  CaseControl::saveCcAnalysisList(ccAnalysisListIbd, file.path(workFolder, "ccAnalysisListIbd.json"))
+  CaseControl::saveCcAnalysisList(ccAnalysisListIbd, file.path(outputFolder, "ccAnalysisListIbd.json"))
 
 
   pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
@@ -217,5 +220,5 @@ createCaseControlAnalysesDetails <- function(workFolder) {
                                                            outcomeId = 3)
     eonsIbd[[length(eonsIbd) + 1]] <- eon
   }
-  CaseControl::saveExposureOutcomeNestingCohortList(eonsIbd, file.path(workFolder, "ccExposureOutcomeNestingIbd.json"))
+  CaseControl::saveExposureOutcomeNestingCohortList(eonsIbd, file.path(outputFolder, "ccExposureOutcomeNestingIbd.json"))
 }

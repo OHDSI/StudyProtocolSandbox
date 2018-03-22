@@ -1,4 +1,4 @@
-# Copyright 2017 Observational Health Data Sciences and Informatics
+# Copyright 2018 Observational Health Data Sciences and Informatics
 #
 # This file is part of EvaluatingCaseControl
 #
@@ -26,16 +26,14 @@ createAtcCovariateSettings <- function(covariateDefs, windowStart = -365, window
 
 #' @export
 getDbAtcCovariateData <- function(connection,
-                                   oracleTempSchema = NULL,
-                                   cdmDatabaseSchema,
-                                   cdmVersion = "5",
-                                   cohortTempTable = "cohort_person",
-                                   rowIdField = "subject_id",
-                                   covariateSettings) {
-  # Temp table names must start with a '#' in SQL Server, our source dialect:
-  if (substr(cohortTempTable, 1, 1) != "#") {
-    cohortTempTable <- paste("#", cohortTempTable, sep = "")
-  }
+                                  oracleTempSchema = NULL,
+                                  cdmDatabaseSchema,
+                                  cohortTable = "#cohort_person",
+                                  cohortId = -1,
+                                  cdmVersion = "5",
+                                  rowIdField = "subject_id",
+                                  covariateSettings,
+                                  aggregated = FALSE) {
   sql <- "CREATE TABLE #covar_defs (concept_id INT, covariate_id INT)"
   sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
   DatabaseConnector::executeSql(connection, sql, progressBar = FALSE, reportOverallTime = FALSE)
@@ -58,7 +56,8 @@ getDbAtcCovariateData <- function(connection,
                                            window_end = covariateSettings$windowEnd,
                                            cdm_database_schema = cdmDatabaseSchema,
                                            row_id_field = rowIdField,
-                                           cohort_temp_table = cohortTempTable)
+                                           cohort_table = cohortTable,
+                                           cohort_id = cohortId)
   covariates <- DatabaseConnector::querySql.ffdf(connection, sql)
   colnames(covariates) <- SqlRender::snakeCaseToCamelCase(colnames(covariates))
   sql <- "TRUNCATE TABLE #covar_defs; DROP TABLE #covar_defs;"
@@ -71,9 +70,20 @@ getDbAtcCovariateData <- function(connection,
   covariateRef$analysisId <- 1
   covariateRef$conceptId <- 0
   covariateRef <- ff::as.ffdf(covariateRef)
+
+  analysisRef <- data.frame(analysisId = 1,
+                            analysisName = "ATC covariates",
+                            domainId = "Drug",
+                            startDay = 0,
+                            endDay = 0,
+                            isBinary = "Y",
+                            missingMeansZero = "Y")
+  analysisRef <- ff::as.ffdf(analysisRef)
+
   metaData <- list(call = match.call())
   result <- list(covariates = covariates,
                  covariateRef = covariateRef,
+                 analysisRef = analysisRef,
                  metaData = metaData)
   class(result) <- "covariateData"
   return(result)

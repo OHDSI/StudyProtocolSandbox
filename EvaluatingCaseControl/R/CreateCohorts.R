@@ -1,4 +1,4 @@
-# Copyright 2017 Observational Health Data Sciences and Informatics
+# Copyright 2018 Observational Health Data Sciences and Informatics
 #
 # This file is part of EvaluatingCaseControl
 #
@@ -16,6 +16,7 @@
 
 .createCohorts <- function(connection,
                            cdmDatabaseSchema,
+                           vocabularyDatabaseSchema = cdmDatabaseSchema,
                            cohortDatabaseSchema,
                            cohortTable,
                            oracleTempSchema,
@@ -42,6 +43,7 @@
                                              dbms = attr(connection, "dbms"),
                                              oracleTempSchema = oracleTempSchema,
                                              cdm_database_schema = cdmDatabaseSchema,
+                                             vocabulary_database_schema = vocabularyDatabaseSchema,
                                                 
                                              target_database_schema = cohortDatabaseSchema,
                                              target_cohort_table = cohortTable,
@@ -57,8 +59,8 @@
   sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
   counts <- DatabaseConnector::querySql(connection, sql)
   names(counts) <- SqlRender::snakeCaseToCamelCase(names(counts))
-  counts <- merge(counts, data.frame(cohortDefinitionId = cohortsToCreate$cohortId[i],
-                                     cohortName  = cohortsToCreate$name[i]))
+  counts <- merge(counts, data.frame(cohortDefinitionId = cohortsToCreate$cohortId,
+                                     cohortName  = cohortsToCreate$name))
   write.csv(counts, file.path(outputFolder, "CohortCounts.csv"))
   
   

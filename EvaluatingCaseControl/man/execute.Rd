@@ -2,14 +2,11 @@
 % Please edit documentation in R/Main.R
 \name{execute}
 \alias{execute}
-\title{Execute OHDSI Celecoxib versus non-selective NSAIDs study}
+\title{Execute OHDSI Evaluating the Case-Control Design Study}
 \usage{
-execute(connectionDetails, cdmDatabaseSchema,
-  workDatabaseSchema = cdmDatabaseSchema,
-  studyCohortTable = "ohdsi_case_control", oracleTempSchema = NULL,
-  workFolder, createCohorts = TRUE, runAnalyses = TRUE,
-  empiricalCalibration = TRUE, packageResultsForSharing = TRUE,
-  maxCores = 4)
+execute(connectionDetails, cdmDatabaseSchema, cohortDatabaseSchema, cohortTable,
+  oracleTempSchema, outputFolder, createCohorts = TRUE, runAnalyses = TRUE,
+  createFiguresAndTables = TRUE, maxCores = 4)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -20,26 +17,30 @@ DatabaseConnector package.}
 Note that for SQL Server, this should include both the database and
 schema name, for example 'cdm_data.dbo'.}
 
-\item{workDatabaseSchema}{Schema name where intermediate data can be stored. You will need to have
+\item{cohortDatabaseSchema}{Schema name where intermediate data can be stored. You will need to have
 write priviliges in this schema. Note that for SQL Server, this should
 include both the database and schema name, for example 'cdm_data.dbo'.}
 
-\item{studyCohortTable}{The name of the table that will be created in the work database schema.
+\item{cohortTable}{The name of the table that will be created in the work database schema.
 This table will hold the exposure and outcome cohorts used in this
 study.}
 
 \item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
 priviliges for storing temporary tables.}
 
-\item{workFolder}{Name of local folder to place results; make sure to use forward slashes
+\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
 (/)}
 
-\item{cdmVersion}{Version of the CDM. Can be "4" or "5"}
+\item{createCohorts}{Instantiate the necessary cohorts in the cohortTable?}
+
+\item{runAnalyses}{Execute the case-control analaysis?}
+
+\item{createFiguresAndTables}{Create the figures and tables for the paper?}
+
+\item{maxCores}{How many parallel cores should be used? If more cores are made available
+this can speed up the analyses.}
 }
-\value{
-TODO
-}
-\details{
+\description{
 This function executes the OHDSI Evaluating the Case-Control Design Study.
 }
 \examples{
@@ -51,10 +52,9 @@ connectionDetails <- createConnectionDetails(dbms = "postgresql",
 
 execute(connectionDetails,
         cdmDatabaseSchema = "cdm_data",
-        workDatabaseSchema = "results",
+        cohortDatabaseSchema = "results",
         oracleTempSchema = NULL,
-        workFolder = "c:/temp/study_results",
-        cdmVersion = "5")
+        outputFolder = "c:/temp/study_results")
 
 }
 
