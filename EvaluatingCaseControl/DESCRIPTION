@@ -1,7 +1,7 @@
 Package: EvaluatingCaseControl
 Type: Package
 Title: OHDSI Evaluating the Case-Control Design Study
-Version: 0.1.0
+Version: 0.2.0
 Author: Martijn J. Schuemie [aut, cre]
 Maintainer: Martijn J. Schuemie <schuemie@ohdsi.org>
 Description: More about what it does (maybe more than one line)
@@ -11,14 +11,15 @@ Depends:
     DatabaseConnector
 Imports:
     SqlRender,
-    MethodEvaluation,
-    FeatureExtraction (>= 1.2.0),
+    FeatureExtraction,
     CohortMethod,
     CaseCrossover,
     CaseControl,
-    EmpiricalCalibration (>= 1.2.2),
-    DBI,
-    ggplot2
+    EmpiricalCalibration,
+    OhdsiRTools,
+    ggplot2,
+    Cyclops,
+    ff
 Suggests:
     testthat
 License: Apache License 2.0

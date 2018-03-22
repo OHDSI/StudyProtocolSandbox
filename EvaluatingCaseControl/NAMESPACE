@@ -2,8 +2,6 @@
 
 export(createAtcCovariateSettings)
 export(createCaseControlAnalysesDetails)
-export(createCaseTimeControlAnalysesDetails)
-export(createCohortMethodAnalysesDetails)
 export(createCohorts)
 export(createIcd9CovariateSettings)
 export(execute)

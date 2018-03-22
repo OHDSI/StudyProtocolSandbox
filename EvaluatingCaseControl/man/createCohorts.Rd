@@ -4,8 +4,8 @@
 \alias{createCohorts}
 \title{Create the exposure and outcome cohorts}
 \usage{
-createCohorts(connectionDetails, cdmDatabaseSchema, workDatabaseSchema,
-  studyCohortTable = "ohdsi_case_control", oracleTempSchema, workFolder)
+createCohorts(connectionDetails, cdmDatabaseSchema, cohortDatabaseSchema,
+  cohortTable, oracleTempSchema, outputFolder)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -16,18 +16,18 @@ DatabaseConnector package.}
 Note that for SQL Server, this should include both the database and
 schema name, for example 'cdm_data.dbo'.}
 
-\item{workDatabaseSchema}{Schema name where intermediate data can be stored. You will need to have
+\item{cohortDatabaseSchema}{Schema name where intermediate data can be stored. You will need to have
 write priviliges in this schema. Note that for SQL Server, this should
 include both the database and schema name, for example 'cdm_data.dbo'.}
 
-\item{studyCohortTable}{The name of the table that will be created in the work database schema.
+\item{cohortTable}{The name of the table that will be created in the work database schema.
 This table will hold the exposure and outcome cohorts used in this
 study.}
 
 \item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
 priviliges for storing temporary tables.}
 
-\item{workFolder}{Name of local folder to place results; make sure to use forward slashes
+\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
 (/)}
 }
 \description{

@@ -1,6 +1,6 @@
 # @file PaperExecutionCode.R
 #
-# Copyright 2017 Observational Health Data Sciences and Informatics
+# Copyright 2018 Observational Health Data Sciences and Informatics
 #
 # This file is part of EvaluatingCaseControl
 #
@@ -17,20 +17,14 @@
 # limitations under the License.
 
 library(EvaluatingCaseControl)
-options(fftempdir = "S:/fftemp")
+options(fftempdir = "r:/fftemp")
 
 pw <- NULL
 dbms <- "pdw"
 user <- NULL
-server <- "JRDUSAPSCTL01"
-cdmDatabaseSchema <- "CDM_Truven_ccae_V568.dbo"
-oracleTempSchema <- NULL
-workDatabaseSchema <- "scratch.dbo"
-studyCohortTable <- "mschuemie_case_control_ap_ccae"
-port <- 17001
-workFolder <- "S:/Temp/EvaluatingCaseControl_ccae"
+server <- Sys.getenv("PDW_SERVER")
+port <- Sys.getenv("PDW_PORT")
 maxCores <- 30
-
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
@@ -38,24 +32,35 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 password = pw,
                                                                 port = port)
 
-createCohorts(connectionDetails = connectionDetails,
-              cdmDatabaseSchema = cdmDatabaseSchema,
-              oracleTempSchema = oracleTempSchema,
-              workDatabaseSchema = workDatabaseSchema,
-              studyCohortTable = studyCohortTable,
-              workFolder = workFolder)
-# conn <- connect(connectionDetails)
-# querySql(conn, "SELECT DISTINCT cohort_definition_id FROM scratch.dbo.mschuemie_case_control_ap_ccae")
+
+# CCAE settings --------------------------------------------------
+cdmDatabaseSchema <- "cdm_truven_ccae_v697.dbo"
+oracleTempSchema <- NULL
+cohortDatabaseSchema <- "scratch.dbo"
+cohortTable <- "mschuemie_case_control_ap_ccae"
+outputFolder <- "r:/EvaluatingCaseControl_ccae"
+
+# Optum settings --------------------------------------------------
+cdmDatabaseSchema <- "cdm_optum_extended_ses_v694.dbo"
+oracleTempSchema <- NULL
+cohortDatabaseSchema <- "scratch.dbo"
+cohortTable <- "mschuemie_case_control_ap_optum"
+outputFolder <- "r:/EvaluatingCaseControl_optum"
+
+# createCohorts(connectionDetails = connectionDetails,
+#               cdmDatabaseSchema = cdmDatabaseSchema,
+#               oracleTempSchema = oracleTempSchema,
+#               cohortDatabaseSchema = cohortDatabaseSchema,
+#               cohortTable = cohortTable,
+#               outputFolder = outputFolder)
 
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
         oracleTempSchema = oracleTempSchema,
-        workDatabaseSchema = workDatabaseSchema,
-        studyCohortTable = studyCohortTable,
-        study = study,
-        workFolder = workFolder,
-        createCohorts = FALSE,
-        injectSignals = FALSE,
+        cohortDatabaseSchema = cohortDatabaseSchema,
+        cohortTable = cohortTable,
+        outputFolder = outputFolder,
+        createCohorts = TRUE,
         runAnalyses = TRUE,
-        empiricalCalibration = TRUE,
+        createFiguresAndTables = TRUE,
         maxCores = maxCores)
