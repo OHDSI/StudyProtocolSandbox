@@ -1,14 +1,25 @@
-# devtools::install_github("ohdsi/FeatureExtraction", ref = "v1.2.3")
-# devtools::install_github("ohdsi/CohortMethod", ref = "v2.4.4")
-
-connectionDetails<-readRDS("/Users/chan/data/test/connectionDetails.rds")
-
-
-cdmDatabaseSchema<-"NHIS_NSC.dbo"
-resultsDatabaseSchema<-"NHIS_NSC.dbo"
-exposureTable <- "cohort"
-outcomeTable <- "cohort"
+# TODO: Insert your connection details here
+connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "postgresql",
+                                                                server = "localhost/ohdsi",
+                                                                user = "joe",
+                                                                password = "supersecret")
+cdmDatabaseSchema <- "my_cdm_data"
+exposureDatabaseSchema <- "my_cdm_data"
+outcomeDatabaseSchema <- "my_cdm_data"
+exposureTable <- "exposure_table"
+outcomeTable <- "outcome_table"
 cdmVersion <- "5" 
+
+if(!dir.exists(outputFolder)){
+  dir.create(outputFolder, recursive = TRUE)
+}
+setwd(outputFolder)
+
+##Define the CohortId and Connection
+targetCohortId <- 542
+comparatorCohortId <- 543
+outcomeCohortId <- 20
+
 connection<-connect(connectionDetails)
 
 #target cohort
