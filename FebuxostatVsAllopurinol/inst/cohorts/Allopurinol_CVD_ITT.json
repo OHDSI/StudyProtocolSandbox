@@ -1373,7 +1373,7 @@
     "CriteriaList": [
       {
         "DrugExposure": {
-          "CodesetId": 0,
+          "CodesetId": 10,
           "First": true
         }
       }
@@ -1703,7 +1703,7 @@
   ],
   "EndStrategy": {
     "CustomEra": {
-      "DrugCodesetId": 0,
+      "DrugCodesetId": 10,
       "GapDays": 30,
       "Offset": 30
     }
