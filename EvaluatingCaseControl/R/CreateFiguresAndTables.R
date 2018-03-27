@@ -38,7 +38,6 @@ createFiguresAndTables <- function(connectionDetails,
 
   OhdsiRTools::logInfo("Fetching population characteristics for Crockett study")
   getCharacteristics(ccFile = file.path(outputFolder, "ccIbd", "caseControls_cd1_cc1_o3.rds"),
-                     offset = -365,
                      connection = connection,
                      cdmDatabaseSchema = cdmDatabaseSchema,
                      oracleTempSchema = oracleTempSchema,
@@ -46,7 +45,6 @@ createFiguresAndTables <- function(connectionDetails,
 
   OhdsiRTools::logInfo("Fetching population characteristics for Chou study")
   getCharacteristics(ccFile = file.path(outputFolder, "ccAp", "caseControls_cd1_n1_cc1_o2.rds"),
-                     offset = -7,
                      connection = connection,
                      cdmDatabaseSchema = cdmDatabaseSchema,
                      oracleTempSchema = oracleTempSchema,
@@ -154,7 +152,7 @@ createVisitPlot <- function(resultsFolder) {
 }
 
 
-getCharacteristics <- function(ccFile, offset, connection, cdmDatabaseSchema, oracleTempSchema, resultsFolder) {
+getCharacteristics <- function(ccFile, connection, cdmDatabaseSchema, oracleTempSchema, resultsFolder) {
   if (!file.exists(resultsFolder))
     dir.create(resultsFolder)
   cc <- readRDS(ccFile)
@@ -179,8 +177,8 @@ getCharacteristics <- function(ccFile, offset, connection, cdmDatabaseSchema, or
                                                                   useMeasurementLongTerm = TRUE,
                                                                   useMeasurementRangeGroupLongTerm = TRUE,
                                                                   useObservationLongTerm = TRUE,
-                                                                  endDays = offset,
-                                                                  longTermStartDays = offset - 365)
+                                                                  endDays = -30,
+                                                                  longTermStartDays = - 365)
   covsCases <- FeatureExtraction::getDbCovariateData(connection = connection,
                                                      oracleTempSchema = oracleTempSchema,
                                                      cdmDatabaseSchema = cdmDatabaseSchema,

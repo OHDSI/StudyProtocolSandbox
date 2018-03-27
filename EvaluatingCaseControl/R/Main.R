@@ -97,7 +97,6 @@ execute <- function(connectionDetails,
     createFiguresAndTables(connectionDetails = connectionDetails,
                            cdmDatabaseSchema = cdmDatabaseSchema,
                            oracleTempSchema = oracleTempSchema,
-                           outputFolder = outputFolder,
-                           maxCores = maxCores)
+                           outputFolder = outputFolder)
   }
 }

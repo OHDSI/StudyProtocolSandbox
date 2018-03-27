@@ -16,6 +16,7 @@
 
 runCaseControlDesigns <- function(connectionDetails,
                                   cdmDatabaseSchema,
+                                  oracleTempSchema,
                                   cohortDatabaseSchema,
                                   cohortTable,
                                   outputFolder,
@@ -41,7 +42,7 @@ runCaseControlDesigns <- function(connectionDetails,
                                          nestingCohortTable = cohortTable,
                                          ccAnalysisList = analysisList,
                                          exposureOutcomeNestingCohortList = eonList,
-                                         outputFolder = outputFolder,
+                                         outputFolder = ccApFolder,
                                          getDbCaseDataThreads = 1,
                                          selectControlsThreads = min(3, maxCores),
                                          getDbExposureDataThreads = 1,
@@ -62,6 +63,46 @@ runCaseControlDesigns <- function(connectionDetails,
   analysisList <- CaseControl::loadCcAnalysisList(analysisListFile)
   eonFile <- system.file("settings", "ccExposureOutcomeNestingIbd.json", package = "EvaluatingCaseControl")
   eonList <- CaseControl::loadExposureOutcomeNestingCohortList(eonFile)
+  ccResult <- CaseControl::runCcAnalyses(connectionDetails = connectionDetails,
+                                         cdmDatabaseSchema = cdmDatabaseSchema,
+                                         oracleTempSchema = oracleTempSchema,
+                                         exposureDatabaseSchema = cohortDatabaseSchema,
+                                         exposureTable = cohortTable,
+                                         outcomeDatabaseSchema = cohortDatabaseSchema,
+                                         outcomeTable = cohortTable,
+                                         nestingCohortDatabaseSchema = cohortDatabaseSchema,
+                                         nestingCohortTable = cohortTable,
+                                         ccAnalysisList = analysisList,
+                                         exposureOutcomeNestingCohortList = eonList,
+                                         outputFolder = ccIbdFolder,
+                                         getDbCaseDataThreads = 1,
+                                         selectControlsThreads = min(3, maxCores),
+                                         getDbExposureDataThreads = 1,
+                                         createCaseControlDataThreads = min(5, maxCores),
+                                         fitCaseControlModelThreads = min(5, maxCores),
+                                         prefetchExposureData = TRUE)
+
+  # Crockett used option not supported by package: controls have index date 1 year from observation start
+  # Achieve this by resetting index date and rerunning analysis.
+  OhdsiRTools::logInfo("Resetting conrol index date")
+  #ccResult <- readRDS(file.path(ccIbdFolder, "outcomeModelReference.rds"))
+  caseControlsFile <- ccResult$caseControlsFile[1]
+  caseControls <- readRDS(caseControlsFile)
+  cases <- caseControls[caseControls$isCase, ]
+  controls <- caseControls[!caseControls$isCase, ]
+  caseData <- CaseControl::loadCaseData(ccResult$caseDataFolder[1])
+  controlsData <- caseData$nestingCohorts[ffbase::`%in%`(caseData$nestingCohorts$personId, controls$personId), c("personId", "startDate", "endDate")]
+  controls <- merge(controls, controlsData, all.x = TRUE)
+  controls <- controls[controls$indexDate >= controls$startDate & controls$indexDate <= controls$endDate, ]
+  controls$indexDate <- controls$startDate + 365
+  controls$startDate <- NULL
+  controls$endDate <- NULL
+  caseControls <- rbind(cases, controls)
+  saveRDS(caseControls, caseControlsFile)
+  unlink(unique(ccResult$exposureDataFile), recursive = TRUE)
+  unlink(unique(ccResult$caseControlDataFile))
+  unlink(unique(ccResult$modelFile))
+
   ccResult <- CaseControl::runCcAnalyses(connectionDetails = connectionDetails,
                                          cdmDatabaseSchema = cdmDatabaseSchema,
                                          oracleTempSchema = oracleTempSchema,
@@ -143,7 +184,7 @@ createCaseControlAnalysesDetails <- function(outputFolder) {
                                                                              defaultCovariateSettings))
 
   ccdAp <- CaseControl::createCreateCaseControlDataArgs(firstExposureOnly = FALSE,
-                                                        riskWindowStart = 0,
+                                                        riskWindowStart = -30,
                                                         riskWindowEnd = 0)
 
   mAp <-  CaseControl::createFitCaseControlModelArgs(useCovariates = TRUE,
@@ -212,7 +253,7 @@ createCaseControlAnalysesDetails <- function(outputFolder) {
 
   pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
   negativeControls <- read.csv(pathToCsv)
-  negativeControls <- negativeControls[negativeControls$outcomeName == "Inflammatory Bowel Disease", ]
+  negativeControls <- negativeControls[negativeControls$outcomeName == "Ulcerative colitis", ]
   eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = 5, outcomeId = 3)
   eonsIbd <- list(eon)
   for (i in 1:nrow(negativeControls)) {

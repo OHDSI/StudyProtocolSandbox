@@ -20,6 +20,16 @@
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
+    "exposureId": 732893,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 1563600,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
     "exposureId": 1598819,
     "outcomeId": 3,
     "attr_class": "exposureOutcomeNestingCohort"
@@ -41,6 +51,16 @@
   },
   {
     "exposureId": 996416,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 1512480,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 1502905,
     "outcomeId": 3,
     "attr_class": "exposureOutcomeNestingCohort"
   },
@@ -70,7 +90,32 @@
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
+    "exposureId": 1103640,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 705944,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 708298,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 1313200,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
     "exposureId": 1114122,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 717136,
     "outcomeId": 3,
     "attr_class": "exposureOutcomeNestingCohort"
   },
@@ -81,6 +126,16 @@
   },
   {
     "exposureId": 1513103,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 781182,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 1334456,
     "outcomeId": 3,
     "attr_class": "exposureOutcomeNestingCohort"
   },
@@ -110,22 +165,22 @@
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
+    "exposureId": 913782,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 704599,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 780442,
+    "outcomeId": 3,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
     "exposureId": 1524674,
-    "outcomeId": 3,
-    "attr_class": "exposureOutcomeNestingCohort"
-  },
-  {
-    "exposureId": 708298,
-    "outcomeId": 3,
-    "attr_class": "exposureOutcomeNestingCohort"
-  },
-  {
-    "exposureId": 1103640,
-    "outcomeId": 3,
-    "attr_class": "exposureOutcomeNestingCohort"
-  },
-  {
-    "exposureId": 781182,
     "outcomeId": 3,
     "attr_class": "exposureOutcomeNestingCohort"
   }

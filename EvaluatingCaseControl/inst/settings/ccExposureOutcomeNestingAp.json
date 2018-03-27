@@ -6,9 +6,27 @@
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
+    "exposureId": 1105775,
+    "outcomeId": 2,
+    "nestingCohortId": 37203741,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 924939,
+    "outcomeId": 2,
+    "nestingCohortId": 35702117,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
     "exposureId": 938044,
     "outcomeId": 2,
     "nestingCohortId": 35606985,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 732893,
+    "outcomeId": 2,
+    "nestingCohortId": 438112,
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
@@ -24,6 +42,12 @@
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
+    "exposureId": 1563600,
+    "outcomeId": 2,
+    "nestingCohortId": 37119655,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
     "exposureId": 1350310,
     "outcomeId": 2,
     "nestingCohortId": 37622411,
@@ -33,6 +57,12 @@
     "exposureId": 1517070,
     "outcomeId": 2,
     "nestingCohortId": 36718449,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 989482,
+    "outcomeId": 2,
+    "nestingCohortId": 37119607,
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
@@ -66,15 +96,51 @@
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
+    "exposureId": 1315865,
+    "outcomeId": 2,
+    "nestingCohortId": 37622411,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 1536743,
+    "outcomeId": 2,
+    "nestingCohortId": 37119655,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
     "exposureId": 1784444,
     "outcomeId": 2,
     "nestingCohortId": 36110310,
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
+    "exposureId": 932815,
+    "outcomeId": 2,
+    "nestingCohortId": 35606985,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 1136422,
+    "outcomeId": 2,
+    "nestingCohortId": 36009773,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 987366,
+    "outcomeId": 2,
+    "nestingCohortId": 35702117,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
     "exposureId": 1589795,
     "outcomeId": 2,
     "nestingCohortId": 37119655,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 704943,
+    "outcomeId": 2,
+    "nestingCohortId": 36516951,
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
@@ -90,9 +156,15 @@
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
-    "exposureId": 987366,
+    "exposureId": 918906,
     "outcomeId": 2,
-    "nestingCohortId": 35702117,
+    "nestingCohortId": 36718449,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 922868,
+    "outcomeId": 2,
+    "nestingCohortId": 36110310,
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
@@ -132,6 +204,12 @@
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {
+    "exposureId": 965748,
+    "outcomeId": 2,
+    "nestingCohortId": 436962,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
     "exposureId": 19012925,
     "outcomeId": 2,
     "nestingCohortId": 37119607,
@@ -147,6 +225,12 @@
     "exposureId": 1341238,
     "outcomeId": 2,
     "nestingCohortId": 37119607,
+    "attr_class": "exposureOutcomeNestingCohort"
+  },
+  {
+    "exposureId": 704599,
+    "outcomeId": 2,
+    "nestingCohortId": 436962,
     "attr_class": "exposureOutcomeNestingCohort"
   },
   {

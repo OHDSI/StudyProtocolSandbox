@@ -253,7 +253,7 @@
     },
     "createCaseControlDataArgs": {
       "firstExposureOnly": false,
-      "riskWindowStart": 0,
+      "riskWindowStart": -30,
       "riskWindowEnd": 0,
       "attr_class": "args"
     },

@@ -47,13 +47,6 @@ cohortDatabaseSchema <- "scratch.dbo"
 cohortTable <- "mschuemie_case_control_ap_optum"
 outputFolder <- "r:/EvaluatingCaseControl_optum"
 
-# createCohorts(connectionDetails = connectionDetails,
-#               cdmDatabaseSchema = cdmDatabaseSchema,
-#               oracleTempSchema = oracleTempSchema,
-#               cohortDatabaseSchema = cohortDatabaseSchema,
-#               cohortTable = cohortTable,
-#               outputFolder = outputFolder)
-
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
         oracleTempSchema = oracleTempSchema,

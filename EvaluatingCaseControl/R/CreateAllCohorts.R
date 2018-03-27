@@ -58,7 +58,7 @@ createCohorts <- function(connectionDetails,
 
   pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
   negativeControls <- read.csv(pathToCsv)
-  writeLines("- Creating exposure cohorts for negative controls")
+  OhdsiRTools::logInfo("- Creating exposure cohorts for negative controls")
   sql <- SqlRender::loadRenderTranslateSql("ExposureCohorts.sql",
                                            "EvaluatingCaseControl",
                                            dbms = connectionDetails$dbms,
@@ -66,9 +66,11 @@ createCohorts <- function(connectionDetails,
                                            cdm_database_schema = cdmDatabaseSchema,
                                            target_database_schema = cohortDatabaseSchema,
                                            target_cohort_table = cohortTable,
-                                           exposure_ids = c(negativeControls$targetId, negativeControls$comparatorId))
+                                           exposure_ids = unique(c(negativeControls$targetId, negativeControls$comparatorId)))
   DatabaseConnector::executeSql(conn, sql)
-  writeLines("- Creating nesting cohorts for negative controls")
+  OhdsiRTools::logInfo("- Creating nesting cohorts for negative controls")
+  nestingIds <- unique(negativeControls$nestingId)
+  nestingIds <- nestingIds[!is.na(nestingIds)]
   sql <- SqlRender::loadRenderTranslateSql("NestingCohorts.sql",
                                            "EvaluatingCaseControl",
                                            dbms = connectionDetails$dbms,
@@ -76,7 +78,7 @@ createCohorts <- function(connectionDetails,
                                            cdm_database_schema = cdmDatabaseSchema,
                                            target_database_schema = cohortDatabaseSchema,
                                            target_cohort_table = cohortTable,
-                                           nesting_ids = negativeControls$nestingId)
+                                           nesting_ids = nestingIds)
   DatabaseConnector::executeSql(conn, sql)
 
   sql <- "SELECT cohort_definition_id, COUNT(*) AS cohort_count FROM @target_database_schema.@target_cohort_table GROUP BY cohort_definition_id"
