@@ -68,10 +68,53 @@ createFiguresAndTables <- function(connectionDetails,
                  pubOr = 1.04,
                  pubLb = 0.89,
                  pubUb = 1.21)
+
+  calibrateCi(ccSummaryFile = file.path(outputFolder, "ccSummaryIbd.rds"),
+              exposureId = 5,
+              allControlsFile = file.path(outputFolder, "AllControlsIbd.csv"),
+              resultsFolder = file.path(outputFolder, "resultsIbd"))
+  calibrateCi(ccSummaryFile = file.path(outputFolder, "ccSummaryAp.rds"),
+              exposureId = 4,
+              allControlsFile = file.path(outputFolder, "AllControlsAp.csv"),
+              resultsFolder = file.path(outputFolder, "resultsAp"))
+}
+
+calibrateCi <- function(ccSummaryFile, exposureId, allControlsFile, resultsFolder) {
+  ccSummary <- readRDS(ccSummaryFile)
+  allControls <- read.csv(allControlsFile)
+  allControls <- allControls[, c("targetId", "outcomeId", "targetEffectSize")]
+  colnames(allControls) <- c("exposureId", "outcomeId", "targetEffectSize")
+  allControls <- merge(allControls, ccSummary)
+  negativeControls <- allControls[allControls$targetEffectSize == 1, ]
+  hoi <- ccSummary[ccSummary$exposureId == exposureId & ccSummary$outcomeId < 10000, ]
+  null <- EmpiricalCalibration::fitNull(logRr = negativeControls$logRr,
+                                        seLogRr = negativeControls$seLogRr)
+  hoiCal <- EmpiricalCalibration::calibrateP(null,
+                                             logRr = hoi$logRr,
+                                             seLogRr = hoi$seLogRr)
+  hoi$calP <- hoiCal
+  model <- EmpiricalCalibration::fitSystematicErrorModel(logRr = allControls$logRr,
+                                                         seLogRr = allControls$seLogRr,
+                                                         trueLogRr = log(allControls$targetEffectSize))
+
+  hoiCal <- EmpiricalCalibration::calibrateConfidenceInterval(logRr = hoi$logRr,
+                                                    seLogRr = hoi$seLogRr,
+                                                    model = model)
+  hoi$calRr <- exp(hoiCal$logRr)
+  hoi$calCi95lb <- exp(hoiCal$logLb95Rr)
+  hoi$calCi95ub <- exp(hoiCal$logUb95Rr)
+  fileName <- file.path(resultsFolder, "EmpiricalCalibration.csv")
+  write.csv(hoi, fileName, row.names = FALSE)
+  fileName <- file.path(resultsFolder, "TrueAndObservedForest.png")
+  EmpiricalCalibration::plotTrueAndObserved(logRr = allControls$logRr,
+                                            seLogRr = allControls$seLogRr,
+                                            trueLogRr = log(allControls$targetEffectSize),
+                                            fileName = fileName)
 }
 
 plotOddsRatios <- function(ccSummaryFile, exposureId, exposureName, resultsFolder, pubOr, pubLb, pubUb) {
   ccSummary <- readRDS(ccSummaryFile)
+  ccSummary <- ccSummary[ccSummary$outcomeId < 10000, ] # No positive controls
   estimates <- data.frame(logRr = ccSummary$logRr,
                           seLogRr = ccSummary$seLogRr,
                           label = "Negative control (our replication)",
@@ -164,6 +207,7 @@ getCharacteristics <- function(ccFile, connection, cdmDatabaseSchema, oracleTemp
                               cohortDefinitionId = as.integer(cc$isCase))
 
   colnames(tableToUpload) <- SqlRender::camelCaseToSnakeCase(colnames(tableToUpload))
+
   DatabaseConnector::insertTable(connection = connection,
                                  tableName = "#temp",
                                  data = tableToUpload,
@@ -211,7 +255,7 @@ getCharacteristics <- function(ccFile, connection, cdmDatabaseSchema, oracleTemp
   sql <- SqlRender::renderSql(sql = sql,
                               cdm_database_schema = cdmDatabaseSchema)$sql
   sql <- SqlRender::translateSql(sql = sql,
-                                 targetDialect = connectionDetails$dbms,
+                                 targetDialect = attr(connection, "dbms"),
                                  oracleTempSchema = oracleTempSchema)$sql
   visitCounts <- querySql(connection = connection, sql = sql)
   colnames(visitCounts) <- SqlRender::snakeCaseToCamelCase(colnames(visitCounts))
@@ -223,7 +267,7 @@ getCharacteristics <- function(ccFile, connection, cdmDatabaseSchema, oracleTemp
 
   sql <- "TRUNCATE TABLE #temp; DROP TABLE #temp;"
   sql <- SqlRender::translateSql(sql = sql,
-                                 targetDialect = connectionDetails$dbms,
+                                 targetDialect = attr(connection, "dbms"),
                                  oracleTempSchema = oracleTempSchema)$sql
   DatabaseConnector::executeSql(connection = connection,
                                 sql = sql,

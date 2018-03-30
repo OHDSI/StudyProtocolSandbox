@@ -14,17 +14,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Create settings for covariates representing one or more ICD-9 codes
+#'
+#' @param covariateDefs  A data frame with three columns: covariateId, covariateName, icd9
+#'
+#' @param windowStart    Days relative to the index date to start capturing the covariates. Negative numbers indicates
+#'                       days prior to index.
+#' @param windowEnd      Days relative to the index date to end capturing the covariates. Negative numbers indicates
+#'                       days prior to index.
+#'
 #' @export
 createIcd9CovariateSettings <- function(covariateDefs, windowStart = -365, windowEnd = -1) {
   covariateSettings <- list(covariateDefs = covariateDefs,
                             windowStart = windowStart,
                             windowEnd = windowEnd)
-  attr(covariateSettings, "fun") <- "getDbIcd9CovariateData"
+  attr(covariateSettings, "fun") <- "EvaluatingCaseControl::getDbIcd9CovariateData"
   class(covariateSettings) <- "covariateSettings"
   return(covariateSettings)
 }
 
-#' @export
 getDbIcd9CovariateData <- function(connection,
                                    oracleTempSchema = NULL,
                                    cdmDatabaseSchema,

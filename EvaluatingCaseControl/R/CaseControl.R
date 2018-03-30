@@ -28,9 +28,10 @@ runCaseControlDesigns <- function(connectionDetails,
 
   analysisListFile <- system.file("settings", "ccAnalysisListAp.json", package = "EvaluatingCaseControl")
   analysisList <- CaseControl::loadCcAnalysisList(analysisListFile)
-  eonFile <- system.file("settings", "ccExposureOutcomeNestingAp.json", package = "EvaluatingCaseControl")
-  eonList <- CaseControl::loadExposureOutcomeNestingCohortList(eonFile)
-
+  eonList <- createEons(allControlsFile = file.path(outputFolder, "AllControlsAp.csv"),
+                        exposureId = 4,
+                        outcomeId = 2,
+                        nestingCohortId = 1)
   ccResult <- CaseControl::runCcAnalyses(connectionDetails = connectionDetails,
                                          cdmDatabaseSchema = cdmDatabaseSchema,
                                          oracleTempSchema = oracleTempSchema,
@@ -61,8 +62,9 @@ runCaseControlDesigns <- function(connectionDetails,
 
   analysisListFile <- system.file("settings", "ccAnalysisListIbd.json", package = "EvaluatingCaseControl")
   analysisList <- CaseControl::loadCcAnalysisList(analysisListFile)
-  eonFile <- system.file("settings", "ccExposureOutcomeNestingIbd.json", package = "EvaluatingCaseControl")
-  eonList <- CaseControl::loadExposureOutcomeNestingCohortList(eonFile)
+  eonList <- createEons(allControlsFile = file.path(outputFolder, "AllControlsIbd.csv"),
+                        exposureId = 5,
+                        outcomeId = 3)
   ccResult <- CaseControl::runCcAnalyses(connectionDetails = connectionDetails,
                                          cdmDatabaseSchema = cdmDatabaseSchema,
                                          oracleTempSchema = oracleTempSchema,
@@ -86,19 +88,21 @@ runCaseControlDesigns <- function(connectionDetails,
   # Achieve this by resetting index date and rerunning analysis.
   OhdsiRTools::logInfo("Resetting conrol index date")
   #ccResult <- readRDS(file.path(ccIbdFolder, "outcomeModelReference.rds"))
-  caseControlsFile <- ccResult$caseControlsFile[1]
-  caseControls <- readRDS(caseControlsFile)
-  cases <- caseControls[caseControls$isCase, ]
-  controls <- caseControls[!caseControls$isCase, ]
   caseData <- CaseControl::loadCaseData(ccResult$caseDataFolder[1])
-  controlsData <- caseData$nestingCohorts[ffbase::`%in%`(caseData$nestingCohorts$personId, controls$personId), c("personId", "startDate", "endDate")]
-  controls <- merge(controls, controlsData, all.x = TRUE)
-  controls <- controls[controls$indexDate >= controls$startDate & controls$indexDate <= controls$endDate, ]
-  controls$indexDate <- controls$startDate + 365
-  controls$startDate <- NULL
-  controls$endDate <- NULL
-  caseControls <- rbind(cases, controls)
-  saveRDS(caseControls, caseControlsFile)
+  caseControlsFiles <- ccResult$caseControlsFile
+  for (caseControlsFile in unique(caseControlsFiles)) {
+    caseControls <- readRDS(caseControlsFile)
+    cases <- caseControls[caseControls$isCase, ]
+    controls <- caseControls[!caseControls$isCase, ]
+    controlsData <- caseData$nestingCohorts[ffbase::`%in%`(caseData$nestingCohorts$personId, controls$personId), c("personId", "startDate", "endDate")]
+    controls <- merge(controls, controlsData, all.x = TRUE)
+    controls <- controls[controls$indexDate >= controls$startDate & controls$indexDate <= controls$endDate, ]
+    controls$indexDate <- controls$startDate + 365
+    controls$startDate <- NULL
+    controls$endDate <- NULL
+    caseControls <- rbind(cases, controls)
+    saveRDS(caseControls, caseControlsFile)
+  }
   unlink(unique(ccResult$exposureDataFile), recursive = TRUE)
   unlink(unique(ccResult$caseControlDataFile))
   unlink(unique(ccResult$modelFile))
@@ -124,20 +128,6 @@ runCaseControlDesigns <- function(connectionDetails,
   ccSummary <- CaseControl::summarizeCcAnalyses(ccResult)
   ccSummaryFile <- file.path(outputFolder, "ccSummaryIbd.rds")
   saveRDS(ccSummary, ccSummaryFile)
-
-  # # model <- readRDS(ccResult$modelFile)
-  # # ed <- loadCaseControlsExposure(ccResult$exposureDataFile)
-  # # covs <- ff::as.ram(ed$covariates)
-  # # sum(covs$covariateId == 4)
-  # ccSummary <- readRDS(file.path(outputFolder, "ccSummaryAp.rds"))
-  # ccSummary[ccSummary$exposureId == 4, ]
-  # ncs <- ccSummary[ccSummary$exposureId != 4, ]
-  # EmpiricalCalibration::plotCalibrationEffect(ncs$logRr, ncs$seLogRr, showCis = TRUE)
-  #
-  # ccSummary <- readRDS(file.path(outputFolder, "ccSummaryIbd.rds"))
-  # ncs <- ccSummary[ccSummary$exposureId != 5, ]
-  # EmpiricalCalibration::plotCalibrationEffect(ncs$logRr, ncs$seLogRr, showCis = TRUE)
-  # ccSummary[ccSummary$exposureId == 5, ]
 }
 
 #' Create the analyses details
@@ -201,18 +191,18 @@ createCaseControlAnalysesDetails <- function(outputFolder) {
   ccAnalysisListAp <- list(ccAnalysisAp)
   CaseControl::saveCcAnalysisList(ccAnalysisListAp, file.path(outputFolder, "ccAnalysisListAp.json"))
 
-  pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
-  negativeControls <- read.csv(pathToCsv)
-  negativeControls <- negativeControls[negativeControls$outcomeName == "Acute pancreatitis", ]
-  eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = 4, outcomeId = 2, nestingCohortId = 1)
-  eonsAp <- list(eon)
-  for (i in 1:nrow(negativeControls)) {
-    eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = negativeControls$targetId[i],
-                                                           outcomeId = 2,
-                                                           nestingCohortId = negativeControls$nestingId[i])
-    eonsAp[[length(eonsAp) + 1]] <- eon
-  }
-  CaseControl::saveExposureOutcomeNestingCohortList(eonsAp, file.path(outputFolder, "ccExposureOutcomeNestingAp.json"))
+  # pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
+  # negativeControls <- read.csv(pathToCsv)
+  # negativeControls <- negativeControls[negativeControls$outcomeName == "Acute pancreatitis", ]
+  # eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = 4, outcomeId = 2, nestingCohortId = 1)
+  # eonsAp <- list(eon)
+  # for (i in 1:nrow(negativeControls)) {
+  #   eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = negativeControls$targetId[i],
+  #                                                          outcomeId = 2,
+  #                                                          nestingCohortId = negativeControls$nestingId[i])
+  #   eonsAp[[length(eonsAp) + 1]] <- eon
+  # }
+  # CaseControl::saveExposureOutcomeNestingCohortList(eonsAp, file.path(outputFolder, "ccExposureOutcomeNestingAp.json"))
 
 
   # Crockett replication ----------------------------------------------------
@@ -251,15 +241,30 @@ createCaseControlAnalysesDetails <- function(outputFolder) {
   CaseControl::saveCcAnalysisList(ccAnalysisListIbd, file.path(outputFolder, "ccAnalysisListIbd.json"))
 
 
-  pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
-  negativeControls <- read.csv(pathToCsv)
-  negativeControls <- negativeControls[negativeControls$outcomeName == "Ulcerative colitis", ]
-  eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = 5, outcomeId = 3)
-  eonsIbd <- list(eon)
-  for (i in 1:nrow(negativeControls)) {
-    eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = negativeControls$targetId[i],
-                                                           outcomeId = 3)
-    eonsIbd[[length(eonsIbd) + 1]] <- eon
+  # pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
+  # negativeControls <- read.csv(pathToCsv)
+  # negativeControls <- negativeControls[negativeControls$outcomeName == "Ulcerative colitis", ]
+  # eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = 5, outcomeId = 3)
+  # eonsIbd <- list(eon)
+  # for (i in 1:nrow(negativeControls)) {
+  #   eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = negativeControls$targetId[i],
+  #                                                          outcomeId = 3)
+  #   eonsIbd[[length(eonsIbd) + 1]] <- eon
+  # }
+  # CaseControl::saveExposureOutcomeNestingCohortList(eonsIbd, file.path(outputFolder, "ccExposureOutcomeNestingIbd.json"))
+}
+
+createEons <- function(allControlsFile, exposureId, outcomeId, nestingCohortId = NULL) {
+  allControls <- read.csv(allControlsFile)
+  eonList <- list(CaseControl::createExposureOutcomeNestingCohort(exposureId = exposureId,
+                                                                  outcomeId = outcomeId,
+                                                                  nestingCohortId = nestingCohortId))
+  for (i in 1:nrow(allControls)) {
+    eon <- CaseControl::createExposureOutcomeNestingCohort(exposureId = allControls$targetId[i],
+                                                           outcomeId = allControls$outcomeId[i],
+                                                           nestingCohortId = allControls$nestingId[i])
+
+    eonList[[length(eonList) + 1]] <- eon
   }
-  CaseControl::saveExposureOutcomeNestingCohortList(eonsIbd, file.path(outputFolder, "ccExposureOutcomeNestingIbd.json"))
+  return(eonList)
 }

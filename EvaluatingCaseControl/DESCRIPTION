@@ -19,7 +19,9 @@ Imports:
     OhdsiRTools,
     ggplot2,
     Cyclops,
-    ff
+    ff,
+    ffbase,
+    MethodEvaluation
 Suggests:
     testthat
 License: Apache License 2.0

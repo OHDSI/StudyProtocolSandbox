@@ -37,6 +37,7 @@
 #' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
 #'                             (/)
 #' @param createCohorts        Instantiate the necessary cohorts in the cohortTable?
+#' @param synthesizePositiveControls  Synthesize positive controls based on the negative controls?
 #' @param runAnalyses          Execute the case-control analaysis?
 #' @param createFiguresAndTables Create the figures and tables for the paper?
 #' @param maxCores             How many parallel cores should be used? If more cores are made available
@@ -65,6 +66,7 @@ execute <- function(connectionDetails,
                     oracleTempSchema,
                     outputFolder,
                     createCohorts = TRUE,
+                    synthesizePositiveControls = TRUE,
                     runAnalyses = TRUE,
                     createFiguresAndTables  = TRUE,
                     maxCores = 4) {
@@ -82,6 +84,18 @@ execute <- function(connectionDetails,
                   cohortTable = cohortTable,
                   outputFolder = outputFolder)
   }
+  if (synthesizePositiveControls) {
+    OhdsiRTools::logInfo("Synthesizing positive controls")
+    synthesizePositiveControls(connectionDetails = connectionDetails,
+                               cdmDatabaseSchema = cdmDatabaseSchema,
+                               cohortDatabaseSchema = cohortDatabaseSchema,
+                               cohortTable = cohortTable,
+                               oracleTempSchema = oracleTempSchema,
+                               outputFolder = outputFolder,
+                               maxCores = maxCores)
+    OhdsiRTools::logInfo("")
+  }
+
   if (runAnalyses) {
     OhdsiRTools::logInfo("Running analyses")
     runCaseControlDesigns(connectionDetails = connectionDetails,

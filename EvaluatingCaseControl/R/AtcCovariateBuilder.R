@@ -14,17 +14,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' Create settings for covariates representing one or more ATC codes
+#'
+#' @param covariateDefs  A data frame with three columns: covariateId, covariateName, atc.
+#'
+#' @param windowStart    Days relative to the index date to start capturing the covariates. Negative numbers indicates
+#'                       days prior to index.
+#' @param windowEnd      Days relative to the index date to end capturing the covariates. Negative numbers indicates
+#'                       days prior to index.
+#'
 #' @export
 createAtcCovariateSettings <- function(covariateDefs, windowStart = -365, windowEnd = -1) {
   covariateSettings <- list(covariateDefs = covariateDefs,
                             windowStart = windowStart,
                             windowEnd = windowEnd)
-  attr(covariateSettings, "fun") <- "getDbAtcCovariateData"
+  attr(covariateSettings, "fun") <- "EvaluatingCaseControl::getDbAtcCovariateData"
   class(covariateSettings) <- "covariateSettings"
   return(covariateSettings)
 }
 
-#' @export
 getDbAtcCovariateData <- function(connection,
                                   oracleTempSchema = NULL,
                                   cdmDatabaseSchema,

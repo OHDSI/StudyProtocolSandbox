@@ -54,6 +54,7 @@ execute(connectionDetails = connectionDetails,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
         createCohorts = TRUE,
+        synthesizePositiveControls = TRUE,
         runAnalyses = TRUE,
         createFiguresAndTables = TRUE,
         maxCores = maxCores)
