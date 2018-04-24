@@ -1,0 +1,125 @@
+n,stratum_1,concept_name,vocabulary_id,concept_code,domain_id,analysis_id
+6,4015724,Vaccination required,SNOMED,170536002,Observation,800
+5,4047564,Routine antenatal care,SNOMED,134435003,Observation,800
+5,4186037,Aftercare,SNOMED,413467001,Observation,800
+5,4214956,History of clinical finding in subject,SNOMED,417662000,Observation,800
+5,4307024,Follow-up encounter,SNOMED,390906007,Observation,800
+5,3036277,Body height,LOINC,8302-2,Measurement,1800
+5,4034850,Laboratory test,SNOMED,15220000,Measurement,1800
+4,4167217,Family history of clinical finding,SNOMED,416471007,Observation,800
+4,4215685,Past history of procedure,SNOMED,416940007,Observation,800
+4,4305272,Contraception care,SNOMED,389095005,Observation,800
+4,3016723,Creatinine serum/plasma,LOINC,2160-0,Measurement,1800
+4,3025315,Body weight,LOINC,29463-7,Measurement,1800
+4,3038553,Body mass index,LOINC,39156-5,Measurement,1800
+3,141693,Elevated blood-pressure reading without diagnosis of hypertension,SNOMED,371622005,Observation,800
+3,437643,Abnormal gait,SNOMED,22325002,Observation,800
+3,440927,High risk drug monitoring status,SNOMED,243872007,Observation,800
+3,442165,Loss of appetite,SNOMED,79890006,Observation,800
+3,4014829,Consultation,SNOMED,11429006,Observation,800
+3,4047392,Postpartum care,SNOMED,133906008,Observation,800
+3,4074187,Healthcare services,SNOMED,224891009,Observation,800
+3,4082397,Repeated prescription,SNOMED,182918009,Observation,800
+3,4086928,IUCD status,SNOMED,243818000,Observation,800
+3,4148832,Certification procedure,SNOMED,310417005,Observation,800
+3,4174707,Dietary management surveillance,SNOMED,424928005,Observation,800
+3,4256343,Medical/dental care,SNOMED,410324006,Observation,800
+3,4298794,Smoker,SNOMED,77176002,Observation,800
+3,40485017,Exposure to communicable disease,SNOMED,444107005,Observation,800
+3,3000905,Leukocytes [#/volume] in Blood by Automated count,LOINC,6690-2,Measurement,1800
+3,3000963,Hemoglobin,LOINC,718-7,Measurement,1800
+3,3007070,Cholesterol in HDL [Mass/volume] in Serum or Plasma,LOINC,2085-9,Measurement,1800
+3,3013682,Urea nitrogen serum/plasma,LOINC,3094-0,Measurement,1800
+3,3019550,Sodium serum/plasma,LOINC,2951-2,Measurement,1800
+3,3022192,Triglyceride [Mass/volume] in Serum or Plasma,LOINC,2571-8,Measurement,1800
+3,3022217,INR,LOINC,6301-6,Measurement,1800
+3,3023103,Potassium serum/plasma,LOINC,2823-3,Measurement,1800
+3,3024929,Platelets [#/volume] in Blood by Automated count,LOINC,777-3,Measurement,1800
+3,3027597,Direct bilirubin serum/plasma,LOINC,1968-7,Measurement,1800
+3,3028615,Eosinophils [#/volume] in Blood by Automated count,LOINC,711-2,Measurement,1800
+3,4152194,Systolic blood pressure,SNOMED,271649006,Measurement,1800
+3,4154790,Diastolic blood pressure,SNOMED,271650006,Measurement,1800
+3,4212065,Erythrocyte sedimentation rate measurement,SNOMED,416838001,Measurement,1800
+2,432454,Excessive thirst,SNOMED,17173007,Observation,800
+2,433315,Feeding problems in newborn,SNOMED,72552008,Observation,800
+2,433316,Dizziness and giddiness,SNOMED,271789005,Condition,800
+2,433942,Accident while engaged in household activity,SNOMED,79573009,Observation,800
+2,439224,Drug allergy,SNOMED,416098002,Observation,800
+2,440279,Accident,SNOMED,55566008,Observation,800
+2,4005823,Tobacco user,SNOMED,110483000,Observation,800
+2,4014023,Palliative care,SNOMED,103735009,Observation,800
+2,4022569,Eating / feeding / drinking finding,SNOMED,116336009,Observation,800
+2,4022658,Discord in the workplace,SNOMED,105514006,Observation,800
+2,4027509,Contraception,SNOMED,13197004,Observation,800
+2,4046549,Preoperative care,SNOMED,133898004,Observation,800
+2,4046550,Postoperative care,SNOMED,133899007,Observation,800
+2,4058419,H/O: surgery,SNOMED,161615003,Observation,800
+2,4094126,Family problems,SNOMED,248539004,Observation,800
+2,4128331,Pregnancy,SNOMED,289908002,Observation,800
+2,4145111,Dental consultation and report,SNOMED,34043003,Observation,800
+2,4147169,Problems at work,SNOMED,266959008,Observation,800
+2,4152194,Systolic blood pressure,SNOMED,271649006,Measurement,800
+2,4154790,Diastolic blood pressure,SNOMED,271650006,Measurement,800
+2,4192676,Born by cesarean section,SNOMED,394699000,Observation,800
+2,4222303,Non-smoker,SNOMED,8392000,Observation,800
+2,4238738,Physical therapy procedure,SNOMED,91251008,Observation,800
+2,4254219,Breastfeeding support,SNOMED,408883002,Observation,800
+2,4296024,Family disruption due to divorce,SNOMED,76799001,Observation,800
+2,4299954,Feeding problem,SNOMED,78164000,Observation,800
+2,4301868,Pulse rate,SNOMED,78564009,Measurement,800
+2,4310250,Ex-smoker,SNOMED,8517006,Observation,800
+2,43020416,Problem with aged spouse or partner,SNOMED,105661000119103,Observation,800
+2,45765728,Supervision of high risk pregnancy,SNOMED,702738006,Observation,800
+2,434169,Abnormal findings on diagnostic imaging of breast,SNOMED,274530001,Condition,1800
+2,439141,Abnormal weight gain,SNOMED,161833006,Observation,1800
+2,439777,Anemia,SNOMED,271737000,Condition,1800
+2,3001122,Ferritin [Mass/volume] in Serum or Plasma,LOINC,2276-4,Measurement,1800
+2,3001420,Magnesium [Mass/volume] in Serum or Plasma,LOINC,19123-9,Measurement,1800
+2,3003458,Phosphate [Moles/volume] in Serum or Plasma,LOINC,14879-1,Measurement,1800
+2,3004327,Lymphocytes [#/volume] in Blood by Automated count,LOINC,731-0,Measurement,1800
+2,3004501,Glucose lab,LOINC,2345-7,Measurement,1800
+2,3006923,Alanine aminotransferase serum/plasma,LOINC,1742-6,Measurement,1800
+2,3009744,Erythrocyte mean corpuscular hemoglobin concentration [Mass/volume] by Automated count,LOINC,786-4,Measurement,1800
+2,3010813,White Blood cell (WBC) count (leukocyte),LOINC,26464-8,Measurement,1800
+2,3012030,Erythrocyte mean corpuscular hemoglobin [Entitic mass] by Automated count,LOINC,785-6,Measurement,1800
+2,3013429,Basophils [#/volume] in Blood by Automated count,LOINC,704-7,Measurement,1800
+2,3013603,PSA serum/plasma,LOINC,2857-1,Measurement,1800
+2,3013721,Aspartate aminotransferase serum/plasma,LOINC,1920-8,Measurement,1800
+2,3014576,Chloride serum/plasma,LOINC,2075-0,Measurement,1800
+2,3017250,Creatinine [Mass/volume] in Urine,LOINC,2161-8,Measurement,1800
+2,3018010,Neutrophils %,LOINC,26511-6,Measurement,1800
+2,3019897,Erythrocyte distribution width [Ratio] by Automated count,LOINC,788-0,Measurement,1800
+2,3020416,Erythrocytes [#/volume] in Blood by Automated count,LOINC,789-8,Measurement,1800
+2,3020630,Protein serum/plasma,LOINC,2885-2,Measurement,1800
+2,3023314,Hematocrit [Volume Fraction] of Blood by Automated count,LOINC,4544-3,Measurement,1800
+2,3023599,Erythrocyte mean corpuscular volume [Entitic volume] by Automated count,LOINC,787-2,Measurement,1800
+2,3024128,Total Bilirubin serum/plasma,LOINC,1975-2,Measurement,1800
+2,3024561,Albumin serum/plasma,LOINC,1751-7,Measurement,1800
+2,3026910,Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma,LOINC,2324-2,Measurement,1800
+2,3027114,Cholesterol [Mass/volume] in Serum or Plasma,LOINC,2093-3,Measurement,1800
+2,3028286,Albumin [Mass/volume] in Serum or Plasma by Electrophoresis,LOINC,2862-1,Measurement,1800
+2,3033575,Monocytes [#/volume] in Blood by Automated count,LOINC,742-7,Measurement,1800
+2,3035995,Alkaline phosphatase serum/plasma,LOINC,6768-6,Measurement,1800
+2,3037110,Fasting glucose [Mass/volume] in Serum or Plasma,LOINC,1558-6,Measurement,1800
+2,4007831,"Vitamin D, 25-hydroxy measurement",SNOMED,12199005,Measurement,1800
+2,4008265,Total cholesterol measurement,SNOMED,121868005,Measurement,1800
+2,4012477,Glucose tolerance test,SNOMED,113076002,Measurement,1800
+2,4030871,Red blood cell count,SNOMED,14089001,Measurement,1800
+2,4042243,Urine ketone test,SNOMED,167285005,Measurement,1800
+2,4042255,Urine Microscopy: white cells,SNOMED,167359009,Measurement,1800
+2,4046263,Enzyme measurement,SNOMED,122444009,Measurement,1800
+2,4092969,In vivo test of hypersensitivity,SNOMED,252512005,Measurement,1800
+2,4095027,Antibody titer measurement,SNOMED,250507002,Measurement,1800
+2,4098179,Immunology laboratory test,SNOMED,252318005,Measurement,1800
+2,4144235,"Glucose measurement, blood",SNOMED,33747003,Measurement,1800
+2,4146380,Alanine aminotransferase measurement,SNOMED,34608000,Measurement,1800
+2,4148615,Neutrophil count,SNOMED,30630007,Measurement,1800
+2,4211845,"Protein measurement, urine",SNOMED,57378007,Measurement,1800
+2,4219640,Red blood cell morphology,SNOMED,82461003,Measurement,1800
+2,4254663,Lymphocyte count,SNOMED,74765001,Measurement,1800
+2,4263457,Aspartate aminotransferase measurement,SNOMED,45896001,Measurement,1800
+2,4301868,Pulse rate,SNOMED,78564009,Measurement,1800
+2,4311463,Mantoux test,SNOMED,424489006,Measurement,1800
+2,4326835,Measurement of substance,SNOMED,430925007,Measurement,1800
+2,4353510,Globulin measurement,SNOMED,250707004,Measurement,1800
+2,40766929,How many cigarettes do you smoke per day now [PhenX],LOINC,64218-1,Measurement,1800

@@ -119,7 +119,7 @@ from
 where de.drug_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 22)
 ) C
 JOIN @cdm_database_schema.PERSON P on C.person_id = P.person_id
-WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= 180
+WHERE DATEDIFF(d,C.drug_era_start_date, C.drug_era_end_date) >= @drug_period
 AND YEAR(C.drug_era_start_date) - P.year_of_birth >= 20
 -- End Drug Era Criteria
 

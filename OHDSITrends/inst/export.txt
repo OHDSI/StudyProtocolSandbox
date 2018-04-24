@@ -1,0 +1,34 @@
+
+This file describes individual files included in the OHDSITrends export folder/export zip file.
+
+Because this folder is designed for sharing, your database_schemas are anonymized. Each schema is given three random letters, which represent your site, followed by a number. The number indicates whether this was the first, second, third, etc. schema you entered. Nothing in the export folder will contain your original schemas. Only the results folder will contain this information.
+
+This folder also contains plots for medical events grouped by ancestor. These .pdf files do not appear in the results folder, because they take a while to generate.
+
+
+.csv
+
+====
+
+This is the main filetype for text and non-graphical information. There are 3 basic kinds of files. 
+
+full_cids.csv
+—————————––––
+This file contains all the medical events with their slope, p value and classification score at the decile level. There are no patient counts or population counts in this file. 
+
+___data.csv
+———————————
+Anything that ends in data.csv has some data in it. This is the data for the top 100 trending medical events, either top 50 rising + top 50 sinking events, OR top 100 tends overall.
+
+____events.csv
+——————————————
+This is a 1 pager-view that lists the medical events that are interesting, either top 50 rising + top 50 sinking events, OR top 100 tends overall. This is also at decile level, and is useful for centralized processing.
+
+
+
+
+
+
+Additional files may be present, which indicates that this readme file was not kept 100% current.
+
+However, the file name should clearly indicate what data is inside it.

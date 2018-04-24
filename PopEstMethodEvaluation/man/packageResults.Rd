@@ -4,7 +4,7 @@
 \alias{packageResults}
 \title{Package the results for sharing with OHDSI researchers}
 \usage{
-packageResults(connectionDetails, cdmDatabaseSchema, workFolder)
+packageResults(connectionDetails, cdmDatabaseSchema, databaseName, workFolder)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -24,4 +24,3 @@ Package the results for sharing with OHDSI researchers
 \details{
 This function packages the results.
 }
-

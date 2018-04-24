@@ -1,0 +1,324 @@
+{
+  "ConceptSets": [
+    {
+      "id": 0,
+      "name": "Acenocoumarol",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 19024063,
+              "CONCEPT_NAME": "Acenocoumarol",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "154",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "name": "Atrial Fibrillation",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 4108832,
+              "CONCEPT_NAME": "Atrial fibrillation and flutter",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "195080001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 313217,
+              "CONCEPT_NAME": "Atrial fibrillation",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "49436004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 314665,
+              "CONCEPT_NAME": "Atrial flutter",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "5370000",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "name": "NOAC",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 43013024,
+              "CONCEPT_NAME": "apixaban",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1364430",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40228152,
+              "CONCEPT_NAME": "dabigatran etexilate",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1037042",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40241331,
+              "CONCEPT_NAME": "rivaroxaban",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1114195",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "name": "Heart Disease",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 4281749,
+              "CONCEPT_NAME": "Heart valve disorder",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "368009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "name": "Deep vein thrombosis / pulmonary embolism",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 440417,
+              "CONCEPT_NAME": "Pulmonary embolism",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "59282003",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4133004,
+              "CONCEPT_NAME": "Deep venous thrombosis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "128053003",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    }
+  ],
+  "PrimaryCriteria": {
+    "CriteriaList": [
+      {
+        "DrugEra": {
+          "CodesetId": 2,
+          "EraStartDate": {
+            "Value": "2010-09-30",
+            "Op": "gt"
+          },
+          "First": true
+        }
+      }
+    ],
+    "ObservationWindow": {
+      "PriorDays": 365,
+      "PostDays": 0
+    },
+    "PrimaryCriteriaLimit": {
+      "Type": "First"
+    }
+  },
+  "AdditionalCriteria": {
+    "Type": "ALL",
+    "CriteriaList": [],
+    "DemographicCriteriaList": [],
+    "Groups": []
+  },
+  "QualifiedLimit": {
+    "Type": "First"
+  },
+  "ExpressionLimit": {
+    "Type": "First"
+  },
+  "InclusionRules": [
+    {
+      "name": "Atrial Fibrillation",
+      "expression": {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ConditionOccurrence": {
+                "CodesetId": 1
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Days": 365,
+                "Coeff": -1
+              },
+              "End": {
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 2,
+              "Count": 1
+            }
+          }
+        ],
+        "DemographicCriteriaList": [],
+        "Groups": []
+      }
+    },
+    {
+      "name": "Heart Disease",
+      "expression": {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ConditionOccurrence": {
+                "CodesetId": 3
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 0,
+              "Count": 0
+            }
+          }
+        ],
+        "DemographicCriteriaList": [],
+        "Groups": []
+      }
+    },
+    {
+      "name": "Deep vein thrombosis / pulmonary embolism",
+      "expression": {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ConditionOccurrence": {
+                "CodesetId": 4
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Days": 365,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": 1
+              }
+            },
+            "Occurrence": {
+              "Type": 0,
+              "Count": 0
+            }
+          }
+        ],
+        "DemographicCriteriaList": [],
+        "Groups": []
+      }
+    }
+  ],
+  "CensoringCriteria": [],
+  "CollapseSettings": {
+    "CollapseType": "ERA",
+    "EraPad": 0
+  }
+}

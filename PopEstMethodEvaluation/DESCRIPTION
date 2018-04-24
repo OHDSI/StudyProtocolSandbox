@@ -11,16 +11,17 @@ Imports:
     RJDBC,
     Cyclops,
     MethodEvaluation,
-    FeatureExtraction,
+    FeatureExtraction (>= 2.0.0),
     CohortMethod,
     SelfControlledCohort,
     SelfControlledCaseSeries,
     IcTemporalPatternDiscovery,
     CaseControl,
+    CaseCrossover (>= 0.1.0),
     EmpiricalCalibration,
     OhdsiSharing
 Suggests:
     testthat
 License: Apache License 2.0
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

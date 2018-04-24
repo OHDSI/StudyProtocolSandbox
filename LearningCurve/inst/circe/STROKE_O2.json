@@ -1,0 +1,250 @@
+﻿{
+  "ConceptSets": [
+    {
+      "id": 0,
+      "name": "Stroke / Systemic embolism",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 381316,
+              "CONCEPT_NAME": "Cerebrovascular accident",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "230690007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4043731,
+              "CONCEPT_NAME": "Infarction - precerebral",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "230692004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4185117,
+              "CONCEPT_NAME": "Vertebral artery obstruction",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "43658003",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4288310,
+              "CONCEPT_NAME": "Carotid artery obstruction",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "69798007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 443239,
+              "CONCEPT_NAME": "Precerebral arterial occlusion",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "266253001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4108356,
+              "CONCEPT_NAME": "Cerebral infarction due to embolism of cerebral arteries",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "195190007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4110192,
+              "CONCEPT_NAME": "Cerebral infarction due to thrombosis of cerebral arteries",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "195189003",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 374060,
+              "CONCEPT_NAME": "Acute ill-defined cerebrovascular disease",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "288723005",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 432923,
+              "CONCEPT_NAME": "Subarachnoid hemorrhage",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "21454007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 376713,
+              "CONCEPT_NAME": "Cerebral hemorrhage",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "274100004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 198446,
+              "CONCEPT_NAME": "Embolism and thrombosis of the abdominal aorta",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "266263009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 432656,
+              "CONCEPT_NAME": "Embolism and thrombosis of the thoracic aorta",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "195317001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 312337,
+              "CONCEPT_NAME": "Arterial embolus and thrombosis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "266262004",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 314965,
+              "CONCEPT_NAME": "Embolism and thrombosis of an arm or leg artery",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "195318006",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    }
+  ],
+  "PrimaryCriteria": {
+    "CriteriaList": [
+      {
+        "ConditionOccurrence": {
+          "CodesetId": 0
+        }
+      }
+    ],
+    "ObservationWindow": {
+      "PriorDays": 0,
+      "PostDays": 0
+    },
+    "PrimaryCriteriaLimit": {
+      "Type": "First"
+    }
+  },
+  "QualifiedLimit": {
+    "Type": "First"
+  },
+  "ExpressionLimit": {
+    "Type": "First"
+  },
+  "InclusionRules": [],
+  "CensoringCriteria": [],
+  "CollapseSettings": {
+    "CollapseType": "ERA",
+    "EraPad": 0
+  }
+}

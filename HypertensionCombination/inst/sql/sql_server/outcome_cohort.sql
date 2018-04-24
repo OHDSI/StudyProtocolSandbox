@@ -78,7 +78,7 @@ SELECT 11 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 INSERT INTO #Codesets (codeset_id, concept_id)
 SELECT 12 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from NHID.DBO.CONCEPT where concept_id in (1363749, 1335471, 19050216, 1308216, 19122327, 1341927, 1340128, 1310756, 1373225, 1331235, 1334456, 19102107, 19040051, 1342439, 999000, 999001, 999003, 40235485, 1351557, 1346686, 1347384, 1367500, 40226742, 1317640, 1308842, 999002)
+  select concept_id from @cdmDatabaseSchema.CONCEPT where concept_id in (1363749, 1335471, 19050216, 1308216, 19122327, 1341927, 1340128, 1310756, 1373225, 1331235, 1334456, 19102107, 19040051, 1342439, 999000, 999001, 999003, 40235485, 1351557, 1346686, 1347384, 1367500, 40226742, 1317640, 1308842, 999002)
   --add (cetapril, delapril, fimasartan, temocapril)  to ACEi/ARB group (999000, 999001, 999002, 999003)
   and invalid_reason is null
   
@@ -879,6 +879,7 @@ DROP TABLE #codesets;
 --making composite endpoint cohort
 -- This syntax cannot be translated:
 --IF OBJECT_ID('@resultsDatabaseSchema.@outcomeTable', 'U') IS NULL
+
 
 
 --HF+MI+STROKE+Any DEATH : 4320
