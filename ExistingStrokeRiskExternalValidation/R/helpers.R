@@ -116,13 +116,7 @@ getTable1 <- function(connectionDetails,
                       outcomeId,
                       tempCohortTable='#temp_cohort'){
 
-  covariateSettings <- FeatureExtraction::createCovariateSettings(useDemographicsGender = T,
-                                                                  useDemographicsAge = T,
-                                                                  useDemographicsAgeGroup = T,
-                                                                  useConditionEraAnyTimePrior = T,
-                                                                  useConditionGroupEraAnyTimePrior = T,
-                                                                  useDrugEraAnyTimePrior = T,
-                                                                  useDrugGroupEraAnyTimePrior = T)
+  covariateSettings <- FeatureExtraction::createCovariateSettings(useDemographicsGender = T)
 
   plpData <- PatientLevelPrediction::getPlpData(connectionDetails,
                                      cdmDatabaseSchema = cdmDatabaseschema,
@@ -143,8 +137,11 @@ getTable1 <- function(connectionDetails,
                                                               riskWindowEnd = 365,
                                                               removeSubjectsWithPriorOutcome = T)
 
-  table1 <- PatientLevelPrediction::getPlpTable(plpData, population, connectionDetails,
-                                    cohortTable=tempCohortTable)
+  table1 <- PatientLevelPrediction::getPlpTable(cdmDatabaseSchema = cdmDatabaseSchema,
+                                                longTermStartDays = -9999,
+                                                population=population,
+                                                connectionDetails=connectionDetails,
+                                                cohortTable=tempCohortTable)
 
   return(table1)
 }
