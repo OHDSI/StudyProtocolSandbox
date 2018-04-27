@@ -512,7 +512,21 @@ createAnalysesDetails <- function(outputFolder) {
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
   
-  cmAnalysis7 <- CohortMethod::createCmAnalysis(analysisId = 18059,
+  cmAnalysis7 <- CohortMethod::createCmAnalysis(analysisId = 18061,
+                                                description = "Hypertension Combination (risk started after 180days)-age 60 or over",
+                                                #targetType = 34,
+                                                #comparatorType = "BC",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs2,
+                                                createPs = TRUE,
+                                                createPsArgs = createPsArgs,
+                                                matchOnPs = TRUE,
+                                                matchOnPsArgs = matchOnPsArgs1,
+                                                computeCovariateBalance = TRUE,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
+  
+  cmAnalysis8 <- CohortMethod::createCmAnalysis(analysisId = 18059,
                                                 description = "Hypertension Combination (risk started after 180days)-age under 60",
                                                 #targetType = 34,
                                                 #comparatorType = "BC",
@@ -526,19 +540,7 @@ createAnalysesDetails <- function(outputFolder) {
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
   
-  cmAnalysis8 <- CohortMethod::createCmAnalysis(analysisId = 18061,
-                                                description = "Hypertension Combination (risk started after 180days)-age 60 or over",
-                                                #targetType = 34,
-                                                #comparatorType = "BC",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs2,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
+  
   
   cmAnalysis9 <- CohortMethod::createCmAnalysis(analysisId = 18011,
                                                 description = "Hypertension Combination (risk started after 180days)-without DM",
