@@ -97,8 +97,6 @@ nhisFolder<-"D:/htn_combi/17.8.7/output/export"
 medicareFolder<-"C:/Users/apple/OneDrive/Study/OHDSI_HTN_combi/Results/Janssen Medicare Files (1)"
 medicaidFolder<-"C:/Users/apple/OneDrive/Study/OHDSI_HTN_combi/Results/Janssen Medicaid Files"
 
-AnalysisIdSet<-c(30,180,365,730,18001,18002,18059,18061)
-
 targetid<-13180
 comparatorid<-14180
 
@@ -108,75 +106,67 @@ comparatorid<-13180
 targetid<-34180
 comparatorid<-14180
 
-outcomeid<-2
+outcomeid<-0
 
 
 
 outcomeidset<-c(0, 2, 3,4, 4320)
 
-for (AnalysisId in AnalysisIdSet){
-    nhis<-read.csv(file.path(paste0("D:/htn_combi/17.7.10/output/output/",AnalysisId,"/export/MainResults.csv")))
-    medicare<-read.csv(file.path(resultFolder,paste0("Janssen Medicare Files (1)/",AnalysisId,"/MainResults.csv")))
-    medicaid<-read.csv(file.path(resultFolder,paste0("Janssen Medicaid Files/",AnalysisId,"/MainResults.csv")))
-    for (outcomeid in outcomeidset){
-        nhis_outcome<-nhis[nhis$outcomeId == outcomeid,]
-        medicare_outcome<-medicare[medicare$outcomeId == outcomeid,]
-        medicaid_outcome<-medicaid[medicaid$outcomeId == outcomeid, ]
-        for (j in 1:3){
-            switch(j,
-                   {targetid<-as.numeric(paste0(13,AnalysisId))
-                   comparatorid<-as.numeric(paste0(14,AnalysisId))
-                   },
-                   {
-                       targetid<-as.numeric(paste0(34,AnalysisId))
-                       comparatorid<-as.numeric(paste0(13,AnalysisId))
-                           
-                   },
-                   {targetid<-as.numeric(paste0(34,AnalysisId))
-                   comparatorid<-as.numeric(paste0(14,AnalysisId))})
+for (outcomeid in outcomeidset){
+    nhis_outcome<-nhis[nhis$outcomeId == outcomeid,]
+    medicare_outcome<-medicare[medicare$outcomeId == outcomeid,]
+    medicaid_outcome<-medicaid[medicaid$outcomeId == outcomeid, ]
+    for (j in 1:3){
+        switch(j,
+               {targetid<-13180
+               comparatorid<-14180
+               },
+               {
+                targetid<-34180
+                comparatorid<-13180       
+               },
+               {targetid<-34180
+               comparatorid<-14180})
             
-            pdf(file.path(ResultFolder,paste0(AnalysisId,"t",targetid,"c",comparatorid,"o",outcomeid,".pdf")))
-            plotMetaAnalysisForest(logRr = c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$logRr ,
-                                             medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$logRr,
-                                             medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$logRr),
-                                   logLb95Ci = log(
-                                       c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$ci95lb ,
-                                         medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$ci95lb,
-                                         medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$ci95lb)
-                                   ),
-                                   logUb95Ci = log(
-                                       c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$ci95ub ,
-                                         medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$ci95ub,
-                                         medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$ci95ub)
-                                   ),
-                                   labels = c("NHIS-NSC", "Medicare", "Medicaid"),
-                                   limits = c(0.2, 5)
-            )
-            dev.off()
-            png(file.path(ResultFolder,paste0(AnalysisId,"t",targetid,"c",comparatorid,"o",outcomeid,".png")))
-            plotMetaAnalysisForest(logRr = c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$logRr ,
-                                             medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$logRr,
-                                             medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$logRr),
-                                   logLb95Ci = log(
-                                       c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$ci95lb ,
-                                         medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$ci95lb,
-                                         medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$ci95lb)
-                                   ),
-                                   logUb95Ci = log(
-                                       c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$ci95ub ,
-                                         medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$ci95ub,
-                                         medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$ci95ub)
-                                   ),
-                                   labels = c("NHIS", "Medicare", "Medicaid"),
-                                   limits = c(0.2, 5)
-            )
-            dev.off()
-            
-        }
+        pdf(file.path(ResultFolder,paste0("t",targetid,"c",comparatorid,"o",outcomeid,".pdf")))
+        plotMetaAnalysisForest(logRr = c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$logRr ,
+                                         medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$logRr,
+                                         medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$logRr),
+                               logLb95Ci = log(
+                                   c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$ci95lb ,
+                                     medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$ci95lb,
+                                     medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$ci95lb)
+                               ),
+                               logUb95Ci = log(
+                                   c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$ci95ub ,
+                                     medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$ci95ub,
+                                     medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$ci95ub)
+                               ),
+                               labels = c("NHIS", "Medicare", "Medicaid"),
+                               limits = c(0.2, 5)
+        )
+        dev.off()
+        png(file.path(ResultFolder,paste0("t",targetid,"c",comparatorid,"o",outcomeid,".png")))
+        plotMetaAnalysisForest(logRr = c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$logRr ,
+                                         medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$logRr,
+                                         medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$logRr),
+                               logLb95Ci = log(
+                                   c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$ci95lb ,
+                                     medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$ci95lb,
+                                     medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$ci95lb)
+                               ),
+                               logUb95Ci = log(
+                                   c(nhis_outcome[ (nhis_outcome$comparatorId==comparatorid & nhis_outcome$targetId == targetid), ]$ci95ub ,
+                                     medicare_outcome[ (medicare_outcome$comparatorId==comparatorid & medicare_outcome$targetId == targetid), ]$ci95ub,
+                                     medicaid_outcome[ (medicaid_outcome$comparatorId==comparatorid & medicaid_outcome$targetId == targetid), ]$ci95ub)
+                               ),
+                               labels = c("NHIS", "Medicare", "Medicaid"),
+                               limits = c(0.2, 5)
+        )
+        dev.off()
+        
     }
 }
-
-
 
 
 

@@ -1,4 +1,4 @@
-# Copyright 2017 Observational Health Data Sciences and Informatics
+# Copyright 2018 Observational Health Data Sciences and Informatics
 #
 # This file is part of EvaluatingCaseControl
 #
@@ -15,13 +15,10 @@
 # limitations under the License.
 
 #' @title
-#' Execute OHDSI Celecoxib versus non-selective NSAIDs study
+#' Execute OHDSI Evaluating the Case-Control Design Study
 #'
-#' @details
+#' @description
 #' This function executes the OHDSI Evaluating the Case-Control Design Study.
-#'
-#' @return
-#' TODO
 #'
 #' @param connectionDetails    An object of type \code{connectionDetails} as created using the
 #'                             \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
@@ -29,17 +26,22 @@
 #' @param cdmDatabaseSchema    Schema name where your patient-level data in OMOP CDM format resides.
 #'                             Note that for SQL Server, this should include both the database and
 #'                             schema name, for example 'cdm_data.dbo'.
-#' @param workDatabaseSchema   Schema name where intermediate data can be stored. You will need to have
+#' @param cohortDatabaseSchema Schema name where intermediate data can be stored. You will need to have
 #'                             write priviliges in this schema. Note that for SQL Server, this should
 #'                             include both the database and schema name, for example 'cdm_data.dbo'.
-#' @param studyCohortTable     The name of the table that will be created in the work database schema.
+#' @param cohortTable          The name of the table that will be created in the work database schema.
 #'                             This table will hold the exposure and outcome cohorts used in this
 #'                             study.
 #' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
 #'                             priviliges for storing temporary tables.
-#' @param cdmVersion           Version of the CDM. Can be "4" or "5"
-#' @param workFolder           Name of local folder to place results; make sure to use forward slashes
+#' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
 #'                             (/)
+#' @param createCohorts        Instantiate the necessary cohorts in the cohortTable?
+#' @param synthesizePositiveControls  Synthesize positive controls based on the negative controls?
+#' @param runAnalyses          Execute the case-control analaysis?
+#' @param createFiguresAndTables Create the figures and tables for the paper?
+#' @param maxCores             How many parallel cores should be used? If more cores are made available
+#'                             this can speed up the analyses.
 #'
 #' @examples
 #' \dontrun{
@@ -50,83 +52,65 @@
 #'
 #' execute(connectionDetails,
 #'         cdmDatabaseSchema = "cdm_data",
-#'         workDatabaseSchema = "results",
+#'         cohortDatabaseSchema = "results",
 #'         oracleTempSchema = NULL,
-#'         workFolder = "c:/temp/study_results",
-#'         cdmVersion = "5")
+#'         outputFolder = "c:/temp/study_results")
 #'
 #' }
 #'
 #' @export
 execute <- function(connectionDetails,
                     cdmDatabaseSchema,
-                    workDatabaseSchema = cdmDatabaseSchema,
-                    studyCohortTable = "ohdsi_case_control",
-                    oracleTempSchema = NULL,
-                    workFolder,
+                    cohortDatabaseSchema,
+                    cohortTable,
+                    oracleTempSchema,
+                    outputFolder,
                     createCohorts = TRUE,
+                    synthesizePositiveControls = TRUE,
                     runAnalyses = TRUE,
-                    empiricalCalibration = TRUE,
-                    packageResultsForSharing = TRUE,
+                    createFiguresAndTables  = TRUE,
                     maxCores = 4) {
-  if (!file.exists(workFolder))
-    dir.create(workFolder)
+  if (!file.exists(outputFolder))
+    dir.create(outputFolder)
+
+  OhdsiRTools::addDefaultFileLogger(file.path(outputFolder, "log.txt"))
 
   if (createCohorts) {
-    writeLines("Creating exposure and outcome cohorts")
+    OhdsiRTools::logInfo("Creating exposure and outcome cohorts")
     createCohorts(connectionDetails = connectionDetails,
-                     cdmDatabaseSchema = cdmDatabaseSchema,
-                     oracleTempSchema = oracleTempSchema,
-                     workDatabaseSchema = workDatabaseSchema,
-                     studyCohortTable = studyCohortTable,
-                     workFolder = workFolder)
-  }
-  if (injectSignals) {
-    injectSignals(connectionDetails = connectionDetails,
                   cdmDatabaseSchema = cdmDatabaseSchema,
                   oracleTempSchema = oracleTempSchema,
-                  workDatabaseSchema = workDatabaseSchema,
-                  studyCohortTable = studyCohortTable,
-                  study = study,
-                  workFolder = workFolder,
-                  maxCores = maxCores)
+                  cohortDatabaseSchema = cohortDatabaseSchema,
+                  cohortTable = cohortTable,
+                  outputFolder = outputFolder)
   }
+  if (synthesizePositiveControls) {
+    OhdsiRTools::logInfo("Synthesizing positive controls")
+    synthesizePositiveControls(connectionDetails = connectionDetails,
+                               cdmDatabaseSchema = cdmDatabaseSchema,
+                               cohortDatabaseSchema = cohortDatabaseSchema,
+                               cohortTable = cohortTable,
+                               oracleTempSchema = oracleTempSchema,
+                               outputFolder = outputFolder,
+                               maxCores = maxCores)
+    OhdsiRTools::logInfo("")
+  }
+
   if (runAnalyses) {
-    writeLines("Running analyses")
-    if (study == "Southworth") {
-      runCohortMethodSouthworth(connectionDetails = connectionDetails,
-                                cdmDatabaseSchema = cdmDatabaseSchema,
-                                workDatabaseSchema = workDatabaseSchema,
-                                studyCohortTable = studyCohortTable,
-                                oracleTempSchema = oracleTempSchema,
-                                maxCores = maxCores)
-
-    } else if (study == "Graham") {
-      runCohortMethodGraham(connectionDetails = connectionDetails,
-                            cdmDatabaseSchema = cdmDatabaseSchema,
-                            workDatabaseSchema = workDatabaseSchema,
-                            studyCohortTable = studyCohortTable,
-                            oracleTempSchema = oracleTempSchema,
-                            maxCores = maxCores)
-    } else if (study == "Tata") {
-      runSccs(connectionDetails = connectionDetails,
-              cdmDatabaseSchema = cdmDatabaseSchema,
-              workDatabaseSchema = workDatabaseSchema,
-              studyCohortTable = studyCohortTable,
-              oracleTempSchema = oracleTempSchema,
-              maxCores = maxCores)
-      runCaseControl(connectionDetails = connectionDetails,
-                     cdmDatabaseSchema = cdmDatabaseSchema,
-                     workDatabaseSchema = workDatabaseSchema,
-                     studyCohortTable = studyCohortTable,
-                     oracleTempSchema = oracleTempSchema,
-                     maxCores = maxCores)
-    }
+    OhdsiRTools::logInfo("Running analyses")
+    runCaseControlDesigns(connectionDetails = connectionDetails,
+                          cdmDatabaseSchema = cdmDatabaseSchema,
+                          oracleTempSchema = oracleTempSchema,
+                          cohortDatabaseSchema = cohortDatabaseSchema,
+                          cohortTable = cohortTable,
+                          outputFolder = outputFolder,
+                          maxCores = maxCores)
   }
-
-  if (empiricalCalibration) {
-    writeLines("Performing empirical calibration")
-    doEmpiricalCalibration(workFolder = workFolder, study = study)
+  if (createFiguresAndTables) {
+    OhdsiRTools::logInfo("Creating figures and tables")
+    createFiguresAndTables(connectionDetails = connectionDetails,
+                           cdmDatabaseSchema = cdmDatabaseSchema,
+                           oracleTempSchema = oracleTempSchema,
+                           outputFolder = outputFolder)
   }
-
 }

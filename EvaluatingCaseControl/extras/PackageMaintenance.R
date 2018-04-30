@@ -1,4 +1,4 @@
-# Copyright 2017 Observational Health Data Sciences and Informatics
+# Copyright 2018 Observational Health Data Sciences and Informatics
 #
 # This file is part of EvaluatingCaseControl
 #
@@ -24,14 +24,20 @@ shell("EvaluatingCaseControl.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/EvaluatingCaseControl.pdf")
 
 # Insert cohort definitions into package ----
-OhdsiRTools::insertCohortDefinitionSetInPackage("CohortsToCreate.csv",
+OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv",
+                                                baseUrl = Sys.getenv("baseUrl"),
+                                                insertTableSql = TRUE,
+                                                insertCohortCreationR = TRUE,
                                                 generateStats = FALSE,
                                                 packageName = "EvaluatingCaseControl")
 
 # Create analysis details ----
+source("R/CaseControl.R")
 createCaseControlAnalysesDetails("inst/settings/")
-createCohortMethodAnalysesDetails("inst/settings/")
-createCaseTimeControlAnalysesDetails("inst/settings/")
+# source("R/CohortMethod.R")
+# createCohortMethodAnalysesDetails("inst/settings/")
+# source("R/CaseTimeControl.R")
+# createCaseTimeControlAnalysesDetails("inst/settings/")
 
 # Store environment in which the study was executed ----
 OhdsiRTools::insertEnvironmentSnapshotInPackage("EvaluatingCaseControl")

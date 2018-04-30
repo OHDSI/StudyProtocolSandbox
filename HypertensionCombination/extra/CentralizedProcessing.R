@@ -2,40 +2,6 @@ library(AlendronateVsRaloxifene)
 library(gridExtra)
 library(meta)
 
-nhisFolder<-"D:/htn_combi/17.8.7/output/export"
-medicareFolder<-"C:/Users/apple/OneDrive/Study/OHDSI_HTN_combi/Results/Janssen Medicare Files (1)"
-medicaidFolder<-"C:/Users/apple/OneDrive/Study/OHDSI_HTN_combi/Results/Janssen Medicaid Files"
-
-#calculate the number of cohorts
-nhisFolder<-"D:/htn_combi/17.8.7/output/cmOutput/180"
-ac.ad.study<-readRDS(file.path(nhisFolder,"StudyPop_l1_s1_t13180_c14180_o0.rds"))
-
-#AC
-sum(ac.ad.study$treatment==1)#4893
-#AD
-sum(ac.ad.study$treatment==0)#8504
-
-#AC
-sum(ac.ad.study$survivalTime[ac.ad.study$treatment==1])/365
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-######################################################################################################
-######################################################################################################
-######################################################################################################
 table.png <- function(obj, name) {
     
     obj <- crude
@@ -114,9 +80,6 @@ invisible(mapply(allCohorts$cohortId, allCohorts$name, FUN = function(outcomeId,
     }
     write.csv(allResults, file.path(studyFolder, filename), row.names = FALSE)
 }))
-
-
-
 
 
 # TODO Move below into report rmarkdown

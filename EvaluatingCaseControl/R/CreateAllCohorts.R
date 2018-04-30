@@ -1,4 +1,4 @@
-# Copyright 2017 Observational Health Data Sciences and Informatics
+# Copyright 2018 Observational Health Data Sciences and Informatics
 #
 # This file is part of EvaluatingCaseControl
 #
@@ -26,72 +26,78 @@
 #' @param cdmDatabaseSchema    Schema name where your patient-level data in OMOP CDM format resides.
 #'                             Note that for SQL Server, this should include both the database and
 #'                             schema name, for example 'cdm_data.dbo'.
-#' @param workDatabaseSchema   Schema name where intermediate data can be stored. You will need to have
+#' @param cohortDatabaseSchema   Schema name where intermediate data can be stored. You will need to have
 #'                             write priviliges in this schema. Note that for SQL Server, this should
 #'                             include both the database and schema name, for example 'cdm_data.dbo'.
-#' @param studyCohortTable     The name of the table that will be created in the work database schema.
+#' @param cohortTable     The name of the table that will be created in the work database schema.
 #'                             This table will hold the exposure and outcome cohorts used in this
 #'                             study.
 #' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
 #'                             priviliges for storing temporary tables.
-#' @param workFolder         Name of local folder to place results; make sure to use forward slashes
+#' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
 #'                             (/)
 #'
 #' @export
 createCohorts <- function(connectionDetails,
                           cdmDatabaseSchema,
-                          workDatabaseSchema,
-                          studyCohortTable = "ohdsi_case_control",
+                          cohortDatabaseSchema,
+                          cohortTable,
                           oracleTempSchema,
-                          workFolder) {
+                          outputFolder) {
+  if (!file.exists(outputFolder)) {
+    dir.create(outputFolder, recursive = TRUE)
+  }
   conn <- DatabaseConnector::connect(connectionDetails)
 
   .createCohorts(connection = conn,
                  cdmDatabaseSchema = cdmDatabaseSchema,
-                 cohortDatabaseSchema = workDatabaseSchema,
-                 cohortTable = studyCohortTable,
+                 cohortDatabaseSchema = cohortDatabaseSchema,
+                 cohortTable = cohortTable,
                  oracleTempSchema = oracleTempSchema,
-                 outputFolder = workFolder)
+                 outputFolder = outputFolder)
 
   pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
   negativeControls <- read.csv(pathToCsv)
-  writeLines("- Creating exposure cohorts for negative controls")
+  OhdsiRTools::logInfo("- Creating exposure cohorts for negative controls")
   sql <- SqlRender::loadRenderTranslateSql("ExposureCohorts.sql",
                                            "EvaluatingCaseControl",
                                            dbms = connectionDetails$dbms,
                                            oracleTempSchema = oracleTempSchema,
                                            cdm_database_schema = cdmDatabaseSchema,
-                                           target_database_schema = workDatabaseSchema,
-                                           target_cohort_table = studyCohortTable,
-                                           exposure_ids = c(negativeControls$targetId, negativeControls$comparatorId))
+                                           target_database_schema = cohortDatabaseSchema,
+                                           target_cohort_table = cohortTable,
+                                           exposure_ids = unique(c(negativeControls$targetId, negativeControls$comparatorId)))
   DatabaseConnector::executeSql(conn, sql)
-  writeLines("- Creating nesting cohorts for negative controls")
+  OhdsiRTools::logInfo("- Creating nesting cohorts for negative controls")
+  nestingIds <- unique(negativeControls$nestingId)
+  nestingIds <- nestingIds[!is.na(nestingIds)]
   sql <- SqlRender::loadRenderTranslateSql("NestingCohorts.sql",
                                            "EvaluatingCaseControl",
                                            dbms = connectionDetails$dbms,
                                            oracleTempSchema = oracleTempSchema,
                                            cdm_database_schema = cdmDatabaseSchema,
-                                           target_database_schema = workDatabaseSchema,
-                                           target_cohort_table = studyCohortTable,
-                                           nesting_ids = negativeControls$nestingId)
+                                           target_database_schema = cohortDatabaseSchema,
+                                           target_cohort_table = cohortTable,
+                                           nesting_ids = nestingIds)
   DatabaseConnector::executeSql(conn, sql)
 
   sql <- "SELECT cohort_definition_id, COUNT(*) AS cohort_count FROM @target_database_schema.@target_cohort_table GROUP BY cohort_definition_id"
   sql <- SqlRender::renderSql(sql,
-                              target_database_schema = workDatabaseSchema,
-                              target_cohort_table = studyCohortTable)$sql
+                              target_database_schema = cohortDatabaseSchema,
+                              target_cohort_table = cohortTable)$sql
   sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
   counts <- DatabaseConnector::querySql(conn, sql)
-  write.csv(counts, file.path(workFolder, "CohortCounts.csv"))
 
-  RJDBC::dbDisconnect(conn)
+  write.csv(counts, file.path(outputFolder, "CohortCounts.csv"))
+
+  DatabaseConnector::disconnect(conn)
 }
 
 
 addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumnName = "cohortName") {
-  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "AlendronateVsRaloxifene")
+  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "EvaluatingCaseControl")
   cohortsToCreate <- read.csv(pathToCsv)
-  pathToCsv <- system.file("settings", "NegativeControls.csv", package = "AlendronateVsRaloxifene")
+  pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
   negativeControls <- read.csv(pathToCsv)
 
   idToName <- data.frame(cohortId = c(cohortsToCreate$cohortId, negativeControls$conceptId),
