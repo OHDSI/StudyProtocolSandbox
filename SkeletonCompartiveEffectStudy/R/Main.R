@@ -43,6 +43,7 @@
 #' @param synthesizePositiveControls  Should positive controls be synthesized?
 #' @param runAnalyses          Perform the cohort method analyses?
 #' @param runDiagnostics       Compute study diagnostics?
+#' @param packageResults       Should results be packaged for later sharing?     
 #' @param maxCores             How many parallel cores should be used? If more cores are made available
 #'                             this can speed up the analyses.
 #' @param minCellCount         The minimum number of subjects contributing to a count before it can be included 
@@ -140,7 +141,9 @@ execute <- function(connectionDetails,
   }
   if (packageResults) {
     OhdsiRTools::logInfo("Packaging results")
-    packageResults(outputFolder = outputFolder,
+    packageResults(connectionDetails = connectionDetails,
+                   cdmDatabaseSchema = cdmDatabaseSchema,
+                   outputFolder = outputFolder,
                    minCellCount = minCellCount)
   }
   

@@ -68,8 +68,8 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   file.copy(from = files, to = exportFolder)
   
   # All effect size estimates ------------------------------------------------------------------------
-  outcomeReference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
-  analysisSummary <- CohortMethod::summarizeAnalyses(outcomeReference)
+  reference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
+  analysisSummary <- CohortMethod::summarizeAnalyses(reference)
   analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
   analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
   analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
@@ -102,8 +102,22 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
     for (analysisId in unique(reference$analysisId)) {
       for (outcomeId in outcomeIds) {
-        #  Create KM plots
-        
+        strataFile <- reference$strataFile[reference$analysisId == analysisId &
+                                             reference$targetId == targetId &
+                                             reference$comparatorId == comparatorId &
+                                             reference$outcomeId == outcomeId]
+        if (strataFile == "") {
+          strataFile <- reference$studyPopFile[reference$analysisId == analysisId &
+                                                 reference$targetId == targetId &
+                                                 reference$comparatorId == comparatorId &
+                                                 reference$outcomeId == outcomeId]
+        }
+        population <- readRDS(strataFile)
+        fileName <-  file.path(exportFolder, paste0("km_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId, ".png"))
+        CohortMethod::plotKaplanMeier(population = population,
+                                      treatmentLabel = targetLabel,
+                                      comparatorLabel = comparatorLabel,
+                                      fileName = fileName)
       }
     }
   }
@@ -124,13 +138,15 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   cohortCounts <- read.csv(fileName)
   cohortCounts$cohortCount[cohortCounts$cohortCount < minCellCount] <- paste0("<", minCellCount)
   cohortCounts$personCount[cohortCounts$personCount < minCellCount] <- paste0("<", minCellCount)
-  
-    fileName <-  file.path(exportFolder, "CohortCounts.csv")
+  fileName <-  file.path(exportFolder, "CohortCounts.csv")
   write.csv(cohortCounts, fileName, row.names = FALSE)
   
   # Add all to zip file -------------------------------------------------------------------------------
   zipName <- file.path(exportFolder, "StudyResults.zip")
-  OhdsiSharing::compressFolder(exportFolder, zipName)
+  files <- list.files(exportFolder)
+  oldWd <- setwd(exportFolder)
+  on.exit(setwd(oldWd))
+  zip::zip(zipfile = zipName, files = files, recurse = FALSE) 
   writeLines(paste("\nStudy results are ready for sharing at:", zipName))
 }
 

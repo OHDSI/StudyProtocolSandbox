@@ -43,6 +43,8 @@ performance.}
 
 \item{runDiagnostics}{Compute study diagnostics?}
 
+\item{packageResults}{Should results be packaged for later sharing?}
+
 \item{maxCores}{How many parallel cores should be used? If more cores are made available
 this can speed up the analyses.}
 

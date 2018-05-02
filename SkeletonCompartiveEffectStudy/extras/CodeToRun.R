@@ -34,9 +34,9 @@ execute(connectionDetails = connectionDetails,
         outputFolder = outputFolder,
         createCohorts = FALSE,
         synthesizePositiveControls = FALSE,
-        runAnalyses = TRUE,
-        runDiagnostics = TRUE,
-        packageResults = FALSE,
+        runAnalyses = FALSE,
+        runDiagnostics = FALSE,
+        packageResults = TRUE,
         maxCores = maxCores)
 
 createFiguresAndTables(outputFolder = outputFolder,
