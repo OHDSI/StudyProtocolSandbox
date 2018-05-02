@@ -1,7 +1,6 @@
 cohortId,atlasId,name
-1,1111,tofacitanib5
-2,2222,tofacitanib10
-3,3333,adalimumab
-4,4444,etanercept
-5,5555,malignancies
-6,6666,mace
+1,6462,Tofacitinib
+2,6574,Adalimumab
+3,6575,Etanercept
+4,6576,Mace
+5,6577,Malignancy

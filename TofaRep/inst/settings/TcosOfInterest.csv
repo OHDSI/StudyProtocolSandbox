@@ -1,2 +1,3 @@
 targetId,targetName,comparatorId,comparatorName,outcomeIds,OutcomeNames,excludedCovariateConceptIds
-1,Celecoxib,2,Diclofenac,3,GI Bleed,21603933
+1,Tofacitinib,2,Adalimumab,4;5,Mace;Malignancy,42904205;1119119
+1,Tofacitinib,3,Etanercept,4;5,Mace;Malignancy,42904205;1151789
