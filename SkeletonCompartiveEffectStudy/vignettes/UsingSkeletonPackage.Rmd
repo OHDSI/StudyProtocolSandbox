@@ -121,7 +121,7 @@ createAnalysesDetails("inst/settings/")
 
 In addition to negative controls, where the true effect size is believed to be a relative risk of 1, we can also include positive controls, where the true effect has a known magnitude unequal to 1. These positive controls can be used together with the negative controls to perform confidence inteval calibration. We can automatically synthesize positive controls by taking negative controls and adding simulated outcomes during the time at risk. To preserve (measured) confounding, these simulated outcomes should be sampled from the baseline probabilities based on the patients' characteristics. 
 
-Positive control synthesis is implemented in the `MethodEvaluation` package, and is called from the skeleton package. However, it is necessary to configure it correctly, in the file called `SynthesizePositiveControls.R` file. Most importantly, the `washoutPeriod`, `riskWindowStart`, `riskWindowEnd`, and `addExposureDaysToEnd` arguments need to be specified to match those in the primary analysis. It is also possible to disable positive control sysnthesis altogether by setting the `skipSynthesis` variable to `TRUE`.
+Positive control synthesis is implemented in the `MethodEvaluation` package, and is called from the skeleton package. However, it is necessary to configure it correctly, in the file called `SynthesizePositiveControls.R` file. Most importantly, the `washoutPeriod`, `riskWindowStart`, `riskWindowEnd`, `addExposureDaysToEnd`, and `removePeopleWithPriorOutcomes` arguments need to be specified to match those in the primary analysis. It is also possible to disable positive control sysnthesis altogether by setting the `skipSynthesis` variable to `TRUE`.
 
 
 

@@ -17,15 +17,14 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
                                                                 port = Sys.getenv("PDW_PORT"))
 
 # The name of the database schema where the CDM data can be found:
-cdmDatabaseSchema <- "cdm_optum_extended_dod_v695.dbo"
+cdmDatabaseSchema <- "cdm_truven_mdcd_v635.dbo"
 
 # The name of the database schema and table where the study-specific cohorts will be instantiated:
 cohortDatabaseSchema <- "scratch.dbo"
-cohortTable <- "mschuemi_denosumab_optum"
+cohortTable <- "mschuemi_skeleton"
 
 # For Oracle: define a schema that can be used to emulate temp tables:
 oracleTempSchema <- NULL
-
 
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
@@ -34,9 +33,10 @@ execute(connectionDetails = connectionDetails,
         oracleTempSchema = oracleTempSchema,
         outputFolder = outputFolder,
         createCohorts = FALSE,
-        synthesizePositiveControls = TRUE,
+        synthesizePositiveControls = FALSE,
         runAnalyses = TRUE,
         runDiagnostics = TRUE,
+        packageResults = FALSE,
         maxCores = maxCores)
 
 createFiguresAndTables(outputFolder = outputFolder,

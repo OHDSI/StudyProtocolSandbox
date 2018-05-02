@@ -42,15 +42,20 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   # Copy MDRR, enforcing minCellCount -----------------------------------------------------------------
   fileName <-  file.path(diagnosticsFolder, "mdrrs.csv")
   mdrrs <- read.csv(fileName)
-  #TODO: filter cell counts
+  mdrrs$totalOutcomes[mdrrs$totalOutcomes < minCellCount] <- paste0("<", minCellCount)
+  mdrrs$targetPersons[mdrrs$targetPersons < minCellCount] <- paste0("<", minCellCount)
+  mdrrs$comparatorPersons[mdrrs$comparatorPersons < minCellCount] <- paste0("<", minCellCount)
   fileName <-  file.path(exportFolder, "mdrrs.csv")
   write.csv(mdrrs, fileName, row.names = FALSE)
   
   # Copy balance files, dropping person counts --------------------------------------------------------
   files <- list.files(path = diagnosticsFolder, pattern = "^balance.*csv$")
   for (file in files) {
-    balance<- read.csv(file.path(diagnosticsFolder, file))
-    #TODO: drop person counts
+    balance <- read.csv(file.path(diagnosticsFolder, file))
+    balance$beforeMatchingSumTreated <- NULL
+    balance$beforeMatchingSumComparator <- NULL
+    balance$afterMatchingSumTreated <- NULL
+    balance$afterMatchingSumComparator <- NULL
     write.csv(balance, file.path(exportFolder, file), row.names = FALSE)
   }
   
@@ -68,14 +73,26 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
   analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
   analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
-  analysisSummary <- addAnalysisDescriptions(analysisSummary)
-  # TODO: add effect sizes of controls
-  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = packageName))
+  allControlsFile <- file.path(outputFolder, "AllControls.csv")
+  allControls <- read.csv(allControlsFile)
+  allControls$temp <- allControls$outcomeName
+  analysisSummary <- merge(analysisSummary, allControls[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "temp", "targetEffectSize", "trueEffectSize")], all.x = TRUE)
+  analysisSummary$outcomeName <- as.character(analysisSummary$outcomeName)
+  analysisSummary$temp <- as.character(analysisSummary$temp)
+  analysisSummary$outcomeName[!is.na(analysisSummary$temp)] <- analysisSummary$temp[!is.na(analysisSummary$temp)]
+  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = "SkeletonCompartiveEffectStudy"))
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
   }
+  analysisSummary$treated[analysisSummary$treated < minCellCount] <- paste0("<", minCellCount)
+  analysisSummary$comparator[analysisSummary$comparator < minCellCount] <- paste0("<", minCellCount)
+  analysisSummary$eventsTreated[analysisSummary$eventsTreated < minCellCount] <- paste0("<", minCellCount)
+  analysisSummary$eventsComparator[analysisSummary$eventsComparator < minCellCount] <- paste0("<", minCellCount)
+  write.csv(analysisSummary, file.path(exportFolder, "AllEstimates.csv"), row.names = FALSE)
+  
+  pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = "SkeletonCompartiveEffectStudy")
+  tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
   tcsOfInterest <- unique(tcosOfInterest[, c("targetId", "comparatorId")])
-  mdrrs <- data.frame()
   for (i in 1:nrow(tcsOfInterest)) {
     targetId <- tcsOfInterest$targetId[i]
     comparatorId <- tcsOfInterest$comparatorId[i]
@@ -95,15 +112,20 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   files <- list.files(path = diagnosticsFolder, pattern = "^attritionTable.*csv$")
   for (file in files) {
     attritionTable<- read.csv(file.path(diagnosticsFolder, file))
-    #TODO: drop person counts
+    attritionTable$treatedPersons[attritionTable$treatedPersons < minCellCount] <- paste0("<", minCellCount)
+    attritionTable$comparatorPersons[attritionTable$comparatorPersons < minCellCount] <- paste0("<", minCellCount)
+    attritionTable$treatedExposures[attritionTable$treatedExposures < minCellCount] <- paste0("<", minCellCount)
+    attritionTable$comparatorExposures[attritionTable$comparatorExposures < minCellCount] <- paste0("<", minCellCount)
     write.csv(attritionTable, file.path(exportFolder, file), row.names = FALSE)
   }
   
   # Cohort counts, enforcing minCellCount -------------------------------------------------------------
   fileName <- file.path(outputFolder, "CohortCounts.csv")
   cohortCounts <- read.csv(fileName)
-  #TODO: filter cell counts
-  fileName <-  file.path(exportFolder, "CohortCounts.csv")
+  cohortCounts$cohortCount[cohortCounts$cohortCount < minCellCount] <- paste0("<", minCellCount)
+  cohortCounts$personCount[cohortCounts$personCount < minCellCount] <- paste0("<", minCellCount)
+  
+    fileName <-  file.path(exportFolder, "CohortCounts.csv")
   write.csv(cohortCounts, fileName, row.names = FALSE)
   
   # Add all to zip file -------------------------------------------------------------------------------

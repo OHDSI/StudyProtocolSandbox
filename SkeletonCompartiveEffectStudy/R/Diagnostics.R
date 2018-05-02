@@ -56,7 +56,7 @@ generateDiagnostics <- function(outputFolder) {
     outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
     for (analysisId in unique(reference$analysisId)) {
       controlSubset <- allControls[allControls$targetId == targetId & allControls$comparatorId == comparatorId, ]
-      controlSubset <- merge(controlSubset[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")], analysisSummary)
+      controlSubset <- merge(controlSubset[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")], analysisSummary[analysisSummary$analysisId == analysisId, ])
       
       # Outcome controls
       label <- "OutcomeControls"
@@ -81,7 +81,7 @@ generateDiagnostics <- function(outputFolder) {
                                                 seLogRr = controlSubset$seLogRr, 
                                                 trueLogRr = log(controlSubset$targetEffectSize),
                                                 fileName = fileName)
-      validPcs <- sum(!is.na(controlSubset$seLogRr))
+      validPcs <- sum(!is.na(controlSubset$seLogRr[controlSubset$targetEffectSize != 1]))
       if (validPcs >= 10) {
         model <- EmpiricalCalibration::fitSystematicErrorModel(controlSubset$logRr, controlSubset$seLogRr, log(controlSubset$targetEffectSize), estimateCovarianceMatrix = FALSE)
         class(model) <- "vector"
@@ -104,6 +104,12 @@ generateDiagnostics <- function(outputFolder) {
                                              reference$targetId == targetId &
                                              reference$comparatorId == comparatorId &
                                              reference$outcomeId == outcomeId]
+        if (strataFile == "") {
+          strataFile <- reference$studyPopFile[reference$analysisId == analysisId &
+                                               reference$targetId == targetId &
+                                               reference$comparatorId == comparatorId &
+                                               reference$outcomeId == outcomeId]
+        }
         population <- readRDS(strataFile)
         mdrr <- CohortMethod::computeMdrr(population, alpha = 0.05, power = 0.8, twoSided = TRUE, modelType = modelType)
         mdrr$analysisId <- analysisId
@@ -131,61 +137,65 @@ generateDiagnostics <- function(outputFolder) {
                                 reference$targetId == targetId &
                                 reference$comparatorId == comparatorId &
                                 reference$outcomeId == outcomeIds[1], ]
-      
-      ps <- readRDS(exampleRef$sharedPsFile)
-      fileName <-  file.path(diagnosticsFolder, paste0("psBeforeStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
-      psPlot <- CohortMethod::plotPs(data = ps,
-                                     treatmentLabel = targetLabel,
-                                     comparatorLabel = comparatorLabel,
-                                     fileName = fileName)
-      
-      psAfterMatching <- readRDS(exampleRef$strataFile)
-      fileName <-  file.path(diagnosticsFolder, paste0("psAfterStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
-      psPlot <- CohortMethod::plotPs(data = psAfterMatching,
-                                     unfilteredData = ps,
-                                     treatmentLabel = targetLabel,
-                                     comparatorLabel = comparatorLabel,
-                                     fileName = fileName)
-      
-      prepapredPsPlot <- EvidenceSynthesis::preparePsPlot(data = psAfterMatching,
-                                                          unfilteredData = ps)
-      fileName <-  file.path(diagnosticsFolder, paste0("preparedPsPlot_a",analysisId,"_t",targetId,"_c",comparatorId,".csv"))
-      write.csv(prepapredPsPlot, fileName, row.names = FALSE)
-      
+      if (exampleRef$sharedPsFile == "") {
+        psAfterMatching <- readRDS(exampleRef$studyPopFile)
+      } else {
+        ps <- readRDS(exampleRef$sharedPsFile)
+        fileName <-  file.path(diagnosticsFolder, paste0("psBeforeStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
+        psPlot <- CohortMethod::plotPs(data = ps,
+                                       treatmentLabel = targetLabel,
+                                       comparatorLabel = comparatorLabel,
+                                       fileName = fileName)
+        
+        psAfterMatching <- readRDS(exampleRef$strataFile)
+        fileName <-  file.path(diagnosticsFolder, paste0("psAfterStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
+        psPlot <- CohortMethod::plotPs(data = psAfterMatching,
+                                       unfilteredData = ps,
+                                       treatmentLabel = targetLabel,
+                                       comparatorLabel = comparatorLabel,
+                                       fileName = fileName)
+        
+        prepapredPsPlot <- EvidenceSynthesis::preparePsPlot(data = psAfterMatching,
+                                                            unfilteredData = ps)
+        fileName <-  file.path(diagnosticsFolder, paste0("preparedPsPlot_a",analysisId,"_t",targetId,"_c",comparatorId,".csv"))
+        write.csv(prepapredPsPlot, fileName, row.names = FALSE)
+        
+        cmData <- CohortMethod::loadCohortMethodData(exampleRef$cohortMethodDataFolder)
+        
+        balance <- CohortMethod::computeCovariateBalance(psAfterMatching, cmData)
+        fileName = file.path(diagnosticsFolder, paste("balance_a",analysisId,"_t",targetId,"_c",comparatorId,".csv",sep=""))
+        write.csv(balance, fileName, row.names = FALSE)
+        
+        fileName = file.path(diagnosticsFolder, paste("balanceScatter_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
+        balanceScatterPlot <- CohortMethod::plotCovariateBalanceScatterPlot(balance = balance,
+                                                                            beforeLabel = paste("Before", psStrategy),
+                                                                            afterLabel =  paste("After", psStrategy),
+                                                                            fileName = fileName)
+        
+        fileName = file.path(diagnosticsFolder, paste("balanceTop_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
+        balanceTopPlot <- CohortMethod::plotCovariateBalanceOfTopVariables(balance = balance,
+                                                                           beforeLabel = paste("Before", psStrategy),
+                                                                           afterLabel =  paste("After", psStrategy),
+                                                                           fileName = fileName)
+        fileName = file.path(diagnosticsFolder, paste("table1_a",analysisId,"_t",targetId,"_c",comparatorId,".csv",sep=""))
+        table1 <- CohortMethod::createCmTable1(balance = balance,  
+                                               beforeTargetPopSize = sum(cmData$cohorts$treatment == 1),
+                                               afterTargetPopSize = sum(psAfterMatching$treatment == 1),
+                                               beforeComparatorPopSize = sum(cmData$cohorts$treatment == 0),
+                                               afterComparatorPopSize = sum(psAfterMatching$treatment == 0),
+                                               targetLabel = targetLabel,
+                                               comparatorLabel = comparatorLabel,
+                                               beforeLabel = paste("Before", psStrategy), 
+                                               afterLabel =  paste("After", psStrategy))
+        write.csv(table1, fileName, row.names = FALSE)
+        
+      }
       fileName = file.path(diagnosticsFolder, paste("followupDist_a",analysisId,"_t",targetId,"_c",comparatorId, ".png",sep=""))
       CohortMethod::plotFollowUpDistribution(psAfterMatching, 
                                              targetLabel = targetLabel,
                                              comparatorLabel = comparatorLabel,
                                              fileName = fileName)
       
-      cmdata <- CohortMethod::loadCohortMethodData(exampleRef$cohortMethodDataFolder)
-      
-      balance <- CohortMethod::computeCovariateBalance(psAfterMatching, cmdata)
-      fileName = file.path(diagnosticsFolder, paste("balance_a",analysisId,"_t",targetId,"_c",comparatorId,".csv",sep=""))
-      write.csv(balance, fileName, row.names = FALSE)
-      
-      fileName = file.path(diagnosticsFolder, paste("balanceScatter_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
-      balanceScatterPlot <- CohortMethod::plotCovariateBalanceScatterPlot(balance = balance,
-                                                                          beforeLabel = paste("Before", psStrategy),
-                                                                          afterLabel =  paste("After", psStrategy),
-                                                                          fileName = fileName)
-      
-      fileName = file.path(diagnosticsFolder, paste("balanceTop_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
-      balanceTopPlot <- CohortMethod::plotCovariateBalanceOfTopVariables(balance = balance,
-                                                                         beforeLabel = paste("Before", psStrategy),
-                                                                         afterLabel =  paste("After", psStrategy),
-                                                                         fileName = fileName)
-      fileName = file.path(diagnosticsFolder, paste("table1_a",analysisId,"_t",targetId,"_c",comparatorId,".csv",sep=""))
-      table1 <- CohortMethod::createCmTable1(balance = balance,  
-                                             beforeTargetPopSize = sum(cmData$cohorts$treatment == 1),
-                                             afterTargetPopSize = sum(strata$treatment == 1),
-                                             beforeComparatorPopSize = sum(cmData$cohorts$treatment == 0),
-                                             afterComparatorPopSize = sum(strata$treatment == 0),
-                                             targetLabel = targetLabel,
-                                             comparatorLabel = comparatorLabel,
-                                             beforeLabel = paste("Before", psStrategy), 
-                                             afterLabel =  paste("After", psStrategy))
-      write.csv(table1, fileName, row.names = FALSE)
     }
   }
   mdrrs <- addCohortNames(mdrrs, "targetId", "targetName")

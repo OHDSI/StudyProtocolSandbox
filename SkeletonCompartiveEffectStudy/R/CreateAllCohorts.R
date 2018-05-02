@@ -80,7 +80,7 @@ createCohorts <- function(connectionDetails,
                                            cdm_database_schema = cdmDatabaseSchema,
                                            work_database_schema = cohortDatabaseSchema,
                                            study_cohort_table = cohortTable)
-  counts <- DatabaseConnector::querySql(connection, sql)
+  counts <- DatabaseConnector::querySql(conn, sql)
   colnames(counts) <- SqlRender::snakeCaseToCamelCase(colnames(counts))
   counts <- addCohortNames(counts)
   write.csv(counts, file.path(outputFolder, "CohortCounts.csv"), row.names = FALSE)

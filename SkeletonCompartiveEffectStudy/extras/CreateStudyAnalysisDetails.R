@@ -50,7 +50,7 @@ createAnalysesDetails <- function(workFolder) {
                                                                                     tolerance = 2e-07,
                                                                                     cvRepetitions = 10))
   
-  matchOnPsArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
+  matchOnPsArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 1)
   
   cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
                                                 description = "Matching plus simple outcome model",
@@ -60,7 +60,6 @@ createAnalysesDetails <- function(workFolder) {
                                                 createPsArgs = createPsArgs,
                                                 matchOnPs = TRUE,
                                                 matchOnPsArgs = matchOnPsArgs,
-                                                computeCovariateBalance = TRUE,
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
   
@@ -89,48 +88,47 @@ createAnalysesDetails <- function(workFolder) {
                                                 createPsArgs = createPsArgs,
                                                 matchOnPs = TRUE,
                                                 matchOnPsArgs = matchOnPsArgs,
-                                                computeCovariateBalance = TRUE,
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
   
-  fitOutcomeModelArgs3 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
-                                                                  modelType = "cox",
-                                                                  stratified = FALSE,
-                                                                  inversePsWeighting = TRUE)
+  # fitOutcomeModelArgs3 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
+  #                                                                 modelType = "cox",
+  #                                                                 stratified = FALSE,
+  #                                                                 inversePsWeighting = TRUE)
+  # 
+  # cmAnalysis5 <- CohortMethod::createCmAnalysis(analysisId = 5,
+  #                                               description = "Inverse probability weighting",
+  #                                               getDbCohortMethodDataArgs = getDbCmDataArgs,
+  #                                               createStudyPopArgs = createStudyPopArgs,
+  #                                               createPs = TRUE,
+  #                                               createPsArgs = createPsArgs,
+  #                                               matchOnPs = FALSE,
+  #                                               fitOutcomeModel = TRUE,
+  #                                               fitOutcomeModelArgs = fitOutcomeModelArgs3)
+  # 
+  # fitOutcomeModelArgs4 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = TRUE,
+  #                                                                 modelType = "cox",
+  #                                                                 stratified = TRUE,
+  #                                                                 control = Cyclops::createControl(cvType = "auto",
+  #                                                                                         startingVariance = 0.1,
+  #                                                                                         selectorType = "byPid",
+  #                                                                                         cvRepetitions = 1,
+  #                                                                                         tolerance = 2e-07,
+  #                                                                                         noiseLevel = "quiet"))
+  # 
+  # cmAnalysis6 <- CohortMethod::createCmAnalysis(analysisId = 6,
+  #                                               description = "Matching plus full outcome model",
+  #                                               getDbCohortMethodDataArgs = getDbCmDataArgs,
+  #                                               createStudyPopArgs = createStudyPopArgs,
+  #                                               createPs = TRUE,
+  #                                               createPsArgs = createPsArgs,
+  #                                               matchOnPs = TRUE,
+  #                                               matchOnPsArgs = matchOnPsArgs,
+  #                                               fitOutcomeModel = TRUE,
+  #                                               fitOutcomeModelArgs = fitOutcomeModelArgs4)
   
-  cmAnalysis5 <- CohortMethod::createCmAnalysis(analysisId = 5,
-                                                description = "Inverse probability weighting",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = FALSE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs3)
-  
-  fitOutcomeModelArgs4 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = TRUE,
-                                                                  modelType = "cox",
-                                                                  stratified = TRUE,
-                                                                  control = Cyclops::createControl(cvType = "auto",
-                                                                                          startingVariance = 0.1,
-                                                                                          selectorType = "byPid",
-                                                                                          cvRepetitions = 1,
-                                                                                          tolerance = 2e-07,
-                                                                                          noiseLevel = "quiet"))
-  
-  cmAnalysis6 <- CohortMethod::createCmAnalysis(analysisId = 6,
-                                                description = "Matching plus full outcome model",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs,
-                                                computeCovariateBalance = TRUE,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs4)
-  
-  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4, cmAnalysis5, cmAnalysis6)
+  # cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4, cmAnalysis5, cmAnalysis6)
+  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4)
   
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisList.json"))
 }
