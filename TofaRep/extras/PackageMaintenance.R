@@ -16,16 +16,16 @@
 
 # Format and check code ---------------------------------------------------
 OhdsiRTools::formatRFolder()
-OhdsiRTools::checkUsagePackage("tofarep")
+OhdsiRTools::checkUsagePackage("TofaRep")
 OhdsiRTools::updateCopyrightYearFolder()
 
 # Create manual -----------------------------------------------------------
-shell("rm extras/tofarep.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/tofarep.pdf")
+shell("rm extras/TofaRep.pdf")
+shell("R CMD Rd2pdf ./ --output=extras/TofaRep.pdf")
 
 # Create vignette ---------------------------------------------------------
-rmarkdown::render("vignettes/tofarep.Rmd",
-                  output_file = "../inst/doc/using_tofarep.pdf",
+rmarkdown::render("vignettes/TofaRep.Rmd",
+                  output_file = "../inst/doc/using_TofaRep.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
                                           toc = TRUE,
                                           number_sections = TRUE))
@@ -36,11 +36,11 @@ OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv"
                                                 insertTableSql = TRUE,
                                                 insertCohortCreationR = TRUE,
                                                 generateStats = FALSE,
-                                                packageName = "tofarep")
+                                                packageName = "TofaRep")
 
 # Create analysis details -------------------------------------------------
 source("extras/CreateStudyAnalysisDetails.R")
 createAnalysesDetails("inst/settings/")
 
 # Store environment in which the study was executed -----------------------
-OhdsiRTools::insertEnvironmentSnapshotInPackage("tofarep")
+OhdsiRTools::insertEnvironmentSnapshotInPackage("TofaRep")
