@@ -18,31 +18,41 @@ createAnalysesDetails <- function(workFolder) {
   covarSettings <- FeatureExtraction::createDefaultCovariateSettings(addDescendantsToExclude = TRUE)
   
   getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(washoutPeriod = 183,
-                                                                   restrictToCommonPeriod = FALSE,
-                                                                   firstExposureOnly = TRUE,
-                                                                   removeDuplicateSubjects = "remove all",
+                                                                   restrictToCommonPeriod = TRUE,
+                                                                   firstExposureOnly = FALSE,
+                                                                   removeDuplicateSubjects = FALSE,
                                                                    studyStartDate = "",
                                                                    studyEndDate = "",
                                                                    excludeDrugsFromCovariates = FALSE,
                                                                    covariateSettings = covarSettings)
   
-  createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
+  createStudyPopArgs1 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = FALSE,
                                                                       minDaysAtRisk = 1,
                                                                       riskWindowStart = 0,
                                                                       addExposureDaysToStart = FALSE,
-                                                                      riskWindowEnd = 30,
+                                                                      riskWindowEnd = 0,
                                                                       addExposureDaysToEnd = TRUE)
+
+  createStudyPopArgs2 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = FALSE,
+                                                                       minDaysAtRisk = 1,
+                                                                       riskWindowStart = 0,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 5*365,
+                                                                       addExposureDaysToEnd = FALSE)
+
+  createStudyPopArgs3 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = FALSE,
+                                                                       minDaysAtRisk = 1,
+                                                                       riskWindowStart = 60,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 60,
+                                                                       addExposureDaysToEnd = TRUE)
   
-  fitOutcomeModelArgs1 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
-                                                                  modelType = "cox",
-                                                                  stratified = FALSE)
-  
-  cmAnalysis1 <- CohortMethod::createCmAnalysis(analysisId = 1,
-                                                description = "No matching, simple outcome model",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
+  createStudyPopArgs4 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = FALSE,
+                                                                       minDaysAtRisk = 1,
+                                                                       riskWindowStart = 60,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 5* 365 + 60,
+                                                                       addExposureDaysToEnd = FALSE)
   
   createPsArgs <- CohortMethod::createCreatePsArgs(control = Cyclops::createControl(cvType = "auto",
                                                                                     startingVariance = 0.01,
@@ -50,84 +60,59 @@ createAnalysesDetails <- function(workFolder) {
                                                                                     tolerance = 2e-07,
                                                                                     cvRepetitions = 10))
   
-  matchOnPsArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 1)
-  
-  cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
-                                                description = "Matching plus simple outcome model",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
-  
   stratifyByPsArgs <- CohortMethod::createStratifyByPsArgs(numberOfStrata = 5)
   
-  fitOutcomeModelArgs2 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
-                                                                  modelType = "cox",
-                                                                  stratified = TRUE)
+  # matchOnPsArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
   
-  cmAnalysis3 <- CohortMethod::createCmAnalysis(analysisId = 3,
-                                                description = "Stratification plus stratified outcome model",
+  fitOutcomeModelArgs <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
+                                                                 modelType = "cox",
+                                                                 stratified = TRUE)
+  
+  cmAnalysis1 <- CohortMethod::createCmAnalysis(analysisId = 1,
+                                                description = "On treatment",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
+                                                createStudyPopArgs = createStudyPopArgs1,
                                                 createPs = TRUE,
                                                 createPsArgs = createPsArgs,
                                                 stratifyByPs = TRUE,
                                                 stratifyByPsArgs = stratifyByPsArgs,
                                                 fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
-  
-  cmAnalysis4 <- CohortMethod::createCmAnalysis(analysisId = 4,
-                                                description = "Matching plus stratified outcome model",
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs)
+
+  cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
+                                                description = "Intent-to-treat",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
+                                                createStudyPopArgs = createStudyPopArgs2,
                                                 createPs = TRUE,
                                                 createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs,
+                                                stratifyByPs = TRUE,
+                                                stratifyByPsArgs = stratifyByPsArgs,
                                                 fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs)
   
-  # fitOutcomeModelArgs3 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
-  #                                                                 modelType = "cox",
-  #                                                                 stratified = FALSE,
-  #                                                                 inversePsWeighting = TRUE)
-  # 
-  # cmAnalysis5 <- CohortMethod::createCmAnalysis(analysisId = 5,
-  #                                               description = "Inverse probability weighting",
-  #                                               getDbCohortMethodDataArgs = getDbCmDataArgs,
-  #                                               createStudyPopArgs = createStudyPopArgs,
-  #                                               createPs = TRUE,
-  #                                               createPsArgs = createPsArgs,
-  #                                               matchOnPs = FALSE,
-  #                                               fitOutcomeModel = TRUE,
-  #                                               fitOutcomeModelArgs = fitOutcomeModelArgs3)
-  # 
-  # fitOutcomeModelArgs4 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = TRUE,
-  #                                                                 modelType = "cox",
-  #                                                                 stratified = TRUE,
-  #                                                                 control = Cyclops::createControl(cvType = "auto",
-  #                                                                                         startingVariance = 0.1,
-  #                                                                                         selectorType = "byPid",
-  #                                                                                         cvRepetitions = 1,
-  #                                                                                         tolerance = 2e-07,
-  #                                                                                         noiseLevel = "quiet"))
-  # 
-  # cmAnalysis6 <- CohortMethod::createCmAnalysis(analysisId = 6,
-  #                                               description = "Matching plus full outcome model",
-  #                                               getDbCohortMethodDataArgs = getDbCmDataArgs,
-  #                                               createStudyPopArgs = createStudyPopArgs,
-  #                                               createPs = TRUE,
-  #                                               createPsArgs = createPsArgs,
-  #                                               matchOnPs = TRUE,
-  #                                               matchOnPsArgs = matchOnPsArgs,
-  #                                               fitOutcomeModel = TRUE,
-  #                                               fitOutcomeModelArgs = fitOutcomeModelArgs4)
+  cmAnalysis3 <- CohortMethod::createCmAnalysis(analysisId = 3,
+                                                description = "On treatment (60 day lag)",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs3,
+                                                createPs = TRUE,
+                                                createPsArgs = createPsArgs,
+                                                stratifyByPs = TRUE,
+                                                stratifyByPsArgs = stratifyByPsArgs,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs)
   
-  # cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4, cmAnalysis5, cmAnalysis6)
+  cmAnalysis4 <- CohortMethod::createCmAnalysis(analysisId = 4,
+                                                description = "Intent-to-treat (60 day lag)",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs4,
+                                                createPs = TRUE,
+                                                createPsArgs = createPsArgs,
+                                                stratifyByPs = TRUE,
+                                                stratifyByPsArgs = stratifyByPsArgs,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs)
+  
+  
   cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4)
   
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisList.json"))
