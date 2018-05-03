@@ -2,13 +2,11 @@ outcomeId,outcomeName,type
 436070,Vitamin D deficiency,Outcome
 318800,Gastroesophageal reflux disease,Outcome
 433316,Dizziness and giddiness,Outcome
-80502,Osteoporosis,Outcome
 201826,Type 2 diabetes mellitus,Outcome
 141932,Seborrheic keratosis,Outcome
 138825,Actinic keratosis,Outcome
 313459,Sleep apnea,Outcome
 436962,Insomnia,Outcome
-197684,Dysuria,Outcome
 75860,Constipation,Outcome
 439082,Menopausal syndrome,Outcome
 197381,Epigastric pain,Outcome
@@ -28,14 +26,12 @@ outcomeId,outcomeName,type
 195562,Hemorrhoids,Outcome
 201061,Diaphragmatic hernia,Outcome
 201620,Kidney stone,Outcome
-261880,Atelectasis,Outcome
 434005,Morbid obesity,Outcome
 437246,Vitamin B deficiency,Outcome
 318736,Migraine,Outcome
 136184,Pruritus of skin,Outcome
 139099,Ingrowing nail,Outcome
 197610,Cyst of ovary,Outcome
-4214376,Hyperglycemia,Outcome
 375806,Idiopathic peripheral neuropathy,Outcome
 373478,Presbyopia,Outcome
 434613,Generalized anxiety disorder,Outcome
@@ -46,7 +42,6 @@ outcomeId,outcomeName,type
 381877,Dysfunction of eustachian tube,Outcome
 74725,Displacement of cervical intervertebral disc without myelopathy,Outcome
 197607,Excessive and frequent menstruation,Outcome
-4002650,Plantar fasciitis,Outcome
 45768910,Uncomplicated asthma,Outcome
 377910,Deviated nasal septum,Outcome
 4308509,Impaired fasting glycaemia,Outcome
@@ -70,7 +65,6 @@ outcomeId,outcomeName,type
 433440,Dysthymia,Outcome
 438409,Attention deficit hyperactivity disorder,Outcome
 4172432,Hyperpigmentation of skin,Outcome
-4059290,Steatosis of liver,Outcome
 26662,Testicular hypofunction,Outcome
 76161,Impotence of organic origin,Outcome
 381292,Chronic allergic conjunctivitis,Outcome
@@ -78,7 +72,6 @@ outcomeId,outcomeName,type
 376065,Neurologic disorder associated with type 2 diabetes mellitus,Outcome
 432738,Chronic fatigue syndrome,Outcome
 433811,Hydronephrosis,Outcome
-133834,Atopic dermatitis,Outcome
 201254,Type 1 diabetes mellitus,Outcome
 440129,Hypertrophy of nasal turbinates,Outcome
 436118,After-cataract with vision obscured,Outcome
