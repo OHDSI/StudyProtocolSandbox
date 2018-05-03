@@ -524,48 +524,10 @@ FROM
 GROUP BY p.person_id, p.event_id
 HAVING COUNT(A.TARGET_CONCEPT_ID) >= 1
 -- End Correlated Criteria
-
-UNION ALL
--- Begin Correlated Criteria
-SELECT 1 as index_id, p.person_id, p.event_id
-FROM (SELECT Q.person_id, Q.event_id, Q.start_date, Q.end_date, Q.visit_occurrence_id, OP.observation_period_start_date as op_start_date, OP.observation_period_end_date as op_end_date
-FROM (-- Begin Death Criteria
-select C.person_id, C.person_id as event_id, C.death_date as start_date, DATEADD(d,1,C.death_date) as end_date, coalesce(C.cause_concept_id,0) as TARGET_CONCEPT_ID, CAST(NULL as bigint) as visit_occurrence_id
-from 
-(
-  select d.*
-  FROM @cdm_database_schema.DEATH d
-
-) C
-
-
--- End Death Criteria
-
-) Q
-JOIN @cdm_database_schema.OBSERVATION_PERIOD OP on Q.person_id = OP.person_id 
-  and OP.observation_period_start_date <= Q.start_date and OP.observation_period_end_date >= Q.start_date
-) P
-LEFT JOIN
-(
-  -- Begin Observation Criteria
-select C.person_id, C.observation_id as event_id, C.observation_date as start_date, DATEADD(d,1,C.observation_date) as END_DATE, C.observation_concept_id as TARGET_CONCEPT_ID, C.visit_occurrence_id
-from 
-(
-  select o.*, row_number() over (PARTITION BY o.person_id ORDER BY o.observation_date, o.observation_id) as ordinal
-  FROM @cdm_database_schema.OBSERVATION o
-where o.observation_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 6)
-) C
-
-
--- End Observation Criteria
-) A on A.person_id = P.person_id and A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= DATEADD(day,-7,P.START_DATE) and A.START_DATE <= DATEADD(day,7,P.START_DATE)
-GROUP BY p.person_id, p.event_id
-HAVING COUNT(A.TARGET_CONCEPT_ID) >= 1
--- End Correlated Criteria
 
   ) CQ on E.person_id = CQ.person_id and E.event_id = CQ.event_id
   GROUP BY E.person_id, E.event_id
-  HAVING COUNT(index_id) = 2
+  HAVING COUNT(index_id) = 1
 ) G
 -- End Criteria Group
 ) AC on AC.person_id = pe.person_id and AC.event_id = pe.event_id
@@ -616,7 +578,7 @@ FROM cteIncludedEvents Results
 -- date offset strategy
 
 select event_id, person_id, 
-  case when DATEADD(day,1,start_date) > start_date then DATEADD(day,1,start_date) else start_date end as end_date
+  case when DATEADD(day,30,start_date) > start_date then DATEADD(day,30,start_date) else start_date end as end_date
 INTO #strategy_ends
 from #included_events;
 
@@ -647,7 +609,7 @@ with cteEndDates (person_id, end_date) AS -- the magic
 (	
 	SELECT
 		person_id
-		, DATEADD(day,-1 * 30, event_date)  as end_date
+		, DATEADD(day,-1 * 0, event_date)  as end_date
 	FROM
 	(
 		SELECT
@@ -670,7 +632,7 @@ with cteEndDates (person_id, end_date) AS -- the magic
 
 			SELECT
 				person_id
-				, DATEADD(day,30,end_date) as end_date
+				, DATEADD(day,0,end_date) as end_date
 				, 1 AS event_type
 				, NULL
 			FROM #cohort_rows

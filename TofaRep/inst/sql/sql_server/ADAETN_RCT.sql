@@ -259,6 +259,11 @@ INSERT INTO #Codesets (codeset_id, concept_id)
 SELECT 21 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
   select concept_id from @vocabulary_database_schema.CONCEPT where concept_id in (1119119,1151789)and invalid_reason is null
+UNION  select c.concept_id
+  from @vocabulary_database_schema.CONCEPT c
+  join @vocabulary_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
+  and ca.ancestor_concept_id in (1119119,1151789)
+  and c.invalid_reason is null
 
 ) I
 ) C;
