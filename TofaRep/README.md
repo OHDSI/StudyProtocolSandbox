@@ -22,6 +22,8 @@ If you experience problems on Windows where rJava can't find Java, one solution 
 install_github("ohdsi/SqlRender", args = "--no-multiarch")
 ```
 
+Alternatively, ensure that you have installed both 32-bit and 64-bit JDK versions.
+
 Once installed, you can execute the study by modifying and using the following code:
 
 ```r
