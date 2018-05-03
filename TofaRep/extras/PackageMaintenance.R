@@ -51,3 +51,10 @@ createAnalysesDetails("inst/settings/")
 
 # Store environment in which the study was executed -----------------------
 OhdsiRTools::insertEnvironmentSnapshotInPackage("TofaRep")
+
+# Build source package ----------------------------------------------------
+name <- list.files(path = "extras", pattern = ".*.tar.gz", full.names = TRUE)
+unlink(name)
+shell("R CMD build ../TofaRep")
+name <- list.files(pattern = ".*.tar.gz")
+file.rename(name, file.path("extras", name))

@@ -7,7 +7,8 @@ options(fftempdir = "S:/FFTemp")
 maxCores <- parallel::detectCores()
 
 # The folder where the study intermediate and result files will be written:
-outputFolder <- "S:/StudyResults/tofarep_ccae_v697"
+outputFolder <- "S:/TofaRep/CCAE"
+outputFolder <- "S:/TofaRep/MDCR"
 
 # Details for connecting to the server:
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
@@ -18,10 +19,12 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
 
 # The name of the database schema where the CDM data can be found:
 cdmDatabaseSchema <- "cdm_truven_ccae_v697.dbo"
+cdmDatabaseSchema <- "cdm_truven_mdcr_v698.dbo"
 
 # The name of the database schema and table where the study-specific cohorts will be instantiated:
 cohortDatabaseSchema <- "scratch.dbo"
 cohortTable <- "tofarep_ccae_v697"
+cohortTable <- "tofarep_mdcr_v698"
 
 # For Oracle: define a schema that can be used to emulate temp tables:
 oracleTempSchema <- NULL
@@ -32,7 +35,7 @@ execute(connectionDetails = connectionDetails,
         cohortTable = cohortTable,
         oracleTempSchema = oracleTempSchema,
         outputFolder = outputFolder,
-        createCohorts = FALSE,
+        createCohorts = TRUE,
         synthesizePositiveControls = TRUE,
         runAnalyses = TRUE,
         runDiagnostics = TRUE,
