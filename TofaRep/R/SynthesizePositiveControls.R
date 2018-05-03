@@ -48,7 +48,7 @@ synthesizePositiveControls <- function(connectionDetails,
                                        outputFolder,
                                        maxCores = 1) {
   # Set to TRUE if you don't want to use synthetic positive controls in your study:
-  skipSynthesis <- FALSE
+  skipSynthesis <- TRUE
   
   if (!skipSynthesis) {
     synthesisFolder <- file.path(outputFolder, "positiveControlSynthesis")

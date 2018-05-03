@@ -68,7 +68,7 @@ createCohorts <- function(connectionDetails,
                                            cdm_database_schema = cdmDatabaseSchema,
                                            target_database_schema = cohortDatabaseSchema,
                                            target_cohort_table = cohortTable,
-                                           outcome_ids = negativeControlOutcomes$outcomeId)
+                                           outcome_ids = unique(negativeControlOutcomes$outcomeId))
   DatabaseConnector::executeSql(conn, sql)
   
   # Check number of subjects per cohort:

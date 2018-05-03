@@ -38,6 +38,13 @@ OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv"
                                                 generateStats = FALSE,
                                                 packageName = "TofaRep")
 
+# Hack: We want to use the same negative controls for each target-comparator combination. Automatically generate file
+ncs <- read.csv("extras/NegativeControls.csv")
+tcos <- read.csv("inst/settings/tcosOfInterest.csv")
+tcs <- unique(tcos[, c("targetId", "targetName", "comparatorId", "comparatorName")])
+ncs <- merge(tcs, ncs)
+write.csv(ncs, "inst/settings/NegativeControls.csv", row.names = FALSE)
+  
 # Create analysis details -------------------------------------------------
 source("extras/CreateStudyAnalysisDetails.R")
 createAnalysesDetails("inst/settings/")

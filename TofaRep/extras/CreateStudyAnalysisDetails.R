@@ -17,7 +17,7 @@
 createAnalysesDetails <- function(workFolder) {
   covarSettings <- FeatureExtraction::createDefaultCovariateSettings(addDescendantsToExclude = TRUE)
   
-  getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(washoutPeriod = 183,
+  getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(washoutPeriod = 365,
                                                                    restrictToCommonPeriod = TRUE,
                                                                    firstExposureOnly = FALSE,
                                                                    removeDuplicateSubjects = FALSE,
@@ -27,20 +27,23 @@ createAnalysesDetails <- function(workFolder) {
                                                                    covariateSettings = covarSettings)
   
   createStudyPopArgs1 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = FALSE,
-                                                                      minDaysAtRisk = 1,
-                                                                      riskWindowStart = 0,
-                                                                      addExposureDaysToStart = FALSE,
-                                                                      riskWindowEnd = 0,
-                                                                      addExposureDaysToEnd = TRUE)
-
+                                                                       removeDuplicateSubjects = "keep first",
+                                                                       minDaysAtRisk = 1,
+                                                                       riskWindowStart = 0,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 0,
+                                                                       addExposureDaysToEnd = TRUE)
+  
   createStudyPopArgs2 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = FALSE,
+                                                                       removeDuplicateSubjects = "keep first",
                                                                        minDaysAtRisk = 1,
                                                                        riskWindowStart = 0,
                                                                        addExposureDaysToStart = FALSE,
                                                                        riskWindowEnd = 5*365,
                                                                        addExposureDaysToEnd = FALSE)
-
+  
   createStudyPopArgs3 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = FALSE,
+                                                                       removeDuplicateSubjects = "keep first",
                                                                        minDaysAtRisk = 1,
                                                                        riskWindowStart = 60,
                                                                        addExposureDaysToStart = FALSE,
@@ -48,6 +51,7 @@ createAnalysesDetails <- function(workFolder) {
                                                                        addExposureDaysToEnd = TRUE)
   
   createStudyPopArgs4 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = FALSE,
+                                                                       removeDuplicateSubjects = "keep first",
                                                                        minDaysAtRisk = 1,
                                                                        riskWindowStart = 60,
                                                                        addExposureDaysToStart = FALSE,
@@ -61,8 +65,6 @@ createAnalysesDetails <- function(workFolder) {
                                                                                     cvRepetitions = 10))
   
   stratifyByPsArgs <- CohortMethod::createStratifyByPsArgs(numberOfStrata = 5)
-  
-  # matchOnPsArgs <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
   
   fitOutcomeModelArgs <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
                                                                  modelType = "cox",
@@ -78,7 +80,7 @@ createAnalysesDetails <- function(workFolder) {
                                                 stratifyByPsArgs = stratifyByPsArgs,
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs)
-
+  
   cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
                                                 description = "Intent-to-treat",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
