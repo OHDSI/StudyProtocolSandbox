@@ -1,6 +1,7 @@
 # tofarep
 
 # To run:
+```r
 install.packages("devtools")
 library(devtools)
 library(devtools)
@@ -14,6 +15,7 @@ install_github("ohdsi/EmpiricalCalibration")
 install_github("ohdsi/MethodEvaluation")
 install_github("ohdsi/EvidenceSynthesis")
 install_github("ohdsi/StudyProtocolSandbox/TofaRep")
+```
 
 Once installed, you can execute the study by modifying and using the following code:
 
