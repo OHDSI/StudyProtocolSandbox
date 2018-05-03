@@ -16,6 +16,12 @@ install_github("ohdsi/EvidenceSynthesis")
 install_github("ohdsi/StudyProtocolSandbox/TofaRep")
 ```
 
+If you experience problems on Windows where rJava can't find Java, one solution may be to add `args = "--no-multiarch"` to each `install_github` call, for example:
+
+```r
+install_github("ohdsi/SqlRender", args = "--no-multiarch")
+```
+
 Once installed, you can execute the study by modifying and using the following code:
 
 ```r
