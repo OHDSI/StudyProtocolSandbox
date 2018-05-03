@@ -39,8 +39,6 @@ execute(connectionDetails = connectionDetails,
         packageResults = TRUE,
         maxCores = maxCores)
 
-createFiguresAndTables(outputFolder = outputFolder,
-                       connectionDetails = connectionDetails,
-                       cohortDatabaseSchema = cohortDatabaseSchema,
-                       cohortTable = cohortTable,
-                       oracleTempSchema = oracleTempSchema)
+prepareForEvidenceExplorer(studyFolder = "S:/SkeletonStudy")
+
+launchEvidenceExplorer(studyFolder = "S:/SkeletonStudy", blind = FALSE, launch.browser = FALSE)

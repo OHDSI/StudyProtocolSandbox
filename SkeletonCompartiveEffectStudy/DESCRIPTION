@@ -23,7 +23,9 @@ Imports:
 	  OhdsiRTools (>= 1.5.0)
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    DT,
+    shiny
 License: Apache License 2.0
 VignetteBuilder: knitr
 LazyData: TRUE
