@@ -6,28 +6,41 @@ options(fftempdir = "S:/FFTemp")
 # Maximum number of cores to be used:
 maxCores <- parallel::detectCores()
 
-# The folder where the study intermediate and result files will be written:
-outputFolder <- "S:/TofaRep/CCAE"
-outputFolder <- "S:/TofaRep/MDCR"
-
+# PDW ----------------------------------------------------------------------------------------------
 # Details for connecting to the server:
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
                                                                 server = Sys.getenv("PDW_SERVER"),
                                                                 user = NULL,
                                                                 password = NULL,
                                                                 port = Sys.getenv("PDW_PORT"))
+cohortDatabaseSchema <- "scratch.dbo"
+oracleTempSchema <- NULL
 
-# The name of the database schema where the CDM data can be found:
+# CCAE settings
+outputFolder <- "S:/TofaRep/CCAE"
+cohortTable <- "tofarep_ccae_v697"
 cdmDatabaseSchema <- "cdm_truven_ccae_v697.dbo"
+
+# MDCR settings
+outputFolder <- "S:/TofaRep/MDCR"
+cohortTable <- "tofarep_mdcr_v698"
 cdmDatabaseSchema <- "cdm_truven_mdcr_v698.dbo"
 
-# The name of the database schema and table where the study-specific cohorts will be instantiated:
-cohortDatabaseSchema <- "scratch.dbo"
-cohortTable <- "tofarep_ccae_v697"
-cohortTable <- "tofarep_mdcr_v698"
 
-# For Oracle: define a schema that can be used to emulate temp tables:
+# Postgres ---------------------------------------------------------------------------------------
+# Details for connecting to the server:
+connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "postgresql",
+                                                                server = "localhost/ohdsi",
+                                                                user = "postgres",
+                                                                password = Sys.getenv("pwPostgres"))
+cohortDatabaseSchema <- "scratch"
 oracleTempSchema <- NULL
+
+# Synpuf settings
+outputFolder <- "S:/TofaRep/Synpuf"
+cohortTable <- "tofarep"
+cdmDatabaseSchema <- "cdm_synpuf"
+
 
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
@@ -35,8 +48,8 @@ execute(connectionDetails = connectionDetails,
         cohortTable = cohortTable,
         oracleTempSchema = oracleTempSchema,
         outputFolder = outputFolder,
-        createCohorts = TRUE,
-        synthesizePositiveControls = TRUE,
+        createCohorts = FALSE,
+        synthesizePositiveControls = FALSE,
         runAnalyses = TRUE,
         runDiagnostics = TRUE,
         packageResults = TRUE,
