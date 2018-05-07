@@ -1,4 +1,5 @@
-# shinySettings <- list(studyFolder = "S:/SkeletonStudy", blind = FALSE)
+# shinySettings <- list(studyFolder = "S:/SkeletonStudy", blind = TRUE)
+shinySettings <- list(studyFolder = "S:/results", blind = TRUE)
 studyFolder <- shinySettings$studyFolder
 blind <- shinySettings$blind
 

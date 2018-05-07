@@ -152,8 +152,8 @@ shinyServer(function(input, output) {
   output$powerTable <- renderTable({
     table <- selectedRow()
     if (!is.null(table)) {
-      table$irTreated <- formatC(1000 * table$eventsTreated / (table$treatedDays / 365.25), digits = 2, format = "f")
-      table$irComparator <- formatC(1000 * table$eventsComparator / (table$comparatorDays / 365.25), digits = 2, format = "f")
+      table$irTreated <- formatC(1000 * as.integer(table$eventsTreated) / (table$treatedDays / 365.25), digits = 2, format = "f")
+      table$irComparator <- formatC(1000 * as.integer(table$eventsComparator) / (table$comparatorDays / 365.25), digits = 2, format = "f")
       
       table$treated <- formatC(table$treated, big.mark = ",", format = "d")
       table$comparator <- formatC(table$comparator, big.mark = ",", format = "d")
@@ -164,6 +164,9 @@ shinyServer(function(input, output) {
       table$mdrr <- formatC(table$mdrr, digits = 2, format = "f")
       table <- table[, powerColumns]
       colnames(table) <- powerColumnNames
+      table$Events <- as.integer(table$`Target events`) + as.integer(table$`Comparator events`)
+      table$`Target events` <- NULL
+      table$`Comparator events` <- NULL
       return(table)
     } else {
       return(table)
