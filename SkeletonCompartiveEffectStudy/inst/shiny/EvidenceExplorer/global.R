@@ -1,7 +1,10 @@
+unlink("s:/temp/log.txt")
+OhdsiRTools::addDefaultFileLogger("s:/temp/log.txt")
+
 # shinySettings <- list(studyFolder = "S:/SkeletonStudy", blind = TRUE)
-shinySettings <- list(studyFolder = "S:/results", blind = TRUE)
 studyFolder <- shinySettings$studyFolder
 blind <- shinySettings$blind
+OhdsiRTools::logDebug(studyFolder)
 
 databases <- list.files(studyFolder, include.dirs = TRUE)
 

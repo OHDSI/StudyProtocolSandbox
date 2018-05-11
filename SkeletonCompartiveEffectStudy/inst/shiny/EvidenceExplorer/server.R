@@ -195,8 +195,8 @@ shinyServer(function(input, output) {
         thead(
           tr(
             th(rowspan = 3, "Characteristic"),
-            th(colspan = 3, class = "dt-center", paste("Before", tolower(row$psStrategy))),
-            th(colspan = 3, class = "dt-center", paste("After", tolower(row$psStrategy)))
+            th(colspan = 3, class = "dt-center", paste("Before", "stratification")),
+            th(colspan = 3, class = "dt-center", paste("After", "stratification"))
           ),
           tr(
             lapply(table1[1, 2:ncol(table1)], th)
@@ -346,7 +346,7 @@ shinyServer(function(input, output) {
   
   output$kaplanMeierPlot <- renderImage({
     row <- selectedRow()
-    if (is.null(row)) {
+    if (is.null(row) || blind) {
       return(NULL)
     } else {
       fileName <- file.path(studyFolder, row$database, paste0("km_a",row$analysisId,"_t",row$targetId,"_c",row$comparatorId,"_o",row$outcomeId,".png"))
@@ -364,7 +364,7 @@ shinyServer(function(input, output) {
   
   output$kmPlotCaption <- renderUI({
     bal <- balance()
-    if (!is.null(bal)) {
+    if (!is.null(bal) && !blind) {
       row <- selectedRow()
       text <- "<strong>Table 5.</strong> Kaplan Meier plot, showing survival as a function of time. This plot
       is adjusted for the propensity score %s: The target curve (<em>%s</em>) shows the actual observed survival. The

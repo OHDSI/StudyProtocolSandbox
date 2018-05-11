@@ -69,7 +69,7 @@ launchEvidenceExplorer <- function(studyFolder, blind = TRUE, launch.browser = T
   appDir <- system.file("shiny", "EvidenceExplorer", package = "SkeletonCompartiveEffectStudy")
   .GlobalEnv$shinySettings <- list(studyFolder = studyFolder, blind = blind)
   on.exit(rm(shinySettings, envir=.GlobalEnv))
-  shiny::runApp(appDir, display.mode = "normal", launch.browser = launch.browser)
+  shiny::runApp(appDir) 
 }
 
 # Borrowed from devtools: https://github.com/hadley/devtools/blob/ba7a5a4abd8258c52cb156e7b26bb4bf47a79f0b/R/utils.r#L44
