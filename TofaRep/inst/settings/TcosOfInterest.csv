@@ -1,0 +1,12 @@
+targetId,targetName,comparatorId,comparatorName,outcomeIds,OutcomeNames,excludedCovariateConceptIds
+6593,"Tofacitinib, satisfying trial",6609,"Adalimumab, satisfying trial",6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,42904205;1119119;2212830
+6593,"Tofacitinib, satisfying trial",6610,"Etanercept, satisfying trial",6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,42904205;1151789;2212830
+6593,"Tofacitinib, satisfying trial",6611,"Adalimumab or etanercept, satisfying trial",6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,42904205;1119119;2212830
+6607,"Tofacitinib, satisfying trial without methotrexate",6612,"Adalimumab, satisfying trial without methotrexate",6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,42904205;1119119;2212830
+6607,"Tofacitinib, satisfying trial without methotrexate",6614,"Etanercept, satisfying trial without methotrexate",6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,42904205;1151789;2212830
+6607,"Tofacitinib, satisfying trial without methotrexate",6616,"Adalimumab or etanercept, satisfying trial without methotrexate",6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,42904205;1119119;2212830
+6608,"Tofacitinib, real-world population",6613,Adalimumab real-world population,6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,42904205;1119119;2212830
+6608,"Tofacitinib, real-world population",6615,Etanercept real world population,6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,42904205;1151789;2212830
+6608,"Tofacitinib, real-world population",6617,Adalimumab or etanercept real world population,6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,42904205;1119119;2212830
+6609,"Adalimumab, satisfying trial",6610,"Etanercept, satisfying trial",6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,1119119;1151789;2212830
+6613,"Adalimumab, real-world population",6615,"Etanercept, real world population",6606; 6596; 6600,MACE; Malignancy - simple; Malignancy - detail,1119119;1151789;2212830

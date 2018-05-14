@@ -1,0 +1,2 @@
+targetId,targetName,comparatorId,comparatorName,outcomeIds,OutcomeNames,excludedCovariateConceptIds
+1,Celecoxib,2,Diclofenac,3,GI Bleed,21603933
