@@ -38,20 +38,16 @@ createCohorts <- function(connectionDetails,
                           targetId,
                           outcomeIds){
 
+  packageName= 'Your package name ...'
+
   cohortDetails <- NULL
   if(!missing(outcomeIds)){
-    if(length(unique(outcomeIds))!=4){
-      stop('Need to enter four outcome ids')
-    }
-    if(length(targetId)!=1){
-      stop('Need to enter one target id')
+    if(missing(cohortId)){
+      stop('Need cohortId if outcomeIds is entered')
     }
 
-    cohortDetails <- data.frame(cohortName=c('Females newly diagnosed with atrial fibrilation aged 65 to 95',
-                                       'Stroke definition 1 Broad stroke Inpatient',
-                                       'Stroke definition 2 Broad stroke',
-                                       'Stroke definition 3 Haemorrhagic stroke',
-                                       'Stroke definition 4 Ischaemic stroke'),
+    cohortDetails <- data.frame(cohortName=c('targetCohort',
+                                       'outcomeCohort'),
                           cohortId = c(targetId, outcomeIds))
 
     }
@@ -63,7 +59,7 @@ createCohorts <- function(connectionDetails,
   existTab <- toupper(cohortTable)%in%toupper(DatabaseConnector::getTableNames(connection, cohortDatabaseschema))
   if(!existTab){
     sql <- SqlRender::loadRenderTranslateSql("createTable.sql",
-                                             packageName = "ExistingStrokeRiskExternalValidation",
+                                             packageName = packageName,
                                              dbms = attr(connection, "dbms"),
                                              target_database_schema = cohortDatabaseschema,
                                              target_cohort_table = cohortTable)
@@ -75,14 +71,14 @@ createCohorts <- function(connectionDetails,
                                        cdmDatabaseSchema = cdmDatabaseschema,
                                        cohortDatabaseSchema = cohortDatabaseschema,
                                        cohortTable = cohortTable,
-                                       package = 'ExistingStrokeRiskExternalValidation')
+                                       package = packageName)
   } else {
     result <- PatientLevelPrediction::createCohort(cohortDetails = cohortDetails,
                                                    connectionDetails = connectionDetails,
                                                    cdmDatabaseSchema = cdmDatabaseschema,
                                                    cohortDatabaseSchema = cohortDatabaseschema,
                                                    cohortTable = cohortTable,
-                                                   package = 'ExistingStrokeRiskExternalValidation')
+                                                   package = packageName)
   }
 
   print(result)
@@ -145,10 +141,14 @@ getTable1 <- function(connectionDetails,
   return(table1)
 }
 
-#' Applies the five existing stroke prediction models
+#==========================
+#  Example of implementing an exisitng model in the PredictionComparison repository
+#==========================
+
+#' Applies an xisting stroke prediction model
 #'
 #' @details
-#' This will run and evaluate five existing stroke risk prediction models
+#' This will run and evaluate  the atria stroke risk prediction model
 #'
 #' @param connectioDetails The connections details for connecting to the CDM
 #' @param cdmDatabaseschema  The schema holding the CDM data
@@ -161,14 +161,14 @@ getTable1 <- function(connectionDetails,
 #' A list with the performance and plots
 #'
 #' @export
-applyExistingstrokeModels <- function(connectionDetails,
+applyExistingAtriastrokeModel <- function(connectionDetails,
                                       cdmDatabaseSchema,
                                       cohortDatabaseSchema,
                                       cohortTable,
                                       targetId,
                                       outcomeId){
 
-  writeLines('Implementing Astria stroke risk model...')
+  writeLines('Implementing Atria stroke risk model...')
   astria <- PredictionComparison::atriaStrokeModel(connectionDetails, cdmDatabaseSchema,
                                        cohortDatabaseSchema = cohortDatabaseSchema,
                                        outcomeDatabaseSchema = cohortDatabaseSchema,
@@ -177,95 +177,67 @@ applyExistingstrokeModels <- function(connectionDetails,
                                        cohortId = targetId, outcomeId = outcomeId,
                                        removePriorOutcome=T)
 
-  writeLines('Implementing Qstroke stroke risk model...')
-  qstroke <- PredictionComparison::qstrokeModel(connectionDetails, cdmDatabaseSchema,
-                                                 cohortDatabaseSchema = cohortDatabaseSchema,
-                                                 outcomeDatabaseSchema = cohortDatabaseSchema,
-                                                 cohortTable = cohortTable,
-                                                 outcomeTable = cohortTable,
-                                                 cohortId = targetId, outcomeId = outcomeId,
-                                                 removePriorOutcome=T)
-
-  writeLines('Implementing Framington stroke risk model...')
-  framington <- PredictionComparison::framinghamModel(connectionDetails, cdmDatabaseSchema,
-                                              cohortDatabaseSchema = cohortDatabaseSchema,
-                                              outcomeDatabaseSchema = cohortDatabaseSchema,
-                                              cohortTable = cohortTable,
-                                              outcomeTable = cohortTable,
-                                              cohortId = targetId, outcomeId = outcomeId,
-                                              removePriorOutcome=T)
-
-  writeLines('Implementing chads2 stroke risk model...')
-  chads2 <- PredictionComparison::chads2Model(connectionDetails, cdmDatabaseSchema,
-                                              cohortDatabaseSchema = cohortDatabaseSchema,
-                                              outcomeDatabaseSchema = cohortDatabaseSchema,
-                                              cohortTable = cohortTable,
-                                              outcomeTable = cohortTable,
-                                              cohortId = targetId, outcomeId = outcomeId,
-                                              removePriorOutcome=T)
-
-  writeLines('Implementing chads2vas stroke risk model...')
-  chads2vas <- PredictionComparison::chads2vasModel(connectionDetails, cdmDatabaseSchema,
-                                              cohortDatabaseSchema = cohortDatabaseSchema,
-                                              outcomeDatabaseSchema = cohortDatabaseSchema,
-                                              cohortTable = cohortTable,
-                                              outcomeTable = cohortTable,
-                                              cohortId = targetId, outcomeId = outcomeId,
-                                              removePriorOutcome=T)
-
-# format the results... [TODO...]
-  results <- list(astria=astria,
-                  qstroke=qstroke,
-                  framington=framington,
-                  chads2=chads2,
-                  chads2vas=chads2vas)
-
- return(results)
+ return(atria)
 }
 
-#' Submit the study results to the study coordinating center
+#==========================
+#  Example of implementing a plp model exported into inst/extdata
+#==========================
+
+#' Applies an exisitng plp prediction model
 #'
 #' @details
-#' This will upload the file \code{StudyResults.zip} to the study coordinating center using Amazon S3.
-#' This requires an active internet connection.
+#' This will run and evaluate an exisitng plpModel
 #'
-#' @param exportFolder   The path to the folder containing the \code{StudyResults.zip} file.
-#' @param dbName         Database name used in the zipName
-#' @param key            The key string as provided by the study coordinator
-#' @param secret         The secret string as provided by the study coordinator
+#' @param connectioDetails The connections details for connecting to the CDM
+#' @param cdmDatabaseschema  The schema holding the CDM data
+#' @param cohortDatabaseschema The schema holding the cohort table
+#' @param cohortTable         The name of the cohort table
+#' @param targetId          The cohort definition id of the target population
+#' @param outcomeId         The cohort definition id of the outcome
 #'
 #' @return
-#' TRUE if the upload was successful.
+#' A list with the performance and plots
 #'
 #' @export
-submitResults <- function(exportFolder,dbName, key, secret) {
-  zipName <- file.path(exportFolder, paste0(dbName,"-StudyResults.zip"))
-  folderName <- file.path(exportFolder, paste0(dbName,"-StudyResults"))
-  if (!dir.exists(folderName)) {
-    dir.create(folderName, recursive = T)
-  }
+applyDevelopedPlpModel <- function(connectionDetails,
+                                   cdmDatabaseSchema,
+                                   cohortDatabaseSchema,
+                                   cohortTable,
+                                   targetId,
+                                   outcomeId,
+                                   packageName){
 
-  # move all zipped files into folder
-  files <- list.files(exportFolder)
-  files <- files[grep('.zip', files)]
-  for(file in files){
-    file.copy(file.path(exportFolder,file), file.path(folderName), recursive=TRUE)
-  }
+  plpResult <- loadPlpResult(sys.file('plp_models/existingModel', package=packageName))
+  writeLines('Implementing Developed plpModel...')
+  result <- externalValidatePlp(plpResult = plpResult,
+                                connectionDetails=connectionDetails,
+                                validationSchemaCdm=cdmDatabaseSchema,
+                                validationSchemaTarget=cohortDatabaseSchema,
+                                validationSchemaOutcome = cohortDatabaseSchema,
+                                validationTableTarget=cohortTable,
+                                validationTableOutcome = cohortTable,
+                                validationIdTarget=targetId,
+                                validationIdOutcome=outcomeId,
+                                keepPrediction=F)
 
-  if(file.exists(file.path(exportFolder, 'predictionDetails.txt'))){
-    file.copy(file.path(exportFolder, 'predictionDetails.txt'), file.path(folderName), recursive=TRUE)
-  }
+  return(result)
+}
 
-  # compress complete folder
-  OhdsiSharing::compressFolder(folderName, zipName)
-  # delete temp folder
-  unlink(folderName, recursive = T)
+#' Checks the plp package is installed sufficiently for the network study and does other checks if needed
+#'
+#' @details
+#' This will check that the network study dependancies work
+#'
+#' @param connectioDetails The connections details for connecting to the CDM
+#'
+#' @return
+#' A number (a value other than 1 means an issue with the install)
+#'
+#' @export
 
-  if (!file.exists(zipName)) {
-    stop(paste("Cannot find file", zipName))
-  }
-  PatientLevelPrediction::submitResults(exportFolder = file.path(exportFolder, paste0(dbName,"-StudyResults.zip")),
-                                        key =  key, secret = secret)
-
-
+checkInstall <- function(connectionDetails=NULL){
+  result <- checkPlpInstallation(connectionDetails=connectionDetails,
+                       python=F)
+  return(result)
 }
