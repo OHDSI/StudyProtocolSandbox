@@ -34,7 +34,9 @@ Getting Started
 install.packages("drat")
 drat::addRepo("OHDSI")
 install.packages("PatientLevelPrediction")
-install.packages("StudyProtocolSandbox/ExistingStrokeRiskExternalValidation")
+install.packages("devtools")
+devtools::install_github("OHDSI/PredictionComparison")
+devtools::install_github("OHDSI/StudyProtocolSandbox/ExistingStrokeRiskExternalValidation")
 
 library('ExistingStrokeRiskExternalValidation')
 # Add inputs for the site:
