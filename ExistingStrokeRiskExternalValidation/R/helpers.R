@@ -21,8 +21,8 @@
 #' This will create the risk prediciton cohorts and then count the table sizes
 #'
 #' @param connectioDetails The connections details for connecting to the CDM
-#' @param cdmDatabaseschema  The schema holding the CDM data
-#' @param cohortDatabaseschema The schema holding the cohort table
+#' @param cdmDatabaseSchema  The schema holding the CDM data
+#' @param cohortDatabaseSchema The schema holding the cohort table
 #' @param cohortTable         The name of the cohort table
 #' @param targetId          The cohort definition id of the target population
 #' @param outcomeIds         The cohort definition ids of the outcomes
@@ -32,8 +32,8 @@
 #'
 #' @export
 createCohorts <- function(connectionDetails,
-                          cdmDatabaseschema,
-                          cohortDatabaseschema,
+                          cdmDatabaseSchema,
+                          cohortDatabaseSchema,
                           cohortTable,
                           targetId,
                           outcomeIds){
@@ -60,27 +60,27 @@ createCohorts <- function(connectionDetails,
 
   #checking whether cohort table exists and creating if not..
   # create the cohort table if it doesnt exist
-  existTab <- toupper(cohortTable)%in%toupper(DatabaseConnector::getTableNames(connection, cohortDatabaseschema))
+  existTab <- toupper(cohortTable)%in%toupper(DatabaseConnector::getTableNames(connection, cohortDatabaseSchema))
   if(!existTab){
     sql <- SqlRender::loadRenderTranslateSql("createTable.sql",
                                              packageName = "ExistingStrokeRiskExternalValidation",
                                              dbms = attr(connection, "dbms"),
-                                             target_database_schema = cohortDatabaseschema,
+                                             target_database_schema = cohortDatabaseSchema,
                                              target_cohort_table = cohortTable)
     DatabaseConnector::executeSql(connection, sql)
   }
 
   if(is.null(cohortDetails)){
   result <- PatientLevelPrediction::createCohort(connectionDetails = connectionDetails,
-                                       cdmDatabaseSchema = cdmDatabaseschema,
-                                       cohortDatabaseSchema = cohortDatabaseschema,
+                                       cdmDatabaseSchema = cdmDatabaseSchema,
+                                       cohortDatabaseSchema = cohortDatabaseSchema,
                                        cohortTable = cohortTable,
                                        package = 'ExistingStrokeRiskExternalValidation')
   } else {
     result <- PatientLevelPrediction::createCohort(cohortDetails = cohortDetails,
                                                    connectionDetails = connectionDetails,
-                                                   cdmDatabaseSchema = cdmDatabaseschema,
-                                                   cohortDatabaseSchema = cohortDatabaseschema,
+                                                   cdmDatabaseSchema = cdmDatabaseSchema,
+                                                   cohortDatabaseSchema = cohortDatabaseSchema,
                                                    cohortTable = cohortTable,
                                                    package = 'ExistingStrokeRiskExternalValidation')
   }
@@ -96,8 +96,8 @@ createCohorts <- function(connectionDetails,
 #' This will create the patient characteristic table
 #'
 #' @param connectioDetails The connections details for connecting to the CDM
-#' @param cdmDatabaseschema  The schema holding the CDM data
-#' @param cohortDatabaseschema The schema holding the cohort table
+#' @param cdmDatabaseSchema  The schema holding the CDM data
+#' @param cohortDatabaseSchema The schema holding the cohort table
 #' @param cohortTable         The name of the cohort table
 #' @param targetId          The cohort definition id of the target population
 #' @param outcomeId         The cohort definition id of the outcome
@@ -108,8 +108,8 @@ createCohorts <- function(connectionDetails,
 #'
 #' @export
 getTable1 <- function(connectionDetails,
-                      cdmDatabaseschema,
-                      cohortDatabaseschema,
+                      cdmDatabaseSchema,
+                      cohortDatabaseSchema,
                       cohortTable,
                       targetId,
                       outcomeId,
@@ -118,10 +118,10 @@ getTable1 <- function(connectionDetails,
   covariateSettings <- FeatureExtraction::createCovariateSettings(useDemographicsGender = T)
 
   plpData <- PatientLevelPrediction::getPlpData(connectionDetails,
-                                     cdmDatabaseSchema = cdmDatabaseschema,
+                                     cdmDatabaseSchema = cdmDatabaseSchema,
                                      cohortId = targetId, outcomeIds = outcomeId,
-                                     cohortDatabaseSchema = cohortDatabaseschema,
-                                     outcomeDatabaseSchema = cohortDatabaseschema,
+                                     cohortDatabaseSchema = cohortDatabaseSchema,
+                                     outcomeDatabaseSchema = cohortDatabaseSchema,
                                      cohortTable = cohortTable,
                                      outcomeTable = cohortTable,
                                      covariateSettings=covariateSettings)
@@ -151,8 +151,8 @@ getTable1 <- function(connectionDetails,
 #' This will run and evaluate five existing stroke risk prediction models
 #'
 #' @param connectioDetails The connections details for connecting to the CDM
-#' @param cdmDatabaseschema  The schema holding the CDM data
-#' @param cohortDatabaseschema The schema holding the cohort table
+#' @param cdmDatabaseSchema  The schema holding the CDM data
+#' @param cohortDatabaseSchema The schema holding the cohort table
 #' @param cohortTable         The name of the cohort table
 #' @param targetId          The cohort definition id of the target population
 #' @param outcomeId         The cohort definition id of the outcome

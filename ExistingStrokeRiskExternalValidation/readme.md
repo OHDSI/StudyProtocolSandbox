@@ -48,8 +48,8 @@ server <- Sys.getenv('server')
 port <- Sys.getenv('port')
 
 databaseName <- 'database name'
-cdmDatabaseschema <- 'cdmDatabase.dbo'
-cohortDatabaseschema <- 'cohortDatabase.dbo'
+cdmDatabaseSchema <- 'cdmDatabase.dbo'
+cohortDatabaseSchema <- 'cohortDatabase.dbo'
 outputLocation <- file.path(getwd(),'External Stroke Validation')
 cohortTable <- 'stroke_cohort'
 getTable1 <- F
@@ -68,8 +68,8 @@ checkPlpInstallation(connectionDetails=connectionDetails,
               
 # Check cohort definitions work for the database:                     
 cohorts <- createCohorts(connectionDetails=connectionDetails,
-                       cdmDatabaseschema=cdmDatabaseschema,
-                       cohortDatabaseschema=cohortDatabaseschema,
+                       cdmDatabaseSchema=cdmDatabaseSchema,
+                       cohortDatabaseSchema=cohortDatabaseSchema,
                        cohortTable=cohortTable) 
                        
 # If the check passes and you have cohort values submit the cohort counts to the study
@@ -79,8 +79,8 @@ cohorts <- createCohorts(connectionDetails=connectionDetails,
 #  Once definitons have been checked across sites run:
 main(connectionDetails=connectionDetails,
                  databaseName=databaseName,
-                 cdmDatabaseschema=cdmDatabaseschema,
-                 cohortDatabaseschema=cohortDatabaseschema,
+                 cdmDatabaseSchema=cdmDatabaseSchema,
+                 cohortDatabaseSchema=cohortDatabaseSchema,
                  outputLocation=outputLocation,
                  cohortTable=cohortTable)
 submitResults(exportFolder=outputLocation,

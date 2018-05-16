@@ -1,7 +1,7 @@
 main <- function(connectionDetails,
                  databaseName,
-                 cdmDatabaseschema,
-                 cohortDatabaseschema,
+                 cdmDatabaseSchema,
+                 cohortDatabaseSchema,
                  outputLocation,
                  cohortTable,
                  removeLessThanN = F,
@@ -10,16 +10,16 @@ main <- function(connectionDetails,
 
 
   names <- createCohorts(connectionDetails,
-                         cdmDatabaseschema=cdmDatabaseschema,
-                         cohortDatabaseschema=cohortDatabaseschema,
+                         cdmDatabaseSchema=cdmDatabaseSchema,
+                         cohortDatabaseSchema=cohortDatabaseSchema,
                          cohortTable=cohortTable)
 
 
   for(i in 2:5){
     if(getTable1){
       table1 <- getTable1(connectionDetails,
-                          cdmDatabaseschema=cdmDatabaseschema,
-                          cohortDatabaseschema=cohortDatabaseschema,
+                          cdmDatabaseSchema=cdmDatabaseSchema,
+                          cohortDatabaseSchema=cohortDatabaseSchema,
                           cohortTable= cohortTable,
                           targetId=names$cohortId[1],
                           outcomeId=names$cohortId[i])
@@ -30,7 +30,7 @@ main <- function(connectionDetails,
 
     results <- applyExistingstrokeModels(connectionDetails=connectionDetails,
                                          cdmDatabaseSchema=cdmDatabaseSchema,
-                                         cohortDatabaseSchema=cohortDatabaseschema,
+                                         cohortDatabaseSchema=cohortDatabaseSchema,
                                          cohortTable= cohortTable,
                                          targetId=names$cohortId[1],
                                          outcomeId=names$cohortId[i])
