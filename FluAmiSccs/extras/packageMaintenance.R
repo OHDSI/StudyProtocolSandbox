@@ -1,6 +1,6 @@
 OhdsiRTools::insertCohortDefinitionSetInPackage(
   fileName              = "CohortsToCreate.csv",
-  baseUrl               = "https://epi.jnj.com:8443/WebAPI",
+  baseUrl               = Sys.getenv("baseUrl"),
   insertTableSql        = TRUE,
   insertCohortCreationR = TRUE,
   generateStats         = FALSE,
