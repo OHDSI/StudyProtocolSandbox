@@ -1,0 +1,8 @@
+[
+  {
+    "targetId": 5987,
+    "comparatorId": 6629,
+    "outcomeIds": [5988, 5989, 5990, 5991, 5992, 5993, 5994, 5995, 5997],
+    "attr_class": "drugComparatorOutcomes"
+  }
+]
