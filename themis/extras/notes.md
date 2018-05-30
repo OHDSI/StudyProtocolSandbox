@@ -3,6 +3,9 @@ Themis group (sub-group: measurements) aims to standardize lab tests and related
 # Introduction
 This effort will be based on real world data at OHDSI sites.
 
+## Update 2018-05
+
+Slight update to the data collected for ThemisMeasurement Database (looks at Measurements and Observations). Achilles Heel implementation discussion. Posting of units results.
 
 ## Update 2018-02
 
