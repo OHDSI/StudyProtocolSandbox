@@ -1,6 +1,10 @@
 # Data quality
 
 This is an informatics study that focuses on data quality (rather than a clinical question).
+Protocol is available in extras folder.
+
+Forum link: http://forums.ohdsi.org/t/ohdsi-informatics-study-data-quality/1857/2
+
 The package was extended to also provide additional function.
 There are three usage scenarios.
 
