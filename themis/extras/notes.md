@@ -3,6 +3,9 @@ Themis group (sub-group: measurements) aims to standardize lab tests and related
 # Introduction
 This effort will be based on real world data at OHDSI sites.
 
+## Update 2018-05
+
+Slight update to the data collected for ThemisMeasurement Database (looks at Measurements and Observations). Achilles Heel implementation discussion. Posting of units results.
 
 ## Update 2018-02
 
@@ -44,9 +47,9 @@ Email me is you need parametized SQL for this translation tool. http://data.ohds
 ### measurements-concepts
 
 ```SQL
-    select * from (select analysis_id, stratum_1 from achilles_results where analysis_id = 1800 and count_value > 500 order by count_value desc limit 200) a
+    select * from (select analysis_id, stratum_1,count_value from achilles_results where analysis_id = 1800 and count_value > 500 order by count_value desc limit 300) a
     union
-    select * from (select analysis_id, stratum_1 from achilles_results where analysis_id = 800 and count_value > 500 order by count_value desc limit 200) b
+    select * from (select analysis_id, stratum_1,count_value from achilles_results where analysis_id = 800 and count_value > 500 order by count_value desc limit 300) b
 ```
 
 

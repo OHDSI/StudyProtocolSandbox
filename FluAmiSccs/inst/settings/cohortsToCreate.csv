@@ -1,0 +1,39 @@
+cohortId,atlasId,name,isOutcome,visit
+5987,5987,Influenza event,0,any
+6629,6629,Common cold event,0,any
+6142,6142,Influenza event with no acute myocardial infarction,0,any
+6143,6143,Influenza event with no lung cancer,0,any
+6144,6144,Influenza event with no ingrowing nail,0,any
+6145,6145,Influenza event with no T2DM,0,any
+6146,6146,Influenza event with no renal impairment,0,any
+6147,6147,Influenza event with no acute liver injury,0,any
+6148,6148,Influenza event with no HIV,0,any
+6149,6149,Influenza event with no anemia,0,any
+6150,6150,Influenza event with no depression,0,any
+6357,6357,IP influenza event with no acute myocardial infarction,0,IP
+6358,6358,OP influenza event with no acute myocardial infarction,0,OP
+6359,6359,IP influenza event with no lung cancer,0,IP
+6360,6360,OP influenza event with no lung cancer,0,OP
+6361,6361,IP influenza event with no ingrowing nail,0,IP
+6362,6362,OP influenza event with no ingrowing nail,0,OP
+6363,6363,IP influenza event with no T2DM,0,IP
+6364,6364,OP influenza event with no T2DM,0,OP
+6366,6366,IP influenza event with no renal impairment,0,IP
+6367,6367,OP influenza event with no renal impairment,0,OP
+6369,6369,IP influenza event with no acute liver injury,0,IP
+6370,6370,OP influenza event with no acute liver injury,0,OP
+6371,6371,IP influenza event with no HIV,0,IP
+6372,6372,OP influenza event with no HIV,0,OP
+6373,6373,IP influenza event with no anemia,0,IP
+6374,6374,OP influenza event with no anemia,0,OP
+6376,6376,IP influenza event with no depression,0,IP
+6377,6377,OP influenza event with no depression,0,OP
+5988,5988,Hospitalization for primary acute myocardial infarction,1,IP
+5989,5989,Hospitalization for primary lung cancer,1,IP
+5990,5990,Hospitalization for primary ingrowing nail,1,IP
+5991,5991,Hospitalization for primary T2DM,1,IP
+5992,5992,Hospitalization for primary renal impairment,1,IP
+5993,5993,Hospitalization for primary acute liver injury,1,IP
+5994,5994,Hospitalization for primary HIV,1,IP
+5995,5995,Hospitalization for primary anemia,1,IP
+5997,5997,Hospitalization for primary depression,1,IP
