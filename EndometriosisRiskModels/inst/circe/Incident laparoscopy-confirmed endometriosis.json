@@ -1,0 +1,194 @@
+{
+  "ConceptSets": [
+    {
+      "id": 0,
+      "name": "[DBMI bootcamp] Laparoscopy ",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 4251314,
+              "CONCEPT_NAME": "Laparoscopy",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "73632009",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Procedure",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "name": "[DBMI Bootcamp] Endometriosis",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 433527,
+              "CONCEPT_NAME": "Endometriosis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "129103003",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    }
+  ],
+  "PrimaryCriteria": {
+    "CriteriaList": [
+      {
+        "ProcedureOccurrence": {
+          "CorrelatedCriteria": {
+            "Type": "ALL",
+            "CriteriaList": [
+              {
+                "Criteria": {
+                  "ConditionOccurrence": {
+                    "CodesetId": 1
+                  }
+                },
+                "StartWindow": {
+                  "Start": {
+                    "Days": 30,
+                    "Coeff": -1
+                  },
+                  "End": {
+                    "Days": 30,
+                    "Coeff": 1
+                  }
+                },
+                "Occurrence": {
+                  "Type": 2,
+                  "Count": 1
+                }
+              },
+              {
+                "Criteria": {
+                  "ProcedureOccurrence": {
+                    "CorrelatedCriteria": {
+                      "Type": "ALL",
+                      "CriteriaList": [
+                        {
+                          "Criteria": {
+                            "ConditionOccurrence": {
+                              "CodesetId": 1
+                            }
+                          },
+                          "StartWindow": {
+                            "Start": {
+                              "Days": 30,
+                              "Coeff": -1
+                            },
+                            "End": {
+                              "Days": 30,
+                              "Coeff": 1
+                            }
+                          },
+                          "Occurrence": {
+                            "Type": 2,
+                            "Count": 1
+                          }
+                        }
+                      ],
+                      "DemographicCriteriaList": [],
+                      "Groups": []
+                    },
+                    "CodesetId": 0
+                  }
+                },
+                "StartWindow": {
+                  "Start": {
+                    "Coeff": -1
+                  },
+                  "End": {
+                    "Days": 1,
+                    "Coeff": -1
+                  }
+                },
+                "Occurrence": {
+                  "Type": 0,
+                  "Count": 0
+                }
+              }
+            ],
+            "DemographicCriteriaList": [],
+            "Groups": []
+          },
+          "CodesetId": 0
+        }
+      }
+    ],
+    "ObservationWindow": {
+      "PriorDays": 0,
+      "PostDays": 0
+    },
+    "PrimaryCriteriaLimit": {
+      "Type": "First"
+    }
+  },
+  "QualifiedLimit": {
+    "Type": "First"
+  },
+  "ExpressionLimit": {
+    "Type": "First"
+  },
+  "InclusionRules": [
+    {
+      "name": "is female",
+      "expression": {
+        "Type": "ALL",
+        "CriteriaList": [],
+        "DemographicCriteriaList": [
+          {
+            "Gender": [
+              {
+                "CONCEPT_CODE": "F",
+                "CONCEPT_ID": 8532,
+                "CONCEPT_NAME": "FEMALE",
+                "DOMAIN_ID": "Gender",
+                "VOCABULARY_ID": "Gender"
+              }
+            ]
+          }
+        ],
+        "Groups": []
+      }
+    },
+    {
+      "name": "is aged 15-49",
+      "expression": {
+        "Type": "ALL",
+        "CriteriaList": [],
+        "DemographicCriteriaList": [
+          {
+            "Age": {
+              "Value": 15,
+              "Extent": 49,
+              "Op": "bt"
+            }
+          }
+        ],
+        "Groups": []
+      }
+    }
+  ],
+  "CensoringCriteria": [],
+  "CollapseSettings": {
+    "CollapseType": "ERA",
+    "EraPad": 0
+  },
+  "CensorWindow": {}
+}
