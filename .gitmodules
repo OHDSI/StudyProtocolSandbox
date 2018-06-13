@@ -1,0 +1,3 @@
+[submodule "SkeletonComparativeEffectStudy"]
+	path = SkeletonComparativeEffectStudy
+	url = https://github.com/OHDSI/SkeletonComparativeEffectStudy.git
