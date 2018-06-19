@@ -7,7 +7,7 @@ main <- function(modelLocations,
                  cdmDatabaseSchema,
                  cohortDatabaseSchema,
                  cohortTable,
-                 N=5
+                 N=5, keepPrediction=T
 ){
 
   allResults <- c()
@@ -19,7 +19,7 @@ main <- function(modelLocations,
                                      cohortTable= cohortTable,
                                      modelLocation = modelLocations[i],
                                      targetId=cohortIds[i],
-                                     outcomeId=outcomeIds[i])
+                                     outcomeId=outcomeIds[i], keepPrediction=keepPrediction)
 
     allResults <- rbind(allResults, result$summary)
 
