@@ -170,7 +170,7 @@ plotOddsRatios <- function(ccSummaryFile, exposureId, exposureName, resultsFolde
                    legend.title = ggplot2::element_blank())
 
   fileName <- file.path(resultsFolder, "estimates.png")
-  ggplot2::ggsave(fileName, plot, width = 6, height = 4.5, dpi = 400)
+  ggplot2::ggsave(fileName, plot, width = 6.1, height = 4.5, dpi = 400)
 }
 
 createCharacteristicsTable <- function(resultsFolder) {
@@ -208,13 +208,20 @@ getCharacteristics <- function(ccFile, connection, cdmDatabaseSchema, oracleTemp
 
   colnames(tableToUpload) <- SqlRender::camelCaseToSnakeCase(colnames(tableToUpload))
 
+  connection <- DatabaseConnector::connect(connectionDetails)
+  # debug(DatabaseConnector:::.bulkLoadPdw)
   DatabaseConnector::insertTable(connection = connection,
-                                 tableName = "#temp",
+                                 tableName = "scratch.dbo.mschuemi_temp",
                                  data = tableToUpload,
                                  dropTableIfExists = TRUE,
                                  createTable = TRUE,
-                                 tempTable = TRUE,
-                                 oracleTempSchema = oracleTempSchema)
+                                 tempTable = FALSE,
+                                 oracleTempSchema = oracleTempSchema,
+                                 useMppBulkLoad = TRUE)
+  disconnect(connection)
+  executeSql(connection, "DROP TABLE scratch.dbo.mschuemi_temp")
+  querySql(connection, "SELECT COUNT(*) FROM scratch.dbo.mschuemi_temp")
+
   covariateSettings <- FeatureExtraction::createCovariateSettings(useConditionGroupEraLongTerm = TRUE,
                                                                   useDrugGroupEraLongTerm = TRUE,
                                                                   useProcedureOccurrenceLongTerm = TRUE,
@@ -273,4 +280,103 @@ getCharacteristics <- function(ccFile, connection, cdmDatabaseSchema, oracleTemp
                                 sql = sql,
                                 progressBar = FALSE,
                                 reportOverallTime = FALSE)
+}
+
+createPsPlot <- function(ccFile, ccdFile, connection, cdmDatabaseSchema, oracleTempSchema, resultsFolder) {
+  resultsFolder <- file.path(outputFolder, "resultsIbd")
+  ccdFile <- "r:/EvaluatingCaseControl_ccae/ccIbd/ccd_cd1_cc1_o3_ed1_e5_ccd1.rds"
+  ccFile = file.path(outputFolder, "ccIbd", "caseControls_cd1_cc1_o3.rds")
+
+  resultsFolder <- file.path(outputFolder, "resultsAp")
+  ccdFile <- "r:/EvaluatingCaseControl_ccae/ccAp/ccd_cd1_n1_cc1_o2_ed1_e4_ccd1.rds"
+  ccFile = file.path(outputFolder, "ccAp", "caseControls_cd1_n1_cc1_o2.rds")
+  cc <- readRDS(ccFile)
+  ccd <- readRDS(ccdFile)
+  cc$rowId <- 1:nrow(cc)
+  m <- merge(cc, ccd)
+  tableToUpload <- data.frame(rowId = cc$rowId,
+                              subjectId = cc$personId,
+                              cohortStartDate = cc$indexDate,
+                              cohortDefinitionId = as.integer(cc$isCase))
+
+  colnames(tableToUpload) <- SqlRender::camelCaseToSnakeCase(colnames(tableToUpload))
+
+  connection <- DatabaseConnector::connect(connectionDetails)
+  # debug(DatabaseConnector:::.bulkLoadPdw)
+  DatabaseConnector::insertTable(connection = connection,
+                                 tableName = "scratch.dbo.mschuemi_temp",
+                                 data = tableToUpload,
+                                 dropTableIfExists = TRUE,
+                                 createTable = TRUE,
+                                 tempTable = FALSE,
+                                 oracleTempSchema = oracleTempSchema,
+                                 useMppBulkLoad = TRUE)
+  # disconnect(connection)
+  # executeSql(connection, "DROP TABLE scratch.dbo.mschuemi_temp")
+  # querySql(connection, "SELECT COUNT(*) FROM scratch.dbo.mschuemi_temp")
+
+  covariateSettings <- FeatureExtraction::createCovariateSettings(useConditionGroupEraLongTerm = TRUE,
+                                                                  useDrugGroupEraLongTerm = TRUE,
+                                                                  useProcedureOccurrenceLongTerm = TRUE,
+                                                                  useMeasurementLongTerm = TRUE,
+                                                                  useMeasurementRangeGroupLongTerm = TRUE,
+                                                                  useObservationLongTerm = TRUE,
+                                                                  endDays = -30,
+                                                                  longTermStartDays = -365)
+  covs <- FeatureExtraction::getDbCovariateData(connection = connection,
+                                                oracleTempSchema = oracleTempSchema,
+                                                cdmDatabaseSchema = cdmDatabaseSchema,
+                                                cohortDatabaseSchema = "scratch.dbo",
+                                                cohortTable = "mschuemi_temp",
+                                                cohortTableIsTemp = FALSE,
+                                                rowIdField = "row_id",
+                                                covariateSettings = covariateSettings,
+                                                aggregated = FALSE)
+  DatabaseConnector::executeSql(connection, "DROP TABLE scratch.dbo.mschuemi_temp")
+  DatabaseConnector::disconnect(connection)
+  FeatureExtraction::saveCovariateData(covs, file.path(resultsFolder, "covsNotAggregated"))
+
+  tidyCovs <- FeatureExtraction::tidyCovariateData(covs)
+
+  # Model probability of exposure ---------------------------------
+  outcomes <- data.frame(rowId = m$rowId,
+                         y = m$exposed)
+  prior <- Cyclops::createPrior("laplace", useCrossValidation = TRUE, exclude = c(0))
+  control <- Cyclops::createControl(cvRepetitions = 1,
+                                    threads = 10,
+                                    fold = 5,
+                                    cvType = "auto")
+  cyclopsData <- Cyclops::convertToCyclopsData(ff::as.ffdf(outcomes), tidyCovs$covariates, modelType = "lr")
+  fit <- Cyclops::fitCyclopsModel(cyclopsData = cyclopsData,
+                                  prior = prior,
+                                  control = control)
+  p <- predict(fit)
+  p <- data.frame(rowId = as.numeric(names(p)),
+                  propensityScore = as.vector(p))
+  ps <- merge(outcomes, p)
+  ps$treatment <- ps$y
+  fileName <- file.path(resultsFolder, "predictabilityExposure.png")
+  CohortMethod::plotPs(ps, fileName = fileName, targetLabel = "Exposed", comparatorLabel = "Unexposed")
+  CohortMethod::computePsAuc(ps)
+
+  # Model probability of case vs control ---------------------------------
+  outcomes <- data.frame(rowId = m$rowId,
+                         y = as.integer(m$isCase))
+  prior <- Cyclops::createPrior("laplace", useCrossValidation = TRUE, exclude = c(0))
+  control <- Cyclops::createControl(cvRepetitions = 1,
+                                    threads = 10,
+                                    fold = 5,
+                                    cvType = "auto")
+  cyclopsData <- Cyclops::convertToCyclopsData(ff::as.ffdf(outcomes), tidyCovs$covariates, modelType = "lr")
+  fit <- Cyclops::fitCyclopsModel(cyclopsData = cyclopsData,
+                                  prior = prior,
+                                  control = control)
+  p <- predict(fit)
+  p <- data.frame(rowId = as.numeric(names(p)),
+                  propensityScore = as.vector(p))
+  ps <- merge(outcomes, p)
+  ps$treatment <- ps$y
+  fileName <- file.path(resultsFolder, "predictabilityCaseControl.png")
+  CohortMethod::plotPs(ps, fileName = fileName, targetLabel = "Cases", comparatorLabel = "Controls")
+  CohortMethod::computePsAuc(ps)
 }
