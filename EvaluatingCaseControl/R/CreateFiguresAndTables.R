@@ -77,6 +77,8 @@ createFiguresAndTables <- function(connectionDetails,
               exposureId = 4,
               allControlsFile = file.path(outputFolder, "AllControlsAp.csv"),
               resultsFolder = file.path(outputFolder, "resultsAp"))
+
+  createEstimatesAppendix(outputFolder = outputFolder)
 }
 
 calibrateCi <- function(ccSummaryFile, exposureId, allControlsFile, resultsFolder) {
@@ -229,7 +231,7 @@ getCharacteristics <- function(ccFile, connection, cdmDatabaseSchema, oracleTemp
                                                                   useMeasurementRangeGroupLongTerm = TRUE,
                                                                   useObservationLongTerm = TRUE,
                                                                   endDays = -30,
-                                                                  longTermStartDays = - 365)
+                                                                  longTermStartDays = -365)
   covsCases <- FeatureExtraction::getDbCovariateData(connection = connection,
                                                      oracleTempSchema = oracleTempSchema,
                                                      cdmDatabaseSchema = cdmDatabaseSchema,
@@ -379,4 +381,180 @@ createPsPlot <- function(ccFile, ccdFile, connection, cdmDatabaseSchema, oracleT
   fileName <- file.path(resultsFolder, "predictabilityCaseControl.png")
   CohortMethod::plotPs(ps, fileName = fileName, targetLabel = "Cases", comparatorLabel = "Controls")
   CohortMethod::computePsAuc(ps)
+}
+
+createCombinedEstimatesTable <- function(outputFolder) {
+  pathToCsv <- system.file("settings", "NegativeControls.csv", package = "EvaluatingCaseControl")
+  negativeControls <- read.csv(pathToCsv, stringsAsFactors = FALSE)
+
+
+  ccSummary <- readRDS(file.path(outputFolder, "ccSummaryIbd.rds"))
+  ccSummary <- ccSummary[ccSummary$outcomeId < 10000, ] # No positive controls
+
+  estimatesIbd <- merge(ccSummary,
+                        data.frame(exposureId = negativeControls$targetId,
+                                   outcomeId = negativeControls$outcomeId,
+                                   nestingCohortId = negativeControls$nestingId,
+                                   exposureName = negativeControls$targetName,
+                                   nestingName = negativeControls$nestingName,
+                                   outcomeName = negativeControls$outcomeName,
+                                   stringsAsFactors = FALSE),
+                        all.x = TRUE)
+  estimatesIbd$type <- "Negative control"
+  estimatesIbd$type[estimatesIbd$exposureId == 5] <- "Exposure of interest"
+  estimatesIbd$exposureName[estimatesIbd$exposureId == 5] <- "Isotretinoin"
+  estimatesIbd$nestingName[estimatesIbd$exposureId == 5] <- ""
+  estimatesIbd$outcomeName[estimatesIbd$exposureId == 5] <- "Ulcerative colitis"
+  null <- EmpiricalCalibration::fitNull(logRr = estimatesIbd$logRr[estimatesIbd$type == "Negative control"],
+                                        seLogRr = estimatesIbd$seLogRr[estimatesIbd$type == "Negative control"])
+  estimatesIbd$calP <- EmpiricalCalibration::calibrateP(null = null,
+                                                        logRr = estimatesIbd$logRr,
+                                                        seLogRr = estimatesIbd$seLogRr)
+
+  ccSummary <- readRDS(file.path(outputFolder, "ccSummaryAp.rds"))
+  ccSummary <- ccSummary[ccSummary$outcomeId < 10000, ] # No positive controls
+
+  estimatesAp <- merge(ccSummary,
+                       data.frame(exposureId = negativeControls$targetId,
+                                  outcomeId = negativeControls$outcomeId,
+                                  nestingCohortId = negativeControls$nestingId,
+                                  exposureName = negativeControls$targetName,
+                                  nestingName = negativeControls$nestingName,
+                                  outcomeName = negativeControls$outcomeName,
+                                  stringsAsFactors = FALSE),
+                       all.x = TRUE)
+  estimatesAp$type <- "Negative control"
+  estimatesAp$type[estimatesAp$exposureId == 4] <- "Exposure of interest"
+  estimatesAp$exposureName[estimatesAp$exposureId == 4] <- "DPP-4 inhibitors"
+  estimatesAp$nestingName[estimatesAp$exposureId == 4] <- "Type 2 Diabetes Mellitus"
+  estimatesAp$outcomeName[estimatesAp$exposureId == 4] <- "Acute pancreatitis"
+  null <- EmpiricalCalibration::fitNull(logRr = estimatesAp$logRr[estimatesAp$type == "Negative control"],
+                                        seLogRr = estimatesAp$seLogRr[estimatesAp$type == "Negative control"])
+  estimatesAp$calP <- EmpiricalCalibration::calibrateP(null = null,
+                                                       logRr = estimatesAp$logRr,
+                                                       seLogRr = estimatesAp$seLogRr)
+
+  estimates <- rbind(estimatesIbd, estimatesAp)
+  write.csv(estimates, file.path(outputFolder, "AllEstimates.csv"), row.names = FALSE)
+}
+
+
+
+
+createEstimatesAppendix <- function(outputFolder) {
+  estimates <- read.csv(file.path(outputFolder, "AllEstimates.csv"))
+  estimates <- estimates[, c("outcomeName", "exposureName", "nestingName", "type", "cases", "controls", "exposedCases", "exposedControls", "rr", "ci95lb", "ci95ub", "p", "calP")]
+  colnames(estimates) <- c("Outcome", "Exposure", "Nesting cohort", "Type", "Cases", "Controls", "Exposed cases", "Exposed controls", "Odds Ratio", "CI95LB", "CI95UB", "P", "Calibrated P")
+  write.csv(estimates, file.path(outputFolder, "SupplementaryTableS1.csv"), row.names = FALSE)
+}
+
+
+plotOddsRatiosCombined <- function(outputFolder) {
+  estimates <- read.csv(file.path(outputFolder, "AllEstimates.csv"), stringsAsFactors = FALSE)
+  estimates <- estimates[, c("type", "outcomeName", "logRr", "seLogRr")]
+  estimates$type[estimates$type == "Negative control"] <- "Negative control (our replication)"
+  estimates$type[estimates$type == "Exposure of interest"] <- "Exposure of interest (our replication)"
+  estimates$study <- "Crockett"
+  estimates$study[estimates$outcomeName == "Acute pancreatitis"] <- "Chou"
+  estimates$outcomeName <- NULL
+  estimates <- rbind(estimates,
+                     data.frame(type = "Exposure of interest (original study)",
+                                logRr = log(c(4.36, 1.04)),
+                                seLogRr = c(-(log(9.66) - log(1.97)) / (2*qnorm(0.025)), -(log(1.21) - log(0.89)) / (2*qnorm(0.025))),
+                                study = c("Crockett", "Chou"),
+                                stringsAsFactors = FALSE))
+  estimates$x <- exp(estimates$logRr)
+  estimates$y <- estimates$seLogRr
+  estimates$study <- factor(estimates$study, levels = c("Crockett", "Chou"))
+
+  getArea <- function(study, alpha = 0.05) {
+    idx <- estimates$type == "Negative control (our replication)" & estimates$study == study
+    null <- EmpiricalCalibration::fitNull(estimates$logRr[idx], estimates$seLogRr[idx])
+    x <- exp(seq(log(0.25), log(10), by = 0.01))
+    y <- EmpiricalCalibration:::logRrtoSE(log(x), alpha, null[1], null[2])
+    seTheoretical <- sapply(x, FUN = function(x) {
+      abs(log(x))/qnorm(1 - 0.05/2)
+    })
+    return(data.frame(study = study, x = x, y = y, seTheoretical = seTheoretical))
+  }
+  area <- rbind(getArea("Crockett"), getArea("Chou"))
+
+
+
+  breaks <- c(0.25, 0.5, 1, 2, 4, 6, 8, 10)
+  theme <- ggplot2::element_text(colour = "#000000", size = 10)
+  themeRA <- ggplot2::element_text(colour = "#000000", size = 10, hjust = 1)
+  plot <- ggplot2::ggplot(estimates, ggplot2::aes(x = x, y = y), environment = environment()) +
+    ggplot2::geom_vline(xintercept = breaks, colour = "#AAAAAA", lty = 1, size = 0.5) +
+    ggplot2::geom_vline(xintercept = 1, size = 0.7) +
+    ggplot2::geom_area(fill = rgb(1, 0.5, 0, alpha = 0.5), color = rgb(1, 0.5, 0), size = 0.5, alpha = 0.5, data = area) +
+    ggplot2::geom_area(ggplot2::aes(y = seTheoretical),
+                       fill = rgb(0, 0, 0),
+                       colour = rgb(0, 0, 0, alpha = 0.1),
+                       alpha = 0.1,
+                       data = area) +
+    ggplot2::geom_line(ggplot2::aes(y = seTheoretical),
+                       colour = rgb(0, 0, 0),
+                       linetype = "dashed",
+                       size = 1,
+                       alpha = 0.5,
+                       data = area) +
+    ggplot2::geom_point(ggplot2::aes(shape = type, color = type, fill = type, size = type), alpha = 0.6) +
+    ggplot2::geom_point(ggplot2::aes(shape = type, color = type, fill = type, size = type), alpha = 0.6, data = estimates[estimates$type != "Negative control (our replication)", ]) +
+    ggplot2::scale_color_manual(values = c(rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0.8))) +
+    ggplot2::scale_fill_manual(values = c(rgb(0.8, 0, 0.8, alpha = 0.8), rgb(1, 1, 0, alpha = 0.8), rgb(0, 0, 0.8, alpha = 0.5))) +
+    ggplot2::scale_shape_manual(values = c(24, 23, 21)) +
+    ggplot2::scale_size_manual(values = c(3, 3, 2)) +
+    ggplot2::geom_hline(yintercept = 0) +
+    ggplot2::scale_x_continuous("Odds ratio", trans = "log10", limits = c(0.25, 10), breaks = breaks, labels = breaks) +
+    ggplot2::scale_y_continuous("Standard Error", limits = c(0, 1.5)) +
+    ggplot2::facet_grid(.~study) +
+    ggplot2::theme(panel.grid.minor = ggplot2::element_blank(),
+                   panel.background = ggplot2::element_rect(fill = "#FAFAFA", colour = NA),
+                   panel.grid.major = ggplot2::element_blank(),
+                   axis.ticks = ggplot2::element_blank(),
+                   axis.text.y = themeRA,
+                   axis.text.x = theme,
+                   axis.title = theme,
+                   legend.key = ggplot2::element_blank(),
+                   strip.text.x = theme,
+                   strip.background = ggplot2::element_blank(),
+                   legend.position = "top",
+                   legend.title = ggplot2::element_blank(),
+                   legend.text = theme,
+                   legend.direction = "horizontal")
+
+  fileName <- file.path(outputFolder, "estimates.png")
+  ggplot2::ggsave(fileName, plot, width = 8, height = 3.5, dpi = 400)
+}
+
+createVisitPlotCombined <- function(outputFolder) {
+  visitCounts1 <- readRDS(file.path(outputFolder, "resultsIbd", "visitCounts.rds"))
+  visitCounts1$study <- "Crockett"
+  visitCounts2 <- readRDS(file.path(outputFolder, "resultsAp", "visitCounts.rds"))
+  visitCounts2$study <- "Chou"
+  visitCounts <- rbind(visitCounts1, visitCounts2)
+  visitCounts$label <- "Cases"
+  visitCounts$label[!visitCounts$isCase] <- "Controls"
+  visitCounts$study <- factor(visitCounts$study, levels = c("Crockett", "Chou"))
+  theme <- ggplot2::element_text(colour = "#000000", size = 10)
+  themeRA <- ggplot2::element_text(colour = "#000000", size = 10, hjust = 1)
+  plot <- ggplot2::ggplot(visitCounts, ggplot2::aes(x = day, y = rate, group = label, color = label)) +
+    ggplot2::geom_vline(xintercept = 0, color = rgb(0, 0, 0), size = 0.5) +
+    ggplot2::geom_line(alpha = 0.7, size = 1) +
+    ggplot2::scale_color_manual(values = c(rgb(0.8, 0, 0), rgb(0, 0, 0.8))) +
+    ggplot2::labs(x = "Days relative to index date", y = "Visits / persons") +
+    ggplot2::facet_grid(.~study) +
+    ggplot2::theme(axis.ticks = ggplot2::element_blank(),
+                   axis.text.y = themeRA,
+                   axis.text.x = theme,
+                   axis.title = theme,
+                   legend.key = ggplot2::element_blank(),
+                   strip.text.x = theme,
+                   strip.background = ggplot2::element_blank(),
+                   legend.position = "top",
+                   legend.title = ggplot2::element_blank(),
+                   legend.text = theme,
+                   legend.direction = "horizontal")
+  ggplot2::ggsave(file.path(outputFolder, "priorVisitRates.png"), plot, width = 8, height = 4, dpi = 400)
 }
