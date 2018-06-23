@@ -94,6 +94,16 @@ insertModifiedCohortDefinitionInPackage(definitionId = 5867,
                                         baseUrl = Sys.getenv("baseUrl"), 
                                         inclusionRulesToDrop = c(6))
 
+# Another hack: drop 'invalid reason is null' from all cohort SQL (https://github.com/OHDSI/circe-be/issues/35 )
+cohortsToCreate <- read.csv("inst/settings/CohortsToCreate.csv")
+for (i in 1:nrow(cohortsToCreate)) {
+  fileName <- file.path("inst", "sql", "sql_server", paste0(cohortsToCreate$name[i],".sql"))
+  writeLines(paste("Dropping 'invalid reason is null' from", fileName))
+  sql <- SqlRender::readSql(fileName)
+  sql <- gsub("and ??invalid_reason is null", "", sql)
+  SqlRender::writeSql(sql, fileName)
+}
+
 # Another hack: negative controls are valid for all TCs of interest. Automatically create union:
 tcosOfInterest <- read.csv("inst/settings/TcosOfInterest.csv")
 ncOutcomes <- read.csv("extras/NegativeControlOutcomes.csv")

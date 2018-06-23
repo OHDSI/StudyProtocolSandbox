@@ -40,9 +40,9 @@ generateDiagnostics <- function(outputFolder) {
   reference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
   reference <- unique(reference)
   analysisSummary <- CohortMethod::summarizeAnalyses(reference)
-  analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
-  analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
-  analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
+  # analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
+  # analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
+  # analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
   cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = packageName))
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
@@ -60,8 +60,10 @@ generateDiagnostics <- function(outputFolder) {
     outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
     outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
     for (analysisId in unique(reference$analysisId)) {
-      controlSubset <- allControls[allControls$targetId == targetId & allControls$comparatorId == comparatorId, ]
-      controlSubset <- merge(controlSubset[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")], analysisSummary)
+      controlSubset <- allControls[allControls$targetId == targetId & 
+                                     allControls$comparatorId == comparatorId, ]
+      controlSubset <- merge(controlSubset[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")], 
+                             analysisSummary[analysisSummary$analysisId == analysisId, ])
       
       # Outcome controls
       label <- "OutcomeControls"
@@ -93,13 +95,13 @@ generateDiagnostics <- function(outputFolder) {
         fileName <-  file.path(diagnosticsFolder, paste0("systematicErrorModel_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".csv"))
         write.csv(t(model), fileName, row.names = FALSE)
         
-        fileName <-  file.path(diagnosticsFolder, paste0("ciCoverage_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".png"))
-        evaluation <- EmpiricalCalibration::evaluateCiCalibration(logRr = controlSubset$logRr, 
-                                                                  seLogRr = controlSubset$seLogRr, 
-                                                                  trueLogRr = log(controlSubset$targetEffectSize),
-                                                                  crossValidationGroup = controlSubset$oldOutcomeId)
-        EmpiricalCalibration::plotCiCoverage(evaluation = evaluation,
-                                             fileName = fileName)
+        # fileName <-  file.path(diagnosticsFolder, paste0("ciCoverage_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".png"))
+        # evaluation <- EmpiricalCalibration::evaluateCiCalibration(logRr = controlSubset$logRr, 
+        #                                                           seLogRr = controlSubset$seLogRr, 
+        #                                                           trueLogRr = log(controlSubset$targetEffectSize),
+        #                                                           crossValidationGroup = controlSubset$oldOutcomeId)
+        # EmpiricalCalibration::plotCiCoverage(evaluation = evaluation,
+        #                                      fileName = fileName)
       } 
       
           
