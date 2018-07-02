@@ -1,0 +1,17 @@
+cohortName,ruleSequence,ruleName,cohortId
+PPI,0,Patients who had pneumonia before entering the cohort within a year,1769261
+PPI,1,Exclude inpatient/ED at the same day,1769261
+PPI,2,Patients who had tuberculosis before entering the cohort,1769261
+PPI,3,Cancer within preceding one year,1769261
+PPI,4,Without hospitalization >= 3days,1769261
+Pneumonia,0,pneumonia,1769264
+H2RA,0,Patients who had pneumonia before entering the cohort within a year,1769262
+H2RA,1,Exclude inpatient/ED at the same day,1769262
+H2RA,2,Patients who had tuberculosis before entering the cohort,1769262
+H2RA,3,Cancer within preceding one year,1769262
+H2RA,4,Without hospitalization >= 3days,1769262
+NSAIDwithoutPPInH2RA,0,Patients who had pneumonia before entering the cohort within a year,1769263
+NSAIDwithoutPPInH2RA,1,Exclude inpatient/ED at the same day,1769263
+NSAIDwithoutPPInH2RA,2,Patients who had tuberculosis before entering the cohort,1769263
+NSAIDwithoutPPInH2RA,3,Cancer within preceding one year,1769263
+NSAIDwithoutPPInH2RA,4,Without hospitalization >= 3days,1769263

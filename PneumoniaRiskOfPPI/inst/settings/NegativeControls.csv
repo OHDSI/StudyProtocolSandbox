@@ -1,0 +1,10 @@
+targetId,targetName,comparatorId,comparatorName,outcomeId,outcomeName,type
+1769261,PPI,1769263,NSAIDwithoutPPInH2RA,4305080,Abnormal breathing,Outcome
+1769261,PPI,1769263,NSAIDwithoutPPInH2RA,45765647,Acquired brain injury,Outcome
+1769261,PPI,1769263,NSAIDwithoutPPInH2RA,4217633,Acrodermatitis,Outcome
+1769261,PPI,1769263,NSAIDwithoutPPInH2RA,198809,Acute cholecystitis,Outcome
+1769261,PPI,1769263,NSAIDwithoutPPInH2RA,4133026,Acute skin disorder,Outcome
+1769261,PPI,1769263,NSAIDwithoutPPInH2RA,440083,Acute stress disorder,Outcome
+1769261,PPI,1769263,NSAIDwithoutPPInH2RA,376981,Amblyopia,Outcome
+1769261,PPI,1769263,NSAIDwithoutPPInH2RA,4207240,Anemia due to intrinsic red cell abnormality,Outcome
+1769261,PPI,1769263,NSAIDwithoutPPInH2RA,4312008,Anemia due to substance,Outcome
