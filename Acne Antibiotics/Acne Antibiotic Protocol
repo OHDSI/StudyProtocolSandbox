@@ -1,0 +1,787 @@
+ Characterization of Oral Antibiotic Therapy for Acne
+https://docs.google.com/document/d/1baPHccNGfQtUNEY-bzIqTGGz7E8zbMBS_62nKDI8kGo/edit#heading=h.24lzjrtcokz0
+
+Authors:
+Project leads 
+Chante Karimkhani: ck2525@caa.columbia.edu  
+Lisa M. Schilling: lisa.schilling@ucdenver.edu 
+Robert P. Dellavalle: robert.dellavalle@ucdenver.edu 
+
+Collaborators
+John Barbieri: john.barbieri@uphs.upenn.edu
+Chris Knoll: cknoll1@its.jnj.com
+David Margolis: margo@mail.med.upenn.edu 
+Patrick Ryan: ryan@ohdsi.org 
+Martijn Schuemie: m.schuemie@erasmusmc.nl 
+Jonathan Silverberg: JonathanISilverberg@gmail.com 
+Stephanie Chapman: chapm184@msu.edu  
+Renee Domozych: renee.domozych@knights.ucf.edu
+
+Date: March 13, 2018
+
+Acknowledgements: The analysis is based on the work from the Observational Health Sciences and Informatics Collaborative. OHDSI (http://ohdsi.org) is a mult-stakeholder, interdisciplinary collaborative that creates open source solutions highlighting the value of observational health data through large-scale analytics.
+
+Disclosures: Dr. Schuemie is an employee of Janssen Research & Development.
+
+Funding: This research is partially funded by a pilot project grant from the American Acne and Rosacea Society to Drs. Karimkhani and Dellavalle.
+
+
+
+
+
+
+
+
+
+
+
+Table of Contents
+Revision history--Amendments and updates……..…………………………………………………2
+Objective……………..………………………………………………………………………………….2
+Rationale…………….………………………………………………………………………………….2
+Research question………….………………………………………………………………………….3
+Research methods……………..………………………………………………………………………3
+Study design
+    Potential data sources
+    Data source time period
+    Data collection
+    Population
+    Inclusion criteria
+    Exclusion criteria
+    Additional factors for analysis
+    Outcomes
+    Limitations and caveats
+Protection of human subjects………………..………………………………………………………..6
+Return of data query/results………………….……………………………………………………….6
+    Data sources
+Plans for disseminating and communicating study results…………..…………………………….7
+Example text, figures, and table shells for eventual publication……..……………………………9
+References….………………………………………………………………………………………...18
+Tables 1-2….…………………………………………………………………………………………..18
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Revision History--Amendments and Updates
+
+Version
+Date
+Author(s)
+Comments
+2.0
+3/8/18
+Chante Karimkhani
+Robert P. Dellavalle
+Lisa M. Schilling
+John Barbieri
+Chris Knoll
+David Margolis
+Patrick Ryan
+Martijn Schuemie
+Jonathan Silverberg
+Stephanie Chapman
+Renee Domozych
+Significant clarifications to protocol
+1.0
+11/1/2016
+Lisa M. Schilling
+Robert P. Dellavalle
+John Barbieri
+Chris Knoll
+David Margolis
+Patrick Ryan
+Martijn Schuemie
+Jonathan Silverberg
+Stephanie Chapman 
+
+
+
+
+
+
+
+1. Objective: 
+To characterize oral antibiotic use, specifically antibiotic type and duration, for acne in two age groups: youth (ages 12 to 20) and adults (ages 21 to 60).
+2. Rationale: 
+Acne is a common and disabling medical condition, particularly amongst adolescents and young adults.[1]  According to the Global Burden of Disease Study 2016, acne is the most disabling skin condition worldwide.[2]  In addition to physical disfigurement, the profound psychosocial effects of acne have been recognized for over half a century.[3]  Guidelines established by the American Academy of Dermatology recommend minimizing the duration of systemic antibiotics for the management of acne to the shortest possible duration, ideally to 3-4 months, in order to decrease the risk of bacterial resistance.[1]  A recent systematic review demonstrated that over 50% of P. acnes strains are reported as resistant in all major regions of the world.[4]  In addition to promoting resistance, long-term oral antibiotic use has been associated with a number of adverse events including microbiome disruption and pharyngitis, as well as possible associations with inflammatory bowel disease and obesity.[5]  Despite these adverse effects, oral antibiotics are often prescribed for acne for longer durations than acne guidelines recommend.[5]  A large retrospective cohort study of teenagers in the UK revealed that 29% of antibiotic courses prescribed by general practitioners exceeded 6 months in duration.[5]  A similar retrospective cohort study of teenagers and young adults in the US found that 18% of antibiotic courses exceeded 6 months.[6]  Our study will investigate oral antibiotic use for acne over the last ten years across the globe in both pediatric/young adult and adult populations.  OHDSI network evidence will identify areas of the globe most in need of improving guideline concordance.
+3. Research question:
+We hypothesize that the type and duration of oral antibiotic therapy will vary regionally (by nation) and course duration will frequently exceed 4 months (a current guideline maximum duration recommendation).
+4. Research Methods:
+Study Design: 
+This study design was determined collectively by consensus among the authors following periodic conferencing between Aug 25, 2016 and March 8, 2018.
+
+The study design will be a retrospective, observational, cohort study. 
+
+Outcomes of interest are (1) type of oral antibiotic prescribed and (2) duration of oral antibiotic therapy used among patients with diagnoses of acne. 
+
+Potential Data Sources: TBD 
+Electronic Health Record (EHR)–TBD if valid source 
+Clinical Practice Research Datalink/CPRD (UK)  
+Claims– 
+Japan Medical Data Center/JMDC (Japan) 
+Optum (US), 
+Truven Commercial Claims and Encounters/CCAE (US) 
+Truven Medicaid (US) 
+France?
+Germany?
+Other?
+
+Data source time period: 1/1/2003 to 12/31/2017
+
+Data collection: Data collection will be performed through a shared analysis program combining R and SQL.  This program will be distributed to the data partners, executed locally against the data in OMOP CDM format, and results will be returned to the central coordinating site (University of Colorado).
+
+Population:
+
+Inclusion Criteria: See Table 1 for all concept sets (inclusion and exclusion criteria)
+Age
+Persons between 12 and 60 years of age [earliest birth date of 1/1/53 and latest birthdate of 12/31/2004]
+Minimum observation time period: 
+Persons with at least one year of observation (this observation period requirement aims to decrease misclassification of antibiotic duration caused solely by person drop out).
+The start of an observation period would be defined as the start of the 12 year of life (DOB +12 years) within the data source time period
+The end of an observation period would be defined the start of the 61 year of life (DOB + 61 years) within the data source time period
+The minimal period of data observation would be defined with following starting and ending points:
+Index date: date of first antibiotic prescription for acne
+Starting point: 6 months of continuous enrollment prior to starting the index date  Ending point: 6 months of continuous enrollment after completion of the index date
+
+Diagnosis:
+If claims data, then the person should have at least two claims for any of the Concept IDs that are a member of the Concept Set shown in Table 2 
+    OR
+If EHR or clinical data, then the person should have at least two encounter diagnoses for any one of the Concept IDs that are a member of the Concept Set shown in Table 2 
+OHDSI ATLAS search specifications: vocabulary search for “acne,” limit to “clinical finding” class, excluding acne scars and acne syndrome (follicular occlusion tetrad, PAPA syndrome) and including descendents [Karimkhani- acne]
+Antibiotic type: Oral antibiotic start date on or after 1/1/2003 occurring on or after any diagnosis of acne
+Eligible oral antibiotics from prior literature will be identified by National Drug Code associated with generic names and Master Form Code [see refs 5, 7]:
+minocycline (regular and extended release (ER) preparations (e.g. Solodyn)), doxycycline (standard and subantimicrobial doses (e.g. Oracea (20 mg BID in adults))), trimethoprim/sulfamethoxazole, amoxicillin, tetracycline, cephalexin, azithromycin, erythromycin ethylsuccinate, amoxicillin/clavulanate, clindamycin, erythromycin ethyls, erythromycin stearate, ciprofloxacin
+OHDSI ATLAS search specifications: vocabulary search for each individual antibiotic name, limit to “ingredient” class, including all results and descendents [Karimkhani- antibiotics test]
+For a course of oral antibiotics to be included for acne, duration of use must be ≥ 30 days and < 5 years 
+Antibiotic duration:
+Start date = date of first prescription (EHR)/fulfillment (claims data)
+End date = date of last prescription (EHR)/fulfillment (claims data) in series + number of days of medication supplied + refills 
+Course duration specification: To capture multiple distributions as part of a single course, distributions separated by less than 28 days will be considered to be part of one course [6]. Durations separated by 28 days or more will be considered to be distinct courses, even if they consisted of the same medication.
+
+Exclusion Criteria: 
+Patients with one or more diagnoses of any of the following diseases during the study period that may require long-term antibiotic use will be excluded to reduce possible misclassifications [OHDSI ATLAS concept set name]:
+OHDSI ATLAS search specifications: vocabulary search for each individual condition, limit to “clinical finding” class, including all results and descendents
+-folliculitis decalvans [Karimkhani- folliculitis decalvans]
+-rosacea [Karimkhani- rosacea] 
+-Lyme disease [Karimkhani- lyme disease] 
+-RMSF [Karimkhani- RMSF] 
+-chlamydia [Karimkhani- chlamydia] 
+-syphilis [Karimkhani- syphilis] 
+-malaria [Karimkhani- malaria] 
+-pneumonia [Karimkhani- pneumonia] 
+-lichen planopilaris [Karimkhani- lichen planopilaris]
+-hidradenitis suppurativa [Karimkhani- hidradenitis suppurativa] 
+-cystic fibrosis [Karimkhani- cystic fibrosis]
+-methicillin-resistant staphylococcus aureus/MRSA [Karimkhani- MRSA]
+-HIV/AIDS [Karimkhani- HIV]
+-vancomycin resistant enterococcus/VRE [Karimkhani- VRE]
+-osteomyelitis [Karimkhani- osteomyelitis]
+-acne keloidalis nuchae [Karimkhani- acne keloidalis]
+One or more prescriptions of any of the following medications known to exacerbate acne during the observation period:
+-steroids (testosterone, progesterone, prednisone, prednisolone, dexamethasone [Karimkhani- steroids]
+-lithium [Karimkhani- lithium]
+-phenobarbital [Karimkhani- phenobarbital]
+-phenytoin [Karimkhani- phenytoin]
+-epidermal growth factor inhibitors 
+-isoniazid [Karimkhani- isoniazid]
+OHDSI ATLAS search specifications: vocabulary search for each individual drug, limit to “ingredient” class, including all results and descendents
+Oral antibiotic courses > 5 years because previous studies have found these cases often attributable to data miscoding [5] 
+
+Additional factors for analysis:
+Concomitant use of oral antibiotics for acne and one or more prescriptions of Isotretinoin [Karimkhani- isotretinoin], a medication prescribed for severe nodulocystic acne that alters the disease course [8]
+Concomitant use of oral antibiotics for acne and one or more prescriptions of topical tretinoin [Karimkhani- tretinoin]
+Concomitant use of oral antibiotics for acne and one or more prescriptions of topical benzoyl peroxide [Karimkhani- benzoyl peroxide]
+
+Outcomes:
+Patient median age with interquartile ranges
+Patient sex
+Number and duration of antibiotic courses per number of acne patients meeting inclusion criteria (mean, median, 95% CI)
+Number/percentage of prescriptions by type of antibiotic 
+Antibiotic courses by location (regional, sub-regional)
+Antibiotic type by year 2003-2016
+Antibiotic course duration by year 2003-2016
+Number of oral antibiotic courses associated with prescribed concomitant topical retinoid therapy, oral retinoid therapy or topical benzoyl peroxide therapy, (recognizing the limitation that topical retinoid and topical benzoyl peroxide therapies may be obtained without prescriptions).
+
+Limitations and Caveats:
+Acne may be coded differently in different countries; we will be using ICD codes established by the Global Burden of Disease Study which were validated by an international panel of skin disease experts (http://ghdx.healthdata.org/record/global-burden-disease-study-2015-gbd-2015-causes-death-and-nonfatal-causes-mapped-icd-codes) 
+Different antibiotics may be used in various countries; we used antibiotics cited in prior acne literature [refs 5, 7].
+
+5. Protection of human subjects:
+This study will use de-identified data. 
+IRB approval - Each participating data site confirmed  Institutional Review Board approval for the study or confirmed that their analysis did not require approval because it was exempt or was deemed non-human subjects research (e.g., because the database had previously been de-identified). 
+6. Return of data query/results:
+We seek de-identified per patient and per course of antibiotic therapy results: 
+
+Patient demographic table: (by contributing data source, need raw #)
+M/F/other sex totals
+Age at first acne diagnosis: provide count distributions
+Acne type at first diagnosis: count distributions per year of age and total (see Table 2 below for acne type by ICD code)
+Number of days of antibiotic therapy (range, median, mean) per patient and total
+Number of >30 day antibiotic therapeutic episodes per patient within the specified age categories (ages 12-20 and ages 21-60)
+Frequency of type of oral antibiotic used for therapeutic episodes 30 days
+(all oral antibiotic members of the tetracycline class, all members of the macrolide class, trimethoprim/sulfamethoxazole, cephalexin, amoxicillin, clindamycin, and all members of the fluoroquinolone class)
+(ref: http://www.webmd.com/drugs/condition-2731-acne+vulgaris.aspx)
+User prevalence of antibiotic type per database
+Prescription prevalence of antibiotic type per database
+Type of insurance coverage for each patient at the time of first acne diagnosis (private, governmental, none, other) per year of age and total
+Presence of antibiotic resistant conditions including MRSA and VRE and timing of diagnosis within 6 months before and 6 months after administration of oral antibiotics for acne
+
+Data Sources:
+The analysis will be performed across a network of observational healthcare databases volunteered after a call for participants. All databases will have been transformed into the OMOP Common Data Model version 4 (http://omop.org/cdm) or 5 (https://github.com/OHDSI/CommonDataModel).
+
+Participant information:
+Name of Database
+Owner (university, claims aggregator, etc),
+Type of data (claims, clinical data,electronic medical records) 
+Medication information (insurance claims, pharmacy fulfillments, prescriptions, clinical narrative documentation)
+Geographic representation
+
+Treatment Results: (by gender, by age category, by data source)
+Number of patients with any long-term antibiotic class prescribed
+Number of long-term antibiotic (LTA)  prescriptions (may be more than 1 per patient)
+LTA class prescribed - number by antibiotic class
+LTA prescribed - number by specific antibiotic
+LTA # of days prescribed per treatment episode- category 30, 31-60, 61-90, 91-120, 121- 180, 181-360, >360 days less than 5 years
+7. Plans for disseminating and communicating study results:
+The study results will be posted on the OHDSI website after completion of the study and published in a peer-reviewed scientific journal. 
+
+Initial proposal date: 25 August, 2016
+
+Launch date: TBD
+
+Study closure date: TBD
+
+Results submission: Email
+
+
+Example Text, Figures, and Table shells for eventual publication:
+
+This section illustrates example results text, tables and figures that will be generated:
+
+Example results text:
+
+“There were X antibiotic prescriptions among X patients. Median age was X and X% were male (Table 2). Fig 1 summarizes the most commonly prescribed oral antibiotics, which were x (%), followed by x (%), x (%). The mean duration of therapy was x days. The mean number of prescription as part of course of therapy was x prescriptions. In all, X%, X%, and X% of courses of antibiotics exceeded 3 months, 6 months, and 1 year respectively.”
+
+“With respect to geographic variation, the mean duration of therapy was X days in the region with the shortest and X days in the region with the longest mean duration of therapy. If all regions were to achieve an average duration of therapy equal to that of the region using the shortest mean duration of therapy, X antibiotic days per year could be avoided in the study population.”
+
+
+Example figure 1: Courses of antibiotic use for acne
+
+*Figure is from Lee et al. JAAD Vol 71 Number 1 page 73.  Our figure might include more types of oral antibiotics. Might present one histogram of totals per antibiotic classes and one histogram of all individual antibiotics used in significant numbers.
+Example figure 2: Antibiotic use for acne by year
+
+
+*Our table would include many more types of oral antibiotics from other classes and would include years 2003-2016
+
+Example figure 3: Antibiotic course duration category totals for acne 
+
+*These pictograms bars can be color-coded by database.
+
+
+Example figure 4: Antibiotic for acne course duration per year
+
+*From Barbierie et al JAAD 2016. 
+Our table would include years 2003-2016
+Example figure 5: Antibiotic for acne course duration per year
+
+*Our heat map would include more countries and category ranges.
+
+
+Example Table 1: Databases included and their characteristics
+Database
+Location
+Years of data
+Owner
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Example Table 2: Study population demographics
+
+
+No of patients (%)
+No of person years 
+No of prescriptions (%)
+Mean age
+12-18 yrs
+>18 yrs
+
+
+
+
+
+
+Gender 
+Male
+Female
+
+
+
+
+
+
+Location
+US
+UK
+Japan
+etc.
+
+
+
+
+
+
+Acne diagnosis
+Acne Vulgaris
+Acne, unspecified
+Acne conglobata
+etc.
+
+
+
+
+
+
+Insurance type 
+Governmental
+Private
+None
+Other
+
+
+
+
+
+
+
+Example Table 2a: User prevalence and prescription prevalence of qualifying oral antibiotic prescriptions by database (prevalence per 1000 persons), ranked by the average user prevalence
+
+
+User prevalence
+Prescription prevalence
+Antibiotics
+CPRD
+JMDC
+Optum
+CCAE
+Truven
+CPRD
+JMDC
+Optum
+CCAE
+Truven
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Example Table 3: Number of qualifying oral antibiotic prescriptions by database.
+
+
+Number of prescriptions
+Type of antibiotic
+CPRD
+JMDC
+Optum
+CCAE
+Truven
+Minocycline
+
+
+
+
+
+
+
+
+
+
+Doxycycline hyclate
+
+
+
+
+
+
+
+
+
+
+Trimethoprim/
+sulfamethoxazole
+
+
+
+
+
+
+
+
+
+
+Tetracycline
+
+
+
+
+
+
+
+
+
+
+Amoxicillin
+
+
+
+
+
+
+
+
+
+
+Cephalexin
+
+
+
+
+
+
+
+
+
+
+Azithromycin
+
+
+
+
+
+
+
+
+
+
+Clindamycin
+
+
+
+
+
+
+
+
+
+
+Ciprofloxacin
+
+
+
+
+
+
+
+
+
+
+Amoxicillin/
+Clavulanate
+
+
+
+
+
+
+
+
+
+
+Erythromycin Ethylsuccinate
+
+
+
+
+
+
+
+
+
+
+Erythromycin Stearate
+
+
+
+
+
+
+
+
+
+
+Lymecycline
+
+
+
+
+
+
+
+
+
+
+Oxytetracycline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Example Table 4. Duration of antibiotic course.
+Duration of antibiotic course 
+(month range)
+**suggested breakdown of data
+Number of antibiotic courses
+< 3 months
+
+
+3-6 months
+
+
+6-12 months
+
+
+1-2 years
+
+
+>2 years
+
+
+
+
+Example Table 5. Mean and SD of antibiotic course duration for males and females.
+Sex
+Mean course duration (days)
+Male
+
+
+Female
+
+
+ 
+ 
+Example Table 6: Regional variation in mean duration of antibiotic therapy
+Country
+Duration of therapy (days/months)
+United States
+
+
+United Kingdom
+
+
+Japan
+
+
+France
+
+
+Germany
+
+
+Other 
+
+
+Other
+
+
+Other
+
+
+ 
+
+References:
+Zaenglein  AL, Pathy AL, Schlosser BJ, et. al. Guidelines of care for the management of acne vulgaris. J Am Acad Dermatol 2016;74(5):945-73. 
+GBD 2016 DALYs and HALE Collaborators Global, regional, and national disability-adjusted life-years (DALYs) for 333 diseases and injuries and healthy life expectancy (HALE) for 195 countries and territories, 1990-2016: a systematic analysis for the Global Burden of Disease Study 2016. Lancet. 2017 Sep 16;390(10100):1260-1344. doi: 10.1016/S0140-6736(17)32130-X.
+Sulzberger MB, Zaidens S. Psychogenic factors in dermatologic disorders. Med Clin North Am 1948;32:669-85.
+Walsh TR, Efthimiou J, Dreno B. Systematic review of antibiotic resistance in acne: an increasing topical and oral threat. Lancet Infect Dis 2016;16(3):e23-33.
+Barbieri JS, Hoffstad O, Margolis DJ. Duration of oral tetracycline-class antibiotic therapy and use of topical retinoids for the treatment of acne among general practitioners (GP): A retrospective cohort study. J Am Acad Dermatol 2016;75(6):1142-50.
+Lee YH, Liu G, Thiboutot DM, Leslie DL, Kirby JS. A retrospective analysis of the duration of oral antibiotic therapy for the treatment of acne among adolescents: Investigating practice gaps and potential cost-savings. J Am Acad Dermatol 2014;71(1):70-6.
+Straight CE, Lee YH, Liu G, Kirby JS. Duration of oral antibiotic therapy for the treatment of adult acne:  A retrospective analysis investigating adherence to guideline recommendations and opportunities for cost-savings. J Am Acad Dermatol 2015;72(5):822-7.
+Nagler AR, Miliam EC, Orlow SJ. The use of oral antibiotics before isotretinoin therapy in patients with acne. J Am Acad Dermatol 2016;74(2):273-9.
+Table 1: Concept sets
+Concept set
+Karimkhani- acne
+Karimkhani- antibiotics test
+Karimkhani- folliculitis decalvans
+Karimkhani- rosacea
+Karimkhani- lyme disease
+Karimkhani- RMSF
+Karimkhani- chlamydia
+Karimkhani- syphilis
+Karimkhani- malaria
+Karimkhani- pneumonia
+Karimkhani- lichen planopilaris
+Karimkhani- hidradenitis suppurativa
+Karimkhani- cystic fibrosis
+Karimkhani- MRSA
+Karimkhani- HIV
+Karimkhani- VRE
+Karimkhani- osteomyelitis
+Karimkhani- acne keloidalis
+Karimkhani- steroids
+Karimkhani- lithium
+Karimkhani- phenobarbital
+Karimkhani- phenytoin
+Karimkhani- isoniazid
+Karimkhani- isotretinoin
+
+Table 2: Acne diagnosis concept set = Karimkhani- acne; Table 2 lists the ICD-9 and -10 Included Source Codes that map to the included concept_IDs for the purposes of face validity
+
+Concept ID
+Concept Code
+Concept Name
+Class
+Domain
+Vocabulary
+44836157
+706.1
+Other acne
+4-dig billing code
+Non-Standard
+Condition
+44824484
+706
+Acne varioliformis
+4-dig billing code
+Non-Standard
+Condition
+35208638
+L73.0
+Acne keloid
+4-char billing code
+Non-Standard
+Condition
+35208628
+L70.9
+Acne, unspecified
+4-char billing code
+Non-Standard
+Condition
+35208627
+L70.8
+Other acne
+4-char billing code
+Non-Standard
+Condition
+35208626
+L70.5
+Acne excoriee
+4-char billing code
+Non-Standard
+Condition
+35208625
+L70.4
+Infantile acne
+4-char billing code
+Non-Standard
+Condition
+35208624
+L70.3
+Acne tropica
+4-char billing code
+Non-Standard
+Condition
+35208623
+L70.2
+Acne varioliformis
+4-char billing code
+Non-Standard
+Condition
+35208622
+L70.1
+Acne conglobata
+4-char billing code
+Non-Standard
+Condition
+35208621
+L70.0
+Acne vulgaris
+4-char billing code
+Non-Standard
+Condition
+1569798
+L70
+Acne
+3-char nonbill code
+Non-Standard
+Condition
+
+
