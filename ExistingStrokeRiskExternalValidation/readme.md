@@ -3,14 +3,14 @@ ExistingStrokeRiskExternalValidation
 
   Introduction
 ============
-  A package for running the OHDSI network study to externally validate 5 existing stroke risk prediction models using the PatientLevelPrediction framework
+A package for running the OHDSI network study to externally validate 5 existing stroke risk prediction models using the PatientLevelPrediction framework
 
 
 Features
 ========
   - Creates target cohort of females newly diagnosed with atrial fibrilation between ages 35-65
-  - Creates outcome cohort of stroke with hospitilisation
-  - Implements 5 existing stroke risk prediciton models and validates on data in OMOP CDM
+  - Creates 4 outcome cohorts of various stroke definitions
+  - Implements 5 existing stroke risk prediciton models and validates on data in OMOP CDM for each target and outcome cohort combination
   - Sends summary results 
 
 Technology
@@ -62,6 +62,9 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
 # Now run the following:
 checkPlpInstallation(connectionDetails=connectionDetails,
                      python=F)
+                     
+# view the models
+viewModels()
                      
 # NOTE IF THE ABOVE DOESN'T RETURN 1 THEN THERE IS AN ISSUE WITH THE PatientLevelPrediction INSTALL
 # OR SETTINGS THAT NEEDS TO BE FIXED BEFORE YOU CONTINUE
