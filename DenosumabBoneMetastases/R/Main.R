@@ -102,33 +102,13 @@ execute <- function(connectionDetails,
   
   if (runAnalyses) {
     OhdsiRTools::logInfo("Running analyses")
-    cmOutputFolder <- file.path(outputFolder, "cmOutput")
-    if (!file.exists(cmOutputFolder))
-      dir.create(cmOutputFolder)
-    cmAnalysisListFile <- system.file("settings",
-                                      "cmAnalysisList.json",
-                                      package = "DenosumabBoneMetastases")
-    cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
-    dcosList <- createTcos(outputFolder = outputFolder)
-    results <- CohortMethod::runCmAnalyses(connectionDetails = connectionDetails,
-                                           cdmDatabaseSchema = cdmDatabaseSchema,
-                                           exposureDatabaseSchema = cohortDatabaseSchema,
-                                           exposureTable = cohortTable,
-                                           outcomeDatabaseSchema = cohortDatabaseSchema,
-                                           outcomeTable = cohortTable,
-                                           outputFolder = cmOutputFolder,
-                                           oracleTempSchema = oracleTempSchema,
-                                           cmAnalysisList = cmAnalysisList,
-                                           drugComparatorOutcomesList = dcosList,
-                                           getDbCohortMethodDataThreads = min(3, maxCores),
-                                           createStudyPopThreads = min(3, maxCores),
-                                           createPsThreads = max(1, round(maxCores/10)),
-                                           psCvThreads = min(10, maxCores),
-                                           computeCovarBalThreads = min(3, maxCores),
-                                           trimMatchStratifyThreads = min(10, maxCores),
-                                           fitOutcomeModelThreads = max(1, round(maxCores/4)),
-                                           outcomeCvThreads = min(4, maxCores),
-                                           refitPsForEveryOutcome = FALSE)
+    runCmAnalyses(connectionDetails = connectionDetails,
+                  cdmDatabaseSchema = cdmDatabaseSchema,
+                  cohortDatabaseSchema = cohortDatabaseSchema,
+                  cohortTable = cohortTable,
+                  oracleTempSchema = oracleTempSchema,
+                  outputFolder = outputFolder,
+                  maxCores = maxCores)
     OhdsiRTools::logInfo("")
   }
   if (runDiagnostics) {

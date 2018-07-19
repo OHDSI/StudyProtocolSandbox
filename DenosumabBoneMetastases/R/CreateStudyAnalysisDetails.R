@@ -40,11 +40,17 @@ createAnalysesDetails <- function(workFolder) {
                                                                              excludeDrugsFromCovariates = FALSE,
                                                                              covariateSettings = covariateSettings)
   
-  createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(removeDuplicateSubjects = "keep first",
-                                                                      removeSubjectsWithPriorOutcome = FALSE,
-                                                                      riskWindowStart = 0,
-                                                                      riskWindowEnd = round(34 * 30.5),
-                                                                      addExposureDaysToEnd = FALSE)
+  createStudyPopArgs1 <- CohortMethod::createCreateStudyPopulationArgs(removeDuplicateSubjects = "keep first",
+                                                                       removeSubjectsWithPriorOutcome = FALSE,
+                                                                       riskWindowStart = 0,
+                                                                       riskWindowEnd = round(34 * 30.5),
+                                                                       addExposureDaysToEnd = FALSE)
+  
+  createStudyPopArgs2 <- CohortMethod::createCreateStudyPopulationArgs(removeDuplicateSubjects = "keep first",
+                                                                       removeSubjectsWithPriorOutcome = FALSE,
+                                                                       riskWindowStart = 0,
+                                                                       riskWindowEnd = 0,
+                                                                       addExposureDaysToEnd = TRUE)
   
   control <- Cyclops::createControl(noiseLevel = "quiet", 
                                     cvType = "auto", 
@@ -63,7 +69,7 @@ createAnalysesDetails <- function(workFolder) {
   cmAnalysis1 <- CohortMethod::createCmAnalysis(analysisId = 1,
                                                 description = "ITT",
                                                 getDbCohortMethodDataArgs = getDbCohortMethodDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs,
+                                                createStudyPopArgs = createStudyPopArgs1,
                                                 createPs = TRUE,
                                                 createPsArgs = createPsArgs,
                                                 stratifyByPs = TRUE,
@@ -71,7 +77,18 @@ createAnalysesDetails <- function(workFolder) {
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs)
   
-  cmAnalysisList <- list(cmAnalysis1)
+  cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
+                                                description = "On-treatment",
+                                                getDbCohortMethodDataArgs = getDbCohortMethodDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs2,
+                                                createPs = TRUE,
+                                                createPsArgs = createPsArgs,
+                                                stratifyByPs = TRUE,
+                                                stratifyByPsArgs = stratifyByPsArgs,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs)
+  
+  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2)
   
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisList.json"))
 }
