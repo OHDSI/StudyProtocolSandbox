@@ -12,8 +12,6 @@ Depends:
 Imports:
     SqlRender,
     FeatureExtraction,
-    CohortMethod,
-    CaseCrossover,
     CaseControl,
     EmpiricalCalibration,
     OhdsiRTools,
@@ -26,4 +24,4 @@ Suggests:
     testthat
 License: Apache License 2.0
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000

@@ -110,6 +110,7 @@ createCohorts <- function(connectionDetails,
 #' @param outcomeId         The cohort definition id of the outcome
 #' @param packageName       The name of the package
 #' @param modelLocation     The model location in the package
+#' @param keepPrediction    Whether to keep the patient level predictions
 #'
 #' @return
 #' A list with the performance and plots
@@ -122,7 +123,8 @@ applyDevelopedPlpModel <- function(connectionDetails,
                                    targetId,
                                    outcomeId,
                                    packageName='EndometriosisRiskModels',
-                                   modelLocation = 'ccae_T6814_O6815'){
+                                   modelLocation = 'ccae_T6814_O6815',
+                                   keepPrediction=T){
 
   plpResult <- loadPlpResult(system.file(file.path('plp_models/existingModel', modelLocation),
                                       package=packageName))
@@ -135,7 +137,7 @@ applyDevelopedPlpModel <- function(connectionDetails,
                                 validationTableOutcome = cohortTable,
                                 validationIdTarget=targetId,
                                 validationIdOutcome=outcomeId,
-                                keepPrediction=F)
+                                keepPrediction=keepPrediction)
 
   return(result)
 }
@@ -211,6 +213,8 @@ developEndometriosisModel <- function(connectionDetails,
                                                                   mediumTermStartDays = -180,
                                                                   shortTermStartDays = -30,
                                                                   endDays = 0,
+                                                                  addDescendantsToInclude = FALSE,
+                                                                  addDescendantsToExclude = FALSE,
                                                                   includedCovariateIds = c())
   plpData <- PatientLevelPrediction::getPlpData(connectionDetails = connectionDetails,
                                                 cdmDatabaseSchema = cdmDatabaseSchema,

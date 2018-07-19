@@ -17,9 +17,15 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
 cdmDatabaseSchema <- "cdm_optum_extended_dod_v695.dbo"
 cohortDatabaseSchema <- "scratch.dbo"
 cohortTable <- "mschuemi_denosumab_optum"
-
 oracleTempSchema <- NULL
 outputFolder <- file.path(studyFolder, "optum")
+
+cdmDatabaseSchema <- "cdm_truven_mdcr_v698.dbo"
+cohortDatabaseSchema <- "scratch.dbo"
+cohortTable <- "mschuemi_denosumab_mdcr"
+oracleTempSchema <- NULL
+outputFolder <- file.path(studyFolder, "mdcr")
+
 
 
 mailSettings <- list(from = Sys.getenv("mailAddress"),
@@ -38,14 +44,21 @@ result <- OhdsiRTools::runAndNotify({
           oracleTempSchema = oracleTempSchema,
           outputFolder = outputFolder,
           createCohorts = FALSE,
-          synthesizePositiveControls = TRUE,
+          synthesizePositiveControls = FALSE,
           runAnalyses = TRUE,
           runDiagnostics = TRUE,
           maxCores = maxCores)
 }, mailSettings = mailSettings, label = "denosumab")
 
-createFiguresAndTables(outputFolder = outputFolder,
-                       connectionDetails = connectionDetails,
-                       cohortDatabaseSchema = cohortDatabaseSchema,
-                       cohortTable = cohortTable,
-                       oracleTempSchema = oracleTempSchema)
+createFiguresAndTablesForProtocol(outputFolder = outputFolder,
+                                  connectionDetails = connectionDetails,
+                                  cohortDatabaseSchema = cohortDatabaseSchema,
+                                  cohortTable = cohortTable,
+                                  oracleTempSchema = oracleTempSchema)
+
+
+createFiguresAndTablesForPaper(outputFolder = outputFolder,
+                                  connectionDetails = connectionDetails,
+                                  cohortDatabaseSchema = cohortDatabaseSchema,
+                                  cohortTable = cohortTable,
+                                  oracleTempSchema = oracleTempSchema)

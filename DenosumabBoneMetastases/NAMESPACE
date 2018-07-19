@@ -2,7 +2,9 @@
 
 export(createAnalysesDetails)
 export(createCohorts)
-export(createFiguresAndTables)
+export(createFiguresAndTablesForPaper)
+export(createFiguresAndTablesForProtocol)
 export(execute)
 export(generateDiagnostics)
+export(runCmAnalyses)
 export(synthesizePositiveControls)
