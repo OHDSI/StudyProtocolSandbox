@@ -175,7 +175,11 @@ applyExistingstrokeModels <- function(connectionDetails,
                                        cohortTable = cohortTable,
                                        outcomeTable = cohortTable,
                                        cohortId = targetId, outcomeId = outcomeId,
-                                       removePriorOutcome=T)
+                                       removePriorOutcome=T,
+                                       riskWindowStart = 1,
+                                       riskWindowEnd = 365,
+                                       requireTimeAtRisk = T,
+                                       minTimeAtRisk = 364, includeAllOutcomes = T)
 
   writeLines('Implementing Qstroke stroke risk model...')
   qstroke <- PredictionComparison::qstrokeModel(connectionDetails, cdmDatabaseSchema,
@@ -184,7 +188,11 @@ applyExistingstrokeModels <- function(connectionDetails,
                                                  cohortTable = cohortTable,
                                                  outcomeTable = cohortTable,
                                                  cohortId = targetId, outcomeId = outcomeId,
-                                                 removePriorOutcome=T)
+                                                 removePriorOutcome=T,
+                                                riskWindowStart = 1,
+                                                riskWindowEnd = 365,
+                                                requireTimeAtRisk = T,
+                                                minTimeAtRisk = 364, includeAllOutcomes = T)
 
   writeLines('Implementing Framington stroke risk model...')
   framington <- PredictionComparison::framinghamModel(connectionDetails, cdmDatabaseSchema,
@@ -193,7 +201,11 @@ applyExistingstrokeModels <- function(connectionDetails,
                                               cohortTable = cohortTable,
                                               outcomeTable = cohortTable,
                                               cohortId = targetId, outcomeId = outcomeId,
-                                              removePriorOutcome=T)
+                                              removePriorOutcome=T,
+                                              riskWindowStart = 1,
+                                              riskWindowEnd = 365,
+                                              requireTimeAtRisk = T,
+                                              minTimeAtRisk = 364, includeAllOutcomes = T)
 
   writeLines('Implementing chads2 stroke risk model...')
   chads2 <- PredictionComparison::chads2Model(connectionDetails, cdmDatabaseSchema,
@@ -202,7 +214,11 @@ applyExistingstrokeModels <- function(connectionDetails,
                                               cohortTable = cohortTable,
                                               outcomeTable = cohortTable,
                                               cohortId = targetId, outcomeId = outcomeId,
-                                              removePriorOutcome=T)
+                                              removePriorOutcome=T,
+                                              riskWindowStart = 1,
+                                              riskWindowEnd = 365,
+                                              requireTimeAtRisk = T,
+                                              minTimeAtRisk = 364, includeAllOutcomes = T)
 
   writeLines('Implementing chads2vas stroke risk model...')
   chads2vas <- PredictionComparison::chads2vasModel(connectionDetails, cdmDatabaseSchema,
@@ -211,7 +227,11 @@ applyExistingstrokeModels <- function(connectionDetails,
                                               cohortTable = cohortTable,
                                               outcomeTable = cohortTable,
                                               cohortId = targetId, outcomeId = outcomeId,
-                                              removePriorOutcome=T)
+                                              removePriorOutcome=T,
+                                              riskWindowStart = 1,
+                                              riskWindowEnd = 365,
+                                              requireTimeAtRisk = T,
+                                              minTimeAtRisk = 364, includeAllOutcomes = T)
 
 # format the results... [TODO...]
   results <- list(astria=astria,
@@ -268,4 +288,40 @@ submitResults <- function(exportFolder,dbName, key, secret) {
                                         key =  key, secret = secret)
 
 
+}
+
+
+#' View the coefficients of the models in this study and the concept ids used to define them
+#'
+#'
+#' @details
+#' This will print the models and return a data.frame with the models
+#'
+#'
+#' @return
+#' A data.frame of the models
+#'
+#' @export
+viewModels <- function(){
+  conceptSets <- system.file("extdata", "existingStrokeModels_concepts.csv", package = "PredictionComparison")
+  conceptSets <- read.csv(conceptSets)
+
+  existingBleedModels <- system.file("extdata", "existingStrokeModels_modelTable.csv", package = "PredictionComparison")
+  existingBleedModels <- read.csv(existingBleedModels)
+
+  modelNames <- system.file("extdata", "existingStrokeModels_models.csv", package = "PredictionComparison")
+  modelNames <- read.csv(modelNames)
+
+
+  models <- merge(modelNames,merge(existingBleedModels[,c('modelId','modelCovariateId','Name','Time','coefficientValue')],
+                                   conceptSets[,c('modelCovariateId','ConceptId','AnalysisId')]))
+  models <- models[,c('name','Name','Time','coefficientValue','ConceptId','AnalysisId')]
+  colnames(models)[1:2] <- c('Model','Covariate')
+  models[,1] <- as.character(models[,1])
+  models[,2] <- as.character(models[,2])
+  models <- rbind(models, c('Chads2','FeatureExtraction covariate','',0,0,0))
+  models <- rbind(models, c('Chads2Vas','FeatureExtraction covariate','',0,0,0))
+
+  View(models)
+  return(models)
 }
