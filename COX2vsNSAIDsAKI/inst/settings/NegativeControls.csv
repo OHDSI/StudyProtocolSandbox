@@ -1,0 +1,36 @@
+targetId,targetName,comparatorId,comparatorName,outcomeId,outcomeName,type
+1,Celecoxib,2,Diclofenac,24609,Hypoglycemia,Outcome
+1,Celecoxib,2,Diclofenac,29735,Candidiasis of mouth,Outcome
+1,Celecoxib,2,Diclofenac,73754,Restless legs,Outcome
+1,Celecoxib,2,Diclofenac,80004,Injury of hand,Outcome
+1,Celecoxib,2,Diclofenac,134718,Hirsutism,Outcome
+1,Celecoxib,2,Diclofenac,139099,Ingrowing nail,Outcome
+1,Celecoxib,2,Diclofenac,141932,Senile hyperkeratosis,Outcome
+1,Celecoxib,2,Diclofenac,192367,Dysplasia of cervix,Outcome
+1,Celecoxib,2,Diclofenac,193739,Ovarian failure,Outcome
+1,Celecoxib,2,Diclofenac,194997,Prostatitis,Outcome
+1,Celecoxib,2,Diclofenac,197236,Uterine leiomyoma,Outcome
+1,Celecoxib,2,Diclofenac,199074,Acute pancreatitis,Outcome
+1,Celecoxib,2,Diclofenac,255573,Chronic obstructive lung disease,Outcome
+1,Celecoxib,2,Diclofenac,257007,Allergic rhinitis,Outcome
+1,Celecoxib,2,Diclofenac,313459,Sleep apnea,Outcome
+1,Celecoxib,2,Diclofenac,314658,Cardiomegaly,Outcome
+1,Celecoxib,2,Diclofenac,316084,Lymphadenitis,Outcome
+1,Celecoxib,2,Diclofenac,319843,Mitral valve disorder,Outcome
+1,Celecoxib,2,Diclofenac,321596,Peripheral venous insufficiency,Outcome
+1,Celecoxib,2,Diclofenac,374366,Sensorineural hearing loss,Outcome
+1,Celecoxib,2,Diclofenac,375292,Perforation of tympanic membrane,Outcome
+1,Celecoxib,2,Diclofenac,380094,Carpal tunnel syndrome,Outcome
+1,Celecoxib,2,Diclofenac,433753,Alcohol abuse,Outcome
+1,Celecoxib,2,Diclofenac,433811,Hydronephrosis,Outcome
+1,Celecoxib,2,Diclofenac,436665,Bipolar disorder,Outcome
+1,Celecoxib,2,Diclofenac,436676,Posttraumatic stress disorder,Outcome
+1,Celecoxib,2,Diclofenac,436940,Metabolic syndrome X,Outcome
+1,Celecoxib,2,Diclofenac,437784,Infectious mononucleosis,Outcome
+1,Celecoxib,2,Diclofenac,438134,Hypersomnia,Outcome
+1,Celecoxib,2,Diclofenac,440358,Lipoma,Outcome
+1,Celecoxib,2,Diclofenac,440374,Obsessive-compulsive disorder,Outcome
+1,Celecoxib,2,Diclofenac,443617,Conduct disorder,Outcome
+1,Celecoxib,2,Diclofenac,443800,Amenorrhea,Outcome
+1,Celecoxib,2,Diclofenac,4084966,Candida infection of genital region,Outcome
+1,Celecoxib,2,Diclofenac,4288310,Carotid artery obstruction,Outcome
