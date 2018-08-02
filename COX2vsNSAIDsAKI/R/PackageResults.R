@@ -73,10 +73,10 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
   analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
   analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
-  allControlsFile <- file.path(outputFolder, "AllControls.csv")
-  allControls <- read.csv(allControlsFile)
-  allControls$temp <- allControls$outcomeName
-  analysisSummary <- merge(analysisSummary, allControls[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "temp", "targetEffectSize", "trueEffectSize")], all.x = TRUE)
+  #allControlsFile <- file.path(outputFolder, "AllControls.csv")
+  #allControls <- read.csv(allControlsFile)
+  #allControls$temp <- allControls$outcomeName
+  #analysisSummary <- merge(analysisSummary, allControls[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "temp", "targetEffectSize", "trueEffectSize")], all.x = TRUE)
   analysisSummary$outcomeName <- as.character(analysisSummary$outcomeName)
   analysisSummary$temp <- as.character(analysisSummary$temp)
   analysisSummary$outcomeName[!is.na(analysisSummary$temp)] <- analysisSummary$temp[!is.na(analysisSummary$temp)]
