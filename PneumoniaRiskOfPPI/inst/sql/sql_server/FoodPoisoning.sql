@@ -7,7 +7,12 @@ CREATE TABLE #Codesets (
 INSERT INTO #Codesets (codeset_id, concept_id)
 SELECT 0 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (4025165,254677,436339,257315,256722,4110510,254066,255084,4071610,252949,4049965,252655,260754,4310964,4231983,443410,312664,4133224,440431,3021082,439857,255848,256723,260430,258180,253790,4050872,252351,436145,261324,260028,40489912,259852,261326)and invalid_reason is null
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (434854)and invalid_reason is null
+UNION  select c.concept_id
+  from @cdm_database_schema.CONCEPT c
+  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
+  and ca.ancestor_concept_id in (434854)
+  and c.invalid_reason is null
 
 ) I
 ) C;
@@ -89,7 +94,7 @@ from #included_events;
 -- Date Offset Strategy
 INSERT INTO #cohort_ends (event_id,  person_id, end_date)
 select event_id, person_id, 
-  case when DATEADD(day,30,start_date) > start_date then DATEADD(day,30,start_date) else start_date end as end_date
+  case when DATEADD(day,0,start_date) > start_date then DATEADD(day,0,start_date) else start_date end as end_date
 from #included_events
 ;
 
