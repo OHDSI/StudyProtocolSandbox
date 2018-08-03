@@ -135,20 +135,13 @@ createAnalysesDetails <- function(workFolder) {
                                                                    covariateSettings = covarSettings)
   
   createStudyPopArgs1 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
-                                                                       minDaysAtRisk = 1,
-                                                                       riskWindowStart = 1,
-                                                                       addExposureDaysToStart = FALSE,
-                                                                       riskWindowEnd = 30,
-                                                                       addExposureDaysToEnd = TRUE)
+                                                                      minDaysAtRisk = 1,
+                                                                      riskWindowStart = 1,
+                                                                      addExposureDaysToStart = FALSE,
+                                                                      riskWindowEnd = 30,
+                                                                      addExposureDaysToEnd = TRUE)
   
   createStudyPopArgs2 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
-                                                                       minDaysAtRisk = 1,
-                                                                       riskWindowStart = 1,
-                                                                       addExposureDaysToStart = FALSE,
-                                                                       riskWindowEnd = 90,
-                                                                       addExposureDaysToEnd = TRUE)
-  
-  createStudyPopArgs3 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
                                                                        minDaysAtRisk = 1,
                                                                        riskWindowStart = 1,
                                                                        addExposureDaysToStart = FALSE,
@@ -216,9 +209,9 @@ createAnalysesDetails <- function(workFolder) {
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
   
   cmAnalysis5 <- CohortMethod::createCmAnalysis(analysisId = 5,
-                                                description = "One-on-one matching of 30-day analysis",
+                                                description = "One-on-one matching until observation end",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
+                                                createStudyPopArgs = createStudyPopArgs2,
                                                 createPs = TRUE,
                                                 createPsArgs = createPsArgs,
                                                 matchOnPs = TRUE,
@@ -226,18 +219,7 @@ createAnalysesDetails <- function(workFolder) {
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
   
-  cmAnalysis6 <- CohortMethod::createCmAnalysis(analysisId = 6,
-                                                description = "One-on-one matching of 365-day analysis",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs1,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
-  
-  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4,cmAnalysis5,cmAnalysis6)
+  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4,cmAnalysis5)
   
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisListTaiwan.json"))
 }
