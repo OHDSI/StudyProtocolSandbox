@@ -30,7 +30,7 @@
 #' @param minCellCount        The minimum number of subjects contributing to a count before it can be included in the results.
 #'
 #' @export
-packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, minCellCount = 5) {
+packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, minCellCount = 5, country = country) {
   exportFolder <- file.path(outputFolder, "export")
   if (!file.exists(exportFolder))
     dir.create(exportFolder)
@@ -58,7 +58,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     balance$afterMatchingSumComparator <- NULL
     write.csv(balance, file.path(exportFolder, file), row.names = FALSE)
   }
-  
+
   # Copy prepared PS plots to export folder ----------------------------------------------------------
   files <- list.files(path = diagnosticsFolder, pattern = "^preparedPsPlot.*csv$", full.names = TRUE)
   file.copy(from = files, to = exportFolder)
@@ -73,14 +73,17 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
   analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
   analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
-  # allControlsFile <- file.path(outputFolder, "AllControls.csv")
+  #allControlsFile <- file.path(outputFolder, "AllControls.csv")
   # allControls <- read.csv(allControlsFile)
   # allControls$temp <- allControls$outcomeName
   # analysisSummary <- merge(analysisSummary, allControls[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "temp", "targetEffectSize", "trueEffectSize")], all.x = TRUE)
   analysisSummary$outcomeName <- as.character(analysisSummary$outcomeName)
-  analysisSummary$temp <- as.character(analysisSummary$temp)
+  #analysisSummary$temp <- as.character(analysisSummary$temp)
   analysisSummary$outcomeName[!is.na(analysisSummary$temp)] <- analysisSummary$temp[!is.na(analysisSummary$temp)]
-  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = "FebuxostatVsAllopurinolCVD"))
+  cmAnalysisListFile <- system.file("settings",
+                                    switch(country, "Europe"="cmAnalysisListEurope.json", "US"="cmAnalysisListUS.json", "Japan"= "cmAnalysisListJapan.json",  "Taiwan"= "cmAnalysisListTaiwan.json","Korea" = "cmAnalysisListKorea.json"),
+                                    package = "FebuxostatVsAllopurinolCVD")
+  cmAnalysisList <- CohortMethod::loadCmAnalysisList(cmAnalysisListFile)
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
   }

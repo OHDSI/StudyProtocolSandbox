@@ -144,14 +144,15 @@ execute <- function(country = 'Korea',
   }
   if (runDiagnostics) {
     OhdsiRTools::logInfo("Running diagnostics")
-    generateDiagnostics(outputFolder = outputFolder)
+    generateDiagnostics(outputFolder = outputFolder, country=country)
   }
   if (packageResults) {
     OhdsiRTools::logInfo("Packaging results")
     packageResults(connectionDetails = connectionDetails,
                    cdmDatabaseSchema = cdmDatabaseSchema,
                    outputFolder = outputFolder,
-                   minCellCount = minCellCount)
+                   minCellCount = minCellCount,
+                   country = country)
   }
   
   
