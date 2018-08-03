@@ -1,0 +1,36 @@
+targetId,targetName,comparatorId,comparatorName,outcomeId,outcomeName,type
+728,PPI,729,H2RA,24609,Hypoglycemia,Outcome
+728,PPI,729,H2RA,29735,Candidiasis of mouth,Outcome
+728,PPI,729,H2RA,73754,Restless legs,Outcome
+728,PPI,729,H2RA,80004,Injury of hand,Outcome
+728,PPI,729,H2RA,134718,Hirsutism,Outcome
+728,PPI,729,H2RA,139099,Ingrowing nail,Outcome
+728,PPI,729,H2RA,141932,Senile hyperkeratosis,Outcome
+728,PPI,729,H2RA,192367,Dysplasia of cervix,Outcome
+728,PPI,729,H2RA,193739,Ovarian failure,Outcome
+728,PPI,729,H2RA,194997,Prostatitis,Outcome
+728,PPI,729,H2RA,197236,Uterine leiomyoma,Outcome
+728,PPI,729,H2RA,199074,Acute pancreatitis,Outcome
+728,PPI,729,H2RA,255573,Chronic obstructive lung disease,Outcome
+728,PPI,729,H2RA,257007,Allergic rhinitis,Outcome
+728,PPI,729,H2RA,313459,Sleep apnea,Outcome
+728,PPI,729,H2RA,314658,Cardiomegaly,Outcome
+728,PPI,729,H2RA,316084,Lymphadenitis,Outcome
+728,PPI,729,H2RA,319843,Mitral valve disorder,Outcome
+728,PPI,729,H2RA,321596,Peripheral venous insufficiency,Outcome
+728,PPI,729,H2RA,374366,Sensorineural hearing loss,Outcome
+728,PPI,729,H2RA,375292,Perforation of tympanic membrane,Outcome
+728,PPI,729,H2RA,380094,Carpal tunnel syndrome,Outcome
+728,PPI,729,H2RA,433753,Alcohol abuse,Outcome
+728,PPI,729,H2RA,433811,Hydronephrosis,Outcome
+728,PPI,729,H2RA,436665,Bipolar disorder,Outcome
+728,PPI,729,H2RA,436676,Posttraumatic stress disorder,Outcome
+728,PPI,729,H2RA,436940,Metabolic syndrome X,Outcome
+728,PPI,729,H2RA,437784,Infectious mononucleosis,Outcome
+728,PPI,729,H2RA,438134,Hypersomnia,Outcome
+728,PPI,729,H2RA,440358,Lipoma,Outcome
+728,PPI,729,H2RA,440374,Obsessive-compulsive disorder,Outcome
+728,PPI,729,H2RA,443617,Conduct disorder,Outcome
+728,PPI,729,H2RA,443800,Amenorrhea,Outcome
+728,PPI,729,H2RA,4084966,Candida infection of genital region,Outcome
+728,PPI,729,H2RA,4288310,Carotid artery obstruction,Outcome
