@@ -43,8 +43,8 @@ generateDiagnostics <- function(outputFolder) {
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
   }
-  allControlsFile <- file.path(outputFolder, "AllControls.csv")
-  allControls <- read.csv(allControlsFile)
+  #allControlsFile <- file.path(outputFolder, "AllControls.csv")
+  #allControls <- read.csv(allControlsFile)
   tcsOfInterest <- unique(tcosOfInterest[, c("targetId", "comparatorId")])
   mdrrs <- data.frame()
   for (i in 1:nrow(tcsOfInterest)) {
@@ -55,8 +55,9 @@ generateDiagnostics <- function(outputFolder) {
     outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
     outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
     for (analysisId in unique(reference$analysisId)) {
-      controlSubset <- allControls[allControls$targetId == targetId & allControls$comparatorId == comparatorId, ]
-      controlSubset <- merge(controlSubset[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")], analysisSummary[analysisSummary$analysisId == analysisId, ])
+      #controlSubset <- allControls[allControls$targetId == targetId & allControls$comparatorId == comparatorId, ]
+      #controlSubset <- merge(controlSubset[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")], analysisSummary[analysisSummary$analysisId == analysisId, ])
+      controlSubset <- analysisSummary[analysisSummary$analysisId == analysisId, ]
       
       # Outcome controls
       label <- "OutcomeControls"
@@ -139,8 +140,11 @@ generateDiagnostics <- function(outputFolder) {
                                 reference$targetId == targetId &
                                 reference$comparatorId == comparatorId &
                                 reference$outcomeId == outcomeIds[1], ]
-      ps <- readRDS(exampleRef$sharedPsFile)
-      if (nrow(ps) != 0) {
+      
+      if(exampleRef$sharedPsFile =="") {
+        ps <- data.frame()
+      } else ps <- readRDS(exampleRef$sharedPsFile)
+      if (  nrow(ps) != 0  ) {
         if (exampleRef$sharedPsFile == "") {
           psAfterMatching <- readRDS(exampleRef$studyPopFile)
         } else {

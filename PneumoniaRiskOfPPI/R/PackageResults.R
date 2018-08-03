@@ -58,7 +58,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
     balance$afterMatchingSumComparator <- NULL
     write.csv(balance, file.path(exportFolder, file), row.names = FALSE)
   }
-  
+
   # Copy prepared PS plots to export folder ----------------------------------------------------------
   files <- list.files(path = diagnosticsFolder, pattern = "^preparedPsPlot.*csv$", full.names = TRUE)
   file.copy(from = files, to = exportFolder)
@@ -73,14 +73,14 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   analysisSummary <- addCohortNames(analysisSummary, "outcomeId", "outcomeName")
   analysisSummary <- addCohortNames(analysisSummary, "targetId", "targetName")
   analysisSummary <- addCohortNames(analysisSummary, "comparatorId", "comparatorName")
-  allControlsFile <- file.path(outputFolder, "AllControls.csv")
-  allControls <- read.csv(allControlsFile)
-  allControls$temp <- allControls$outcomeName
-  analysisSummary <- merge(analysisSummary, allControls[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "temp", "targetEffectSize", "trueEffectSize")], all.x = TRUE)
+  #allControlsFile <- file.path(outputFolder, "AllControls.csv")
+  # allControls <- read.csv(allControlsFile)
+  # allControls$temp <- allControls$outcomeName
+  # analysisSummary <- merge(analysisSummary, allControls[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "temp", "targetEffectSize", "trueEffectSize")], all.x = TRUE)
   analysisSummary$outcomeName <- as.character(analysisSummary$outcomeName)
-  analysisSummary$temp <- as.character(analysisSummary$temp)
+  #analysisSummary$temp <- as.character(analysisSummary$temp)
   analysisSummary$outcomeName[!is.na(analysisSummary$temp)] <- analysisSummary$temp[!is.na(analysisSummary$temp)]
-  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = "PneumoniaRiskOfPPI"))
+  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = packageName))
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
   }
@@ -90,7 +90,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   analysisSummary$eventsComparator[analysisSummary$eventsComparator < minCellCount] <- paste0("<", minCellCount)
   write.csv(analysisSummary, file.path(exportFolder, "AllEstimates.csv"), row.names = FALSE)
   
-  pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = "PneumoniaRiskOfPPI")
+  pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = "FebuxostatVsAllopurinolCVD")
   tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
   tcsOfInterest <- unique(tcosOfInterest[, c("targetId", "comparatorId")])
   for (i in 1:nrow(tcsOfInterest)) {
