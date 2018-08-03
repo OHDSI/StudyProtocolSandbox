@@ -128,7 +128,7 @@ createAnalysesDetails <- function(workFolder) {
   getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(washoutPeriod = 7,
                                                                    restrictToCommonPeriod = FALSE,
                                                                    firstExposureOnly = FALSE,
-                                                                   removeDuplicateSubjects = TRUE,
+                                                                   removeDuplicateSubjects = FALSE,
                                                                    studyStartDate = "20120211",
                                                                    studyEndDate = "",
                                                                    excludeDrugsFromCovariates = FALSE,
