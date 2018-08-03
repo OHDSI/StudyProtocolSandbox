@@ -10,19 +10,17 @@ maxCores <- 1
 outputFolder <- "D:/FebuxostatAllopurinol2"
 
 # Details for connecting to the server:
-connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "sql server",
-                                                                server = "128.1.99.53",
-                                                                user = "chandryou",
-                                                                password = "dbtmdcks12#")
+connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "",
+                                                                server = "",
+                                                                user = "",
+                                                                password = "")
 
 # The name of the database schema where the CDM data can be found:
-cdmDatabaseSchema <- "NHIS_NSC.dbo"
-
-cohortTable <- "cohort"
+cdmDatabaseSchema <- ""
 
 # The name of the database schema and table where the study-specific cohorts will be instantiated:
-cohortDatabaseSchema <- "Chan_NHID_CVD.dbo"
-cohortTable <- "FebuxostatAllopurinol"
+cohortDatabaseSchema <- ""
+cohortTable <- ""
 
 # For Oracle: define a schema that can be used to emulate temp tables:
 oracleTempSchema <- NULL
@@ -43,6 +41,6 @@ execute(country = 'Korea',
 
 traceback()
 
-prepareForEvidenceExplorer(studyFolder = "D:/FebuxostatAllopurinol2")
+prepareForEvidenceExplorer(studyFolder = "D:/FebuxostatAllopurinol")
 
-launchEvidenceExplorer(studyFolder = "D:/FebuxostatAllopurinol2", blind = FALSE, launch.browser = FALSE)
+launchEvidenceExplorer(studyFolder = "D:/FebuxostatAllopurinol", blind = FALSE, launch.browser = FALSE)
