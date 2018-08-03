@@ -137,26 +137,26 @@ createAnalysesDetails <- function(workFolder) {
   createStudyPopArgs1 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
                                                                        minDaysAtRisk = 1,
                                                                        riskWindowStart = 1,
-                                                                       addExposureDaysToStart = TRUE,
+                                                                       addExposureDaysToStart = FALSE,
                                                                        riskWindowEnd = 30,
                                                                        addExposureDaysToEnd = TRUE)
   
   createStudyPopArgs2 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
                                                                        minDaysAtRisk = 1,
-                                                                       riskWindowStart = 0,
-                                                                       addExposureDaysToStart = TRUE,
-                                                                       riskWindowEnd = 90,
-                                                                       addExposureDaysToEnd = TRUE)
+                                                                       riskWindowStart = 1,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 9999,
+                                                                       addExposureDaysToEnd = FALSE)
   
   createStudyPopArgs3 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
                                                                        minDaysAtRisk = 1,
-                                                                       riskWindowStart = 0,
-                                                                       addExposureDaysToStart = TRUE,
-                                                                       riskWindowEnd = 9999,
-                                                                       addExposureDaysToEnd = TRUE)
+                                                                       riskWindowStart = 1,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 30,
+                                                                       addExposureDaysToEnd = FALSE)
   
   fitOutcomeModelArgs1 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
-                                                                  modelType = "logistic",
+                                                                  modelType = "cox",
                                                                   stratified = FALSE)
   
   cmAnalysis1 <- CohortMethod::createCmAnalysis(analysisId = 1,
@@ -175,7 +175,7 @@ createAnalysesDetails <- function(workFolder) {
   matchOnPsArgs1 <- CohortMethod::createMatchOnPsArgs(maxRatio = 4)
   
   fitOutcomeModelArgs2 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
-                                                                  modelType = "logistic",
+                                                                  modelType = "cox",
                                                                   stratified = TRUE)
   
   cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
@@ -216,7 +216,7 @@ createAnalysesDetails <- function(workFolder) {
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
   
   cmAnalysis5 <- CohortMethod::createCmAnalysis(analysisId = 5,
-                                                description = "One-on-one matching of 90-day analysis",
+                                                description = "One-on-one matching until observation end",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
                                                 createStudyPopArgs = createStudyPopArgs2,
                                                 createPs = TRUE,
@@ -227,13 +227,13 @@ createAnalysesDetails <- function(workFolder) {
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
   
   fitOutcomeModelArgs3 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
-                                                                  modelType = "cox",
+                                                                  modelType = "logistic",
                                                                   stratified = TRUE)
   
   cmAnalysis6 <- CohortMethod::createCmAnalysis(analysisId = 6,
-                                                description = "Per Protocol Survival analysis after One-on-one matching",
+                                                description = "One-on-one matching within 30 days after index",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
+                                                createStudyPopArgs = createStudyPopArgs3,
                                                 createPs = TRUE,
                                                 createPsArgs = createPsArgs,
                                                 matchOnPs = TRUE,
