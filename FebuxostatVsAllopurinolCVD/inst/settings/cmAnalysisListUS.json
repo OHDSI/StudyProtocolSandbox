@@ -43,8 +43,8 @@
       "priorOutcomeLookback": 99999,
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
-      "addExposureDaysToStart": true,
-      "riskWindowEnd": 90,
+      "addExposureDaysToStart": false,
+      "riskWindowEnd": 30,
       "addExposureDaysToEnd": true,
       "censorAtNewRiskWindow": false,
       "attr_class": "args"
@@ -75,7 +75,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -145,8 +145,8 @@
       "priorOutcomeLookback": 99999,
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
-      "addExposureDaysToStart": true,
-      "riskWindowEnd": 90,
+      "addExposureDaysToStart": false,
+      "riskWindowEnd": 30,
       "addExposureDaysToEnd": true,
       "censorAtNewRiskWindow": false,
       "attr_class": "args"
@@ -168,7 +168,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -223,7 +223,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -293,8 +293,8 @@
       "priorOutcomeLookback": 99999,
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
-      "addExposureDaysToStart": true,
-      "riskWindowEnd": 90,
+      "addExposureDaysToStart": false,
+      "riskWindowEnd": 30,
       "addExposureDaysToEnd": true,
       "censorAtNewRiskWindow": false,
       "attr_class": "args"
@@ -316,7 +316,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -371,7 +371,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -441,8 +441,8 @@
       "priorOutcomeLookback": 99999,
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
-      "addExposureDaysToStart": true,
-      "riskWindowEnd": 90,
+      "addExposureDaysToStart": false,
+      "riskWindowEnd": 30,
       "addExposureDaysToEnd": true,
       "censorAtNewRiskWindow": false,
       "attr_class": "args"
@@ -464,7 +464,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -518,7 +518,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -588,8 +588,8 @@
       "priorOutcomeLookback": 99999,
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
-      "addExposureDaysToStart": true,
-      "riskWindowEnd": 90,
+      "addExposureDaysToStart": false,
+      "riskWindowEnd": 30,
       "addExposureDaysToEnd": true,
       "censorAtNewRiskWindow": false,
       "attr_class": "args"
@@ -611,7 +611,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -666,7 +666,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -736,8 +736,8 @@
       "priorOutcomeLookback": 99999,
       "minDaysAtRisk": 1,
       "riskWindowStart": 1,
-      "addExposureDaysToStart": true,
-      "riskWindowEnd": 90,
+      "addExposureDaysToStart": false,
+      "riskWindowEnd": 30,
       "addExposureDaysToEnd": true,
       "censorAtNewRiskWindow": false,
       "attr_class": "args"
@@ -759,7 +759,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -814,7 +814,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-007,
+        "tolerance": 2e-07,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
