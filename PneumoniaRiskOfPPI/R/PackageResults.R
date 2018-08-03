@@ -1,6 +1,6 @@
 # Copyright 2018 Observational Health Data Sciences and Informatics
 #
-# This file is part of AlendronateVsRaloxifene
+# This file is part of PneumoniaRiskOfPPI
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   analysisSummary$outcomeName <- as.character(analysisSummary$outcomeName)
   analysisSummary$temp <- as.character(analysisSummary$temp)
   analysisSummary$outcomeName[!is.na(analysisSummary$temp)] <- analysisSummary$temp[!is.na(analysisSummary$temp)]
-  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = "AlendronateVsRaloxifene"))
+  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = "PneumoniaRiskOfPPI"))
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
   }
@@ -90,7 +90,7 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   analysisSummary$eventsComparator[analysisSummary$eventsComparator < minCellCount] <- paste0("<", minCellCount)
   write.csv(analysisSummary, file.path(exportFolder, "AllEstimates.csv"), row.names = FALSE)
   
-  pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = "AlendronateVsRaloxifene")
+  pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = "PneumoniaRiskOfPPI")
   tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
   tcsOfInterest <- unique(tcosOfInterest[, c("targetId", "comparatorId")])
   for (i in 1:nrow(tcsOfInterest)) {
@@ -174,7 +174,7 @@ createMetaData <- function(connectionDetails, cdmDatabaseSchema, exportFolder) {
   DatabaseConnector::disconnect(conn)
   lines <- paste(names(cdmSource), cdmSource[1, ], sep = ": ")
   
-  snapshot <- OhdsiRTools::takeEnvironmentSnapshot("AlendronateVsRaloxifene")
+  snapshot <- OhdsiRTools::takeEnvironmentSnapshot("PneumoniaRiskOfPPI")
   lines <- c(lines, "")
   lines <- c(lines, "Package versions:")
   lines <- c(lines, paste(snapshot$package, snapshot$version, sep = ": "))
