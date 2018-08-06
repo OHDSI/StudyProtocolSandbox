@@ -4,7 +4,18 @@ CREATE TABLE #Codesets (
 )
 ;
 
+INSERT INTO #Codesets (codeset_id, concept_id)
+SELECT 0 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
+( 
+  select concept_id from @cdm_database_schema.CONCEPT where concept_id in (141651,46273453,443754)and invalid_reason is null
+UNION  select c.concept_id
+  from @cdm_database_schema.CONCEPT c
+  join @cdm_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
+  and ca.ancestor_concept_id in (141651,46273453,443754)
+  and c.invalid_reason is null
 
+) I
+) C;
 
 
 with primary_events (event_id, person_id, start_date, end_date, op_start_date, op_end_date, visit_occurrence_id) as
@@ -16,18 +27,17 @@ FROM
   select P.person_id, P.start_date, P.end_date, row_number() OVER (PARTITION BY person_id ORDER BY start_date ASC) ordinal, P.visit_occurrence_id
   FROM 
   (
-  -- Begin Death Criteria
-select C.person_id, C.person_id as event_id, C.death_date as start_date, DATEADD(d,1,C.death_date) as end_date, coalesce(C.cause_concept_id,0) as TARGET_CONCEPT_ID, NULL as visit_occurrence_id
-from 
+  -- Begin Condition Occurrence Criteria
+SELECT C.person_id, C.condition_occurrence_id as event_id, C.condition_start_date as start_date, COALESCE(C.condition_end_date, DATEADD(day,1,C.condition_start_date)) as end_date, C.CONDITION_CONCEPT_ID as TARGET_CONCEPT_ID, C.visit_occurrence_id
+FROM 
 (
-  select d.*
-  FROM @cdm_database_schema.DEATH d
-
+  SELECT co.*, row_number() over (PARTITION BY co.person_id ORDER BY co.condition_start_date, co.condition_occurrence_id) as ordinal
+  FROM @cdm_database_schema.CONDITION_OCCURRENCE co
+  where co.condition_concept_id in (SELECT concept_id from  #Codesets where codeset_id = 0)
 ) C
 
 
--- End Death Criteria
-
+-- End Condition Occurrence Criteria
 
   ) P
 ) P
@@ -81,7 +91,12 @@ select event_id, person_id, op_end_date as end_date
 into #cohort_ends
 from #included_events;
 
-
+-- Date Offset Strategy
+INSERT INTO #cohort_ends (event_id,  person_id, end_date)
+select event_id, person_id, 
+  case when DATEADD(day,0,start_date) > start_date then DATEADD(day,0,start_date) else start_date end as end_date
+from #included_events
+;
 
 
 

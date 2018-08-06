@@ -1,7 +1,8 @@
 cohortId,atlasId,name
 620,620,FebuxostatGeneral
 621,621,AllopurinolGeneral
-762,762,CVD
+756,756,CVDInpatient
 20,20,death
-60,60,AcuteMI
-763,763,Stroke
+60,60,AcuteMIinpatient
+763,763,StrokeInpatient
+736,736,SJSnTEN
