@@ -1,32 +1,27 @@
-remove.packages("PneumoniaRiskOfPPI")
-
-setwd("C:/Users/apple/git/ohdsi/StudyProtocolSandbox")
-library(devtools)
-PneumoniaRiskOfPPI::install("PneumoniaRiskOfPPI")
-
 library(PneumoniaRiskOfPPI)
 
 # Optional: specify where the temporary files (used by the ff package) will be created:
-#options(fftempdir = "e:/FFtemp")
+options(fftempdir = "s:/FFtemp")
 
 # Maximum number of cores to be used:
-maxCores <- 4
+maxCores <- 32
 
 # The folder where the study intermediate and result files will be written:
-outputFolder <- "D:/PneumoniaRiskofPPI"
+outputFolder <- "s:/PneumoniaRiskOfPPI"
 
 # Details for connecting to the server:
-connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "sql server",
-                                                                server = "",
-                                                                user = "",
-                                                                password = "")
+connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
+                                                                server = Sys.getenv("PDW_SERVER"),
+                                                                user = NULL,
+                                                                password = NULL,
+                                                                port = Sys.getenv("PDW_PORT"))
 
 # The name of the database schema where the CDM data can be found:
-cdmDatabaseSchema <- "NHIS_NSC.dbo"
+cdmDatabaseSchema <- "cdm_truven_mdcd_v635.dbo"
 
 # The name of the database schema and table where the study-specific cohorts will be instantiated:
-cohortDatabaseSchema <- "NHIS_NSC.dbo"
-cohortTable <- "cohort"
+cohortDatabaseSchema <- "scratch.dbo"
+cohortTable <- "mschuemi_skeleton"
 
 # For Oracle: define a schema that can be used to emulate temp tables:
 oracleTempSchema <- NULL
@@ -39,11 +34,11 @@ execute(connectionDetails = connectionDetails,
         outputFolder = outputFolder,
         createCohorts = FALSE,
         synthesizePositiveControls = FALSE,
-        runAnalyses = TRUE,
-        runDiagnostics = TRUE,
+        runAnalyses = FALSE,
+        runDiagnostics = FALSE,
         packageResults = TRUE,
         maxCores = maxCores)
-traceback()
-prepareForEvidenceExplorer(studyFolder = "D:/PneumoniaRiskofPPI")
 
-launchEvidenceExplorer(studyFolder = "D:/PneumoniaRiskofPPI", blind = FALSE, launch.browser = FALSE)
+prepareForEvidenceExplorer(studyFolder = "S:/PneumoniaRiskOfPPI")
+
+launchEvidenceExplorer(studyFolder = "S:/PneumoniaRiskOfPPI", blind = FALSE, launch.browser = FALSE)

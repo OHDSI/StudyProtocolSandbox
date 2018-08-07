@@ -1,9 +1,7 @@
-OHDSI Alendronate vs Raloxifene study
+OHDSI Short-term risk of PPI study
 =============================================
 
-This study aims to evaluate hip fracture risk in patients exposed to alendronate compared with those exposed to raloxifene.
-
-Detailed information is available on the [OHDSI Wiki](http://www.ohdsi.org/web/wiki/doku.php?id=research:bisphosphonates_and_hip_fracture) and [full Protocol](https://github.com/OHDSI/StudyProtocols/blob/master/AlendronateVsRaloxifene/extras/alendronate_raloxifene_hip_fracture.docx?raw=true).
+This study aims to evaluate short-term risk of PPI compared with H2-blocker.
 
 Requirements
 ============
@@ -31,7 +29,7 @@ How to run
 	install_github("ohdsi/EmpiricalCalibration")
 	install_github("ohdsi/MethodEvaluation")
 	install_github("ohdsi/EvidenceSynthesis")
-	install_github("ohdsi/StudyProtocols/AlendronateVsRaloxifene")
+	install_github("ohdsi/StudyProtocols/PneumoniaRiskOfPPI")
 ```
 
 	If you experience problems on Windows where rJava can't find Java, one solution may be to add `args = "--no-multiarch"` to each `install_github` call, for example:
@@ -45,7 +43,7 @@ How to run
 2. Once installed, you can execute the study by modifying and using the following code:
 	
 	```r
-	library(AlendronateVsRaloxifene)
+	library(PneumoniaRiskOfPPI)
 	
 	connectionDetails <- createConnectionDetails(dbms = "postgresql",
 																						 user = "joe",
@@ -53,7 +51,7 @@ How to run
 																						 server = "myserver")
 	cdmDatabaseSchema <- "cdm_data"
 	cohortDatabaseSchema <- "results"
-	cohortTable <- "ohdsi_alendronate_raloxifene"
+	cohortTable <- "ohdsi_PneumoniaRiskOfPPI"
 	outputfolder <- "c:/temp/study_results"
 	
 	execute(connectionDetails = connectionDetails,
@@ -96,9 +94,6 @@ How to run
 
 Getting Involved
 ================
-* Package manual: [AlendronateVsRaloxifene.pdf](https://raw.githubusercontent.com/OHDSI/StudyProtocol/AlendronateVsRaloxifene/master/extras/AlendronateVsRaloxifene.pdf)
-* Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>
-* We use the <a href="../../issues">GitHub issue tracker</a> for all bugs/issues/enhancements
 
 License
 =======
@@ -107,7 +102,7 @@ The TofaRep package is licensed under Apache License 2.0
 
 Development
 ===========
-AlendronateVsRaloxifene was developed in R Studio.
+PneumoniaRiskOfPPI was developed in R Studio.
 
 ### Development status
 

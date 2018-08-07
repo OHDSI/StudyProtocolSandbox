@@ -1,6 +1,6 @@
 # Copyright 2018 Observational Health Data Sciences and Informatics
 #
-# This file is part of AlendronateVsRaloxifene
+# This file is part of PneumoniaRiskOfPPI.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 # Format and check code ---------------------------------------------------
 OhdsiRTools::formatRFolder()
-OhdsiRTools::checkUsagePackage("AlendronateVsRaloxifene")
+OhdsiRTools::checkUsagePackage("PneumoniaRiskOfPPI")
 OhdsiRTools::updateCopyrightYearFolder()
 
 # Create manual -----------------------------------------------------------
-shell("rm extras/AlendronateVsRaloxifene.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/AlendronateVsRaloxifene.pdf")
+shell("rm extras/PneumoniaRiskOfPPI.pdf")
+shell("R CMD Rd2pdf ./ --output=extras/PneumoniaRiskOfPPI.pdf")
 
 # Create vignette ---------------------------------------------------------
 rmarkdown::render("vignettes/UsingSkeletonPackage.Rmd",
-                  output_file = "../inst/doc/UsingSkeletonPackage.pdf",
+                  output_file = "../inst/doc/UsingPneumoniaRiskOfPPI..pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
                                           toc = TRUE,
                                           number_sections = TRUE))
@@ -36,11 +36,11 @@ OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv"
                                                 insertTableSql = TRUE,
                                                 insertCohortCreationR = TRUE,
                                                 generateStats = FALSE,
-                                                packageName = "AlendronateVsRaloxifene")
+                                                packageName = "PneumoniaRiskOfPPI")
 
 # Create analysis details -------------------------------------------------
 source("extras/CreateStudyAnalysisDetails.R")
 createAnalysesDetails("inst/settings/")
 
 # Store environment in which the study was executed -----------------------
-OhdsiRTools::insertEnvironmentSnapshotInPackage("AlendronateVsRaloxifene")
+OhdsiRTools::insertEnvironmentSnapshotInPackage("PneumoniaRiskOfPPI")

@@ -1,0 +1,2 @@
+targetId,targetName,comparatorId,comparatorName,outcomeIds,OutcomeNames,excludedCovariateConceptIds
+764,COX2,765,NSAID,766,AKI,1236607;1189754;1118045;1115008;1113648;1150345;1136980;1178663;1177480;1124300;1118084
