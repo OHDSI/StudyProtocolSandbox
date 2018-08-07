@@ -1,0 +1,29 @@
+Package: SkeletonPredictionStudy
+Type: Package
+Title: A Package Skeleton for Patient Level Prediction Studies
+Version: 0.0.1
+Author: Jenna Reps [aut, cre]
+Maintainer: Jenna M Reps <reps@ohdsi.org>
+Description: A skeleton package, to be used as a starting point when implementing patient-level prediction studies.
+Depends:
+    DatabaseConnector
+Imports:
+    SqlRender,
+    Cyclops,
+    FeatureExtraction,
+    PatientLevelPrediction,
+    ggplot2,
+    ff,
+    ffbase,
+    OhdsiSharing,
+    zip,
+	  OhdsiRTools (>= 1.5.0)
+Suggests:
+    knitr,
+    rmarkdown,
+    DT,
+    shiny
+License: Apache License 2.0
+VignetteBuilder: knitr
+LazyData: TRUE
+RoxygenNote: 6.0.1.9000
