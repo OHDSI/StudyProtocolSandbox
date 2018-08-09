@@ -98,6 +98,27 @@ main(modelLocations = models$modelLocation,
      cdmDatabaseSchema=cdmDatabaseSchema,
      cohortDatabaseSchema=cohortDatabaseSchema, 
      cohortTable=cohortTable)
+     
+
+# ================================================
+# RUN FINAL MODEL USING ENDO PHENOTYPE OUTCOME
+# ================================================     
+data(finalmodels)
+names <- createFinalCohorts(connectionDetails,
+                         cdmDatabaseSchema=cdmDatabaseSchema,
+                         cohortDatabaseSchema=cohortDatabaseSchema,
+                         cohortTable=cohortTable,
+                         targetId=101,
+                         outcomeId=202)
+mainFinalModel(model = 'ccae',
+     cohortId = 101,
+     outcomeId = 202,
+     connectionDetails=connectionDetails,
+     outputLocation=outputLocation,
+     databaseName=databaseName, 
+     cdmDatabaseSchema=cdmDatabaseSchema,
+     cohortDatabaseSchema=cohortDatabaseSchema, 
+     cohortTable=cohortTable)
 
 # ================================================
 # DEVELOP NEW MODEL

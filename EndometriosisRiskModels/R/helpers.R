@@ -93,6 +93,72 @@ createCohorts <- function(connectionDetails,
 }
 
 
+#' Create and summarise the final cohorts (O:endo phenotype and T: Women
+#' presenting in ER with abdominal pain for the first time after 1yr of
+#' observation)
+#'
+#' @details
+#' This will create the cohorts and then count the table sizes
+#'
+#' @param connectioDetails The connections details for connecting to the CDM
+#' @param cdmDatabaseSchema  The schema holding the CDM data
+#' @param cohortDatabaseSchema The schema holding the cohort table
+#' @param cohortTable         The name of the cohort table
+#' @param targetId          The cohort definition ids of the target population
+#' @param outcomeId         The cohort definition ids of the outcome
+#'
+#' @return
+#' A summary of the cohort counts
+#'
+#' @export
+createFinalCohorts <- function(connectionDetails,
+                          cdmDatabaseSchema,
+                          cohortDatabaseSchema,
+                          cohortTable,
+                          targetId=101,
+                          outcomeId=201){
+
+  packageName= 'EndometriosisRiskModels'
+
+  cohortDetails <- NULL
+  if(missing(outcomeId)){
+    stop('Need outcomeId')
+  }
+
+  if(missing(targetId)){
+    stop('Need targetId')
+  }
+
+  cohortDetails <- data.frame(cohortName=c("Women presenting in ER with abdominal pain for the first time after 1yr of observation",
+                                           "EndoPhenotype"),
+                              cohortId = c(targetId, outcomeId))
+
+  connection <- DatabaseConnector::connect(connectionDetails)
+
+  #checking whether cohort table exists and creating if not..
+  # create the cohort table if it doesnt exist
+  existTab <- toupper(cohortTable)%in%toupper(DatabaseConnector::getTableNames(connection, cohortDatabaseSchema))
+  if(!existTab){
+    sql <- SqlRender::loadRenderTranslateSql("createTable.sql",
+                                             packageName = packageName,
+                                             dbms = attr(connection, "dbms"),
+                                             target_database_schema = cohortDatabaseSchema,
+                                             target_cohort_table = cohortTable)
+    DatabaseConnector::executeSql(connection, sql)
+  }
+
+  result <- PatientLevelPrediction::createCohort(cohortDetails = cohortDetails,
+                                                 connectionDetails = connectionDetails,
+                                                 cdmDatabaseSchema = cdmDatabaseSchema,
+                                                 cohortDatabaseSchema = cohortDatabaseSchema,
+                                                 cohortTable = cohortTable,
+                                                 package = packageName)
+
+  print(result)
+
+  return(result)
+}
+
 #==========================
 #  Implementing the 16 plp models exported into inst/extdata
 #==========================
