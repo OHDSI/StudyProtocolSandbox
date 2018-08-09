@@ -79,8 +79,8 @@ packageResults <- function(connectionDetails, cdmDatabaseSchema, outputFolder, m
   # analysisSummary <- merge(analysisSummary, allControls[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "temp", "targetEffectSize", "trueEffectSize")], all.x = TRUE)
   analysisSummary$outcomeName <- as.character(analysisSummary$outcomeName)
   #analysisSummary$temp <- as.character(analysisSummary$temp)
-  analysisSummary$outcomeName[!is.na(analysisSummary$temp)] <- analysisSummary$temp[!is.na(analysisSummary$temp)]
-  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = packageName))
+  #analysisSummary$outcomeName[!is.na(analysisSummary$temp)] <- analysisSummary$temp[!is.na(analysisSummary$temp)]
+  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = "PneumoniaRiskOfPPI"))
   for (i in 1:length(cmAnalysisList)) {
     analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
   }
