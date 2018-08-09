@@ -66,6 +66,47 @@ databaseName <- 'network study implementers database name'
 cdmDatabaseSchema <- 'Cdm database'
 cohortDatabaseSchema <- 'read/write access database or cdm database'
 cohortTable <- 'endoCohorts'
+
+
+# ================================================
+# RUN FINAL MODEL USING ENDO PHENOTYPE OUTCOME
+# ================================================     
+names <- createFinalCohorts(connectionDetails,
+                         cdmDatabaseSchema=cdmDatabaseSchema,
+                         cohortDatabaseSchema=cohortDatabaseSchema,
+                         cohortTable=cohortTable,
+                         targetId=101,
+                         outcomeId=202)
+mainFinalModel(model = 'ccae', # pick from models: 'ccae','optum','mdcd' or 'optum_panther'
+     cohortId = 101,
+     outcomeId = 202,
+     connectionDetails=connectionDetails,
+     outputLocation=outputLocation,
+     databaseName=databaseName, 
+     cdmDatabaseSchema=cdmDatabaseSchema,
+     cohortDatabaseSchema=cohortDatabaseSchema, 
+     cohortTable=cohortTable)
+
+# ================================================
+# DEVELOP NEW MODEL
+# ================================================
+# Run the code with your site specific inputs:
+newMod <- developEndometriosisModel(connectionDetails,
+                                      cdmDatabaseSchema=cdmDatabaseSchema,
+                                      cohortDatabaseSchema=cohortDatabaseSchema,
+                                      cohortTable='your cohort table',
+                                      cohortId=cohortId,
+                                      outcomeDatabaseSchema=cohortDatabaseSchema,
+                                      outcomeTable='your cohort table',
+                                      outcomeId=outcomeId,
+                                      sampleSize = 100000,
+                                      cdmVersion = 5)
+                                      
+                                      
+                                      
+# ================================================
+# RUN OLD MODELS
+# ================================================       
 createCohorts <- T
 newTarget1Id <- NULL
 newTarget2Id <- NULL
@@ -98,42 +139,6 @@ main(modelLocations = models$modelLocation,
      cdmDatabaseSchema=cdmDatabaseSchema,
      cohortDatabaseSchema=cohortDatabaseSchema, 
      cohortTable=cohortTable)
-     
-
-# ================================================
-# RUN FINAL MODEL USING ENDO PHENOTYPE OUTCOME
-# ================================================     
-data(finalmodels)
-names <- createFinalCohorts(connectionDetails,
-                         cdmDatabaseSchema=cdmDatabaseSchema,
-                         cohortDatabaseSchema=cohortDatabaseSchema,
-                         cohortTable=cohortTable,
-                         targetId=101,
-                         outcomeId=202)
-mainFinalModel(model = 'ccae',
-     cohortId = 101,
-     outcomeId = 202,
-     connectionDetails=connectionDetails,
-     outputLocation=outputLocation,
-     databaseName=databaseName, 
-     cdmDatabaseSchema=cdmDatabaseSchema,
-     cohortDatabaseSchema=cohortDatabaseSchema, 
-     cohortTable=cohortTable)
-
-# ================================================
-# DEVELOP NEW MODEL
-# ================================================
-# Run the code with your site specific inputs:
-newMod <- developEndometriosisModel(connectionDetails,
-                                      cdmDatabaseSchema=cdmDatabaseSchema,
-                                      cohortDatabaseSchema=cohortDatabaseSchema,
-                                      cohortTable='your cohort table',
-                                      cohortId=cohortId,
-                                      outcomeDatabaseSchema=cohortDatabaseSchema,
-                                      outcomeTable='your cohort table',
-                                      outcomeId=outcomeId,
-                                      sampleSize = 100000,
-                                      cdmVersion = 5)
 
 ```
 
