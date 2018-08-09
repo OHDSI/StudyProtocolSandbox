@@ -79,10 +79,13 @@ generateDiagnostics <- function(outputFolder) {
       }
       if (sum(!is.na(controlSubset$seLogRr)) >= 5) {
         fileName <-  file.path(diagnosticsFolder, paste0("trueAndObs_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".png"))
-        EmpiricalCalibration::plotTrueAndObserved(logRr = controlSubset$logRr, 
+        #controlSubset doesn't have targetEffectSize
+        try(
+          EmpiricalCalibration::plotTrueAndObserved(logRr = controlSubset$logRr, 
                                                   seLogRr = controlSubset$seLogRr, 
                                                   trueLogRr = log(controlSubset$targetEffectSize),
                                                   fileName = fileName)
+        )
       }
       validPcs <- sum(!is.na(controlSubset$seLogRr[controlSubset$targetEffectSize != 1]))
       if (validPcs >= 10) {
