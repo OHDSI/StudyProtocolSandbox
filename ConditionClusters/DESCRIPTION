@@ -1,0 +1,18 @@
+Package: ConditionClusters
+Type: Package
+Title: This package returns a ranked list of similar conditions concept ids for a given condition concept id
+Version: 0.1.0
+Author: Jenna Reps
+Maintainer: Jenna Reps <yourself@somewhere.net>
+Description: We performed ensemble clustering across OHDSI datasets to find similar condition concepts
+License: Apache License 2.0
+Encoding: UTF-8
+LazyData: false
+Depends:
+    R (>= 3.3.0), 
+    DatabaseConnector (>= 1.11.4),
+    SqlRender
+Imports:
+    Matrix,
+    stats
+RoxygenNote: 6.0.1
