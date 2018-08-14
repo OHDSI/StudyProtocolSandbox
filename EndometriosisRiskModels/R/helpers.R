@@ -192,6 +192,9 @@ applyDevelopedPlpModel <- function(connectionDetails,
 
   plpResult <- loadPlpResult(system.file(file.path('plp_models/existingModel', modelLocation),
                                       package=packageName))
+  mod <- get("plpModel", envir = environment(plpResult$model$predict))
+  mod$metaData$call$cdmDatabaseSchema <- 'Missing'
+  assign("plpModel", mod, envir = environment(plpResult$model$predict))
   result <- externalValidatePlp(plpResult = plpResult,
                                 connectionDetails=connectionDetails,
                                 validationSchemaCdm=cdmDatabaseSchema,
