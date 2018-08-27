@@ -1,6 +1,6 @@
 This package is using Achilles precomputed metadata to analyze trends. The intent is to do data quality inspection. It is an extenstion of the Data Quality study.  The package can  analyze trends in medical events at a health-system-wide or national level. This package is optimally designed to analyze trends in interesting medical events from datasets built under the OMOP Common Data Model but can also be used on data in other models (see section at the end). 
 
-A site running this package can run the analysis localy with no requiremnt to share any data with the study coordinating center. The package will generate data on events that may be interesting from Data Quality perspective to review localy. Sharing of data is optional step 4.
+A site running this package can run the analysis localy with no requiremnt to share any data with the study coordinating center. The package will generate data on events that may be interesting from Data Quality perspective to review localy. Sharing of data is optional step 4.  
 
 
 ## Dependencies and R Version
