@@ -16,6 +16,10 @@ checkThemis <- function(connectionDetails,
   
   
   
+  #assuming colum names will be upper case for all outputs
+  
+  #1 derived measures 
+  
   a<-Achilles::fetchAchillesAnalysisResults(connectionDetails,resultsDatabaseSchema,1807)$analysisResults
   names(a) <-tolower(names(a))
   a$measurement_concept_id<-as.integer(a$measurement_concept_id)
@@ -28,6 +32,8 @@ checkThemis <- function(connectionDetails,
   
   
   ref<-read.csv(system.file("csv","S4-preferred_units-A.csv",package="DataQuality"),as.is=T)
+  
+  #make sure one error concept is not considered
   ref<-dplyr::filter(ref,concept_id != 4046263)
   
   #str(ref)
@@ -49,8 +55,10 @@ checkThemis <- function(connectionDetails,
   #export data
   write.csv(output,file = file.path(exportFolder,'ThemisMeasurementsUnitsCheck.csv'),row.names = F)
   
-  
-  
+  writeLines(paste('Dataset rows considered:',nrow(a)))   
+  writeLines(paste('Reference data rows considered:',nrow(ref)))   
+  writeLines(paste('Output rows:',nrow(output)))   
+  writeLines('Comparison was written to export folder.')  
   writeLines('Done with checking.')  
   return(output)
 }
