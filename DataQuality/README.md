@@ -162,7 +162,7 @@ Themis aims to generate stricter conventions. The checks tested here will be inc
 Current checks include testing if laboratory tests results (`analysis 1807`) are using units that were derived in [Themis study](https://github.com/OHDSI/StudyProtocolSandbox/tree/master/themis)
 
 
-Results of the check are outputed by a function (and also saved into `export` sub-folder of the `workFolder`)
+Results of the check are provided as data.frame output of the function (and also saved into `export` sub-folder of the `workFolder`) as file name `ThemisMeasurementsUnitsCheck.csv`.
 
 ```R
 workFolder <- 'c:/temp/DQStudy-dataset1'  #ideally, use one workFolder per database
