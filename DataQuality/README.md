@@ -1,7 +1,7 @@
 # Data quality
 
-This is an informatics study that focuses on data quality (rather than a clinical question).
-Protocol is available in extras folder.
+This is an R package that has sume utilities and also supports an informatics study that focuses on data quality (rather than a clinical question).
+For the study, the protocol is available in extras folder.
 
 Forum link: http://forums.ohdsi.org/t/ohdsi-informatics-study-data-quality/1857/2
 
@@ -11,6 +11,7 @@ There are three usage scenarios.
 1. Generate MIAD (minumum information about dataset) as .csv file that can be added to an OHDSI study
 2. Participate on DataQuality study (with later step for sharing of the limited data about your dataset)
 3. Run local report on Data Quality (not shared with anybody)
+4. Run development version of Data Quality (DQ) checks
 
 
 
@@ -152,3 +153,32 @@ writeReport(exportFolder = exportFolder,
   outputFile = file.path(workFolder,'report.docx')
   )
 ```
+
+
+# 4. Run Developmental DQ checks
+
+Themis aims to generate stricter conventions. The checks tested here will be incorporated into `Achilles Heel`.  
+
+Current checks include testing if laboratory tests results (`analysis 1807`) are using units that were derived in [Themis study](https://github.com/OHDSI/StudyProtocolSandbox/tree/master/themis)
+
+
+Results of the check are outputed by a function (and also saved into `export` sub-folder of the `workFolder`)
+
+```R
+workFolder <- 'c:/temp/DQStudy-dataset1'  #ideally, use one workFolder per database
+dir.create(workFolder) 
+
+#populate database parameters
+ cdmDatabaseSchema <-'datasetA'
+ resultsDatabaseSchema <-'datasetAResults' 
+ #connectionDetails #make sure this object exists
+
+
+dq_check_results<-checkThemis(connectionDetails = connectionDetails,
+  cdmDatabaseSchema = cdmDatabaseSchema,
+  resultsDatabaseSchema = resultsDatabaseSchema,
+  outputFolder = workFolder
+  )
+```
+
+Example output is [here](inst/csv/ThemisMeasurementsUnitsCheck.csv)
