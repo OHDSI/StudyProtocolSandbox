@@ -1,0 +1,93 @@
+unit_concept_id,n,concept_name,domain_id,vocabulary_id,concept_class_id,concept_code
+8842,677,nanogram per milliliter,Unit,UCUM,Unit,ng/mL
+8554,544,percent,Unit,UCUM,Unit,%
+8840,377,milligram per deciliter,Unit,UCUM,Unit,mg/dL
+8859,229,microgram per milliliter,Unit,UCUM,Unit,ug/mL
+8753,173,millimole per liter,Unit,UCUM,Unit,mmol/L
+8749,129,micromole per liter,Unit,UCUM,Unit,umol/L
+8751,124,milligram per liter,Unit,UCUM,Unit,mg/L
+8748,85,microgram per liter,Unit,UCUM,Unit,ug/L
+8845,75,picogram per milliliter,Unit,UCUM,Unit,pg/mL
+8713,71,gram per deciliter,Unit,UCUM,Unit,g/dL
+8843,71,nanomole per milliliter,Unit,UCUM,Unit,nmol/mL
+8736,63,nanomole per liter,Unit,UCUM,Unit,nmol/L
+8848,57,thousand per microliter,Unit,UCUM,Unit,10*3/uL
+8837,53,microgram per deciliter,Unit,UCUM,Unit,ug/dL
+8636,51,gram per liter,Unit,UCUM,Unit,g/L
+8647,48,per microliter,Unit,UCUM,Unit,/uL
+8720,46,microgram per gram,Unit,UCUM,Unit,ug/g
+8645,45,unit per liter,Unit,UCUM,Unit,[U]/L
+8839,37,micromole per deciliter,Unit,UCUM,Unit,umol/dL
+8817,35,nanogram per deciliter,Unit,UCUM,Unit,ng/dL
+8701,29,nanogram per gram,Unit,UCUM,Unit,ng/g
+8876,24,millimeter mercury column,Unit,UCUM,Unit,mm[Hg]
+8985,23,international unit per milliliter,Unit,UCUM,Unit,[iU]/mL
+8763,22,unit per milliliter,Unit,UCUM,Unit,[U]/mL
+8729,21,picomole per liter,Unit,UCUM,Unit,pmol/L
+9648,21,unified atomic mass unit,Unit,UCUM,Unit,u
+8810,17,kilounit per liter,Unit,UCUM,Unit,10*3.[U]/L
+8816,16,million per milliliter,Unit,UCUM,Unit,10*6/mL
+8583,15,femtoliter,Unit,UCUM,Unit,fL
+8795,15,milliliter per minute,Unit,UCUM,Unit,mL/min
+8923,14,international unit per liter,Unit,UCUM,Unit,[iU]/L
+8786,13,per high power field,Unit,UCUM,Unit,/[HPF]
+9436,12,thousand per milliliter,Unit,UCUM,Unit,10*3/mL
+9557,11,milliequivalent per liter,Unit,UCUM,Unit,10*-3.eq/L
+8587,10,milliliter,Unit,UCUM,Unit,mL
+8785,10,per cubic millimeter,Unit,UCUM,Unit,/mm3
+8862,9,milliosmole per kilogram,Unit,UCUM,Unit,mosm/kg
+8555,8,second,Unit,UCUM,Unit,s
+8961,8,thousand per cubic millimeter,Unit,UCUM,Unit,10*3/mm3
+8980,8,arbitrary unit per milliliter,Unit,UCUM,Unit,[arb'U]/mL
+9260,8,arbitrary unit,Unit,UCUM,Unit,[arb'U]
+8588,7,millimeter,Unit,UCUM,Unit,mm
+8723,7,milligram per gram,Unit,UCUM,Unit,mg/g
+8909,7,milligram per 24 hours,Unit,UCUM,Unit,mg/(24.h)
+9495,7,electronvolt,Unit,UCUM,Unit,eV
+8564,6,picogram,Unit,UCUM,Unit,pg
+8577,6,nanometer,Unit,UCUM,Unit,nm
+8752,6,millimeter per hour,Unit,UCUM,Unit,mm/h
+9529,6,kilogram,Unit,UCUM,Unit,kg
+9550,6,milli-international unit per milliliter,Unit,UCUM,Unit,10*-3.[iU]/mL
+8523,5,ratio,Unit,UCUM,Unit,{ratio}
+8525,5,titer,Unit,UCUM,Unit,{titer}
+8576,5,milligram,Unit,UCUM,Unit,mg
+8582,5,centimeter,Unit,UCUM,Unit,cm
+8725,5,nanogram per liter,Unit,UCUM,Unit,ng/L
+9040,5,milli-international unit per liter,Unit,UCUM,Unit,10*-3.[iU]/L
+9573,5,millimole,Unit,UCUM,Unit,mmol
+9667,5,micromole,Unit,UCUM,Unit,umol
+8505,4,hour,Unit,UCUM,Unit,h
+8550,4,minute,Unit,UCUM,Unit,min
+8774,4,microgram per minute,Unit,UCUM,Unit,ug/min
+8815,4,million per microliter,Unit,UCUM,Unit,10*6/uL
+9017,4,milligram per gram of creatinine,Unit,UCUM,Unit,mg/g{creat}
+9117,4,milliliter per minute per 1.73 square meter,Unit,UCUM,Unit,mL/min/1.73.m2
+9330,4,inch (US),Unit,UCUM,Unit,[in_us]
+44777578,4,milliunit per liter,Unit,UCUM,Unit,10*-3.[U]/L
+8504,3,gram,Unit,UCUM,Unit,g
+8510,3,unit,Unit,UCUM,Unit,[U]
+8541,3,per minute,Unit,UCUM,Unit,/min
+8574,3,G (anti-prothrombin IgG concentration) unit,Unit,UCUM,Unit,[G'U]
+8605,3,milliosmole,Unit,UCUM,Unit,mosm
+8629,3,unit per gram,Unit,UCUM,Unit,[U]/g
+9075,3,milligram per millimole of creatinine,Unit,UCUM,Unit,mg/mmol{creat}
+9531,3,kilogram per square meter,Unit,UCUM,Unit,kg/m2
+9562,3,milligram per kilogram,Unit,UCUM,Unit,mg/kg
+9577,3,millimole per kilogram,Unit,UCUM,Unit,mmol/kg
+9579,3,millimole per mole,Unit,UCUM,Unit,mmol/mol
+9593,3,millisecond,Unit,UCUM,Unit,ms
+9651,3,unit per gram of hemoglobin,Unit,UCUM,Unit,[U]/g{HGB}
+44777595,3,gram per mole,Unit,UCUM,Unit,g/mol
+8653,2,degree Celsius,Unit,UCUM,Unit,[degC]
+8686,2,cubic millimeter,Unit,UCUM,Unit,mm3
+8799,2,copies per milliliter,Unit,UCUM,Unit,{copies}/mL
+8820,2,picogram per deciliter,Unit,UCUM,Unit,pg/dL
+8838,2,microgram per milligram,Unit,UCUM,Unit,ug/mg
+8860,2,microunit per milliliter,Unit,UCUM,Unit,10*-6.[U]/mL
+9093,2,micro-international unit per milliliter,Unit,UCUM,Unit,10*-6.[iU]/mL
+9229,2,percent of white blood cells,Unit,UCUM,Unit,%{of'WBC}
+9666,2,micrometer,Unit,UCUM,Unit,um
+44777556,2,per 24 hours,Unit,UCUM,Unit,/(24.h)
+44777604,2,liter per liter,Unit,UCUM,Unit,L/L
+44777612,2,milligram per millimole,Unit,UCUM,Unit,mg/mmol
