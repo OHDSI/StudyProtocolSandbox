@@ -2,15 +2,16 @@
 #' percentage measures are used that hide exact patient counts
 #' @export
 createMIAD <- function(connectionDetails,
-                               cdmDatabaseSchema,
-                               workDatabaseSchema = cdmDatabaseSchema,
-                               outputFolder,
-                               level=3) {
+                       cdmDatabaseSchema,
+                       workDatabaseSchema = cdmDatabaseSchema,
+                       outputFolder,
+                       level=3) {
   
   #assumption  outputFolder is where study output is (and exists)
-  #assumption outputFolder has subfolder export 
+  #now not needed - assumption outputFolder has subfolder export 
   
-  #assuming that result database would be added to packageresults
+  #assuming that MIAD data  would be added to packageresults
+  
   #workDatabaseSchema = "results" and the same wordDatabaseSchema happens to also have
   #achilles results data
   #the function above requires knowing workDatabaseSchema (currently package data does not have that)
@@ -19,6 +20,7 @@ createMIAD <- function(connectionDetails,
   
   
   exportFolder<-file.path(outputFolder,"export")
+  
   
   if (!file.exists(exportFolder))
     dir.create(exportFolder)
@@ -32,14 +34,22 @@ createMIAD <- function(connectionDetails,
   #check if Achilles_results tables are in workDatabaseSchema (hoping they would)
   conn <- DatabaseConnector::connect(connectionDetails)    
   
+  
+  #not truly used at the moment
   tables<-getTableNames(conn,workDatabaseSchema) #requires certain version of DatabaseConnector
+  tables
   tables<-toupper(tables)
-  if (!("ACHILLES_RESULTS_DERIVED" %in% tables)) hasAchillesDerivedTable=F else hasAchillesDerivedTable=T
+  if (!("ACHILLES_RESULTS_DERIVED" %in% tables)) hasAchillesDerivedTable=FALSE else hasAchillesDerivedTable=TRUE
+  
+  
+  #fix for Redshift bug
+  hasAchillesDerivedTable = TRUE
+  
   #testing just one table. if achilles_results_derived table is present, it is assumed that all achilles tables are present
   if (hasAchillesDerivedTable) {
     
     
-
+    
     
     
     #assuming colum names will be upper case for all outputs
@@ -148,16 +158,34 @@ createMIAD <- function(connectionDetails,
     
     
     #further prune the measures
-      #no proning done at this point
+    
     
     export <- dplyr::arrange(export,MEASURE_ID,STRATUM_1,STRATUM_2,STRATUM_3)
+    
+    LEVEL_1 <- c('0','2','4','99')
+    LEVEL_2 <- c(LEVEL_1,'Achilles:byAnalysis:RowCnt')
     
     #restrict data to a given level
     #level 1 is most restrictive, level 3 has most data
     if (level==1) {
       writeLines(paste('Using level',level))
-      export <-  dplyr::filter(export,MEASURE_ID %in% c('0','2','4'))
+      export <-  dplyr::filter(export,MEASURE_ID %in% LEVEL_1)
     }
+    
+    if (level==2) {
+      writeLines(paste('Using level',level))
+      export <-  dplyr::filter(export,MEASURE_ID %in% LEVEL_2)
+    }
+    
+    #add description column
+    #this makes it dependand on Achilles (not ideal, but for the time beeing OK)
+    lkup_analyses<-Achilles::getAnalysisDetails()
+    
+    
+    lkup_analyses <- dplyr::select(lkup_analyses,MEASURE_ID=ANALYSIS_ID,MEASURE_NAME=ANALYSIS_NAME)
+    lkup_analyses$MEASURE_ID <- as.character(lkup_analyses$MEASURE_ID)
+    export<-dplyr::left_join(export,lkup_analyses,by='MEASURE_ID')
+    
     
     
     #export data
@@ -171,9 +199,5 @@ createMIAD <- function(connectionDetails,
   }
   writeLines('Done generating MIAD')
   #return value
-  invisible(NULL)
+  return(export)
 }
-
-
-
-

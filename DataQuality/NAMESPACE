@@ -2,7 +2,6 @@
 
 export("%>%")
 export(createMIAD)
-export(createMetaData)
 export(doSelectiveExport)
 export(doTree)
 export(executeDQ)
