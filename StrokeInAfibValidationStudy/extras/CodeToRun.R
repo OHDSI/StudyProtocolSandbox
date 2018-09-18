@@ -23,6 +23,10 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
 
 # debug(execute)
 StrokeInAfibValidationStudy::execute(connectionDetails = connectionDetails,
+                                 databaseName = 'your database name',
+                                 cdmDatabaseSchema = "your cdm database.dbo",
+                                 cohortDatabaseSchema = "workingdatabase.dbo",
+                                 cohortTable = "strokeafibcohortval",
                                  outputFolder = outputFolder,
                                  createCohorts = F,
                                  runValidations = T,
