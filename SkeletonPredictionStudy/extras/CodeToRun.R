@@ -1,14 +1,12 @@
 library(SkeletonPredictionStudy)
 
-# Optional: specify where the temporary files (used by the ff package) will be created:
+# USER INPUTS
+#=======================
+# Specify where the temporary files (used by the ff package) will be created:
 options(fftempdir = "s:/FFtemp")
 
-# If you are creating the study then run:
-## createStudyFiles(baseUrl='http://api.ohdsi.org:80/WebAPI',   
-##                  packageName='SkeletonPredictionStudy')
-
 # The folder where the study intermediate and result files will be written:
-outputFolder <- "s:/SkeletonpredictionStudy"
+outputFolder <- "s:/SkeletonPredictionStudyResults"
 
 # Details for connecting to the server:
 dbms <- "pdw"
@@ -23,13 +21,22 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 password = pw,
                                                                 port = port)
 
-debug(execute)
+# Add the database containing the OMOP CDM data
+cdmDatabaseSchema <- 'cdm_database.dbo'
+# Add a database with read/write access as this is where the cohorts will be generated
+cohortDatabaseSchema <- 'workdatabase.dbo'
+
+# table name where the cohorts will be generated
+cohortTable <- 'SkeletonPredictionStudyCohort'
+#=======================
+
 execute(connectionDetails = connectionDetails,
-        cdmDatabaseSchema = 'cdm_database',
-        cohortDatabaseSchema = 'cohort_database',
-        cohortTable = "cohort",
+        cdmDatabaseSchema = cdmDatabaseSchema,
+        cohortDatabaseSchema = cohortDatabaseSchema,
+        cohortTable = cohortTable,
         outputFolder = outputFolder,
-        createCohorts = F,
-        packageResults = TRUE,
-        minCellCount= 5,
-        packageName="SkeletonPredictionStudy")
+        createCohorts = T,
+        runAnalyses = T,
+        packageResults = T,
+        createValidationPackage = F,
+        minCellCount= 5)

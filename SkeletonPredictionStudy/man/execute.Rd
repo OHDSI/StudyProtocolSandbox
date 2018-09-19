@@ -6,10 +6,9 @@
 \usage{
 execute(connectionDetails, cdmDatabaseSchema,
   cohortDatabaseSchema = cdmDatabaseSchema, cohortTable = "cohort",
-  outcomeDatabaseSchema = cohortDatabaseSchema, outcomeTable = cohortTable,
   oracleTempSchema = cohortDatabaseSchema, outputFolder,
-  createCohorts = TRUE, packageResults = TRUE, minCellCount = 5,
-  packageName = "SkeletonPredictionStudy")
+  createCohorts = TRUE, runAnalyses = TRUE, packageResults = TRUE,
+  minCellCount = 5)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -28,14 +27,6 @@ include both the database and schema name, for example 'cdm_data.dbo'.}
 This table will hold the target population cohorts used in this
 study.}
 
-\item{outcomeDatabaseSchema}{Schema name where intermediate data can be stored. You will need to have
-write priviliges in this schema. Note that for SQL Server, this should
-include both the database and schema name, for example 'cdm_data.dbo'.}
-
-\item{outcomeTable}{The name of the table that will be created in the work database schema.
-This table will hold the outcome cohorts used in this
-study.}
-
 \item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
 priviliges for storing temporary tables.}
 
@@ -50,7 +41,13 @@ performance.}
 \item{minCellCount}{The minimum number of subjects contributing to a count before it can be included 
 in packaged results.}
 
-\item{packageName}{The name of the package}
+\item{outcomeDatabaseSchema}{Schema name where intermediate data can be stored. You will need to have
+write priviliges in this schema. Note that for SQL Server, this should
+include both the database and schema name, for example 'cdm_data.dbo'.}
+
+\item{outcomeTable}{The name of the table that will be created in the work database schema.
+This table will hold the outcome cohorts used in this
+study.}
 }
 \description{
 Execute the Study

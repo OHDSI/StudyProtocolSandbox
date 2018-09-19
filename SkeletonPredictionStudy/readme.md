@@ -8,43 +8,85 @@ Vignette: [Using the package skeleton for patient-level prediction studies](http
 Instructions 
 ===================
 
-- Step 1: Create the prediction study design in atlas
-- Step 2: Copy and Rename the SkeletonPredictionStudy package (e.g., in this example I will rename it ExamplePredictionStudy)
-- Step 3: Save the json object copied from altas into package location: './inst/settings/predictionAnalysisList.json' found in the ExamplePredictionStudy directory
-- Step 4: Populated the package with cohort details by opening the ExamplePredictionStudy.Rproj in the ExamplePredictionStudy directory and running:
-  ```r
-  library('ExamplePredictionStudy')
-  createStudyFiles(baseUrl=http://api.ohdsi.org:80/WebAPI")
+- Step 1: Change package name, readme and description (replace (SkeletonPredictionStudy with the package name)
+- Step 2: Change all references of package name [in Main.R lines 101 and 126, CreateCohorts.R lines 27,37 and 42, CreateAllCohorts.R lines 62 and 77, readme.md and in PackageMaintenance.R]
+- Step 3: Add inst/settings/CohortToCreate.csv - a csv containing three columns, cohortId, atlasId and name - the cohorts in your local atlas with the atlasId will be downloaded into the package and given the cohortId cohort_definition_id when the user creates the cohorts.
+- Step 4: Create prediction analysis detail r code that specifies the models, populations, covariates, Ts and Os used in the study (extras/CreatePredictionAnalysisDetails)
+- Step 5: Run package management to extract cohorts (using CohortToCreate.csv) and create json specification (using extras/CreatePredictionAnalysisDetails.R)
+- Step 6: Now build the package by clicking the R studio 'Install and Restart' button in the built tab 
+- Step 7: Share the package and get people to install by running but replace 'SkeletonPredictionStudy' with your study name:
+```r
+  # get the latest PatientLevelPrediction
+  install.packages("devtools")
+  devtools::install_github("OHDSI/PatientLevelPrediction")
+  # check the package
+  PatientLevelPrediction::checkPlpInstallation()
+  
+  # install the network package
+  devtools::install_github(OHDSI/SkeletonPredictionStudy)
 ```
-This extracts the cohorts designed in atlas into the package 
-- Step 5: Now build the package by clicking the 'Install and Restart' button
-- Step 6: Share the package and get people to execute the study by running:
-  ```r
-  library('ExamplePredictionStudy')
-  connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = 'my dbms e.g., sql server',
-                                                                server = 'my server',
-                                                                user = 'my username',
-                                                                password = 'not telling',
-                                                                port = 'port number')
+
+- Step 8: Get users to execute the study by running the code in (extras/CodeToRun.R) but replace 'SkeletonPredictionStudy' with your study name:
+```r
+  library(SkeletonPredictionStudy)
+  # USER INPUTS
+#=======================
+# Specify where the temporary files (used by the ff package) will be created:
+options(fftempdir = "s:/FFtemp")
+
+# The folder where the study intermediate and result files will be written:
+outputFolder <- "s:/SkeletonPredictionStudyResults"
+
+# Details for connecting to the server:
+dbms <- "pdw"
+user <- NULL
+pw <- NULL
+server <- Sys.getenv('server')
+port <- Sys.getenv('port')
+
+connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
+                                                                server = server,
+                                                                user = user,
+                                                                password = pw,
+                                                                port = port)
+
+# Add the database containing the OMOP CDM data
+cdmDatabaseSchema <- 'cdm_database.dbo'
+# Add a database with read/write access as this is where the cohorts will be generated
+cohortDatabaseSchema <- 'workdatabase.dbo'
+
+# table name where the cohorts will be generated
+cohortTable <- 'SkeletonPredictionStudyCohort'
+#=======================
+
 execute(connectionDetails = connectionDetails,
-                    cdmDatabaseSchema = 'your cdm schema',
-                    cohortDatabaseSchema = 'your cohort schema',
-                    cohortTable = "cohort",
-                    outcomeDatabaseSchema = 'your cohort schema',
-                    outcomeTable = "cohort",
-                    oracleTempSchema = cohortDatabaseSchema,
-                    outputFolder = 'my study results',
-                    createCohorts = TRUE,
-                    packageResults = TRUE,
-                    minCellCount= 5,
-                    packageName="SkeletonPredictionStudy")
+        cdmDatabaseSchema = cdmDatabaseSchema,
+        cohortDatabaseSchema = cohortDatabaseSchema,
+        cohortTable = cohortTable,
+        outputFolder = outputFolder,
+        createCohorts = T,
+        runAnalyses = T,
+        packageResults = T,
+        createValidationPackage = F,
+        minCellCount= 5)
 ```
-- Step 7: You can then easily transport these results into a network study package by copying this package https://github.com/OHDSI/StudyProtocolSandbox/tree/master/PredictionNetworkStudySkeleton and running:
+- [Still Under Development] Step 9: You can then easily transport these results into a network study package by running:
   ```r
-  code to come soon
+  
+  execute(connectionDetails = connectionDetails,
+        cdmDatabaseSchema = cdmDatabaseSchema,
+        cohortDatabaseSchema = cohortDatabaseSchema,
+        cohortTable = cohortTable,
+        outputFolder = outputFolder,
+        createCohorts = F,
+        runAnalyses = F,
+        packageResults = F,
+        createValidationPackage = T,
+        minCellCount= 5)
+  
+
 ```
 
 
 # Development status
-
 Under development. Do not use

@@ -1,6 +1,6 @@
 # Copyright 2018 Observational Health Data Sciences and Informatics
 #
-# This file is part of SkeletonCompartiveEffectStudy
+# This file is part of SkeletonValidationStudy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 # Format and check code ---------------------------------------------------
 OhdsiRTools::formatRFolder()
-OhdsiRTools::checkUsagePackage("SkeletonPredictionStudy")
+OhdsiRTools::checkUsagePackage("SkeletonValidationStudy")
 OhdsiRTools::updateCopyrightYearFolder()
 
 # Create manual -----------------------------------------------------------
-shell("rm extras/SkeletonPredictionStudy.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/SkeletonPredictionStudy.pdf")
+shell("rm extras/SkeletonValidationStudy.pdf")
+shell("R CMD Rd2pdf ./ --output=extras/SkeletonValidationStudy.pdf")
 
 # Create vignette ---------------------------------------------------------
 rmarkdown::render("vignettes/UsingSkeletonPackage.Rmd",
@@ -30,18 +30,18 @@ rmarkdown::render("vignettes/UsingSkeletonPackage.Rmd",
                                           toc = TRUE,
                                           number_sections = TRUE))
 
-# Create analysis details -------------------------------------------------
 # Insert cohort definitions from ATLAS into package -----------------------
 OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv",
-                                                baseUrl = "webapi",
+                                                baseUrl = Sys.getenv("baseUrl"),
                                                 insertTableSql = TRUE,
                                                 insertCohortCreationR = TRUE,
                                                 generateStats = FALSE,
-                                                packageName = "SkeletonPredictionStudy")
+                                                packageName = "SkeletonValidationStudy")
 
-# Create analysis details -------------------------------------------------
-source("extras/CreatePredictionAnalysisDetails.R")
-createAnalysesDetails("inst/settings")
+# transport the plp models -------------------------------------------------
+transportPlpModels(analysesDir= "modelFolder",
+                   minCellCount = 5,
+                   databaseName = 'sharable name of development data')
 
 # Store environment in which the study was executed -----------------------
-OhdsiRTools::insertEnvironmentSnapshotInPackage("SkeletonPredictionStudy")
+OhdsiRTools::insertEnvironmentSnapshotInPackage("SkeletonValidationStudy")
