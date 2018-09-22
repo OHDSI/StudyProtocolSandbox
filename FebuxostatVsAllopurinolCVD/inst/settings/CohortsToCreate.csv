@@ -1,8 +1,11 @@
 cohortId,atlasId,name
-620,620,FebuxostatGeneral
-621,621,AllopurinolGeneral
+863,863,FebuxostatGeneral
+864,864,AllopurinolGeneral
 756,756,CVDInpatient
 20,20,death
 60,60,AcuteMIinpatient
 763,763,StrokeInpatient
-736,736,SJSnTEN
+736,736,AllopurinolHypersensitivity
+824,824,SCD
+586,586,HeartFailure
+862,862,GoutFlare

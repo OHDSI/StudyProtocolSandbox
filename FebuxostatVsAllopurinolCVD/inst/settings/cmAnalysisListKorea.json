@@ -75,7 +75,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-07,
+        "tolerance": 2e-007,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -168,7 +168,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-07,
+        "tolerance": 2e-007,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -223,7 +223,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-07,
+        "tolerance": 2e-007,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -316,7 +316,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-07,
+        "tolerance": 2e-007,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -371,7 +371,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-07,
+        "tolerance": 2e-007,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -464,7 +464,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-07,
+        "tolerance": 2e-007,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -518,7 +518,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-07,
+        "tolerance": 2e-007,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -611,7 +611,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-07,
+        "tolerance": 2e-007,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
@@ -666,7 +666,7 @@
       },
       "control": {
         "maxIterations": 1000,
-        "tolerance": 2e-07,
+        "tolerance": 2e-007,
         "convergenceType": "gradient",
         "autoSearch": true,
         "fold": 10,
