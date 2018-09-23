@@ -2,15 +2,21 @@
 title: "DQ Report"
 output: 
     word_document:
-        fig_caption: yes
-        toc: yes
+      fig_caption: yes
+      toc: yes
 params: 
-    exportFolder: c:/temp
+    exportFolder: c:/temp/OHDSI.dbo/export
 ---
 
 ```{r, echo = FALSE, message = FALSE}
 exportFolder <- params$exportFolder
 # exportFolder
+#toc turned to yes makes security promt in word, so it is turned off (NOT TRUE)
+#something else turns it on
+
+options(scipen = 999)
+
+# sample code
 # results <- read.csv(file.path(exportFolder, "tablesAndFigures", "EmpiricalCalibration.csv"))
 #     analysisIds <- unique(results$analysisId)
 #     analysisIds <- analysisIds[order(analysisIds)]
@@ -19,10 +25,47 @@ exportFolder <- params$exportFolder
 
 
 
-### Plot
+# Person data
 
-```{r, echo = FALSE, fig.width = 5, fig.height= 4, fig.cap = "demographic plot"}
+```{r, echo = FALSE, fig.width = 5, fig.height= 4, fig.cap = "Person data plot"}
 knitr::include_graphics(file.path(exportFolder, "DemogrPyramidFigure.png"))
 ```
 
+# Visit data
+
+
+```{r, echo = FALSE, fig.width = 5, fig.height= 4, fig.cap = "Visits plot by decile"}
+knitr::include_graphics(file.path(exportFolder, "VisitsByDecileDotPlot.png"))
+```
+
+# Achilles Heel
+
+This output contains additional column with value as structured output (compared to Atlas view of Heel errors)
+
+```{r, echo = FALSE}
+h<-read.csv(file = file.path(exportFolder, "HeelOutput.csv"))
+knitr::kable(h)
+```
+
+# Unmapped Data
+
+```{r, echo = FALSE}
+d<-read.csv(file = file.path(exportFolder, "SelectedDerivedMeasures.csv"))
+
+dsmall<-d[d$measure_id=='UnmappedData:byDomain:Percentage',]
+knitr::kable(dsmall,row.names = F)
+```
+
+
+
+# Experimental: All Achilles derived measures with names
+
+```{r, echo = FALSE}
+
+#read names of the derived measures
+measNames<-read.csv(system.file("csv","derived_analysis_details.csv",package="Achilles"))
+
+d<-merge(d,measNames[,c("measure_id","name")],all.x = T)
+knitr::kable(d)
+```
 

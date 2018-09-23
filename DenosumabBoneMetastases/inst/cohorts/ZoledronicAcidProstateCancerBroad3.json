@@ -1,0 +1,536 @@
+{
+ "ConceptSets": [
+ {
+ "id":      0,
+"name": "Zoledronic acid ",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 1.5247e+06,
+"CONCEPT_NAME": "zoledronic acid",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "77655",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "RxNorm",
+"CONCEPT_CLASS_ID": "Ingredient",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      1,
+"name": "Prostate cancer",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 4.1633e+06,
+"CONCEPT_NAME": "Malignant tumor of prostate",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "399068003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      3,
+"name": "Hormonal therapy",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 2.1604e+07,
+"CONCEPT_NAME": "ENDOCRINE THERAPY",
+"STANDARD_CONCEPT": "C",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "L02",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "ATC",
+"CONCEPT_CLASS_ID": "ATC 2nd",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Classification" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      4,
+"name": "Bone metastasis",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID":  78097,
+"CONCEPT_NAME": "Secondary malignant neoplasm of bone",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "94222008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      5,
+"name": "Bisphosphonates",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 2.1604e+07,
+"CONCEPT_NAME": "Bisphosphonates",
+"STANDARD_CONCEPT": "C",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "M05BA",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "ATC",
+"CONCEPT_CLASS_ID": "ATC 4th",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Classification" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      6,
+"name": "Osteonecrosis or osteomyelitis of the jaw",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 4.0481e+07,
+"CONCEPT_NAME": "Aseptic necrosis of bone of jaw",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "441809006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.3147e+06,
+"CONCEPT_NAME": "Osteomyelitis of jaw",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "87415007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.627e+07,
+"CONCEPT_NAME": "Osteonecrosis of jaw caused by drug",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "315801000119108",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      7,
+"name": "Malignant disease other than prostate cancer",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 4.1633e+06,
+"CONCEPT_NAME": "Malignant tumor of prostate",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "399068003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"isExcluded": true,
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.3939e+05,
+"CONCEPT_NAME": "Primary malignant neoplasm",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372087000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.442e+05,
+"CONCEPT_NAME": "Neoplasm of bone",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "126537000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"isExcluded": true,
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.3692e+05,
+"CONCEPT_NAME": "Primary malignant neoplasm of unspecified site",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "109356001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"isExcluded": true,
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      8,
+"name": "Zoledronic acid source concept",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 2.7187e+06,
+"CONCEPT_NAME": "Injection, zoledronic acid (reclast), 1 mg",
+"STANDARD_CONCEPT": "N",
+"INVALID_REASON": "D",
+"CONCEPT_CODE": "J3488",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
+} 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 2.7208e+06,
+"CONCEPT_NAME": "Injection, zoledronic acid (reclast), 1 mg",
+"STANDARD_CONCEPT": "N",
+"INVALID_REASON": "D",
+"CONCEPT_CODE": "Q4095",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
+} 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 2.7186e+06,
+"CONCEPT_NAME": "Injection, zoledronic acid (zometa), 1 mg",
+"STANDARD_CONCEPT": "N",
+"INVALID_REASON": "D",
+"CONCEPT_CODE": "J3487",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
+} 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.4787e+07,
+"CONCEPT_NAME": "Injection, zoledronic acid, 1 mg",
+"STANDARD_CONCEPT": "N",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "J3489",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
+} 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.4787e+07,
+"CONCEPT_NAME": "Injection, zoledronic acid, not otherwise specified, 1mg",
+"STANDARD_CONCEPT": "N",
+"INVALID_REASON": "D",
+"CONCEPT_CODE": "Q2051",
+"DOMAIN_ID": "Procedure",
+"VOCABULARY_ID": "HCPCS",
+"CONCEPT_CLASS_ID": "HCPCS",
+"INVALID_REASON_CAPTION": "Invalid",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard" 
+} 
+} 
+] 
+} 
+} 
+],
+"PrimaryCriteria": {
+ "CriteriaList": [
+ {
+ "DrugExposure": {
+ "CodesetId":      0 
+} 
+},
+{
+ "ProcedureOccurrence": {
+ "ProcedureSourceConcept":      8 
+} 
+} 
+],
+"ObservationWindow": {
+ "PriorDays":    365,
+"PostDays":      0 
+},
+"PrimaryCriteriaLimit": {
+ "Type": "First" 
+} 
+},
+"AdditionalCriteria": {
+ "Type": "ALL",
+"CriteriaList": [
+ {
+ "Criteria": {
+ "DrugExposure": {
+ "CodesetId":      0 
+} 
+},
+"StartWindow": {
+ "Start": {
+ "Coeff":     -1 
+},
+"End": {
+ "Days":      1,
+"Coeff":     -1 
+} 
+},
+"Occurrence": {
+ "Type":      0,
+"Count":      0 
+} 
+},
+{
+ "Criteria": {
+ "ProcedureOccurrence": {
+ "ProcedureSourceConcept":      8 
+} 
+},
+"StartWindow": {
+ "Start": {
+ "Coeff":     -1 
+},
+"End": {
+ "Days":      1,
+"Coeff":     -1 
+} 
+},
+"Occurrence": {
+ "Type":      0,
+"Count":      0 
+} 
+} 
+],
+"DemographicCriteriaList": [],
+"Groups": [] 
+},
+"QualifiedLimit": {
+ "Type": "First" 
+},
+"ExpressionLimit": {
+ "Type": "First" 
+},
+"InclusionRules": [
+ {
+ "name": "Male",
+"description": "Male",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [],
+"DemographicCriteriaList": [
+ {
+ "Gender": [
+ {
+ "CONCEPT_CODE": "M",
+"CONCEPT_ID":   8507,
+"CONCEPT_NAME": "MALE",
+"DOMAIN_ID": "Gender",
+"VOCABULARY_ID": "Gender" 
+} 
+] 
+} 
+],
+"Groups": [] 
+} 
+},
+{
+ "name": "18 years and older",
+"description": "18 Years and older (Adult, Senior)\n",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [],
+"DemographicCriteriaList": [
+ {
+ "Age": {
+ "Value":     18,
+"Op": "gte" 
+} 
+} 
+],
+"Groups": [] 
+} 
+},
+{
+ "name": "Prostate cancer",
+"description": "Histologically confirmed prostate cancer",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [
+ {
+ "Criteria": {
+ "ConditionOccurrence": {
+ "CodesetId":      1 
+} 
+},
+"StartWindow": {
+ "Start": {
+ "Days":    365,
+"Coeff":     -1 
+},
+"End": {
+ "Days":      0,
+"Coeff":      1 
+} 
+},
+"Occurrence": {
+ "Type":      2,
+"Count":      1 
+} 
+} 
+],
+"DemographicCriteriaList": [],
+"Groups": [] 
+} 
+},
+{
+ "name": "Bone metastasis",
+"description": "Radiographic evidence of at least one bone metastasis",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [
+ {
+ "Criteria": {
+ "ConditionOccurrence": {
+ "CodesetId":      4 
+} 
+},
+"StartWindow": {
+ "Start": {
+ "Days":    365,
+"Coeff":     -1 
+},
+"End": {
+ "Days":      0,
+"Coeff":      1 
+} 
+},
+"Occurrence": {
+ "Type":      2,
+"Count":      1 
+} 
+} 
+],
+"DemographicCriteriaList": [],
+"Groups": [] 
+} 
+},
+{
+ "name": "At least one hormonal therapy",
+"description": "Failure of at least one hormonal therapy as evidenced by a rising PSA",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [
+ {
+ "Criteria": {
+ "DrugExposure": {
+ "CodesetId":      3 
+} 
+},
+"StartWindow": {
+ "Start": {
+ "Coeff":     -1 
+},
+"End": {
+ "Days":      0,
+"Coeff":      1 
+} 
+},
+"Occurrence": {
+ "Type":      2,
+"Count":      1 
+} 
+} 
+],
+"DemographicCriteriaList": [],
+"Groups": [] 
+} 
+} 
+],
+"CensoringCriteria": [],
+"CollapseSettings": {
+ "CollapseType": "ERA",
+"EraPad":      0 
+} 
+}

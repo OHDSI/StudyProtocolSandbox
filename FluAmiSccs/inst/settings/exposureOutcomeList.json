@@ -1,0 +1,137 @@
+[
+  {
+    "exposureId": 614200,
+    "outcomeId": 5988,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 614300,
+    "outcomeId": 5989,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 614400,
+    "outcomeId": 5990,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 614500,
+    "outcomeId": 5991,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 614600,
+    "outcomeId": 5992,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 614700,
+    "outcomeId": 5993,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 614800,
+    "outcomeId": 5994,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 614900,
+    "outcomeId": 5995,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 615000,
+    "outcomeId": 5997,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 635700,
+    "outcomeId": 5988,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 635900,
+    "outcomeId": 5989,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 636100,
+    "outcomeId": 5990,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 636300,
+    "outcomeId": 5991,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 636600,
+    "outcomeId": 5992,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 636900,
+    "outcomeId": 5993,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 637100,
+    "outcomeId": 5994,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 637300,
+    "outcomeId": 5995,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 637600,
+    "outcomeId": 5997,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 635800,
+    "outcomeId": 5988,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 636000,
+    "outcomeId": 5989,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 636200,
+    "outcomeId": 5990,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 636400,
+    "outcomeId": 5991,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 636700,
+    "outcomeId": 5992,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 637000,
+    "outcomeId": 5993,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 637200,
+    "outcomeId": 5994,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 637400,
+    "outcomeId": 5995,
+    "attr_class": "exposureOutcome"
+  },
+  {
+    "exposureId": 637700,
+    "outcomeId": 5997,
+    "attr_class": "exposureOutcome"
+  }
+]

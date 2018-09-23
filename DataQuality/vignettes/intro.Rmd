@@ -1,0 +1,20 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Local report
+
+Data Quality package can produce a local report about a dataset. The package generates a local .doc file with such a report.
+Under development functionality.
+
+```{r, echo=FALSE, results='asis'}
+#writeReport()
+```
+

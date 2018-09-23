@@ -1,0 +1,9 @@
+cohortId,atlasId,name
+728,728,PPI
+729,729,H2RA
+730,730,Pneumonia
+731,731,BacterialPneumonia
+735,735,BacterialEnteritis
+751,751,FoodPoisoning
+734,734,CDAI
+752,752,Gibleeding

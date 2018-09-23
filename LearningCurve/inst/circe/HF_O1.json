@@ -1,0 +1,1828 @@
+{
+  "ConceptSets": [
+    {
+      "id": 1,
+      "name": "[RWE CTF] Heart failure",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 316139,
+              "CONCEPT_NAME": "Heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "84114007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "name": "T2DM Diagnosis",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 201826,
+              "CONCEPT_NAME": "Type 2 diabetes mellitus",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "44054006",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "name": "Left ventricular ejection fraction (documented) -observation",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 40664797,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) < 40%",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "G8694",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43533258,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) < 40% or documentation of moderately or severely depressed left ventricular systolic function",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "G8923",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40664695,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) < 40% or documentation of severely or moderately depressed left ventricular systolic function",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "D",
+              "CONCEPT_CODE": "G8738",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Invalid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43533228,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) <40% or documentation of moderately or severely depressed left ventricular systolic function",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "G8934",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40664690,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) >= 40% or documentation as mildly depressed left ventricular systolic function or normal",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "D",
+              "CONCEPT_CODE": "G8695",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Invalid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40664846,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) >= 40% or documentation as normal or mildly depressed left ventricular systolic function",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "D",
+              "CONCEPT_CODE": "G8739",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Invalid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2617799,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) >= 40% or documentation as normal or mildly depressed left ventricular systolic function",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "G8395",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2106187,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (LVEF) less than 40% or documentation of moderately or severely depressed left ventricular systolic function (CAD, HF)",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "3021F",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "CPT4",
+              "CONCEPT_CLASS_ID": "CPT4",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 42742422,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (LVEF) less than or equal to 35% (HF)",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "3055F",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "CPT4",
+              "CONCEPT_CLASS_ID": "CPT4",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "name": "[RWE CTF] Acute HF",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 40481042,
+              "CONCEPT_NAME": "Acute diastolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "443343001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40481043,
+              "CONCEPT_NAME": "Acute on chronic diastolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "443344007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40480602,
+              "CONCEPT_NAME": "Acute on chronic systolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "443253003",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40480603,
+              "CONCEPT_NAME": "Acute systolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "443254009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "name": "[RWE CTF] T1DM and Hx of T1DM",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 43021174,
+              "CONCEPT_NAME": "History of diabetes mellitus type 1",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "472970003",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Context-dependent",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 201254,
+              "CONCEPT_NAME": "Type 1 diabetes mellitus",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "46635009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 201826,
+              "CONCEPT_NAME": "Type 2 diabetes mellitus",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "44054006",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "name": "jns - reduced LV ejection fraction (meas)",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 45766164,
+              "CONCEPT_NAME": "Heart failure with reduced ejection fraction",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "703272007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 45766167,
+              "CONCEPT_NAME": "Heart failure with reduced ejection fraction due to cardiomyopathy",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "703275009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 45766165,
+              "CONCEPT_NAME": "Heart failure with reduced ejection fraction due to coronary artery disease",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "703273002",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 45773075,
+              "CONCEPT_NAME": "Heart failure with reduced ejection fraction due to heart valve disease",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "703276005",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 45766166,
+              "CONCEPT_NAME": "Heart failure with reduced ejection fraction due to myocarditis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "703274008",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40664797,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) < 40%",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "G8694",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43533258,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) < 40% or documentation of moderately or severely depressed left ventricular systolic function",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "G8923",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43533228,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (lvef) <40% or documentation of moderately or severely depressed left ventricular systolic function",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "G8934",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "HCPCS",
+              "CONCEPT_CLASS_ID": "HCPCS",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2106187,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (LVEF) less than 40% or documentation of moderately or severely depressed left ventricular systolic function (CAD, HF)",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "3021F",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "CPT4",
+              "CONCEPT_CLASS_ID": "CPT4",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 42742422,
+              "CONCEPT_NAME": "Left ventricular ejection fraction (LVEF) less than or equal to 35% (HF)",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "3055F",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "CPT4",
+              "CONCEPT_CLASS_ID": "CPT4",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 36356230,
+              "CONCEPT_NAME": "Left ventricular ejection fraction decreased",
+              "STANDARD_CONCEPT": "C",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "10053222",
+              "DOMAIN_ID": "Measurement",
+              "VOCABULARY_ID": "MedDRA",
+              "CONCEPT_CLASS_ID": "LLT",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Classification"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Finding",
+              "CONCEPT_CODE": "159570",
+              "CONCEPT_ID": 45949547,
+              "CONCEPT_NAME": "Very low ejection fraction",
+              "DOMAIN_ID": "Condition",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "VOCABULARY_ID": "CIEL"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "name": "[RWE CTF] Echocardiography",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 4230911,
+              "CONCEPT_NAME": "Echocardiography",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "40701008",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Procedure",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "name": "Acute ischemic heart disease",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 319844,
+              "CONCEPT_NAME": "Acute ischemic heart disease",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "413439005",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "name": "[F2F] Ace Inhibitors",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 21601801,
+              "CONCEPT_NAME": "ACE INHIBITORS, COMBINATIONS",
+              "STANDARD_CONCEPT": "C",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "C09B",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "ATC",
+              "CONCEPT_CLASS_ID": "ATC 3rd",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Classification"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21601783,
+              "CONCEPT_NAME": "ACE INHIBITORS, PLAIN",
+              "STANDARD_CONCEPT": "C",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "C09A",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "ATC",
+              "CONCEPT_CLASS_ID": "ATC 3rd",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Classification"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "name": "jns - angiotensin II receptor blockers",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 1351557,
+              "CONCEPT_NAME": "candesartan",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "214354",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 1367500,
+              "CONCEPT_NAME": "Losartan",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "52175",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 1308842,
+              "CONCEPT_NAME": "valsartan",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "69749",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 11,
+      "name": "jns - beta-blockers",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 1338005,
+              "CONCEPT_NAME": "Bisoprolol",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "19484",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 1346823,
+              "CONCEPT_NAME": "carvedilol",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "20352",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 1307046,
+              "CONCEPT_NAME": "Metoprolol",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "6918",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 12,
+      "name": "jns - aldosterone antagonists",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 1309799,
+              "CONCEPT_NAME": "eplerenone",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "298869",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 970250,
+              "CONCEPT_NAME": "Spironolactone",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "9997",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 13,
+      "name": "[RWE CTF] Digoxin",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 1326303,
+              "CONCEPT_NAME": "Digoxin",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "3407",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 14,
+      "name": "[RWE CTF] Calcium channel blockers",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "ETC",
+              "CONCEPT_CODE": "00000215",
+              "CONCEPT_ID": 21500215,
+              "CONCEPT_NAME": "Calcium Channel Blockers",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "C",
+              "STANDARD_CONCEPT_CAPTION": "Classification",
+              "VOCABULARY_ID": "ETC"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 15,
+      "name": "[RWE CTF] Diastolic HF",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 40481042,
+              "CONCEPT_NAME": "Acute diastolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "443343001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40481043,
+              "CONCEPT_NAME": "Acute on chronic diastolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "443344007",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 16,
+      "name": "[RWE CTF] Systolic HF",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 40480602,
+              "CONCEPT_NAME": "Acute on chronic systolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "443253003",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 40480603,
+              "CONCEPT_NAME": "Acute systolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "443254009",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 17,
+      "name": "[RWE CTF] Combined systolic and diastolic HF",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 44782718,
+              "CONCEPT_NAME": "Acute combined systolic and diastolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "153931000119109",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44782733,
+              "CONCEPT_NAME": "Acute on chronic combined systolic and diastolic heart failure",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "153951000119103",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 18,
+      "name": "Diuretics",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 956874,
+              "CONCEPT_NAME": "Furosemide",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "4603",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 932745,
+              "CONCEPT_NAME": "Bumetanide",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1808",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 942350,
+              "CONCEPT_NAME": "torsemide",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "38413",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 992590,
+              "CONCEPT_NAME": "Chlorothiazide",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "2396",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 991382,
+              "CONCEPT_NAME": "Amiloride",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "644",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 974166,
+              "CONCEPT_NAME": "Hydrochlorothiazide",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "5487",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 978555,
+              "CONCEPT_NAME": "Indapamide",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "5764",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 907013,
+              "CONCEPT_NAME": "Metolazone",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "6916",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 904542,
+              "CONCEPT_NAME": "Triamterene",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "10763",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 19,
+      "name": "SGLT2 for cana study",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 43526465,
+              "CONCEPT_NAME": "canagliflozin",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1373458",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44785829,
+              "CONCEPT_NAME": "dapagliflozin",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1488564",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 45774751,
+              "CONCEPT_NAME": "empagliflozin",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1545653",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 20,
+      "name": "Valsartan and sacubitril",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 46275811,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet [Entresto]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656356",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275810,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG [Entresto]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656355",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Branded Drug Comp",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275809,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656354",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Clinical Drug",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275734,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet [Entresto]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656351",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275733,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG [Entresto]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656350",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Branded Drug Comp",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275732,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656349",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Clinical Drug",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275729,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet [Entresto]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656346",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275728,
+              "CONCEPT_NAME": "sacubitril / valsartan Oral Tablet [Entresto]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656343",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Branded Drug Form",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275727,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG [Entresto]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656342",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Branded Drug Comp",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275725,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656340",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Clinical Drug",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 46275724,
+              "CONCEPT_NAME": "sacubitril / valsartan Oral Tablet",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1656338",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm",
+              "CONCEPT_CLASS_ID": "Clinical Drug Form",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21031738,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet [Entresto] Box of 56 by Novartis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344645",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Marketed Product",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21051439,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet [Entresto] Box of 28",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344654",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21080853,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet [Entresto] by Novartis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344653",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Marketed Product",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21090590,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet [Entresto] by Novartis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344641",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Marketed Product",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21090591,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet [Entresto] Box of 28",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344642",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21090592,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet [Entresto] Box of 56 by Novartis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344650",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Marketed Product",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21100544,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet Box of 28",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344639",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21100545,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet [Entresto] Box of 28 by Novartis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344643",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Marketed Product",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21110338,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet Box of 28",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344651",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21120066,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet Box of 56",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344640",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21120067,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet [Entresto] Box of 56",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344649",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21129846,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet [Entresto] Box of 28 by Novartis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344655",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Marketed Product",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21139754,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet [Entresto] Box of 56",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344644",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21169318,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet Box of 56",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344647",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 21169319,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet [Entresto] by Novartis",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP344648",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Marketed Product",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43290970,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet [Entresto] Box of 60",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556178",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43290969,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet Box of 60",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556175",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43290968,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet [Entresto] Box of 60",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556174",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43290967,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet [Entresto] Box of 14",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556172",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43274807,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet Box of 14",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556170",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43274806,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet [Entresto] Box of 60",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556169",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43269263,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet [Entresto] Box of 56",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556168",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43269262,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet Box of 56",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556166",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43269261,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet Box of 60",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556163",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43263799,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet [Entresto] Box of 14",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556177",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43263798,
+              "CONCEPT_NAME": "sacubitril 97 MG / valsartan 103 MG Oral Tablet Box of 60",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556171",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43263797,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet [Entresto] Box of 14",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556167",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Branded Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43263796,
+              "CONCEPT_NAME": "sacubitril 24 MG / valsartan 26 MG Oral Tablet Box of 14",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556165",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 43258355,
+              "CONCEPT_NAME": "sacubitril 49 MG / valsartan 51 MG Oral Tablet Box of 14",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "OMOP556176",
+              "DOMAIN_ID": "Drug",
+              "VOCABULARY_ID": "RxNorm Extension",
+              "CONCEPT_CLASS_ID": "Clinical Drug Box",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 21,
+      "name": "[RWE CTF] Cardioverter Defibrillator or cardiac resynchronization defibrillator",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 4263573,
+              "CONCEPT_NAME": "Implantation of automatic cardioverter/defibrillator, total system",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "45965006",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Procedure",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000049,
+              "CONCEPT_NAME": "Implantation of cardiac resynchronization defibrillator, total system [CRT-D]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "00.51",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc",
+              "CONCEPT_CLASS_ID": "4-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000048,
+              "CONCEPT_NAME": "Implantation of cardiac resynchronization pacemaker without mention of defibrillation, total system [CRT-P]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "00.50",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc",
+              "CONCEPT_CLASS_ID": "4-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4144899,
+              "CONCEPT_NAME": "Implantation of cardioverter defibrillator with two electrode leads",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "427508005",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Procedure",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000052,
+              "CONCEPT_NAME": "Implantation or replacement of cardiac resynchronization defibrillator pulse generator only [CRT-D]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "00.54",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc",
+              "CONCEPT_CLASS_ID": "4-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 2000051,
+              "CONCEPT_NAME": "Implantation or replacement of cardiac resynchronization pacemaker pulse generator only [CRT-P]",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "00.53",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "ICD9Proc",
+              "CONCEPT_CLASS_ID": "4-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "ICD10PCS",
+              "CONCEPT_CODE": "0JH609Z",
+              "CONCEPT_ID": 2756520,
+              "CONCEPT_NAME": "Insertion of Cardiac Resynchronization Defibrillator Pulse Generator into Chest Subcutaneous Tissue and Fascia, Open Approach",
+              "DOMAIN_ID": "Procedure",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "ICD10PCS"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4322971,
+              "CONCEPT_NAME": "Replacement of automatic cardioverter/defibrillator, total system",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "71372002",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Procedure",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 4144100,
+              "CONCEPT_NAME": "Revision of automatic implantable cardioverter/defibrillator",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "34955007",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Procedure",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    }
+  ],
+  "PrimaryCriteria": {
+    "CriteriaList": [
+      {
+        "ConditionOccurrence": {
+          "CodesetId": 1
+        }
+      }
+    ],
+    "ObservationWindow": {
+      "PriorDays": 0,
+      "PostDays": 0
+    },
+    "PrimaryCriteriaLimit": {
+      "Type": "First"
+    }
+  },
+  "AdditionalCriteria": {
+    "Type": "ALL",
+    "CriteriaList": [],
+    "DemographicCriteriaList": [],
+    "Groups": []
+  },
+  "QualifiedLimit": {
+    "Type": "First"
+  },
+  "ExpressionLimit": {
+    "Type": "First"
+  },
+  "InclusionRules": [],
+  "CensoringCriteria": [],
+  "CollapseSettings": {
+    "CollapseType": "ERA",
+    "EraPad": 0
+  }
+}

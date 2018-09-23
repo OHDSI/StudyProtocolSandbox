@@ -1,0 +1,380 @@
+{
+ "ConceptSets": [
+ {
+ "id":      0,
+"name": "Denosumab ",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 4.0222e+07,
+"CONCEPT_NAME": "denosumab",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "993449",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "RxNorm",
+"CONCEPT_CLASS_ID": "Ingredient",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      4,
+"name": "Bone metastasis",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID":  78097,
+"CONCEPT_NAME": "Secondary malignant neoplasm of bone",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "94222008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      5,
+"name": "Bisphosphonates",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 2.1604e+07,
+"CONCEPT_NAME": "Bisphosphonates",
+"STANDARD_CONCEPT": "C",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "M05BA",
+"DOMAIN_ID": "Drug",
+"VOCABULARY_ID": "ATC",
+"CONCEPT_CLASS_ID": "ATC 4th",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Classification" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      7,
+"name": "Malignant disease other than breast cancer",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 4.3939e+05,
+"CONCEPT_NAME": "Primary malignant neoplasm",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372087000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.442e+05,
+"CONCEPT_NAME": "Neoplasm of bone",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "126537000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"isExcluded": true,
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.3692e+05,
+"CONCEPT_NAME": "Primary malignant neoplasm of unspecified site",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "109356001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"isExcluded": true,
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.1623e+06,
+"CONCEPT_NAME": "Primary malignant neoplasm of breast",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372137005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"isExcluded": true,
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      8,
+"name": "Breast cancer",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 4.1623e+06,
+"CONCEPT_NAME": "Primary malignant neoplasm of breast",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "372137005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4.3257e+05,
+"CONCEPT_NAME": "Malignant lymphoma",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "118600007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"isExcluded": true,
+"includeDescendants": true 
+} 
+] 
+} 
+},
+{
+ "id":      9,
+"name": "Dental surgery",
+"expression": {
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 4.305e+06,
+"CONCEPT_NAME": "Dental surgical procedure",
+"STANDARD_CONCEPT": "S",
+"INVALID_REASON": "V",
+"CONCEPT_CODE": "81733005",
+"DOMAIN_ID": "Procedure",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Procedure",
+"INVALID_REASON_CAPTION": "Valid",
+"STANDARD_CONCEPT_CAPTION": "Standard" 
+},
+"includeDescendants": true 
+} 
+] 
+} 
+} 
+],
+"PrimaryCriteria": {
+ "CriteriaList": [
+ {
+ "DrugExposure": {
+ "CodesetId":      0,
+"First": true 
+} 
+} 
+],
+"ObservationWindow": {
+ "PriorDays":    365,
+"PostDays":      0 
+},
+"PrimaryCriteriaLimit": {
+ "Type": "First" 
+} 
+},
+"QualifiedLimit": {
+ "Type": "First" 
+},
+"ExpressionLimit": {
+ "Type": "First" 
+},
+"InclusionRules": [
+ {
+ "name": "18 years and older",
+"description": "18 Years and older (Adult, Senior)\n",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [],
+"DemographicCriteriaList": [
+ {
+ "Age": {
+ "Value":     18,
+"Op": "gte" 
+} 
+} 
+],
+"Groups": [] 
+} 
+},
+{
+ "name": "Breast cancer",
+"description": "Histologically confirmed breast cancer",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [
+ {
+ "Criteria": {
+ "ConditionOccurrence": {
+ "CodesetId":      8 
+} 
+},
+"StartWindow": {
+ "Start": {
+ "Days":    365,
+"Coeff":     -1 
+},
+"End": {
+ "Days":      0,
+"Coeff":      1 
+} 
+},
+"Occurrence": {
+ "Type":      2,
+"Count":      1 
+} 
+} 
+],
+"DemographicCriteriaList": [],
+"Groups": [] 
+} 
+},
+{
+ "name": "Bone metastasis",
+"description": "Radiographic evidence of at least one bone metastasis",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [
+ {
+ "Criteria": {
+ "ConditionOccurrence": {
+ "CodesetId":      4 
+} 
+},
+"StartWindow": {
+ "Start": {
+ "Days":    365,
+"Coeff":     -1 
+},
+"End": {
+ "Days":      0,
+"Coeff":      1 
+} 
+},
+"Occurrence": {
+ "Type":      2,
+"Count":      1 
+} 
+} 
+],
+"DemographicCriteriaList": [],
+"Groups": [] 
+} 
+},
+{
+ "name": "Recent dental surgery",
+"description": "No nonhealed dental/oral surgery",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [
+ {
+ "Criteria": {
+ "ProcedureOccurrence": {
+ "CodesetId":      9 
+} 
+},
+"StartWindow": {
+ "Start": {
+ "Days":     14,
+"Coeff":     -1 
+},
+"End": {
+ "Days":      0,
+"Coeff":      1 
+} 
+},
+"Occurrence": {
+ "Type":      0,
+"Count":      0 
+} 
+} 
+],
+"DemographicCriteriaList": [],
+"Groups": [] 
+} 
+},
+{
+ "name": "No prior bisphosphonates",
+"description": "No current or previous treatment with intravenous bisphosphonate or oral bisphosphonate for bone metastasis",
+"expression": {
+ "Type": "ALL",
+"CriteriaList": [
+ {
+ "Criteria": {
+ "DrugExposure": {
+ "CodesetId":      5 
+} 
+},
+"StartWindow": {
+ "Start": {
+ "Coeff":     -1 
+},
+"End": {
+ "Days":      1,
+"Coeff":     -1 
+} 
+},
+"Occurrence": {
+ "Type":      0,
+"Count":      0 
+} 
+} 
+],
+"DemographicCriteriaList": [],
+"Groups": [] 
+} 
+} 
+],
+"CensoringCriteria": [],
+"CollapseSettings": {
+ "CollapseType": "ERA",
+"EraPad":      0 
+} 
+}

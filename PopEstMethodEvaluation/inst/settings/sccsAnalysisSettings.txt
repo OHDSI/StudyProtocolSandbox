@@ -4,14 +4,16 @@
     "description": "Simple SCCS",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": {
         "includeCovariateIds": "exposureId",
@@ -29,14 +31,17 @@
         "includeAge": false,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": false,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },
@@ -83,14 +88,16 @@
     "description": "Using pre-exposure window",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": [
         {
@@ -123,14 +130,17 @@
         "includeAge": false,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": false,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },
@@ -177,14 +187,16 @@
     "description": "Using age and season",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": {
         "includeCovariateIds": "exposureId",
@@ -202,14 +214,17 @@
         "includeAge": true,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": true,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },
@@ -256,14 +271,16 @@
     "description": "Using event-dependent observation",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": {
         "includeCovariateIds": "exposureId",
@@ -281,14 +298,17 @@
         "includeAge": false,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": false,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": true,
       "attr_class": "args"
     },
@@ -332,17 +352,19 @@
   },
   {
     "analysisId": 5,
-    "description": "Using event-dependent observation",
+    "description": "Using all other exposures",
     "getDbSccsDataArgs": {
       "useCustomCovariates": false,
+      "useNestingCohort": false,
       "deleteCovariatesSmallCount": 100,
       "studyStartDate": "",
       "studyEndDate": "",
+      "maxCasesPerOutcome": 250000,
       "customCovariateIds": "",
       "attr_class": "args"
     },
     "createSccsEraDataArgs": {
-      "naivePeriod": 180,
+      "naivePeriod": 365,
       "firstOutcomeOnly": false,
       "covariateSettings": [
         {
@@ -374,14 +396,17 @@
         "includeAge": false,
         "ageKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "ageSettings"
       },
       "seasonalitySettings": {
         "includeSeasonality": false,
         "seasonKnots": 5,
         "allowRegularization": false,
+        "computeConfidenceIntervals": false,
         "attr_class": "seasonalitySettings"
       },
+      "minCasesForAgeSeason": 10000,
       "eventDependentObservation": false,
       "attr_class": "args"
     },

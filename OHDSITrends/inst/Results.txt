@@ -1,0 +1,45 @@
+
+This file describes individual files included in the OHDSITrends Results folder.
+
+Because this folder is NOT designed for sharing, your database_schemas are NOT anonymized. Only the results folder will contain this information; the export folder has anonymized your database schema.
+
+This folder does not contains plots for medical events grouped by ancestor. Those .pdf files are in the export folder.
+
+.tsv
+====
+This filetype is to help you view the 1-pagers that summarize the analyzed trends in a slightly more convenient format than the .csv files. These files are designed to be human-readable, and are not easily machine-readable. Use the similarly named .csv files instead if you wish to do analysis on the information contained in these files.
+
+
+.csv
+
+====
+
+This is the main filetype for text and non-graphical information. There are 3 basic kinds of files. 
+
+full_cids.csv
+—————————––––
+This file contains all the medical events with their slope, p value and classification score at the decile level. There are no patient counts or population counts in this file. You can use this file in addition to the data file (below) to do your own trend analysis and exploration.
+
+___data.csv
+———————————
+Anything that ends in data.csv has some data in it. This is the data for ALL the medical events. Do not share this file (unless you want to). This is to help you, should you want to do your own trend analysis and exploration. 
+
+____events.csv
+——————————————
+This is a 1 pager-view that lists the medical events that are interesting, either top 50 rising + top 50 sinking events, OR top 100 tends overall. This is also at decile level, and is useful for centralized processing.
+
+
+
+.pdf
+=====
+These files contain graphical outputs. The file names describe what they are.
+
+
+Within the results folder, there may also be a sub-folder called "bad data" with a few .csv files. These files denote the specific medical events (drug ingredients, procedures, diagnoses, etc.) that have significant data missing at the decile level. In general these are events with only 1 data point at the decile level within the study period. We denote these events in the 'Results' folder to help the curators of the datasets identify lapses in comprehensiveness (a key tennet of data quality). THESE RESULTS ARE PURELY INTERNAL! They are NOT meant to be shared with the OHDSI study authors; rather they are produced for the internal benefit of the site running the study.
+
+
+
+Additional files may be present, which indicates that this readme file was not kept 100% current.
+
+However, the file name should clearly indicate what data is inside it.
+

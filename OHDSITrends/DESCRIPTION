@@ -1,0 +1,13 @@
+Package: OHDSITrends
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 1.2
+Author: Yohan Sumathipala, Vojtech Huser
+Maintainer: Vojtech Huser <vojtech.huser@nih.gov>
+Description: Calculate trends. Input data is Achilles precomputations.
+    Use four spaces when indenting paragraphs within the Description.
+License: tbd
+Encoding: UTF-8
+LazyData: true
+Imports: magrittr, dplyr, magrittr, readr, stringr, ggplot2, gridExtra, DatabaseConnector
+RoxygenNote: 6.0.1 

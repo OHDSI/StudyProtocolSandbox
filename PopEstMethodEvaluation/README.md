@@ -22,6 +22,7 @@ How to run
 	install_github("ohdsi/SelfControlledCaseSeries")
 	install_github("ohdsi/IcTemporalPatternDiscovery")
 	install_github("ohdsi/CaseControl")
+	install_github("ohdsi/CaseCrossover")
 	install_github("ohdsi/OhdsiSharing")
 	install_github("ohdsi/MethodEvaluation")
 	install_github("ohdsi/StudyProtocolSandbox/PopEstMethodEvaluation")

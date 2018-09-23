@@ -1,0 +1,26 @@
+Package: StrokeInAfibValidationStudy
+Type: Package
+Title: A package for validating the stroke in afib patients models across the OHDSI network
+Version: 0.0.1
+Date: 2018-04-01
+Author: Jenna Reps
+Maintainer:Jenna Reps <kreps@ohdsi.org>
+Description: This package applies developed models for predicting stroke in patients with afib to new data in the OMOP CDM
+License: Apache License 2.0
+Depends:
+  R (>= 3.3.0), 
+  DatabaseConnector (>= 1.11.4),
+  FeatureExtraction (>= 2.0.0),
+  Cyclops (>= 1.2.2),
+  PatientLevelPrediction (>= 2.0.0),
+  Hydra
+Imports:
+  ggplot2,
+  gridExtra,
+  ff,
+  ffbase (>= 0.12.1)
+Suggests:
+  testthat
+LinkingTo: Rcpp
+NeedsCompilation: No
+RoxygenNote: 6.0.1

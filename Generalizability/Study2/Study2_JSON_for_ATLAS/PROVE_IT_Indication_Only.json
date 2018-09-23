@@ -1,0 +1,215 @@
+{
+  "ConceptSets": [
+    {
+      "id": 1,
+      "name": "Acute Coronary Syndrome",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 4329847,
+              "CONCEPT_NAME": "Myocardial infarction",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "22298006",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 35205182,
+              "CONCEPT_NAME": "Angina unstable",
+              "STANDARD_CONCEPT": "C",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "10002388",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "MedDRA",
+              "CONCEPT_CLASS_ID": "PT",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Classification"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44819697,
+              "CONCEPT_NAME": "Acute myocardial infarction of other anterior wall, subsequent episode of care",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "410.12",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD9CM",
+              "CONCEPT_CLASS_ID": "5-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44820861,
+              "CONCEPT_NAME": "Acute myocardial infarction of unspecified site, subsequent episode of care",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "410.92",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD9CM",
+              "CONCEPT_CLASS_ID": "5-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44832376,
+              "CONCEPT_NAME": "Acute myocardial infarction of other specified sites, subsequent episode of care",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "410.82",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD9CM",
+              "CONCEPT_CLASS_ID": "5-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44834721,
+              "CONCEPT_NAME": "Acute myocardial infarction of other lateral wall, subsequent episode of care",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "410.52",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD9CM",
+              "CONCEPT_CLASS_ID": "5-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44832374,
+              "CONCEPT_NAME": "Acute myocardial infarction of other inferior wall, subsequent episode of care",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "410.42",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD9CM",
+              "CONCEPT_CLASS_ID": "5-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44820860,
+              "CONCEPT_NAME": "Acute myocardial infarction of inferoposterior wall, subsequent episode of care",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "410.32",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD9CM",
+              "CONCEPT_CLASS_ID": "5-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44820859,
+              "CONCEPT_NAME": "Acute myocardial infarction of inferolateral wall, subsequent episode of care",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "410.22",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD9CM",
+              "CONCEPT_CLASS_ID": "5-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 44820858,
+              "CONCEPT_NAME": "Acute myocardial infarction of anterolateral wall, subsequent episode of care",
+              "STANDARD_CONCEPT": "N",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "410.02",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD9CM",
+              "CONCEPT_CLASS_ID": "5-dig billing code",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 314666,
+              "CONCEPT_NAME": "Old myocardial infarction",
+              "STANDARD_CONCEPT": "S",
+              "INVALID_REASON": "V",
+              "CONCEPT_CODE": "1755008",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT_CAPTION": "Standard"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          }
+        ]
+      }
+    }
+  ],
+  "PrimaryCriteria": {
+    "CriteriaList": [
+      {
+        "ConditionOccurrence": {
+          "CodesetId": 1
+        }
+      }
+    ],
+    "ObservationWindow": {
+      "PriorDays": "0",
+      "PostDays": 0
+    },
+    "PrimaryCriteriaLimit": {
+      "Type": "All"
+    }
+  },
+  "QualifiedLimit": {
+    "Type": "First"
+  },
+  "ExpressionLimit": {
+    "Type": "First"
+  },
+  "InclusionRules": [],
+  "CensoringCriteria": [],
+  "CollapseSettings": {
+    "CollapseType": "ERA",
+    "EraPad": 0
+  },
+  "CensorWindow": {}
+}

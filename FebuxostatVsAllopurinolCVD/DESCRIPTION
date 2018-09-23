@@ -1,0 +1,32 @@
+Package: FebuxostatVsAllopurinolCVD
+Type: Package
+Title: A Package Skeleton for Comparative Effectiveness Studies
+Version: 0.0.1
+Author: Martijn Schuemie [aut, cre]
+Maintainer: Martijn J. Schuemie <schuemie@ohdsi.org>
+Description: A skeleton package, to be used as a starting point when implementing comprative effect studies.
+Depends:
+    DatabaseConnector
+Imports:
+    SqlRender,
+    EmpiricalCalibration,
+    Cyclops,
+    FeatureExtraction,
+    CohortMethod,
+    ggplot2,
+    ff,
+    ffbase,
+    MethodEvaluation,
+    EvidenceSynthesis,
+    OhdsiSharing,
+    zip,
+	  OhdsiRTools (>= 1.5.0)
+Suggests:
+    knitr,
+    rmarkdown,
+    DT,
+    shiny
+License: Apache License 2.0
+VignetteBuilder: knitr
+LazyData: TRUE
+RoxygenNote: 6.0.1.9000

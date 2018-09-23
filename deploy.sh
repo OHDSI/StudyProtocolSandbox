@@ -19,10 +19,10 @@ addToDrat(){
   ## Link to local R packages
   echo 'R_LIBS=~/Rlib' > .Renviron
 
-  Rscript -e "drat::insertPackage('$PKG_REPO/$PKG_TARBALL', \
+  Rscript -e "drat::insertPackage('$PKG_REPO/$PKG_TARBALL_NS', \
     repodir = '.', \
-    commit='Travis update: $PKG_TARBALL build $TRAVIS_BUILD_NUMBER')"
+    commit='Travis update: $PKG_TARBALL_NS build $TRAVIS_BUILD_NUMBER')"
   git push
-
+  
 }
 addToDrat

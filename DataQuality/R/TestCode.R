@@ -2,7 +2,7 @@
 test <- function(connectionDetails,cdmDatabaseSchema) {
   
 
-  workFolder=paste0('c:/temp/',cdmDatabaseSchema)
+  workFolder=paste0('c:/b/',cdmDatabaseSchema)
   unlink(workFolder)
   dir.create(workFolder)
   
@@ -10,6 +10,8 @@ test <- function(connectionDetails,cdmDatabaseSchema) {
   # conn<-connect(connectionDetails)
   cdmVersion='5'
   
+  
+  #source('q:/w/d/r/conn.R')
   # library(DataQuality)
   DataQuality::executeDQ(connectionDetails = connectionDetails,cdmDatabaseSchema = cdmDatabaseSchema,
                          resultsDatabaseSchema = resultsDatabaseSchema,

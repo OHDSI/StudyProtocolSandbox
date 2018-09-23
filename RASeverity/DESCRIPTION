@@ -1,0 +1,25 @@
+Package: RASeverity
+Type: Package
+Title: Prediction models to predict risk of severe RA in the next 90 and 730 days
+Version: 0.0.1
+Date: 2018-06-01
+Author: Jenna Reps
+Maintainer: Jenna Reps <jreps@ohdsi.org>
+Description: This package contains code to externally validate the models, apply the models to new plpData or create custom covariate for the predicted risk.
+License: Apache License 2.0
+Depends:
+    R (>= 3.3.0), 
+    DatabaseConnector (>= 1.11.4),
+    FeatureExtraction (>= 2.0.0),
+    Cyclops (>= 1.2.2),
+    PatientLevelPrediction (>= 2.0.0)
+Imports:
+    ggplot2,
+    gridExtra,
+    ff,
+    ffbase (>= 0.12.1)
+Suggests:
+  testthat,
+LinkingTo: Rcpp
+NeedsCompilation: No
+RoxygenNote: 6.0.1

@@ -1,6 +1,6 @@
 # @file TestCode.R
 #
-# Copyright 2016 Observational Health Data Sciences and Informatics
+# Copyright 2017 Observational Health Data Sciences and Informatics
 #
 # This file is part of PopEstMethodEvaluation
 #
@@ -18,22 +18,41 @@
 
 library(PopEstMethodEvaluation)
 options('fftempdir' = 'r:/fftemp')
-
-workFolder <- "r:/PopEstMethodEvaluation"
+options(java.parameters = "-Xmx8000m")
 
 
 pw <- NULL
 dbms <- "pdw"
 user <- NULL
 server <- "JRDUSAPSCTL01"
-cdmDatabaseSchema <- "CDM_Truven_MDCD_V432.dbo"
+cdmDatabaseSchema <- "CDM_Truven_MDCD_V610.dbo"
+databaseName <- "MDCD"
 oracleTempSchema <- NULL
 outcomeDatabaseSchema <- "scratch.dbo"
-outcomeTable <- "mschuemie_outcomes"
+outcomeTable <- "mschuemi_ohdsi_hois2"
 nestingCohortDatabaseSchema <- "scratch.dbo"
-nestingCohortTable <- "mschuemi_nesting_cohorts"
+nestingCohortTable <- "mschuemi_ohdsi_nesting"
 port <- 17001
 cdmVersion <- "5"
+workFolder <- "r:/PopEstMethodEvaluation"
+maxCores <- 32
+
+
+pw <- NULL
+dbms <- "pdw"
+user <- NULL
+server <- "JRDUSAPSCTL01"
+cdmDatabaseSchema <- "CDM_Truven_CCAE_V608.dbo"
+databaseName <- "CCAE"
+oracleTempSchema <- NULL
+outcomeDatabaseSchema <- "scratch.dbo"
+outcomeTable <- "mschuemi_ohdsi_hois_ccae"
+nestingCohortDatabaseSchema <- "scratch.dbo"
+nestingCohortTable <- "mschuemi_ohdsi_nesting_ccae"
+port <- 17001
+cdmVersion <- "5"
+workFolder <- "r:/PopEstMethodEvaluation_ccae"
+maxCores <- 32
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
@@ -41,22 +60,24 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 password = pw,
                                                                 port = port)
 
-injectSignals(connectionDetails = connectionDetails,
-              cdmDatabaseSchema = cdmDatabaseSchema,
-              oracleTempSchema = oracleTempSchema,
-              outcomeDatabaseSchema = outcomeDatabaseSchema,
-              outcomeTable = outcomeTable,
-              workFolder = workFolder,
-              cdmVersion = cdmVersion,
-              createBaselineCohorts = FALSE,
-              maxCores = 32)
+# MethodEvaluation::createReferenceSetCohorts(connectionDetails = connectionDetails,
+#                                             oracleTempSchema = oracleTempSchema,
+#                                             cdmDatabaseSchema = cdmDatabaseSchema,
+#                                             outcomeDatabaseSchema = outcomeDatabaseSchema,
+#                                             outcomeTable = outcomeTable,
+#                                             nestingDatabaseSchema = nestingCohortDatabaseSchema,
+#                                             nestingTable = nestingCohortTable,
+#                                             referenceSet = "ohdsiNegativeControls")
+#
+# injectSignals(connectionDetails = connectionDetails,
+#               cdmDatabaseSchema = cdmDatabaseSchema,
+#               oracleTempSchema = oracleTempSchema,
+#               outcomeDatabaseSchema = outcomeDatabaseSchema,
+#               outcomeTable = outcomeTable,
+#               workFolder = workFolder,
+#               maxCores = maxCores)
 
-createNestingCohorts(connectionDetails = connectionDetails,
-                     cdmDatabaseSchema = cdmDatabaseSchema,
-                     oracleTempSchema = oracleTempSchema,
-                     nestingCohortDatabaseSchema = nestingCohortDatabaseSchema,
-                     nestingCohortTable = nestingCohortTable,
-                     cdmVersion = cdmVersion)
+
 
 runCohortMethod(connectionDetails = connectionDetails,
                 cdmDatabaseSchema = cdmDatabaseSchema,
@@ -92,23 +113,41 @@ runIctpd(connectionDetails = connectionDetails,
          cdmVersion = cdmVersion)
 
 runCaseControl(connectionDetails = connectionDetails,
-         cdmDatabaseSchema = cdmDatabaseSchema,
-         oracleTempSchema = oracleTempSchema,
-         outcomeDatabaseSchema = outcomeDatabaseSchema,
-         outcomeTable = outcomeTable,
-         nestingCohortDatabaseSchema = nestingCohortDatabaseSchema,
-         nestingCohortTable = nestingCohortTable,
-         workFolder = workFolder,
-         cdmVersion = cdmVersion,
-         maxCores = 20)
+               cdmDatabaseSchema = cdmDatabaseSchema,
+               oracleTempSchema = oracleTempSchema,
+               outcomeDatabaseSchema = outcomeDatabaseSchema,
+               outcomeTable = outcomeTable,
+               nestingCohortDatabaseSchema = nestingCohortDatabaseSchema,
+               nestingCohortTable = nestingCohortTable,
+               workFolder = workFolder,
+               cdmVersion = cdmVersion,
+               maxCores = 20)
+
+runCaseCrossover(connectionDetails = connectionDetails,
+                 cdmDatabaseSchema = cdmDatabaseSchema,
+                 oracleTempSchema = oracleTempSchema,
+                 outcomeDatabaseSchema = outcomeDatabaseSchema,
+                 outcomeTable = outcomeTable,
+                 nestingCohortDatabaseSchema = nestingCohortDatabaseSchema,
+                 nestingCohortTable = nestingCohortTable,
+                 workFolder = workFolder,
+                 cdmVersion = cdmVersion,
+                 maxCores = 20)
 
 packageResults(connectionDetails = connectionDetails,
                cdmDatabaseSchema = cdmDatabaseSchema,
                workFolder = workFolder)
 
-createFiguresAndTables(file.path(workFolder, "export"))
+addCalibration(file.path(workFolder, "export"))
 
 
+# Merge results from multiple databases
 
-
-
+folders <- c("s:/PopEstMethodEvaluation", "r:/PopEstMethodEvaluation_ccae")
+calibrated <- data.frame()
+for (folder in folders) {
+  temp <- read.csv(file.path(folder, "export", "calibrated.csv"), stringsAsFactors = FALSE)
+  calibrated <- rbind(calibrated, temp)
+}
+head(calibrated)
+write.csv(calibrated, "r:/calibrated.csv", row.names = FALSE)

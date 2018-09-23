@@ -57,6 +57,7 @@ doTree <- function(connectionDetails,
     stop("CDM version 4 not supported")
   }
   
+  writeLines("Looking at population size data")
   exportFolder<-file.path(workFolder,"export")
   
   if (!file.exists(exportFolder))
@@ -93,9 +94,10 @@ doTree <- function(connectionDetails,
   write.csv(data,file = file.path(exportFolder,'DemogrPyramidData.csv'),row.names = F)
   
   # Clean up
-  RJDBC::dbDisconnect(conn)
+  DatabaseConnector::disconnect(conn)
+  #RJDBC::dbDisconnect(conn)
   
-  writeLines("Done")
+  writeLines("Done (doTree)")
   
 }
 
@@ -364,12 +366,18 @@ doSelectiveExport <- function(connectionDetails,
   write.csv(ruleDataOutput,file = file.path(exportFolder,'DataQuality.csv'),row.names = F)
 
   # Clean up
-  RJDBC::dbDisconnect(conn)
   
-  writeLines("SelectiveExport Done")
+  DatabaseConnector::disconnect(conn)
+  
+  writeLines("Done (selectiveExport)")
   
 }
 
 
-
+# assessFeasibility(connectionDetails = connectionDetails,
+#                   cdmDatabaseSchema = "cdm_data",
+#                   workDatabaseSchema = "results",
+#                   studyCohortTable = "ohdsi_alendronate_raloxifene",
+#                   oracleTempSchema = NULL,
+#                   outputFolder = "c:/temp/study_results")
 

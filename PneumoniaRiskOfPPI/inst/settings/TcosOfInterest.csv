@@ -1,0 +1,2 @@
+targetId,targetName,comparatorId,comparatorName,outcomeIds,OutcomeNames,excludedCovariateConceptIds
+728,PPI,729,H2RA,730;731;751;735;751;734;752,Pneumonia;BacterialPneumonia;BacterialEnteritis;FoodPoisoning;CDAI;Gibleeding,21600081;21600086;19011685;19039926;904453;929887;923645;948078;21600095

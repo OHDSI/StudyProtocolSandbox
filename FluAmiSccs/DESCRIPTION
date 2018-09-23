@@ -1,0 +1,11 @@
+Package: nejmfluami
+Type: Package
+Title: SCCS on the effect of flu on myocardial infarction
+Version: 0.1.0
+Author: James Weaver
+Maintainer: James Weaver <jweave17@its.jnj.com>
+Description: Replicates Kwong et al, Acute Myocardial Infarction after Laboratory-Confirmed Influenza Infection. N Engl J Med 378;4:345-353.
+License: Apache License 2.0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1

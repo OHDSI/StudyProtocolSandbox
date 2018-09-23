@@ -1,6 +1,6 @@
 # @file InjectSignals.R
 #
-# Copyright 2016 Observational Health Data Sciences and Informatics
+# Copyright 2017 Observational Health Data Sciences and Informatics
 #
 # This file is part of PopEstMethodEvaluation
 #
@@ -23,54 +23,47 @@ injectSignals <- function(connectionDetails,
                           outcomeDatabaseSchema = cdmDatabaseSchema,
                           outcomeTable = "cohort",
                           workFolder,
-                          cdmVersion = "5",
-                          createBaselineCohorts = TRUE,
-                          maxThreads = 1) {
+                          maxCores = 1) {
     injectionFolder <- file.path(workFolder, "SignalInjection")
     if (!file.exists(injectionFolder))
         dir.create(injectionFolder)
 
     injectionSummaryFile <- file.path(workFolder, "injectionSummary.rds")
     if (!file.exists(injectionSummaryFile)) {
-        if (createBaselineCohorts) {
-            connection <- DatabaseConnector::connect(connectionDetails)
-
-            sql <- SqlRender::loadRenderTranslateSql("CreateNegativeControlOutcomes.sql",
-                                                     packageName = "PopEstMethodEvaluation",
-                                                     dbms = connectionDetails$dbms,
-                                                     cdmDatabaseSchema = cdmDatabaseSchema,
-                                                     resultsDatabaseSchema = outcomeDatabaseSchema,
-                                                     outcomeTable = outcomeTable)
-            if (cdmVersion == "4"){
-                sql <- gsub("cohort_definition_id", "cohort_concept_id", sql)
-                sql <- gsub("visit_concept_id", "place_of_service_concept_id", sql)
-            }
-
-            DatabaseConnector::executeSql(connection, sql)
-
-            # Check number of subjects per cohort:
-            sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @resultsDatabaseSchema.@outcomeTable GROUP BY cohort_definition_id"
-            sql <- SqlRender::renderSql(sql, resultsDatabaseSchema = outcomeDatabaseSchema, outcomeTable = outcomeTable)$sql
-            sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
-            if (cdmVersion == "4"){
-                sql <- gsub("cohort_definition_id", "cohort_concept_id", sql)
-            }
-            print(DatabaseConnector::querySql(connection, sql))
-            dbDisconnect(connection)
-        }
-        #Diclofenac and all negative control outcomes:
-        exposureOutcomePairs <- data.frame(exposureId = 1124300,
-                                           outcomeId = c(24609, 29735, 73754, 80004, 134718, 139099, 141932, 192367, 193739, 194997, 197236, 199074, 255573, 257007, 313459, 314658, 316084, 319843, 321596, 374366, 375292, 380094, 433753, 433811, 436665, 436676, 436940, 437784, 438134, 440358, 440374, 443617, 443800, 4084966, 4288310))
-       # exposureOutcomePairs <- data.frame(exposureId = 1124300,
-        #                                   outcomeId = c(24609, 29735))
+        ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
+        exposureOutcomePairs <- data.frame(exposureId = ohdsiNegativeControls$targetId,
+                                           outcomeId = ohdsiNegativeControls$outcomeId)
+        exposureOutcomePairs <- unique(exposureOutcomePairs)
+        #
+        # connection <- DatabaseConnector::connect(connectionDetails)
+        # sql <- "SELECT cohort_definition_id, COUNT(*) AS count FROM @resultsDatabaseSchema.@outcomeTable GROUP BY cohort_definition_id"
+        # sql <- SqlRender::renderSql(sql, resultsDatabaseSchema = outcomeDatabaseSchema, outcomeTable = outcomeTable)$sql
+        # sql <- SqlRender::translateSql(sql, targetDialect = connectionDetails$dbms)$sql
+        # print(DatabaseConnector::querySql(connection, sql))
+        # dbDisconnect(connection)
 
         prior = Cyclops::createPrior("laplace", exclude = 0, useCrossValidation = TRUE)
 
         control = Cyclops::createControl(cvType = "auto",
-                                         startingVariance = 0.001,
+                                         startingVariance = 0.01,
                                          noiseLevel = "quiet",
-                                         tolerance = 2e-07,
-                                         threads = min(c(5, maxThreads)))
+                                         cvRepetitions = 1,
+                                         threads = min(c(10, maxCores)))
+
+        covariateSettings <- FeatureExtraction::createCovariateSettings(useDemographicsAgeGroup = TRUE,
+                                                                        useDemographicsGender = TRUE,
+                                                                        useDemographicsIndexYear = TRUE,
+                                                                        useDemographicsIndexMonth = TRUE,
+                                                                        useConditionGroupEraLongTerm = TRUE,
+                                                                        useDrugGroupEraLongTerm = TRUE,
+                                                                        useProcedureOccurrenceLongTerm = TRUE,
+                                                                        useMeasurementLongTerm = TRUE,
+                                                                        useObservationLongTerm = TRUE,
+                                                                        useCharlsonIndex = TRUE,
+                                                                        useDcsi = TRUE,
+                                                                        useChads2Vasc = TRUE,
+                                                                        longTermStartDays = 365,
+                                                                        endDays = 0)
 
         result <- MethodEvaluation::injectSignals(connectionDetails,
                                                   cdmDatabaseSchema = cdmDatabaseSchema,
@@ -79,20 +72,67 @@ injectSignals <- function(connectionDetails,
                                                   exposureTable = "drug_era",
                                                   outcomeDatabaseSchema = outcomeDatabaseSchema,
                                                   outcomeTable = outcomeTable,
-                                                  exposureOutcomePairs = exposureOutcomePairs,
+                                                  outputDatabaseSchema = outcomeDatabaseSchema,
+                                                  outputTable = outcomeTable,
                                                   createOutputTable = FALSE,
+                                                  outputIdOffset = 10000,
+                                                  exposureOutcomePairs = exposureOutcomePairs,
                                                   firstExposureOnly = FALSE,
-                                                  firstOutcomeOnly = FALSE,
-                                                  modelType = "poisson",
-                                                  prior = prior,
-                                                  control = control,
+                                                  firstOutcomeOnly = TRUE,
+                                                  removePeopleWithPriorOutcomes = TRUE,
+                                                  modelType = "survival",
+                                                  washoutPeriod = 365,
                                                   riskWindowStart = 0,
                                                   riskWindowEnd = 0,
                                                   addExposureDaysToEnd = TRUE,
-                                                  effectSizes = c(1, 1.25, 1.5, 2, 4),
+                                                  effectSizes = c(1.5, 2, 4),
+                                                  precision = 0.01,
+                                                  prior = prior,
+                                                  control = control,
+                                                  maxSubjectsForModel = 250000,
+                                                  minOutcomeCountForModel = 100,
+                                                  minOutcomeCountForInjection = 25,
                                                   workFolder = injectionFolder,
-                                                  cdmVersion = cdmVersion,
-                                                  outcomeThreads = max(c(1, floor(maxThreads / 5))))
+                                                  modelThreads = max(1, round(maxCores/8)),
+                                                  generationThreads = min(6, maxCores),
+                                                  covariateSettings = covariateSettings)
         saveRDS(result, injectionSummaryFile)
     }
+    ohdsiNegativeControls <- readRDS(system.file("ohdsiNegativeControls.rds", package = "MethodEvaluation"))
+    injectedSignals <- readRDS(injectionSummaryFile)
+    injectedSignals$targetId <- injectedSignals$exposureId
+    injectedSignals <- merge(injectedSignals, ohdsiNegativeControls)
+    injectedSignals <- injectedSignals[injectedSignals$trueEffectSize != 0, ]
+    injectedSignals$outcomeName <- paste0(injectedSignals$outcomeName, ", RR=", injectedSignals$targetEffectSize)
+    injectedSignals$oldOutcomeId <- injectedSignals$outcomeId
+    injectedSignals$outcomeId <- injectedSignals$newOutcomeId
+    ohdsiNegativeControls$targetEffectSize <- 1
+    ohdsiNegativeControls$trueEffectSize <- 1
+    ohdsiNegativeControls$trueEffectSizeFirstExposure <- 1
+    ohdsiNegativeControls$oldOutcomeId <- ohdsiNegativeControls$outcomeId
+    allControls <- rbind(ohdsiNegativeControls, injectedSignals[, names(ohdsiNegativeControls)])
+    exposureOutcomes <- data.frame()
+    exposureOutcomes <- rbind(exposureOutcomes, data.frame(exposureId = allControls$targetId,
+                                                           outcomeId = allControls$outcomeId))
+    exposureOutcomes <- rbind(exposureOutcomes, data.frame(exposureId = allControls$comparatorId,
+                                                           outcomeId = allControls$outcomeId))
+    exposureOutcomes <- unique(exposureOutcomes)
+    mdrr <- MethodEvaluation::computeMdrr(connectionDetails = connectionDetails,
+                                          cdmDatabaseSchema = cdmDatabaseSchema,
+                                          oracleTempSchema = oracleTempSchema,
+                                          exposureOutcomePairs = exposureOutcomes,
+                                          exposureDatabaseSchema = cdmDatabaseSchema,
+                                          exposureTable = "drug_era",
+                                          outcomeDatabaseSchema = outcomeDatabaseSchema,
+                                          outcomeTable = outcomeTable,
+                                          cdmVersion = cdmVersion)
+    allControls <- merge(allControls, data.frame(targetId = mdrr$exposureId,
+                                                 outcomeId = mdrr$outcomeId,
+                                                 mdrrTarget = mdrr$mdrr))
+    allControls <- merge(allControls,
+                         data.frame(comparatorId = mdrr$exposureId,
+                                    outcomeId = mdrr$outcomeId,
+                                    mdrrComparator = mdrr$mdrr),
+                         all.x = TRUE)
+    write.csv(allControls, file.path(workFolder, "allControls.csv"), row.names = FALSE)
 }

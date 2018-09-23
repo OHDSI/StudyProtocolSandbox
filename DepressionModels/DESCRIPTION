@@ -1,0 +1,15 @@
+Package: DepressionModels
+Type: Package
+Title: Models from the large scale analysis study and plp framework paper
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: Jenna M. Reps <jreps@its.jnj.com>
+Description: This package enables external validation of 21 models that were
+    developed to predict various outcomes within therapeutically treated depressed people on
+    4 different OMOP CDM databases by applying the models to other datasets in the
+    OMOP CDM format.
+Imports:
+    PatientLevelPrediction
+License: Apache License 2.0
+LazyData: TRUE
+RoxygenNote: 5.0.1
