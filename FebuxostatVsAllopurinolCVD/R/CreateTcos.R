@@ -14,23 +14,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 createTcos <- function(outputFolder) {
   pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = "FebuxostatVsAllopurinolCVD")
   tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
-  #allControlsFile <- file.path(outputFolder, "AllControls.csv")
-  #allControls <- read.csv(allControlsFile)
+  allControlsFile <- file.path(outputFolder, "AllControls.csv")
+  allControls <- read.csv(allControlsFile)
   dcosList <- list()
-  tcs <- tcosOfInterest[, c("targetId", "comparatorId")]
-  # tcs <- unique(rbind(tcosOfInterest[, c("targetId", "comparatorId")],
-  #                     allControls[, c("targetId", "comparatorId")]))
+  tcs <- unique(rbind(tcosOfInterest[, c("targetId", "comparatorId")],
+                      allControls[, c("targetId", "comparatorId")]))
   for (i in 1:nrow(tcs)) {
     targetId <- tcs$targetId[i]
     comparatorId <- tcs$comparatorId[i]
     outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
     outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
-    outcomeIds <- c(outcomeIds
-                    #, allControls$outcomeId[allControls$targetId == targetId & allControls$comparatorId == comparatorId]
-                    )
+    outcomeIds <- c(outcomeIds, allControls$outcomeId[allControls$targetId == targetId & allControls$comparatorId == comparatorId])
     excludeConceptIds <- as.character(tcosOfInterest$excludedCovariateConceptIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
     excludeConceptIds <- as.numeric(strsplit(excludeConceptIds, split = ";")[[1]])
     dcos <- CohortMethod::createDrugComparatorOutcomes(targetId = targetId,
@@ -41,3 +39,4 @@ createTcos <- function(outputFolder) {
   }
   return(dcosList)
 }
+

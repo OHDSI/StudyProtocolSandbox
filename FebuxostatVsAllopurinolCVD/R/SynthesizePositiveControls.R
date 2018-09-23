@@ -48,7 +48,7 @@ synthesizePositiveControls <- function(connectionDetails,
                                        outputFolder,
                                        maxCores = 1) {
   # Set to TRUE if you don't want to use synthetic positive controls in your study:
-  skipSynthesis <- FALSE
+  skipSynthesis <- TRUE
   
   if (!skipSynthesis) {
     synthesisFolder <- file.path(outputFolder, "positiveControlSynthesis")
@@ -71,15 +71,15 @@ synthesizePositiveControls <- function(connectionDetails,
       covariateSettings <- FeatureExtraction::createCovariateSettings(useDemographicsAgeGroup = TRUE,
                                                                       useDemographicsGender = TRUE,
                                                                       useDemographicsIndexYear = TRUE,
-                                                                      useDemographicsIndexMonth = TRUE,
+                                                                      useDemographicsIndexMonth = FALSE,
                                                                       useConditionGroupEraLongTerm = TRUE,
                                                                       useDrugGroupEraLongTerm = TRUE,
                                                                       useProcedureOccurrenceLongTerm = TRUE,
                                                                       useMeasurementLongTerm = TRUE,
                                                                       useObservationLongTerm = TRUE,
                                                                       useCharlsonIndex = TRUE,
-                                                                      useDcsi = TRUE,
-                                                                      useChads2Vasc = TRUE,
+                                                                      useDcsi = FALSE,
+                                                                      useChads2Vasc = FALSE,
                                                                       longTermStartDays = 365,
                                                                       endDays = 0)
       result <- MethodEvaluation::injectSignals(connectionDetails,
