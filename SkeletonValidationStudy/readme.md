@@ -39,7 +39,7 @@ databaseName <- 'add a shareable name for the database used to develop the model
 cdmDatabaseschema <- 'cdm_yourdatabase.dbo'
 
 # add the work database schema this requires read/write privileges 
-cohortDatabaseschema <- 'cdm_yourworkdatabase.dbo'
+cohortDatabaseschema <- 'yourworkdatabase.dbo'
 
 # the name of the table that will be created in cohortDatabaseSchema to hold the cohorts
 cohortTable <- 'studyCohortTable'
