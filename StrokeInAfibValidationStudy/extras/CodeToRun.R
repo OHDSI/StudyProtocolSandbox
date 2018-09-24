@@ -5,10 +5,10 @@ library(StrokeInAfibValidationStudy)
 databaseName <- 'add a shareable name for the database used to develop the models'
 
 # add the cdm database schema with the data
-cdmDatabaseschema <- 'cdm_yourdatabase.dbo'
+cdmDatabaseSchema <- 'yourcdmdatabase'
 
 # add the work database schema this requires read/write privileges
-cohortDatabaseschema <- 'yourworkdatabase.dbo'
+cohortDatabaseSchema <- 'yourworkdatabase'
 
 # the name of the table that will be created in cohortDatabaseSchema to hold the cohorts
 cohortTable <- 'studyAfibStrokeCohortTable'
@@ -32,8 +32,8 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
 # Now run the study
 execute(connectionDetails = connectionDetails,
         databaseName = databaseName,
-        cdmDatabaseschema = cdmDatabaseschema,
-        cohortDatabaseschema = cohortDatabaseschema,
+        cdmDatabaseSchema = cdmDatabaseSchema,
+        cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
         createCohorts = T,
