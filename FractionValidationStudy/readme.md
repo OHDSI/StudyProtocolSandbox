@@ -39,10 +39,10 @@ library(FractionValidationStudy)
 databaseName <- 'add a shareable name for the database used to develop the models'
 
 # add the cdm database schema with the data
-cdmDatabaseschema <- 'cdm_yourdatabase.dbo'
+cdmDatabaseSchema <- 'cdm_yourdatabase.dbo'
 
 # add the work database schema this requires read/write privileges 
-cohortDatabaseschema <- 'cdm_yourworkdatabase.dbo'
+cohortDatabaseSchema <- 'yourworkdatabase'
 
 # the name of the table that will be created in cohortDatabaseSchema to hold the cohorts
 cohortTable <- 'studyFractionCohortTable'
@@ -66,8 +66,8 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
 # Now run the study
 execute(connectionDetails = connectionDetails,
                  databaseName = databaseName,
-                 cdmDatabaseschema = cdmDatabaseschema,
-                 cohortDatabaseschema = cohortDatabaseschema,
+                 cdmDatabaseSchema = cdmDatabaseSchema,
+                 cohortDatabaseSchema = cohortDatabaseSchema,
                  cohortTable = cohortTable,
                  outputFolder = outputFolder,
                  createCohorts = T,
