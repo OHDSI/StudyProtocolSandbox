@@ -46,7 +46,7 @@ val <- PatientLevelPrediction::evaluateMultiplePlp(analysesLocation = analysesLo
 # results saved to outputFolder/databaseName
 if (packageResults) {
   OhdsiRTools::logInfo("Packaging results")
-  packageResults(outputFolder = file.path(outputFolder, datbaseName),
+  packageResults(outputFolder = file.path(outputFolder, databaseName),
                  minCellCount = minCellCount)
 }
 
