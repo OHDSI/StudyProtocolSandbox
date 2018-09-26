@@ -33,8 +33,8 @@ Getting Started
   ```r
 install.packages("drat")
 drat::addRepo("OHDSI")
-install.packages("PatientLevelPrediction")
 install.packages("devtools")
+devtools::install_github("OHDSI/PatientLevelPrediction")
 devtools::install_github("OHDSI/PredictionComparison")
 devtools::install_github("OHDSI/StudyProtocolSandbox/ExistingStrokeRiskExternalValidation")
 
@@ -44,7 +44,7 @@ options(fftempdir = 'C:/fftemp')
 dbms <- "pdw"
 user <- NULL
 pw <- NULL
-server <- Sys.getenv('server')
+server <- Sys.getenv('server')	
 port <- Sys.getenv('port')
 
 databaseName <- 'database name'
@@ -92,7 +92,7 @@ submitResults(exportFolder=outputLocation,
 # where key and secret are provided by request
 
 
-```
+  ```
 
 License
 =======
