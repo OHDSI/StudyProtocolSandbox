@@ -1,6 +1,6 @@
 ---
-title: "Using the package skeleton for comparative effectiveness studies"
-author: "Martijn J. Schuemie"
+title: "Using the package for comparative effectiveness studies between febuxostat and allopurinol"
+author: "Seng Chan You"
 date: "`r Sys.Date()`"
 output:
   pdf_document:
