@@ -1,0 +1,114 @@
+{
+  "targetIds": 872,
+  "outcomeIds": 20,
+  "cohortDefinitions": [
+    {
+      "id": "872",
+      "name": "HospitalizedMoreThan2wks"
+    },
+    {
+      "id": " 20",
+      "name": "AnyDeath"
+    }
+  ],
+  "getPlpDataArgs": {
+    "maxSampleSize": null,
+    "washoutPeriod": 0
+  },
+  "runPlpArgs": {
+    "minCovariateFraction": 0.001,
+    "normalizeData": true,
+    "testSplit": "person",
+    "testFraction": 0.2,
+    "splitSeed": 1,
+    "nfold": 3,
+    "verbosity": "INFO"
+  },
+  "covariateSettings": [
+    {
+      "temporal": false,
+      "ConditionOccurrenceAnyTimePrior": true,
+      "DrugExposureAnyTimePrior": true,
+      "ProcedureOccurrenceAnyTimePrior": true,
+      "MeasurementAnyTimePrior": true,
+      "MeasurementValueAnyTimePrior": true,
+      "MeasurementRangeGroupAnyTimePrior": true,
+      "ObservationAnyTimePrior": true,
+      "longTermStartDays": -365,
+      "mediumTermStartDays": -180,
+      "shortTermStartDays": -30,
+      "endDays": 0,
+      "includedCovariateConceptIds": [],
+      "addDescendantsToInclude": false,
+      "excludedCovariateConceptIds": [],
+      "addDescendantsToExclude": false,
+      "includedCovariateIds": [],
+      "attr_fun": "getDbDefaultCovariateData",
+      "attr_class": "covariateSettings"
+    }
+  ],
+  "populationSettings": [
+    {
+      "binary": true,
+      "includeAllOutcomes": true,
+      "firstExposureOnly": false,
+      "washoutPeriod": 0,
+      "removeSubjectsWithPriorOutcome": true,
+      "priorOutcomeLookback": 99999,
+      "requireTimeAtRisk": true,
+      "minTimeAtRisk": 1,
+      "riskWindowStart": 1,
+      "addExposureDaysToStart": false,
+      "riskWindowEnd": 14,
+      "addExposureDaysToEnd": false,
+      "verbosity": "INFO",
+      "attr_class": "populationSettings"
+    }
+  ],
+  "modelSettings": [
+    {
+      "AdaBoostSettings": {
+        "nEstimators": 50,
+        "learningRate": 1
+      }
+    },
+    {
+      "LassoLogisticRegressionSettings": {
+        "variance": 0.01,
+        "seed": null
+      }
+    },
+    {
+      "GradientBoostingMachineSettings": {
+        "ntrees": [10, 100],
+        "maxDepth": [4, 6, 17],
+        "minRows": 20,
+        "learnRate": [0.01, 0.1],
+        "nthread": 20
+      }
+    },
+    {
+      "DecisionTreeSettings": {
+        "maxDepth": 10,
+        "minSamplesSplit": 2,
+        "minSamplesLeaf": 10,
+        "minImpurityDecrease": 1e-07,
+        "classWeight": "None",
+        "plot": false
+      }
+    },
+    {
+      "NaiveBayesSettings": {
+        "variableNumber": 2000
+      }
+    },
+    {
+      "RandomForestSettings": {
+        "ntrees": 500,
+        "mtries": -1,
+        "maxDepth": [4, 10, 17],
+        "varImp": true
+      }
+    }
+  ]
+}

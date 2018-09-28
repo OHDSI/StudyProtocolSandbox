@@ -1,0 +1,90 @@
+{
+  "targetIds": 872,
+  "outcomeIds": 20,
+  "cohortDefinitions": [
+    {
+      "id": "872",
+      "name": "HospitalizedMoreThan2wks"
+    },
+    {
+      "id": " 20",
+      "name": "AnyDeath"
+    }
+  ],
+  "getPlpDataArgs": {
+    "maxSampleSize": null,
+    "washoutPeriod": 0
+  },
+  "runPlpArgs": {
+    "minCovariateFraction": 0.001,
+    "normalizeData": true,
+    "testSplit": "person",
+    "testFraction": 0.2,
+    "splitSeed": 1,
+    "nfold": 3,
+    "verbosity": "INFO"
+  },
+  "covariateSettings": [
+    {
+      "temporal": true,
+      "ConditionOccurrence": true,
+      "DrugExposure": true,
+      "ProcedureOccurrence": true,
+      "DeviceExposure": true,
+      "Measurement": true,
+      "MeasurementValue": true,
+      "MeasurementRangeGroup": true,
+      "Observation": true,
+      "temporalStartDays": [-99999, -60, -30, -14, -12, -10, -8, -6, -4, -2],
+      "temporalEndDays": [-61, -31, -15, -13, -11, -9, -7, -5, -3, 0],
+      "includedCovariateConceptIds": [],
+      "addDescendantsToInclude": false,
+      "excludedCovariateConceptIds": [],
+      "addDescendantsToExclude": false,
+      "includedCovariateIds": [],
+      "attr_fun": "getDbDefaultCovariateData",
+      "attr_class": "covariateSettings"
+    }
+  ],
+  "populationSettings": [
+    {
+      "binary": true,
+      "includeAllOutcomes": true,
+      "firstExposureOnly": false,
+      "washoutPeriod": 0,
+      "removeSubjectsWithPriorOutcome": true,
+      "priorOutcomeLookback": 99999,
+      "requireTimeAtRisk": true,
+      "minTimeAtRisk": 1,
+      "riskWindowStart": 1,
+      "addExposureDaysToStart": false,
+      "riskWindowEnd": 14,
+      "addExposureDaysToEnd": false,
+      "verbosity": "INFO",
+      "attr_class": "populationSettings"
+    }
+  ],
+  "modelSettings": [
+    {
+      "CIReNNSettings": {
+        "units": 64,
+        "recurrentDropout": 0.3,
+        "layerDropout": 0.2,
+        "lr": 0.0001,
+        "decay": 1e-05,
+        "outcomeWeight": 1,
+        "epochs": 100,
+        "earlyStoppingMinDelta": 0.001,
+        "earlyStoppingPatience": 5,
+        "useVae": true,
+        "vaeDataSamplingProportion": 1,
+        "vaeValidationSplit": 0.2,
+        "vaeBatchSize": 100,
+        "vaeLatentDim": 256,
+        "vaeIntermediateDim": 1024,
+        "vaeEpoch": 100,
+        "vaeEpislonStd": 1
+      }
+    }
+  ]
+}
