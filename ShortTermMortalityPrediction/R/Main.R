@@ -92,6 +92,18 @@ execute <- function(connectionDetails,
                   cohortTable = cohortTable,
                   oracleTempSchema = oracleTempSchema,
                   outputFolder = outputFolder)
+    ##Add 13 days to the cohort_start_date of target
+    connection<-DatabaseConnector::connect(connectionDetails)
+    sql<-"UPDATE @target_database_schema.@target_cohort_table
+          SET cohort_start_date = DATEADD(DAY,13,cohort_start_date)
+          where cohort_definition_id = @target_cohort_id"
+    sql<-SqlRender::renderSql(sql,
+                              target_database_schema = cohortDatabaseSchema,
+                              target_cohort_table = cohortTable,
+                              target_cohort_id = 872)$sql
+    sql <- SqlRender::translateSql(sql,
+                        targetDialect=connectionDetails$dbms)$sql
+    DatabaseConnector::executeSql(connection,sql)
   }
   
   if(runAnalyses){
@@ -109,9 +121,26 @@ execute <- function(connectionDetails,
   predictionAnalysisList$outcomeDatabaseSchema = cohortDatabaseSchema
   predictionAnalysisList$outcomeTable = cohortTable
   predictionAnalysisList$cdmVersion = cdmVersion
-  predictionAnalysisList$outputFolder = outputFolder
+  predictionAnalysisList$outputFolder = file.path(outputFolder,"nontemporal")
   
   result <- do.call(PatientLevelPrediction::runPlpAnalyses, predictionAnalysisList)
+  
+  temporalPredictionAnalysisListFile <- system.file("settings",
+                                            "temporalPredictionAnalysisList.json",
+                                            package = "ShortTermMortalityPrediction")
+  temporalPredictionAnalysisList <- PatientLevelPrediction::loadPredictionAnalysisList(temporalPredictionAnalysisListFile)
+  temporalPredictionAnalysisList$connectionDetails = connectionDetails
+  temporalPredictionAnalysisList$cdmDatabaseSchema = cdmDatabaseSchema
+  temporalPredictionAnalysisList$cdmDatabaseName = cdmDatabaseName
+  temporalPredictionAnalysisList$oracleTempSchema = oracleTempSchema
+  temporalPredictionAnalysisList$cohortDatabaseSchema = cohortDatabaseSchema
+  temporalPredictionAnalysisList$cohortTable = cohortTable
+  temporalPredictionAnalysisList$outcomeDatabaseSchema = cohortDatabaseSchema
+  temporalPredictionAnalysisList$outcomeTable = cohortTable
+  temporalPredictionAnalysisList$cdmVersion = cdmVersion
+  temporalPredictionAnalysisList$outputFolder = file.path(outputFolder,"temporal")
+  
+  temporalResult <- do.call(PatientLevelPrediction::runPlpAnalyses, temporalPredictionAnalysisList)
   }
   
   if (packageResults) {

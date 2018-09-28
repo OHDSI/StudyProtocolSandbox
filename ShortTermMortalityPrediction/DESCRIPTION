@@ -1,10 +1,10 @@
 Package: ShortTermMortalityPrediction
 Type: Package
-Title: A Package Skeleton for Patient Level Prediction Studies
+Title: A Package Skeleton for ShortTerm Mortality Studies
 Version: 0.0.1
-Author: Jenna Reps [aut, cre]
-Maintainer: Jenna M Reps <reps@ohdsi.org>
-Description: A skeleton package, to be used as a starting point when implementing patient-level prediction studies.
+Author: Seng Chan You [aut, cre]
+Maintainer: Seng Chan You <applegna@gmail.com>
+Description: A package to build machine learning model to predict short-term mortality
 Depends:
     DatabaseConnector
 Imports:

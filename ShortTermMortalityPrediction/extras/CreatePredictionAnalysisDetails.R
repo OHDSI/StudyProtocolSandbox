@@ -27,17 +27,17 @@
 
 createAnalysesDetails <- function(workFolder) {
    # 1) ADD MODELS you want
-  modelSettingList <- list(setAdaBoost(),
-                           setLassoLogisticRegression(),
-                           setGradientBoostingMachine(), 
-                           setDecisionTree(), 
-                           setNaiveBayes(),
-                           setRandomForest()
+  modelSettingList <- list(PatientLevelPrediction::setAdaBoost(),
+                           PatientLevelPrediction::setLassoLogisticRegression(),
+                           PatientLevelPrediction::setGradientBoostingMachine(), 
+                           PatientLevelPrediction::setDecisionTree(), 
+                           PatientLevelPrediction::setNaiveBayes(),
+                           PatientLevelPrediction::setRandomForest()
                            )
   
   # 2) ADD POPULATIONS you want
-  pop1 <- createStudyPopulationSettings(riskWindowStart = 1, 
-                                        riskWindowEnd = 30,
+  pop1 <- PatientLevelPrediction::createStudyPopulationSettings(riskWindowStart = 1, 
+                                        riskWindowEnd = 14,
                                         requireTimeAtRisk = T, 
                                         minTimeAtRisk = 1, 
                                         includeAllOutcomes = T)
@@ -59,10 +59,6 @@ createAnalysesDetails <- function(workFolder) {
                                                                    useConditionOccurrenceLongTerm = FALSE,
                                                                    useConditionOccurrenceMediumTerm = FALSE,
                                                                    useConditionOccurrenceShortTerm = FALSE,
-                                                                   useConditionOccurrenceInpatientAnyTimePrior = FALSE,
-                                                                   useConditionOccurrenceInpatientLongTerm = FALSE,
-                                                                   useConditionOccurrenceInpatientMediumTerm = FALSE,
-                                                                   useConditionOccurrenceInpatientShortTerm = FALSE,
                                                                    useConditionEraAnyTimePrior = FALSE, 
                                                                    useConditionEraLongTerm = FALSE,
                                                                    useConditionEraMediumTerm = FALSE, 
@@ -162,20 +158,20 @@ createAnalysesDetails <- function(workFolder) {
   
   
   # this will then generate and save the json specification for the analysis
-  savePredictionAnalysisList(workFolder=workFolder,
-                                         cohortIds,
-                                         outcomeIds,
-                                         cohortSettingCsv =file.path(workFolder, 'CohortsToCreate.csv'), 
-                                         covariateSettingList,
-                                         populationSettingList,
-                                         modelSettingList,
-                                         maxSampleSize= NULL,
-                                         washoutPeriod=0,
-                                         minCovariateFraction=0.001,
-                                         normalizeData=T,
-                                         testSplit='person',
-                                         testFraction=0.2,
-                                         splitSeed=1,
-                                         nfold=3,
-                                         verbosity="INFO")
+  PatientLevelPrediction::savePredictionAnalysisList(workFolder=workFolder,
+                                                     cohortIds,
+                                                     outcomeIds,
+                                                     cohortSettingCsv =file.path(workFolder, 'CohortsToCreate.csv'), 
+                                                     covariateSettingList,
+                                                     populationSettingList,
+                                                     modelSettingList,
+                                                     maxSampleSize= NULL,
+                                                     washoutPeriod=0,
+                                                     minCovariateFraction=0.001,
+                                                     normalizeData=T,
+                                                     testSplit='person',
+                                                     testFraction=0.2,
+                                                     splitSeed=1,
+                                                     nfold=3,
+                                                     verbosity="INFO")
   }
