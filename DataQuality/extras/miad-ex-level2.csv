@@ -1,0 +1,68 @@
+measure_id,stratum_1,stratum_2,stratum_3,value,measure_name,distribution,cost,distributed_field,analysis_name,stratum_1_name,stratum_2_name,stratum_3_name,stratum_4_name,stratum_5_name
+0,NA,1.6,2018-09-17,1,Source name,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,8507,NA,NA,0.45,Number of persons by gender,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,8532,NA,NA,0.55,Number of persons by gender,NA,NA,NA,NA,NA,NA,NA,NA,NA
+4,4218674,NA,NA,0.11,Number of persons by race,NA,NA,NA,NA,NA,NA,NA,NA,NA
+4,8527,NA,NA,0.74,Number of persons by race,NA,NA,NA,NA,NA,NA,NA,NA,NA
+99,NA,,,<10k,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Achilles:byAnalysis:RowCnt,0,NA,NA,1,NA,-1,0,,Source name,,,,,NA
+Achilles:byAnalysis:RowCnt,1,NA,NA,1,NA,0,0,,Number of persons,,,,,NA
+Achilles:byAnalysis:RowCnt,101,NA,NA,4,NA,0,0,,"Number of persons by age, with age at first observation period",age,,,,NA
+Achilles:byAnalysis:RowCnt,108,NA,NA,1,NA,0,0,,"Number of persons by length of observation period, in 30d increments",Observation period length 30d increments,,,,NA
+Achilles:byAnalysis:RowCnt,113,NA,NA,2,NA,0,0,,Number of persons by number of observation periods,number of observation periods,,,,NA
+Achilles:byAnalysis:RowCnt,119,NA,NA,1,NA,0,0,,Number of observation period records by period_type_concept_id,period_type_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,12,NA,NA,3,NA,0,0,,Number of persons by race and ethnicity,race_concept_id,ethnicity_concept_id,,,NA
+Achilles:byAnalysis:RowCnt,1201,NA,NA,1,NA,0,0,,Number of visits by place of service,place_of_service_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,1202,NA,NA,1,NA,0,0,,Number of care sites by place of service,place_of_service_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,1800,NA,NA,294,NA,0,0,,"Number of persons with at least one measurement occurrence, by measurement_concept_id",measurement_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,1801,NA,NA,331,NA,0,0,,"Number of measurement occurrence records, by measurement_concept_id",measurement_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,1805,NA,NA,342,NA,0,0,,"Number of measurement occurrence records, by measurement_concept_id by measurement_type_concept_id",measurement_concept_id,measurement_type_concept_id,,,NA
+Achilles:byAnalysis:RowCnt,1807,NA,NA,358,NA,0,0,,"Number of measurement occurrence records, by measurement_concept_id and unit_concept_id",measurement_concept_id,unit_concept_id,,,NA
+Achilles:byAnalysis:RowCnt,1810,NA,NA,1,NA,0,0,,Number of measurement records outside valid observation period,,,,,NA
+Achilles:byAnalysis:RowCnt,1814,NA,NA,1,NA,0,0,,"Number of measurement records with no value (numeric, string, or concept)",,,,,NA
+Achilles:byAnalysis:RowCnt,1818,NA,NA,41,NA,0,0,,"Number of measurement records below/within/above normal range, by measurement_concept_id and unit_concept_id",,,,,NA
+Achilles:byAnalysis:RowCnt,1820,NA,NA,218,NA,0,0,,Number of measurement records  by measurement start month,calendar month,,,,NA
+Achilles:byAnalysis:RowCnt,1821,NA,NA,1,NA,0,0,,Number of measurement records with no numeric value,,,,,NA
+Achilles:byAnalysis:RowCnt,1891,NA,NA,3456,NA,0,0,,Percentage of total persons that have at least x measurements,measurement_concept_id,measurement_person,,,NA
+Achilles:byAnalysis:RowCnt,1900,NA,NA,1346,NA,0,0,,"Source values mapped to concept_id 0 by table, by source_value",table_name,source_value,,,NA
+Achilles:byAnalysis:RowCnt,2,NA,NA,2,NA,0,0,,Number of persons by gender,gender_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,200,NA,NA,2,NA,0,0,,"Number of persons with at least one visit occurrence, by visit_concept_id",visit_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,2000,NA,NA,1,NA,0,0,,Number of patients with at least 1 Dx and 1 Rx,,,,,NA
+Achilles:byAnalysis:RowCnt,2001,NA,NA,1,NA,0,0,,Number of patients with at least 1 Dx and 1 Proc,,,,,NA
+Achilles:byAnalysis:RowCnt,2002,NA,NA,1,NA,0,0,,"Number of patients with at least 1 Meas, 1 Dx and 1 Rx",,,,,NA
+Achilles:byAnalysis:RowCnt,2003,NA,NA,1,NA,0,0,,Number of patients with at least 1 Visit,,,,,NA
+Achilles:byAnalysis:RowCnt,201,NA,NA,2,NA,0,0,,"Number of visit occurrence records, by visit_concept_id",visit_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,300,NA,NA,1,NA,0,0,,Number of providers,,,,,NA
+Achilles:byAnalysis:RowCnt,301,NA,NA,1,NA,0,0,,Number of providers by specialty concept_id,specialty_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,4,NA,NA,3,NA,0,0,,Number of persons by race,race_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,400,NA,NA,53,NA,0,0,,"Number of persons with at least one condition occurrence, by condition_concept_id",condition_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,401,NA,NA,63,NA,0,0,,"Number of condition occurrence records, by condition_concept_id",condition_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,405,NA,NA,25,NA,0,0,,"Number of condition occurrence records, by condition_concept_id by condition_type_concept_id",condition_concept_id,condition_type_concept_id,,,NA
+Achilles:byAnalysis:RowCnt,420,NA,NA,113,NA,0,0,,Number of condition occurrence records by condition occurrence start month,calendar month,,,,NA
+Achilles:byAnalysis:RowCnt,5,NA,NA,1,NA,0,0,,Number of persons by ethnicity,ethnicity_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,500,NA,NA,1,NA,0,0,,"Number of persons with death, by cause_concept_id",cause_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,501,NA,NA,1,NA,0,0,,"Number of records of death, by cause_concept_id",cause_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,505,NA,NA,2,NA,0,0,,"Number of death records, by death_type_concept_id",death_type_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,510,NA,NA,1,NA,0,0,,Number of death records outside valid observation period,,,,,NA
+Achilles:byAnalysis:RowCnt,600,NA,NA,40,NA,0,0,,"Number of persons with at least one procedure occurrence, by procedure_concept_id",procedure_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,601,NA,NA,50,NA,0,0,,"Number of procedure occurrence records, by procedure_concept_id",procedure_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,605,NA,NA,51,NA,0,0,,"Number of procedure occurrence records, by procedure_concept_id by procedure_type_concept_id",procedure_concept_id,procedure_type_concept_id,,,NA
+Achilles:byAnalysis:RowCnt,620,NA,NA,115,NA,0,0,,Number of procedure occurrence records  by procedure occurrence start month,calendar month,,,,NA
+Achilles:byAnalysis:RowCnt,691,NA,NA,97,NA,0,0,,Percentage of total persons that have at least x procedures,procedure_concept_id,procedure_person,,,NA
+Achilles:byAnalysis:RowCnt,700,NA,NA,149,NA,0,0,,"Number of persons with at least one drug exposure, by drug_concept_id",drug_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,701,NA,NA,267,NA,0,0,,"Number of drug exposure records, by drug_concept_id",drug_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,702,NA,NA,5,NA,0,0,,"Number of persons by drug exposure start month, by drug_concept_id",drug_concept_id,calendar month,,,NA
+Achilles:byAnalysis:RowCnt,704,NA,NA,5,NA,0,0,,"Number of persons with at least one drug exposure, by drug_concept_id by calendar year by gender by age decile",drug_concept_id,calendar year,gender_concept_id,age decile,NA
+Achilles:byAnalysis:RowCnt,705,NA,NA,271,NA,0,0,,"Number of drug exposure records, by drug_concept_id by drug_type_concept_id",drug_concept_id,drug_type_concept_id,,,NA
+Achilles:byAnalysis:RowCnt,710,NA,NA,1,NA,0,0,,Number of drug exposure records outside valid observation period,,,,,NA
+Achilles:byAnalysis:RowCnt,711,NA,NA,1,NA,0,0,,Number of drug exposure records with end date < start date,,,,,NA
+Achilles:byAnalysis:RowCnt,720,NA,NA,138,NA,0,0,,Number of drug exposure records  by drug exposure start month,calendar month,,,,NA
+Achilles:byAnalysis:RowCnt,791,NA,NA,461,NA,0,0,,Percentage of total persons that have at least x drug exposures,drug_concept_id,drug_person,,,NA
+Achilles:byAnalysis:RowCnt,800,NA,NA,14,NA,0,0,,"Number of persons with at least one observation occurrence, by observation_concept_id",observation_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,801,NA,NA,16,NA,0,0,,"Number of observation occurrence records, by observation_concept_id",observation_concept_id,,,,NA
+Achilles:byAnalysis:RowCnt,805,NA,NA,17,NA,0,0,,"Number of observation occurrence records, by observation_concept_id by observation_type_concept_id",observation_concept_id,observation_type_concept_id,,,NA
+Achilles:byAnalysis:RowCnt,807,NA,NA,16,NA,0,0,,"Number of observation occurrence records, by observation_concept_id and unit_concept_id",observation_concept_id,unit_concept_id,,,NA
+Achilles:byAnalysis:RowCnt,810,NA,NA,1,NA,0,0,,Number of observation records outside valid observation period,,,,,NA
+Achilles:byAnalysis:RowCnt,814,NA,NA,1,NA,0,0,,"Number of observation records with no value (numeric, string, or concept)",,,,,NA
+Achilles:byAnalysis:RowCnt,820,NA,NA,133,NA,0,0,,Number of observation records  by observation start month,calendar month,,,,NA
+Achilles:byAnalysis:RowCnt,891,NA,NA,157,NA,0,0,,Percentage of total persons that have at least x observations,observation_concept_id,observation_person,,,NA

@@ -1,0 +1,7 @@
+MEASURE_ID,STRATUM_1,STRATUM_2,STRATUM_3,VALUE,MEASURE_NAME
+0,mimiciii100,1.6,2018-09-17,1,Source name
+2,8507,NA,NA,0.45,Number of persons by gender
+2,8532,NA,NA,0.55,Number of persons by gender
+4,4218674,NA,NA,0.11,Number of persons by race
+4,8527,NA,NA,0.74,Number of persons by race
+99,,,,<10k,NA
