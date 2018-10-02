@@ -31,7 +31,8 @@ checkThemis <- function(connectionDetails,
   
   
   
-  ref<-read.csv(system.file("csv","S4-preferred_units-A.csv",package="DataQuality"),as.is=T)
+  #ref<-read.csv(system.file("csv","S4-preferred_units-A.csv",package="DataQuality"),as.is=T)
+  ref<-read.csv(system.file("csv","S7-preferred_units-ABC.csv",package="DataQuality"),as.is=T)
   
   #make sure one error concept is not considered
   ref<-dplyr::filter(ref,concept_id != 4046263)
