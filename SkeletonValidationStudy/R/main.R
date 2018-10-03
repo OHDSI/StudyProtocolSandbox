@@ -1,7 +1,7 @@
 execute <- function(connectionDetails,
                  databaseName,
-                 cdmDatabaseschema,
-                 cohortDatabaseschema,
+                 cdmDatabaseSchema,
+                 cohortDatabaseSchema,
                  cohortTable,
                  outputFolder,
                  createCohorts = T,
@@ -31,9 +31,9 @@ analysesLocation <- system.file("plp_models",
 val <- PatientLevelPrediction::evaluateMultiplePlp(analysesLocation = analysesLocation,
                            outputLocation = outputFolder,
                            connectionDetails = connectionDetails,
-                           validationSchemaTarget = cohortDatabaseschema,
-                           validationSchemaOutcome = cohortDatabaseschema,
-                           validationSchemaCdm = cdmDatabaseschema,
+                           validationSchemaTarget = cohortDatabaseSchema,
+                           validationSchemaOutcome = cohortDatabaseSchema,
+                           validationSchemaCdm = cdmDatabaseSchema,
                            databaseNames = databaseName,
                            validationTableTarget = cohortTable,
                            validationTableOutcome = cohortTable)
@@ -45,7 +45,7 @@ val <- PatientLevelPrediction::evaluateMultiplePlp(analysesLocation = analysesLo
 # results saved to outputFolder/databaseName
 if (packageResults) {
   OhdsiRTools::logInfo("Packaging results")
-  packageResults(outputFolder = file.path(outputFolder, datbaseName),
+  packageResults(outputFolder = file.path(outputFolder, databaseName),
                  minCellCount = minCellCount)
 }
 

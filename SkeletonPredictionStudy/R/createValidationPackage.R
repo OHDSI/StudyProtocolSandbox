@@ -6,13 +6,15 @@ createValidationPackage <- function(modelFolder,
   
   # json needs to contain the cohort details and packagename
   
-  hydra::hydrate(specifications = jsonSettings, 
+  Hydra::hydrate(specifications = jsonSettings, 
                  outputFolder=outputFolder)
   
   transportPlpModels(analysesDir = modelFolder,
                      minCellCount = minCellCount,
                      databaseName = databaseName,
                      outputDir = file.path(outputFolder,"inst/plp_models"))
+  
+  return(TRUE)
   
 }
 
@@ -27,15 +29,15 @@ transportPlpModels <- function(analysesDir,
   filesOut <- file.path(outputDir, files, 'plpResult')
   
   for(i in 1:length(filesIn)){
-    plpResult <- PatientLevelPrediction::loadPlpResult(fileIn[i])
-    transportPlp(plpResult,
-                 modelName= files[i], dataName=databaseName,
-                 outputFolder = fileOut[i],
-                 n=minCellCount,
-                 includeEvaluationStatistics=T,
-                 includeThresholdSummary=T, includeDemographicSummary=T,
-                 includeCalibrationSummary =T, includePredictionDistribution=T,
-                 includeCovariateSummary=T, save=T)
+    plpResult <- PatientLevelPrediction::loadPlpResult(filesIn[i])
+    PatientLevelPrediction::transportPlp(plpResult,
+                                         modelName= files[i], dataName=databaseName,
+                                         outputFolder = filesOut[i],
+                                         n=minCellCount,
+                                         includeEvaluationStatistics=T,
+                                         includeThresholdSummary=T, includeDemographicSummary=T,
+                                         includeCalibrationSummary =T, includePredictionDistribution=T,
+                                         includeCovariateSummary=T, save=T)
     
   }
 }

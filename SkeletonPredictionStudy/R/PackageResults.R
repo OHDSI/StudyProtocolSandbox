@@ -19,7 +19,7 @@
 #' @details
 #' This function packages the results.
 #'
-#' @param outputFolder        Name of local folder to place results; make sure to use forward slashes
+#' @param outputFolder        Name of folder containing the study analysis results 
 #'                            (/)
 #' @param minCellCount        The minimum number of subjects contributing to a count before it can be included in the results.
 #'

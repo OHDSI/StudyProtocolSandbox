@@ -43,7 +43,8 @@
 #' @param packageResults       Should results be packaged for later sharing?     
 #' @param minCellCount         The minimum number of subjects contributing to a count before it can be included 
 #'                             in packaged results.
-#' @param cdmVersion           The version of the common data model                             
+#' @param cdmVersion           The version of the common data model  
+#' @param verbosity                      The logging level                           
 #'
 #' @examples
 #' \dontrun{
@@ -80,7 +81,8 @@ execute <- function(connectionDetails,
                     createValidationPackage = TRUE,
                     packageResults = TRUE,
                     minCellCount= 5,
-                    cdmVersion = 5) {
+                    cdmVersion = 5,
+                    verbosity = 'INFO') {
   if (!file.exists(outputFolder))
     dir.create(outputFolder, recursive = TRUE)
 
@@ -110,6 +112,7 @@ execute <- function(connectionDetails,
   predictionAnalysisList$outcomeTable = cohortTable
   predictionAnalysisList$cdmVersion = cdmVersion
   predictionAnalysisList$outputFolder = outputFolder
+  predictionAnalysisList$verbosity = verbosity 
   
   result <- do.call(PatientLevelPrediction::runPlpAnalyses, predictionAnalysisList)
   }
@@ -122,17 +125,19 @@ execute <- function(connectionDetails,
   
   if(createValidationPackage){
     predictionAnalysisListFile <- system.file("settings",
-                "predictionAnalysisList.json",
-                package = "SkeletonPredictionStudy")
-    jsonSettings <-  tryCatch({rjson::fromJSON(file=predictionAnalysisListFile)},
-                                        error=function(cond) {
-                                          stop('Issue with json file...')
-                                        })
-    jsonSettings$skeletonType <- 'SimpleValidationStudy'
-    jsonSettings$packageName <- paste0(jsonSettings$packageName,'Validation')
+                                              "predictionAnalysisList.json",
+                                              package = "SkeletonPredictionStudy")
+    jsonSettings <-  tryCatch({Hydra::loadSpecifications(file=predictionAnalysisListFile)},
+                              error=function(cond) {
+                                stop('Issue with json file...')
+                              })
+    pn <- jsonlite::fromJSON(jsonSettings)$packageName
+    jsonSettings <- gsub(pn,paste0(pn,'Validation'),jsonSettings)
+    jsonSettings <- gsub('PatientLevelPredictionStudy','PatientLevelPredictionValidationStudy',jsonSettings)
+    
     
     createValidationPackage(modelFolder = outputFolder, 
-                            outputFolder = file.path(outputFolder, jsonSettings$packageName),
+                            outputFolder = file.path(outputFolder, paste0(pn,'Validation')),
                             minCellCount = minCellCount,
                             databaseName = cdmDatabaseName,
                             jsonSettings = jsonSettings )
