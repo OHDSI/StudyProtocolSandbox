@@ -1,2 +1,31 @@
-"measurement_concept_id","dataset_unit_concept_id","expected_unit_concept_id","count_value","expected_unit_concept_name","measurement_concept_name"
-3015183,8752,8753,44,"millimeter per hour","Erythrocyte sedimentation rate"
+measurement_concept_id,dataset_unit_concept_id,expected_unit_concept_id,count_value,expected_unit_concept_name,measurement_concept_name,dataset_unit_concept_name
+3016038,8753,9557,26,millimole per liter,Potassium [Moles/volume] in Urine,millimole per liter
+3016771,8645,8923,128,unit per liter,Amylase [Enzymatic activity/volume] in Serum or Plasma,unit per liter
+3004905,8645,8923,146,unit per liter,Lipase [Enzymatic activity/volume] in Serum or Plasma,unit per liter
+3008939,8848,8554,231,thousand per microliter,Band form neutrophils [#/volume] in Blood by Manual count,thousand per microliter
+3023103,8753,9557,2279,millimole per liter,Potassium serum/plasma,millimole per liter
+3018572,8753,9557,87,millimole per liter,Chloride [Moles/volume] in Blood,millimole per liter
+3028615,8848,8554,547,thousand per microliter,Eosinophils [#/volume] in Blood by Automated count,thousand per microliter
+3016293,8753,9557,2151,millimole per liter,Bicarbonate [Moles/volume] in Serum,millimole per liter
+3006923,8645,8923,609,unit per liter,Alanine aminotransferase serum/plasma,unit per liter
+3013721,8645,8923,603,unit per liter,Aspartate aminotransferase serum/plasma,unit per liter
+3035995,8645,8923,592,unit per liter,Alkaline phosphatase serum/plasma,unit per liter
+3035510,8751,8859,6,milligram per liter,Gentamicin [Mass/volume] in Serum or Plasma,milligram per liter
+3000285,8753,9557,107,millimole per liter,Sodium [Moles/volume] in Blood,millimole per liter
+3005456,8753,9557,256,millimole per liter,Potassium [Moles/volume] in Blood,millimole per liter
+3013429,8848,8554,547,thousand per microliter,Basophils [#/volume] in Blood by Automated count,thousand per microliter
+3006576,8753,9557,18,millimole per liter,Bicarbonate in blood,millimole per liter
+3021886,8636,8713,13,gram per liter,Globulin [Mass/volume] in Serum,gram per liter
+3026910,8645,8923,6,unit per liter,Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma,unit per liter
+3037278,8753,9557,2134,millimole per liter,Anion gap 4 in Serum or Plasma,millimole per liter
+3012501,8753,9557,1166,millimole per liter,Base excess of blood,millimole per liter
+3019550,8753,9557,2185,millimole per liter,Sodium serum/plasma,millimole per liter
+3033575,8848,8554,547,thousand per microliter,Monocytes [#/volume] in Blood by Automated count,thousand per microliter
+3009744,8713,8554,2008,gram per deciliter,Erythrocyte mean corpuscular hemoglobin concentration [Mass/volume] by Automated count,gram per deciliter
+3036277,8582,9546,170,centimeter,Body height,centimeter
+3007733,8753,9557,25,millimole per liter,Chloride [Moles/volume] in Urine,millimole per liter
+3003181,8753,9557,92,millimole per liter,Sodium [Moles/volume] in Urine,millimole per liter
+3009201,9040,8860,7,milli-international unit per liter,Thyrotropin [Units/volume] in Serum or Plasma,milli-international unit per liter
+3009201,9040,9093,66,milli-international unit per liter,Thyrotropin [Units/volume] in Serum or Plasma,milli-international unit per liter
+3014576,8753,9557,2160,millimole per liter,Chloride serum/plasma,millimole per liter
+3004327,8848,8554,547,thousand per microliter,Lymphocytes [#/volume] in Blood by Automated count,thousand per microliter
