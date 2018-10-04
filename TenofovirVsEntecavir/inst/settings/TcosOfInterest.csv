@@ -1,0 +1,2 @@
+targetId,targetName,comparatorId,comparatorName,outcomeIds,OutcomeNames,excludedCovariateConceptIds
+627,Tenofovir,628,Entecavir,551;631;630,Fracture;HCC;LiverCirrhosis,1710281;19011093;1711246
