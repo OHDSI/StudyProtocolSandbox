@@ -43,7 +43,10 @@ checkThemis <- function(connectionDetails,
   #str(a)
   #str(ref)
   #on redshift, some names are "" and dplyr complains
-  a<-a[,c(1,2,3,7)]
+  vars<-c('analysis_id','measurement_concept_id','unit_concept_id','count_value')
+  a<-a[vars]
+  
+  
   #a<-a %>% select(analysis_id,measurement_concept_id,unit_concept_id,count_value)
   comp<-dplyr::inner_join(a,ref,by=c('measurement_concept_id' = 'concept_id'))
   comp2<-dplyr::filter(comp,unit_concept_id.x!=unit_concept_id.y)
