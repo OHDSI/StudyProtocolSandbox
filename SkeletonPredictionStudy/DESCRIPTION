@@ -17,12 +17,16 @@ Imports:
     ffbase,
     OhdsiSharing,
     zip,
-	  OhdsiRTools (>= 1.5.0)
+	  OhdsiRTools (>= 1.5.0),
+	  magrittr,
+	  dplyr,
+	  officer
 Suggests:
     knitr,
     rmarkdown,
     DT,
-    shiny
+    shiny,
+    Hydra
 License: Apache License 2.0
 VignetteBuilder: knitr
 LazyData: TRUE
