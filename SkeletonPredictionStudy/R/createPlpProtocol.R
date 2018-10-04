@@ -14,6 +14,8 @@ createPlpProtocol <- function(outputLocation = getwd()){
   style_citation <- officer::shortcuts$fp_italic(shading.color = "grey")
   style_table_title <- officer::shortcuts$fp_bold(font.size = 14, italic = TRUE)
   
+  style_hidden_text <- officer::shortcuts$fp_italic(color = "#FFFFFF")
+  
   #============== VARIABLES ====================================================
   json <- tryCatch({OhdsiRTools::loadSettingsFromJson(file=predictionAnalysisListFile)},
                    error=function(cond) {
@@ -69,7 +71,7 @@ createPlpProtocol <- function(outputLocation = getwd()){
   completeAnalysisList <- merge(m3,popSet)
   completeAnalysisList$ID <- seq.int(nrow(completeAnalysisList))
   
-  concepts <- PatientLevelPrediction:::formatConcepts(json)
+  concepts <- formatConcepts(json)
   #-----------------------------------------------------------------------------
   
   #============== CITATIONS =====================================================
@@ -398,8 +400,7 @@ createPlpProtocol <- function(outputLocation = getwd()){
   
   if(json$runPlpArgs$minCovariateFraction == 0){
     covStatement <- covStatement1 
-  }
-  else {
+  }else {
     covStatement <- paste0(covStatement1,covStatement2)
   }
   
@@ -531,10 +532,22 @@ createPlpProtocol <- function(outputLocation = getwd()){
     officer::body_add_par("Tables & Figures", style = "heading 1") %>%
     #```````````````````````````````````````````````````````````````````````````
     officer::body_add_par("Incidence Rate of Target & Outcome", style = "heading 2") %>%
+    officer::body_add_fpar(
+      officer::fpar(
+        officer::ftext("<< add incidence here. >>", prop = style_hidden_text)
+      )) %>%
     officer::body_add_par("") %>%
     #```````````````````````````````````````````````````````````````````````````
     officer::body_add_par("Characterization", style = "heading 2") %>%
+    officer::body_add_fpar(
+      officer::fpar(
+        officer::ftext("<< add characterization table here. >>", prop = style_hidden_text)
+      )) %>%
     officer::body_add_par("") %>%
+    officer::body_add_fpar(
+      officer::fpar(
+        officer::ftext("<< add results here. >>", prop = style_hidden_text)
+      )) %>%
     officer::body_add_break() 
   #----------------------------------------------------------------------------- 
   
@@ -589,6 +602,12 @@ createPlpProtocol <- function(outputLocation = getwd()){
     officer::body_add_par("") %>%
     officer::body_add_table(completeAnalysisList[,c(7,1,2,3,4,5,6)], header = TRUE, style = "Table Professional") %>% 
     officer::body_add_break() 
+  
+  
+  doc <- doc %>% officer::body_add_fpar(
+    officer::fpar(
+      officer::ftext("<< add models here >>", prop = style_hidden_text)
+    )) %>% officer::body_add_par("")
   #-----------------------------------------------------------------------------
   
   #============ REFERNCES ======================================================
@@ -652,7 +671,7 @@ createMultiPlpReport <- function(analysisLocation,
   # Find the sections to add the results to (results + appendix)
   
   doc  %>% 
-    officer::cursor_reach(keyword = "Add characterization of patients .>>") %>% officer::cursor_forward() %>%
+    officer::cursor_reach(keyword = "<< add results here. >>") %>% officer::cursor_forward() %>%
     officer::body_add_par("Results", style = heading1)
   
   for(model in modelsExtraction){
@@ -663,6 +682,7 @@ createMultiPlpReport <- function(analysisLocation,
                                      " predict ", model$O, " during ", model$tar,
                                      " developed using database ", model$D),
                               style = "Normal") %>%
+        officer::body_add_par("") %>%
         officer::body_add_par("Internal Performance", style = heading3) %>%
         officer::body_add_table(model$internalPerformance, style = tableStyle) %>%
         officer::body_add_gg(model$scatterPlot) %>%
@@ -677,7 +697,8 @@ createMultiPlpReport <- function(analysisLocation,
     }
     
     if(!is.null(model$externalPerformance)){
-      doc  %>%  officer::body_add_par("External Performance", style = heading3) %>%
+      doc  %>%  officer::body_add_par("") %>%
+        officer::body_add_par("External Performance", style = heading3) %>%
         officer::body_add_table(model$externalPerformance, style = tableStyle) %>%
         rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, model$externalRocPlots)) %>%
         rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, model$externalCalPlots))
@@ -692,12 +713,12 @@ createMultiPlpReport <- function(analysisLocation,
   if(includeModels){
     # move the cursor at the end of the document
     doc  %>% 
-      officer::cursor_reach(keyword = "Identifier / Organization: ") %>%  officer::cursor_forward() %>%
+      officer::cursor_reach(keyword = "<< add models here >>") %>%  officer::cursor_forward() %>%
       officer::body_add_par("Developed Models", style = heading2)
     
     for(model in modelsExtraction){
       if(!is.null(model$modelTable)){
-        doc  %>% officer::body_add_par(paste('Analysis',model$analysisId), style = heading2) %>%
+        doc  %>% officer::body_add_par(paste('Analysis',model$analysisId), style = heading3) %>%
           officer::body_add_table(model$modelTable, style = tableStyle) %>%
           officer::body_add_break() 
       }
@@ -705,6 +726,9 @@ createMultiPlpReport <- function(analysisLocation,
   }
   
   # print the document to the doc directory:
+  if(!dir.exists(file.path(analysisLocation,'doc'))){
+    dir.create(file.path(analysisLocation,'doc'), recursive = T)
+  }
   print(doc, target = file.path(analysisLocation,'doc','plpMultiReport.docx'))
   return(TRUE)
 }
