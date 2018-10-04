@@ -23,7 +23,7 @@ Instructions
   PatientLevelPrediction::checkPlpInstallation()
   
   # install the network package
-  devtools::install_github(OHDSI/SkeletonPredictionStudy)
+  devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonPredictionStudy"")
 ```
 
 - Step 8: Get users to execute the study by running the code in (extras/CodeToRun.R) but replace 'SkeletonPredictionStudy' with your study name:
@@ -64,13 +64,15 @@ execute(connectionDetails = connectionDetails,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
+        createProtocol = T,
         createCohorts = T,
         runAnalyses = T,
+        createResultsDoc = T,
         packageResults = T,
         createValidationPackage = F,
         minCellCount= 5)
 ```
-- [Still Under Development] Step 9: You can then easily transport these results into a network study package by running:
+- Step 9: You can then easily transport these results into a network study package by running:
   ```r
   
   execute(connectionDetails = connectionDetails,
@@ -78,8 +80,10 @@ execute(connectionDetails = connectionDetails,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
+        createProtocol = F,
         createCohorts = F,
         runAnalyses = F,
+        createResultsDoc = F,
         packageResults = F,
         createValidationPackage = T,
         minCellCount= 5)

@@ -1,6 +1,10 @@
 #' @export
-createPlpProtocol <- function(predictionAnalysisListFile = file.path(getwd(),'inst/settings/StudySpecification.json'),
-                              outputLocation = file.path(getwd(),'plp_protocol.docx')){
+createPlpProtocol <- function(outputLocation = getwd()){
+  
+  predictionAnalysisListFile <- system.file("settings",
+                                            "predictionAnalysisList.json",
+                                            package = "SkeletonPredictionStudy")
+  
   
   #============== STYLES =======================================================
   style_title <- officer::shortcuts$fp_bold(font.size = 28)
@@ -597,5 +601,188 @@ createPlpProtocol <- function(predictionAnalysisListFile = file.path(getwd(),'in
       ))
   #----------------------------------------------------------------------------- 
   
-  print(doc, target = file.path(outputLocation))
+  if(!dir.exists(outputLocation)){
+    dir.create(outputLocation, recursive = T)
+  }
+  print(doc, target = file.path(outputLocation,'protocol.docx'))
+}
+
+
+#' createMultiPlpReport
+#'
+#' @description
+#' Creates a word document report of the prediction
+#' @details
+#' The function creates a word document containing the analysis details, data summary and prediction model results.
+#' @param analysisLocation    The location of the multiple patient-level prediction study
+#' @param protocolLocation    The location of the auto generated patient-level prediction protocol
+#' @param includeModels       Whether to include the models into the results document
+#'
+#' @return
+#' A work document containing the results of the study is saved into the doc directory in the analysisLocation
+#' @export
+createMultiPlpReport <- function(analysisLocation,
+                                 protocolLocation = file.path(analysisLocation,'doc','protocol.docx'),
+                                 includeModels = F){
+  
+  if(!dir.exists(analysisLocation)){
+    stop('Directory input for analysisLocation does not exists')
+  }
+  
+  # this fucntion creates a lsit for analysis with 
+  #    internal validation table, internal validation plots
+  #    external validation table, external validation plots
+  modelsExtraction <- getModelInfo(analysisLocation) 
+  
+  # add checks for suitable files expected - protocol/summary
+  if(!file.exists(protocolLocation)){
+    stop('Protocol location invalid')
+  }
+  
+  #================ Check for protocol =========================
+  # if exists load it and add results section - else return error
+  doc = tryCatch(officer::read_docx(path=protocolLocation),
+                 error = function(e) stop(e))
+  
+  heading1 <- 'heading 1'
+  heading2 <- 'heading 2'
+  heading3 <- 'heading 3'
+  tableStyle <- "Table Professional"
+  
+  # Find the sections to add the results to (results + appendix)
+  
+  doc  %>% 
+    officer::cursor_reach(keyword = "Add characterization of patients .>>") %>% officer::cursor_forward() %>%
+    officer::body_add_par("Results", style = heading1)
+  
+  for(model in modelsExtraction){
+    if(!is.null(model$internalPerformance)){
+      doc  %>%  officer::body_add_par(paste('Analysis',model$analysisId), style = heading2) %>%
+        officer::body_add_par('Description', style = heading3) %>%
+        officer::body_add_par(paste0("The predicton model within ", model$T, 
+                                     " predict ", model$O, " during ", model$tar,
+                                     " developed using database ", model$D),
+                              style = "Normal") %>%
+        officer::body_add_par("Internal Performance", style = heading3) %>%
+        officer::body_add_table(model$internalPerformance, style = tableStyle) %>%
+        officer::body_add_gg(model$scatterPlot) %>%
+        rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, c(model$internalPlots, list(layout_matrix=rbind(c(1,2),
+                                                                                                                 c(3,4),
+                                                                                                                 c(5,6),
+                                                                                                                 c(7,7),
+                                                                                                                 c(7,7),
+                                                                                                                 c(8,8),
+                                                                                                                 c(9,9)
+        )))))
+    }
+    
+    if(!is.null(model$externalPerformance)){
+      doc  %>%  officer::body_add_par("External Performance", style = heading3) %>%
+        officer::body_add_table(model$externalPerformance, style = tableStyle) %>%
+        rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, model$externalRocPlots)) %>%
+        rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, model$externalCalPlots))
+    }
+    
+    doc  %>%  officer::body_add_break() 
+    
+  }
+  
+  
+  
+  if(includeModels){
+    # move the cursor at the end of the document
+    doc  %>% 
+      officer::cursor_reach(keyword = "Identifier / Organization: ") %>%  officer::cursor_forward() %>%
+      officer::body_add_par("Developed Models", style = heading2)
+    
+    for(model in modelsExtraction){
+      if(!is.null(model$modelTable)){
+        doc  %>% officer::body_add_par(paste('Analysis',model$analysisId), style = heading2) %>%
+          officer::body_add_table(model$modelTable, style = tableStyle) %>%
+          officer::body_add_break() 
+      }
+    }
+  }
+  
+  # print the document to the doc directory:
+  print(doc, target = file.path(analysisLocation,'doc','plpMultiReport.docx'))
+  return(TRUE)
+}
+
+getModelInfo <- function(analysisLocation){
+  settings <- read.csv(file.path(analysisLocation, "settings.csv"))
+  
+  modelSettings <- lapply((1:nrow(settings))[order(settings$analysisId)], function(i) {getModelFromSettings(settings[i,])})
+  return(modelSettings)
+}
+
+getModelFromSettings <- function(x){
+  result <- list(analysisId = x$analysisId, T = x$cohortName, 
+                 D = x$devDatabase, O = x$outcomeName, 
+                 tar = paste0(x$riskWindowStart, ' days after ', 
+                              ifelse(x$addExposureDaysToStart==1, 'cohort end','cohort start'),
+                              ' to ', x$riskWindowEnd, ' days after ',
+                              ifelse(x$addExposureDaysToEnd==1, 'cohort end','cohort start')),
+                 model = x$modelSettingName)
+  
+  plpResult <- PatientLevelPrediction::loadPlpResult(file.path(as.character(x$plpResultFolder),'plpResult'))
+  modelTable <- plpResult$model$varImp
+  result$modelTable <- modelTable[modelTable$covariateValue!=0,]
+  
+  if(!is.null(plpResult$performanceEvaluation)){
+    internalPerformance <- plpResult$performanceEvaluation$evaluationStatistics
+    internalPerformance <- as.data.frame(internalPerformance)
+    internalPerformance$Value <- format(as.double(as.character(internalPerformance$Value)), digits = 2, nsmall = 0, scientific = F)
+    class(internalPerformance$Value) <- 'double'
+    result$internalPerformance <- reshape2::dcast(internalPerformance, Metric ~ Eval, value.var = 'Value', fun.aggregate = mean)
+    
+    result$internalPlots <- list(
+      PatientLevelPrediction::plotSparseRoc(plpResult$performanceEvaluation),
+      PatientLevelPrediction::plotPrecisionRecall(plpResult$performanceEvaluation),
+      PatientLevelPrediction::plotF1Measure(plpResult$performanceEvaluation),
+      PatientLevelPrediction::plotPredictionDistribution(plpResult$performanceEvaluation),
+      
+      PatientLevelPrediction::plotSparseCalibration( plpResult$performanceEvaluation),
+      PatientLevelPrediction::plotSparseCalibration2( plpResult$performanceEvaluation),
+      
+      PatientLevelPrediction::plotDemographicSummary( plpResult$performanceEvaluation),
+      PatientLevelPrediction::plotPreferencePDF(plpResult$performanceEvaluation),
+      PatientLevelPrediction::plotPredictedPDF(plpResult$performanceEvaluation)
+      
+    )} else{
+      result$internalPlots <- NULL  
+    }
+  
+  result$scatterPlot <- PatientLevelPrediction::plotVariableScatterplot(plpResult$covariateSummary)
+  
+  # get external results if they exist
+  externalPerformance <- c()  
+  ind <- grep(paste0('Analysis_', x$analysisId,'/'), 
+              dir(file.path(analysisLocation,'validation'), recursive = T))
+  if(length(ind)>0){
+    vals <- dir(file.path(analysisLocation,'validation'), recursive = T)[ind]
+    externalRocPlots <- list() 
+    externalCalPlots <- list() 
+    length(externalRocPlots) <- length(vals)
+    length(externalCalPlots) <- length(vals)
+    for(k in 1:length(vals)){
+      val <- vals[k]
+      nameDat <- strsplit(val, '\\/')[[1]][1]
+      val <- readRDS(file.path(analysisLocation,'validation',val))
+      sum <- as.data.frame(val[[1]]$performanceEvaluation$evaluationStatistics)
+      sum$database <- nameDat
+      externalPerformance <- rbind(externalPerformance, sum)
+      externalCalPlots[[k]] <- PatientLevelPrediction::plotSparseCalibration2(val[[1]]$performanceEvaluation, type='validation') + ggplot2::labs(title=paste(nameDat))
+      externalRocPlots[[k]] <- PatientLevelPrediction::plotSparseRoc(val[[1]]$performanceEvaluation, type='validation')+ ggplot2::labs(title=paste(nameDat))
+    }
+    externalPerformance <- as.data.frame(externalPerformance)
+    externalPerformance$Value <- format(as.double(as.character(externalPerformance$Value)), digits = 2, nsmall = 0, scientific = F)
+    class(externalPerformance$Value) <- 'double'
+    result$externalPerformance <- reshape2::dcast(externalPerformance, Metric ~ database, value.var = 'Value', fun.aggregate = mean)
+    result$externalCalPlots <- externalCalPlots
+    result$externalRocPlots <- externalRocPlots
+  }
+  
+  
+  return(result)
 }
