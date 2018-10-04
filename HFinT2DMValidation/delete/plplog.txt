@@ -1,0 +1,50 @@
+2018-09-25 05:16:06	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in NA
+2018-09-25 05:16:06	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in 
+2018-09-25 05:47:09	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in NA
+2018-09-25 05:47:09	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in 
+2018-09-25 05:47:09	[Main thread]	FATAL	PatientLevelPrediction	evaluateMultiplePlp	Error in if (dir.exists(file.path(modelSettings[i], "plpResult"))) { :    argument is of length zero 
+2018-09-25 05:52:19	[Main thread]	FATAL			Error in clearLoggerType("Multple Evaluate PLP Log") :    could not find function "clearLoggerType" 
+2018-09-25 05:52:24	[Main thread]	FATAL			Error in dir.exists(outputLocation) : object 'outputLocation' not found 
+2018-09-25 05:53:22	[Main thread]	FATAL			Error: unexpected ',' in "databaseNames = databaseName," 
+2018-09-25 05:53:42	[Main thread]	FATAL			Error in OhdsiRTools::createLogger(name = "Multple Evaluate PLP Log",  :    object 'verbosity' not found 
+2018-09-25 05:54:10	[Main thread]	FATAL			Error: unexpected symbol in: "if(missing(databaseNames)){     stop('Need" 
+2018-09-25 05:54:10	[Main thread]	FATAL			Error: unexpected '}' in "  }" 
+2018-09-25 06:00:20	[Main thread]	FATAL			Error in transportPlpModels(analysesDir = "S:/rwilliams/HFinT2DM/final/OPTUM_panther/models/gbmModels/6681",  :    could not find function "transportPlpModels" 
+2018-09-25 06:00:29	[Main thread]	FATAL	PatientLevelPrediction	loadPlpResult	Error in PatientLevelPrediction::loadPlpResult(filesIn[i]) :    Cannot find folder NA 
+2018-09-25 06:01:59	[Main thread]	FATAL			Error in file.path(outputDir, files, "plpResult") :    object 'outputDir' not found 
+2018-09-25 06:02:32	[Main thread]	FATAL	PatientLevelPrediction	loadPlpResult	Error in PatientLevelPrediction::loadPlpResult(filesIn[i]) :    Cannot find folder S:/rwilliams/HFinT2DM/final/OPTUM_panther/models/gbmModels/6681/analysisRef.rds/plpResult 
+2018-10-03 09:56:23	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in NA
+2018-10-03 09:56:23	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in 
+2018-10-03 09:56:23	[Main thread]	FATAL	PatientLevelPrediction	evaluateMultiplePlp	Error in if (dir.exists(file.path(modelSettings[i], "plpResult"))) { :    argument is of length zero 
+2018-10-03 09:58:13	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 10:09:34	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 10:09:37	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 10:09:37	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:09:37	[Main thread]	FATAL	PatientLevelPrediction	clearLoggerType	Error in if (is.integer(x) || as.numeric(x)) { :    missing value where TRUE/FALSE needed 
+2018-10-03 10:14:13	[Main thread]	FATAL			Error in if (createCohorts) { : argument is not interpretable as logical 
+2018-10-03 10:14:25	[Main thread]	INFO			Creating Cohorts
+2018-10-03 10:21:27	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 10:26:52	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:26:52	[Main thread]	FATAL	PatientLevelPrediction	clearLoggerType	Error in if (is.integer(x) || as.numeric(x)) { :    missing value where TRUE/FALSE needed 
+2018-10-03 10:31:42	[Main thread]	FATAL	PatientLevelPrediction	loadPlpResult	Error in file.exists(dirPath) :    argument "dirPath" is missing, with no default 
+2018-10-03 10:31:50	[Main thread]	FATAL			Error: 'loadPlpResultplp_location' is not an exported object from 'namespace:PatientLevelPrediction' 
+2018-10-03 10:31:58	[Main thread]	FATAL	PatientLevelPrediction	loadPlpResult	Error in PatientLevelPrediction::loadPlpResult(plp_location) :    Cannot find folder C:/Users/prijnbee/Documents/R/win-library/3.4/HFinT2DMValidation/plp_models/plpResult 
+2018-10-03 10:38:16	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:43:46	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:51:11	[Main thread]	INFO			Creating Cohorts
+2018-10-03 10:57:52	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 11:03:05	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 11:11:49	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 11:11:51	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 11:11:51	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:20:32	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 15:28:10	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 15:28:11	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 15:28:11	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 15:28:24	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:49:53	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:52:32	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 16:02:41	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 16:02:48	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
