@@ -1,6 +1,6 @@
 # Copyright 2018 Observational Health Data Sciences and Informatics
 #
-# This file is part of SkeletonValidationStudy
+# This file is part of HFinT2DMValidation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 # Format and check code ---------------------------------------------------
 OhdsiRTools::formatRFolder()
-OhdsiRTools::checkUsagePackage("SkeletonValidationStudy")
+OhdsiRTools::checkUsagePackage("HFinT2DMValidation")
 OhdsiRTools::updateCopyrightYearFolder()
 
 # Create manual -----------------------------------------------------------
-shell("rm extras/SkeletonValidationStudy.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/SkeletonValidationStudy.pdf")
+shell("rm extras/HFinT2DMValidation")
+shell("R CMD Rd2pdf ./ --output=extras/HFinT2DMValidation")
 
 # Create vignette ---------------------------------------------------------
 rmarkdown::render("vignettes/UsingSkeletonPackage.Rmd",
@@ -36,7 +36,7 @@ OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv"
                                                 insertTableSql = TRUE,
                                                 insertCohortCreationR = TRUE,
                                                 generateStats = FALSE,
-                                                packageName = "SkeletonValidationStudy")
+                                                packageName = "HFinT2DMValidation")
 
 # transport the plp models -------------------------------------------------
 transportPlpModels(analysesDir= "modelFolder",
@@ -44,4 +44,4 @@ transportPlpModels(analysesDir= "modelFolder",
                    databaseName = 'sharable name of development data')
 
 # Store environment in which the study was executed -----------------------
-OhdsiRTools::insertEnvironmentSnapshotInPackage("SkeletonValidationStudy")
+OhdsiRTools::insertEnvironmentSnapshotInPackage("HFinT2DMValidation")
