@@ -73,4 +73,3 @@ packageResults <- function(outputFolder,
   writeLines(paste("\nStudy results are compressed and ready for sharing at:", zipName))
   return(zipName)
 }
-

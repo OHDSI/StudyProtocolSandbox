@@ -28,21 +28,24 @@ Getting Started
   1. In R, use the following commands to run the study:
 
   ```r
-install.packages("devtools")
-devtools::install_github("OHDSI/SkeletonValidationStudy")
+  # If not building locally uncomment and run:
+#install.packages("devtools")
+#devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonValidationStudy")
+
+library(SkeletonValidationStudy)
 package <- F
 
 # add details of your database setting:
 databaseName <- 'add a shareable name for the database used to develop the models'
 
 # add the cdm database schema with the data
-cdmDatabaseSchema <- 'cdm_yourdatabase.dbo'
+cdmDatabaseSchema <- 'your cdm database schema'
 
 # add the work database schema this requires read/write privileges 
-cohortDatabaseSchema <- 'yourworkdatabase.dbo'
+cohortDatabaseSchema <- 'your work database schema'
 
 # the name of the table that will be created in cohortDatabaseSchema to hold the cohorts
-cohortTable <- 'studyCohortTable'
+cohortTable <- 'SkeletonValidationStudyCohortTable'
 
 # the location to save the prediction models results to:
 outputFolder <- getwd()
@@ -61,7 +64,7 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 port = port)
 
 # Now run the study
-execute(connectionDetails = connectionDetails,
+SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
                  databaseName = databaseName,
                  cdmDatabaseSchema = cdmDatabaseSchema,
                  cohortDatabaseSchema = cohortDatabaseSchema,
@@ -88,4 +91,3 @@ License
 Development
 ===========
   PredictionNetworkStudySkeleton is being developed in R Studio.
-
