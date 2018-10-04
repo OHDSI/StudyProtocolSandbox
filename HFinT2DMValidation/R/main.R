@@ -1,7 +1,7 @@
 execute <- function(connectionDetails,
                  databaseName,
-                 cdmDatabaseschema,
-                 cohortDatabaseschema,
+                 cdmDatabaseSchema,
+                 cohortDatabaseSchema,
                  cohortTable,
                  outputFolder,
                  createCohorts = T,
@@ -17,23 +17,25 @@ OhdsiRTools::addDefaultFileLogger(file.path(outputFolder, "log.txt"))
 if(createCohorts){
   OhdsiRTools::logInfo("Creating Cohorts")
   createCohorts(connectionDetails,
-                       cdmDatabaseschema=cdmDatabaseschema,
-                       cohortDatabaseschema=cohortDatabaseschema,
+                       cdmDatabaseSchema=cdmDatabaseSchema,
+                       cohortDatabaseSchema=cohortDatabaseSchema,
                        cohortTable=cohortTable,
                        outputFolder = outputFolder)
 }
 
-if(runValidations){
+if(runValidation){
   OhdsiRTools::logInfo("Validating Models")
 # for each model externally validate
 analysesLocation <- system.file("plp_models",
                                package = "HFinT2DMValidation")
+OhdsiRTools::logInfo("analyses located")
+
 val <- PatientLevelPrediction::evaluateMultiplePlp(analysesLocation = analysesLocation,
                            outputLocation = outputFolder,
                            connectionDetails = connectionDetails,
-                           validationSchemaTarget = cohortDatabaseschema,
-                           validationSchemaOutcome = cohortDatabaseschema,
-                           validationSchemaCdm = cdmDatabaseschema,
+                           validationSchemaTarget = cohortDatabaseSchema,
+                           validationSchemaOutcome = cohortDatabaseSchema,
+                           validationSchemaCdm = cdmDatabaseSchema,
                            databaseNames = databaseName,
                            validationTableTarget = cohortTable,
                            validationTableOutcome = cohortTable)

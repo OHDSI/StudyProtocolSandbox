@@ -1,11 +1,11 @@
-Package: SkeletonValidationStudy
+Package: HFinT2DMValidation
 Type: Package
 Title: Add the title of the package here
 Version: 0.0.1
 Date: 2018-04-01
-Author: your name [aut]
-Maintainer: your name <youremail@address>
-Description: A description of the study
+Author: Ross D. Williams [aut]
+Maintainer: Ross D. Williams <r.williams@erasmusmc.nl>
+Description: Validation of plp prediciton models of Heart Failure in Type 2 Diabetes
 License: Apache License 2.0
 Depends:
   R (>= 3.3.0), 
