@@ -7,7 +7,7 @@
 packageResults(outputFolder, minCellCount = 5)
 }
 \arguments{
-\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
+\item{outputFolder}{Name of folder containing the study analysis results 
 (/)}
 
 \item{minCellCount}{The minimum number of subjects contributing to a count before it can be included in the results.}

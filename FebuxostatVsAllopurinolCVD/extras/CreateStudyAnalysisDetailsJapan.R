@@ -135,11 +135,11 @@ createAnalysesDetails <- function(workFolder) {
                                                                    covariateSettings = covarSettings)
   
   createStudyPopArgs1 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
-                                                                      minDaysAtRisk = 1,
-                                                                      riskWindowStart = 1,
-                                                                      addExposureDaysToStart = FALSE,
-                                                                      riskWindowEnd = 30,
-                                                                      addExposureDaysToEnd = TRUE)
+                                                                       minDaysAtRisk = 1,
+                                                                       riskWindowStart = 1,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 30,
+                                                                       addExposureDaysToEnd = TRUE)
   
   createStudyPopArgs2 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
                                                                        minDaysAtRisk = 1,
@@ -148,14 +148,35 @@ createAnalysesDetails <- function(workFolder) {
                                                                        riskWindowEnd = 9999,
                                                                        addExposureDaysToEnd = FALSE)
   
+  createStudyPopArgs3 <- CohortMethod::createCreateStudyPopulationArgs(removeSubjectsWithPriorOutcome = TRUE,
+                                                                       minDaysAtRisk = 1095,
+                                                                       riskWindowStart = 1,
+                                                                       addExposureDaysToStart = FALSE,
+                                                                       riskWindowEnd = 30,
+                                                                       addExposureDaysToEnd = TRUE)
+  
   fitOutcomeModelArgs1 <- CohortMethod::createFitOutcomeModelArgs(useCovariates = FALSE,
                                                                   modelType = "cox",
                                                                   stratified = FALSE)
   
   cmAnalysis1 <- CohortMethod::createCmAnalysis(analysisId = 1,
-                                                description = "No matching",
+                                                description = "No matching On Treatment",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
                                                 createStudyPopArgs = createStudyPopArgs1,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
+  
+  cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
+                                                description = "No matching ITT",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs2,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs1)
+  
+  cmAnalysis3 <- CohortMethod::createCmAnalysis(analysisId = 3,
+                                                description = "No matching with minDaysAtRisk more than 3yr",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs3,
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs1)
   
@@ -171,8 +192,8 @@ createAnalysesDetails <- function(workFolder) {
                                                                   modelType = "cox",
                                                                   stratified = TRUE)
   
-  cmAnalysis2 <- CohortMethod::createCmAnalysis(analysisId = 2,
-                                                description = "One-on-one matching",
+  cmAnalysis4 <- CohortMethod::createCmAnalysis(analysisId = 4,
+                                                description = "One-on-one matching on Treatment",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
                                                 createStudyPopArgs = createStudyPopArgs1,
                                                 createPs = TRUE,
@@ -182,34 +203,8 @@ createAnalysesDetails <- function(workFolder) {
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
   
-  matchOnPsArgs2 <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
-  
-  cmAnalysis3 <- CohortMethod::createCmAnalysis(analysisId = 3,
-                                                description = "Variable ratio matching",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                matchOnPs = TRUE,
-                                                matchOnPsArgs = matchOnPsArgs2,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
-  
-  stratifyByPsArgs <- CohortMethod::createStratifyByPsArgs(numberOfStrata = 5)
-  
-  cmAnalysis4 <- CohortMethod::createCmAnalysis(analysisId = 4,
-                                                description = "Stratification",
-                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
-                                                createStudyPopArgs = createStudyPopArgs1,
-                                                createPs = TRUE,
-                                                createPsArgs = createPsArgs,
-                                                stratifyByPs = TRUE,
-                                                stratifyByPsArgs = stratifyByPsArgs,
-                                                fitOutcomeModel = TRUE,
-                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
-  
   cmAnalysis5 <- CohortMethod::createCmAnalysis(analysisId = 5,
-                                                description = "One-on-one matching until observation end",
+                                                description = "One-on-one matching ITT",
                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
                                                 createStudyPopArgs = createStudyPopArgs2,
                                                 createPs = TRUE,
@@ -219,7 +214,91 @@ createAnalysesDetails <- function(workFolder) {
                                                 fitOutcomeModel = TRUE,
                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
   
-  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4,cmAnalysis5)
+  cmAnalysis6 <- CohortMethod::createCmAnalysis(analysisId = 6,
+                                                description = "One-on-one matching with minDaysAtRisk more than 3yr",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs3,
+                                                createPs = TRUE,
+                                                createPsArgs = createPsArgs,
+                                                matchOnPs = TRUE,
+                                                matchOnPsArgs = matchOnPsArgs1,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  
+  matchOnPsArgs2 <- CohortMethod::createMatchOnPsArgs(maxRatio = 100)
+  
+  cmAnalysis7 <- CohortMethod::createCmAnalysis(analysisId = 7,
+                                                description = "Variable ratio matching on Treatmet",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs1,
+                                                createPs = TRUE,
+                                                createPsArgs = createPsArgs,
+                                                matchOnPs = TRUE,
+                                                matchOnPsArgs = matchOnPsArgs2,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  cmAnalysis8 <- CohortMethod::createCmAnalysis(analysisId = 8,
+                                                description = "Variable ratio matching ITT",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs2,
+                                                createPs = TRUE,
+                                                createPsArgs = createPsArgs,
+                                                matchOnPs = TRUE,
+                                                matchOnPsArgs = matchOnPsArgs2,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  
+  cmAnalysis9 <- CohortMethod::createCmAnalysis(analysisId = 9,
+                                                description = "Variable ratio matching with minDaysAtRisk more than 3yr",
+                                                getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                createStudyPopArgs = createStudyPopArgs3,
+                                                createPs = TRUE,
+                                                createPsArgs = createPsArgs,
+                                                matchOnPs = TRUE,
+                                                matchOnPsArgs = matchOnPsArgs2,
+                                                fitOutcomeModel = TRUE,
+                                                fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  
+  
+  stratifyByPsArgs <- CohortMethod::createStratifyByPsArgs(numberOfStrata = 10)
+  
+  cmAnalysis10 <- CohortMethod::createCmAnalysis(analysisId = 10,
+                                                 description = "Stratification on Treatment",
+                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                 createStudyPopArgs = createStudyPopArgs1,
+                                                 createPs = TRUE,
+                                                 createPsArgs = createPsArgs,
+                                                 stratifyByPs = TRUE,
+                                                 stratifyByPsArgs = stratifyByPsArgs,
+                                                 fitOutcomeModel = TRUE,
+                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  
+  cmAnalysis11 <- CohortMethod::createCmAnalysis(analysisId = 11,
+                                                 description = "Stratification ITT",
+                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                 createStudyPopArgs = createStudyPopArgs2,
+                                                 createPs = TRUE,
+                                                 createPsArgs = createPsArgs,
+                                                 stratifyByPs = TRUE,
+                                                 stratifyByPsArgs = stratifyByPsArgs,
+                                                 fitOutcomeModel = TRUE,
+                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  
+  cmAnalysis12 <- CohortMethod::createCmAnalysis(analysisId = 12,
+                                                 description = "Stratification with minDaysAtRisk more than 3y",
+                                                 getDbCohortMethodDataArgs = getDbCmDataArgs,
+                                                 createStudyPopArgs = createStudyPopArgs3,
+                                                 createPs = TRUE,
+                                                 createPsArgs = createPsArgs,
+                                                 stratifyByPs = TRUE,
+                                                 stratifyByPsArgs = stratifyByPsArgs,
+                                                 fitOutcomeModel = TRUE,
+                                                 fitOutcomeModelArgs = fitOutcomeModelArgs2)
+  
+  
+  
+  cmAnalysisList <- list(cmAnalysis1, cmAnalysis2, cmAnalysis3, cmAnalysis4,cmAnalysis5, cmAnalysis6,
+                         cmAnalysis7, cmAnalysis8, cmAnalysis9, cmAnalysis10, cmAnalysis11, cmAnalysis12)
   
   CohortMethod::saveCmAnalysisList(cmAnalysisList, file.path(workFolder, "cmAnalysisListJapan.json"))
 }

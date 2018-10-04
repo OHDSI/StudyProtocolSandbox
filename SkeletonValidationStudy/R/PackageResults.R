@@ -44,21 +44,23 @@ packageResults <- function(outputFolder,
     }
 
     # loads analysis results
-    plpResult <- readRDS(file.path(outputFolder,folder, 'validationResult.rds'))
+    if(file.exists(file.path(outputFolder,folder, 'validationResults.rds'))){
+      plpResult <- readRDS(file.path(outputFolder,folder, 'validationResults.rds'))
 
-    if(minCellCount==0){
-      minCellCount <- NULL
+      if(minCellCount==0){
+        minCellCount <- NULL
+      }
+      result <- PatientLevelPrediction::transportPlp(plpResult, save = F,
+                                                     n=minCellCount,
+                                                     includeEvaluationStatistics=T,
+                                                     includeThresholdSummary=T,
+                                                     includeDemographicSummary=T,
+                                                     includeCalibrationSummary =T,
+                                                     includePredictionDistribution=T,
+                                                     includeCovariateSummary=T)
+      saveRDS(result, file.path(exportFolder,folder, 'validationResults.rds'))
+
     }
-    result <- PatientLevelPrediction::transportPlp(plpResult, save = F,
-                                                   n=minCellCount,
-                                                   includeEvaluationStatistics=T,
-                                                   includeThresholdSummary=T,
-                                                   includeDemographicSummary=T,
-                                                   includeCalibrationSummary =T,
-                                                   includePredictionDistribution=T,
-                                                   includeCovariateSummary=T)
-    saveRDS(result, file.path(exportFolder,folder, 'validationResult.rds'))
-
   }
 
 
@@ -71,3 +73,4 @@ packageResults <- function(outputFolder,
   writeLines(paste("\nStudy results are compressed and ready for sharing at:", zipName))
   return(zipName)
 }
+
