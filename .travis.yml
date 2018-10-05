@@ -1,4 +1,4 @@
-language: c
+language: generic
 
 # use containers
 sudo: false
@@ -6,10 +6,11 @@ sudo: false
 addons:
   apt:
     sources:
-    - r-packages-precise
+    - r-packages-trusty
     packages:
     - r-base-dev
     - r-recommended
+    - r-cran-rjava
     - pandoc
     - default-jdk
     - default-jre
@@ -19,23 +20,27 @@ cache:
   directories:
     - ~/Rlib
 
-# install the package and dependencies:
-install:
-  - mkdir -p ~/Rlib
-  - echo 'R_LIBS=~/Rlib' > .Renviron
+# Before run install script
+before_install:
   - echo 'options(repos = "http://cran.rstudio.com")' > .Rprofile
   - echo 'options(download.file.method = "wget")' >> .Rprofile
+  - mkdir -p ~/Rlib
+  - echo 'R_LIBS=~/Rlib' > .Renviron
   - mkdir -p ~/.R
   - Rscript -e 'if (!require("devtools")) install.packages("devtools")'
   - Rscript -e 'if (!require("drat")) install.packages("drat")'
+  - Rscript -e 'if (!require("RJDBC")) install.packages("RJDBC")'
+
+# install the package and dependencies:
+install:
   - echo 'drat::addRepo("OHDSI")' >> .Rprofile
   - echo 'drat::addRepo(c("OHDSI","cloudyr"))' >> .Rprofile
-
   - Rscript -e 'if (!require("PatientLevelPrediction")) install.packages("PatientLevelPrediction", dependencies = TRUE)'
   - Rscript -e 'if (!require("CohortMethod")) install.packages("CohortMethod", dependencies = TRUE)'
   - Rscript -e 'if (!require("OhdsiSharing")) install.packages("OhdsiSharing", dependencies = TRUE)'
   - Rscript -e 'if (!require("mailR")) install.packages("mailR", dependencies = TRUE)'
-  - Rscript -e 'if (!require("ReporteRs")) install.packages("ReporteRs", dependencies = TRUE)'
+  - Rscript -e 'if (!require("ReporteRsjars")) devtools::install_github("davidgohel/ReporteRsjars")'
+  - Rscript -e 'if (!require("ReporteRs")) devtools::install_github("davidgohel/ReporteRs")'
   - Rscript -e 'update.packages(ask = FALSE, instlib = "~/Rlib")'
 
 before_script:
@@ -46,8 +51,8 @@ before_script:
 # Build and check NoacStudy package
 script:
   - R CMD build NoacStudy --no-build-vignettes --no-manual
-  - _R_CHECK_CRAN_INCOMING_=FALSE R CMD check "${PKG_TARBALL_NS}" --no-build-vignettes --no-manual
-  - cat ${PKG_NAME_NS}.Rcheck/00install.out # Print out install / compile log
+  - R_CHECK_CRAN_INCOMING_=FALSE R CMD check "${PKG_TARBALL_NS}" --no-build-vignettes --no-manual
+  - cat ${PKG_NAME_NS}.Rcheck/00check.log # Print out install / compile log
 
 notifications:
   recipients:
