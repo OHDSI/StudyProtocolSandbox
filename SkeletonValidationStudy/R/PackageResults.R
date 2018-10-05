@@ -33,6 +33,7 @@ packageResults <- function(outputFolder,
   # for each analysis copy the requested files...
   folders <- list.dirs(path = outputFolder, recursive = T, full.names = F)
   folders <- folders[grep('Analysis_', folders)]
+  folders <- folders[-grep('inst/plp_models', folders)] #in case using package directory
 
   #create export subfolder in workFolder
   exportFolder <- file.path(outputFolder, "export")
@@ -44,8 +45,8 @@ packageResults <- function(outputFolder,
     }
 
     # loads analysis results
-    if(file.exists(file.path(outputFolder,folder, 'validationResults.rds'))){
-      plpResult <- readRDS(file.path(outputFolder,folder, 'validationResults.rds'))
+    if(file.exists(file.path(outputFolder,folder, 'validationResult.rds'))){
+      plpResult <- readRDS(file.path(outputFolder,folder, 'validationResult.rds'))
 
       if(minCellCount==0){
         minCellCount <- NULL
@@ -58,7 +59,7 @@ packageResults <- function(outputFolder,
                                                      includeCalibrationSummary =T,
                                                      includePredictionDistribution=T,
                                                      includeCovariateSummary=T)
-      saveRDS(result, file.path(exportFolder,folder, 'validationResults.rds'))
+      saveRDS(result, file.path(exportFolder,folder, 'validationResult.rds'))
 
     }
   }

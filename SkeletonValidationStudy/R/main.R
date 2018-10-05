@@ -8,7 +8,8 @@ execute <- function(connectionDetails,
                     createCohorts = T,
                     runValidation = T,
                     packageResults = T,
-                    minCellCount = 5){
+                    minCellCount = 5,
+                    sampleSize=NULL){
 
   if (!file.exists(outputFolder))
     dir.create(outputFolder, recursive = TRUE)
@@ -37,7 +38,8 @@ execute <- function(connectionDetails,
                                                        validationSchemaCdm = cdmDatabaseSchema,
                                                        databaseNames = databaseName,
                                                        validationTableTarget = cohortTable,
-                                                       validationTableOutcome = cohortTable)
+                                                       validationTableOutcome = cohortTable,
+                                                       sampleSize = sampleSize)
   }
 
   # package the results: this creates a compressed file with sensitive details removed - ready to be reviewed and then

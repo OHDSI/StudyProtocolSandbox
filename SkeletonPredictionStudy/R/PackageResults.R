@@ -31,7 +31,7 @@ packageResults <- function(outputFolder,
   }
   
   # for each analysis copy the requested files...
-  folders <- list.dirs(path = outputFolder, recursive = T, full.names = F)
+  folders <- list.dirs(path = outputFolder, recursive = F, full.names = F)
   folders <- folders[grep('Analysis_', folders)]
   
   #create export subfolder in workFolder

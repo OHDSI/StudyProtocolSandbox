@@ -33,7 +33,6 @@ Getting Started
 #devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonValidationStudy")
 
 library(SkeletonValidationStudy)
-package <- F
 
 # add details of your database setting:
 databaseName <- 'add a shareable name for the database used to develop the models'
@@ -73,13 +72,10 @@ SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
                  createCohorts = T,
                  runValidation = T,
                  packageResults = T,
-                 minCellCount = 5)
+                 minCellCount = 5,
+                 sampleSize = NULL)
                  
-# now package and submit results to study admin 
-if(package == T){
-submitResults(exportFolder=outputLocation,
-              dbName=databaseName, key, secret)
-            }
+# add code to submit results to study admin here
 
 
 ```
