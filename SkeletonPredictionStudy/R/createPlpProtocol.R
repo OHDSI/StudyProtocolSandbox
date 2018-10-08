@@ -689,15 +689,24 @@ createMultiPlpReport <- function(analysisLocation,
         officer::body_add_par("") %>%
         officer::body_add_par("Internal Performance", style = heading3) %>%
         officer::body_add_table(model$internalPerformance, style = tableStyle) %>%
-        officer::body_add_gg(model$scatterPlot) %>%
-        rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, c(model$internalPlots, list(layout_matrix=rbind(c(1,2),
-                                                                                                                 c(3,4),
-                                                                                                                 c(5,6),
-                                                                                                                 c(7,7),
-                                                                                                                 c(7,7),
-                                                                                                                 c(8,8),
-                                                                                                                 c(9,9)
-        )))))
+        officer::body_add_gg(model$scatterPlot) 
+      if(!is.null(model$internalPlots[[7]])){
+        doc %>% rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, c(model$internalPlots, list(layout_matrix=rbind(c(1,2),
+                                                                                                                         c(3,4),
+                                                                                                                         c(5,6),
+                                                                                                                         c(7,7),
+                                                                                                                         c(7,7),
+                                                                                                                         c(8,8),
+                                                                                                                         c(9,9)
+        )))))} else{
+          model$internalPlots[[7]] <- NULL
+          doc %>% rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, c(model$internalPlots, list(layout_matrix=rbind(c(1,2),
+                                                                                                                           c(3,4),
+                                                                                                                           c(5,6),
+                                                                                                                           c(7,7),
+                                                                                                                           c(8,8)
+          )))))   
+        }
     }
     
     if(!is.null(model$externalPerformance)){
