@@ -36,6 +36,10 @@ packageResults <- function(outputFolder,
   if(length(grep("inst/plp_models", folders))>0){  
     folders <- folders[-grep('inst/plp_models', folders)] #in case using package directory
     }
+  
+  if(length(folders)==0){
+    stop('No results to export...')
+    }
 
   #create export subfolder in workFolder
   exportFolder <- file.path(outputFolder, "export")
