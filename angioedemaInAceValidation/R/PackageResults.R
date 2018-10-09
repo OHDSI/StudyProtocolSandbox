@@ -33,7 +33,9 @@ packageResults <- function(outputFolder,
   # for each analysis copy the requested files...
   folders <- list.dirs(path = outputFolder, recursive = T, full.names = F)
   folders <- folders[grep('Analysis_', folders)]
-  folders <- folders[-grep('inst/plp_models', folders)] #in case using package directory
+  if(length(grep("inst/plp_models", folders))>0){  
+    folders <- folders[-grep('inst/plp_models', folders)] #in case using package directory
+    }
 
   #create export subfolder in workFolder
   exportFolder <- file.path(outputFolder, "export")
