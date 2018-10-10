@@ -147,59 +147,7 @@
   }},
   "CensoringCriteria": [],
   "Title": null,
-  "AdditionalCriteria": {
-    "CriteriaList": [{
-      "RestrictVisit": false,
-      "StartWindow": {
-        "UseEventEnd": false,
-        "Start": {
-          "Days": null,
-          "Coeff": -1
-        },
-        "End": {
-          "Days": 1,
-          "Coeff": 1
-        },
-        "UseIndexEnd": null
-      },
-      "EndWindow": {
-        "UseEventEnd": true,
-        "Start": {
-          "Days": 0,
-          "Coeff": -1
-        },
-        "End": {
-          "Days": null,
-          "Coeff": 1
-        },
-        "UseIndexEnd": null
-      },
-      "Criteria": {"VisitOccurrence": {
-        "OccurrenceEndDate": null,
-        "VisitLength": null,
-        "CorrelatedCriteria": null,
-        "VisitSourceConcept": null,
-        "CodesetId": 2,
-        "VisitTypeExclude": false,
-        "ProviderSpecialty": null,
-        "Gender": null,
-        "PlaceOfService": null,
-        "VisitType": null,
-        "First": null,
-        "OccurrenceStartDate": null,
-        "Age": null
-      }},
-      "Occurrence": {
-        "Type": 2,
-        "IsDistinct": false,
-        "Count": 1
-      }
-    }],
-    "Type": "ANY",
-    "DemographicCriteriaList": [],
-    "Groups": [],
-    "Count": null
-  },
+  "AdditionalCriteria": null,
   "QualifiedLimit": {"Type": "All"},
   "InclusionRules": [],
   "PrimaryCriteria": {

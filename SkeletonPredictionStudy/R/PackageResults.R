@@ -36,6 +36,7 @@ packageResults <- function(outputFolder,
   
   #create export subfolder in workFolder
   exportFolder <- file.path(outputFolder, "export")
+  dir.create(exportFolder, recursive = T)
   
   for(folder in folders){
     #copy all plots across
@@ -44,27 +45,29 @@ packageResults <- function(outputFolder,
     }
     
     # loads analysis results
-    plpResult <- PatientLevelPrediction::loadPlpResult(file.path(outputFolder,folder, 'plpResult'))
-    
-    if(minCellCount!=0){
-      PatientLevelPrediction::transportPlp(plpResult,
-                                           outputFolder=file.path(exportFolder,folder, 'plpResult'), 
-                                           n=minCellCount,
-                                           includeEvaluationStatistics=T,
-                                           includeThresholdSummary=T, 
-                                           includeDemographicSummary=T,
-                                           includeCalibrationSummary =T, 
-                                           includePredictionDistribution=T,
-                                           includeCovariateSummary=T)
-    } else {
-      PatientLevelPrediction::transportPlp(plpResult,outputFolder=file.path(exportFolder,folder, 'plpResult'), 
-                                           n=NULL,
-                                           includeEvaluationStatistics=T,
-                                           includeThresholdSummary=T, 
-                                           includeDemographicSummary=T,
-                                           includeCalibrationSummary =T, 
-                                           includePredictionDistribution=T,
-                                           includeCovariateSummary=T)
+    if(dir.exists(file.path(outputFolder,folder, 'plpResult'))){
+      plpResult <- PatientLevelPrediction::loadPlpResult(file.path(outputFolder,folder, 'plpResult'))
+      
+      if(minCellCount!=0){
+        PatientLevelPrediction::transportPlp(plpResult,
+                                             outputFolder=file.path(exportFolder,folder, 'plpResult'), 
+                                             n=minCellCount,
+                                             includeEvaluationStatistics=T,
+                                             includeThresholdSummary=T, 
+                                             includeDemographicSummary=T,
+                                             includeCalibrationSummary =T, 
+                                             includePredictionDistribution=T,
+                                             includeCovariateSummary=T)
+      } else {
+        PatientLevelPrediction::transportPlp(plpResult,outputFolder=file.path(exportFolder,folder, 'plpResult'), 
+                                             n=NULL,
+                                             includeEvaluationStatistics=T,
+                                             includeThresholdSummary=T, 
+                                             includeDemographicSummary=T,
+                                             includeCalibrationSummary =T, 
+                                             includePredictionDistribution=T,
+                                             includeCovariateSummary=T)
+      }
     }
   }
   
