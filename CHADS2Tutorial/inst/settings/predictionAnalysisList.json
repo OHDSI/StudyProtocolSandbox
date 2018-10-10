@@ -5,7 +5,7 @@
   },
   "skeletonType": "PatientLevelPredictionStudy",
   "populationSettings": [{
-    "minTimeAtRisk": 1000,
+    "minTimeAtRisk": 364,
     "requireTimeAtRisk": true,
     "addExposureDaysToStart": false,
     "riskWindowStart": 1,
@@ -16,7 +16,7 @@
     "priorOutcomeLookback": 99999,
     "binary": true,
     "removeSubjectsWithPriorOutcome": false,
-    "riskWindowEnd": 1001,
+    "riskWindowEnd": 365,
     "firstExposureOnly": true
   }],
   "organizationName": "Janssen Research and Development",
