@@ -20,7 +20,7 @@
     "firstExposureOnly": true
   }],
   "organizationName": "Janssen Research and Development",
-  "targetIds": [5305],
+  "targetIds": [5380],
   "runPlpArgs": {
     "nfold": 5,
     "minCovariateFraction": 0.001,
@@ -31,7 +31,7 @@
   },
   "description": "This is an implementation of chads2 but in analysis 1 we just use standard chads2, in analysis 2 we tune the f chads2 variable coefficients to the database and for analysis 3 we add all demographics/drugs/conditions/measurements/procedures/observations ",
   "version": "OHDSI PLP tutorial 2018 chads2 one five and all variables vignette",
-  "outcomeIds": [5379],
+  "outcomeIds": [5306],
   "skeletonVersion": "v0.0.1",
   "createdDate": null,
   "conceptSetCrossReference": [{
@@ -192,7 +192,59 @@
         }},
         "CensoringCriteria": [],
         "Title": null,
-        "AdditionalCriteria": null,
+        "AdditionalCriteria": {
+          "CriteriaList": [{
+            "RestrictVisit": false,
+            "StartWindow": {
+              "UseEventEnd": false,
+              "Start": {
+                "Days": null,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 1,
+                "Coeff": 1
+              },
+              "UseIndexEnd": null
+            },
+            "EndWindow": {
+              "UseEventEnd": true,
+              "Start": {
+                "Days": 0,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": null,
+                "Coeff": 1
+              },
+              "UseIndexEnd": null
+            },
+            "Criteria": {"VisitOccurrence": {
+              "OccurrenceEndDate": null,
+              "VisitLength": null,
+              "CorrelatedCriteria": null,
+              "VisitSourceConcept": null,
+              "CodesetId": 2,
+              "VisitTypeExclude": false,
+              "ProviderSpecialty": null,
+              "Gender": null,
+              "PlaceOfService": null,
+              "VisitType": null,
+              "First": null,
+              "OccurrenceStartDate": null,
+              "Age": null
+            }},
+            "Occurrence": {
+              "Type": 2,
+              "IsDistinct": false,
+              "Count": 1
+            }
+          }],
+          "Type": "ANY",
+          "DemographicCriteriaList": [],
+          "Groups": [],
+          "Count": null
+        },
         "QualifiedLimit": {"Type": "All"},
         "InclusionRules": [],
         "PrimaryCriteria": {
@@ -218,14 +270,14 @@
           }
         }
       },
-      "createdDate": "2018-10-10T01:49:49.567-0400",
+      "createdDate": "2018-10-02T15:44:42.713-0400",
       "createdBy": null,
-      "name": "[PatientLevelPrediction vignette]:  O: Ischemic stroke events unrestricted",
-      "modifiedDate": "2018-10-10T01:50:07.347-0400",
+      "name": "[PatientLevelPrediction vignette]:  O: Ischemic stroke events",
+      "modifiedDate": null,
       "description": "Ischemic stroke condition record during an inpatient or ER visit;  successive records with > 180 day gap are considered independent episodes",
       "expressionType": "SIMPLE_EXPRESSION",
       "modifiedBy": null,
-      "id": 5379
+      "id": 5306
     },
     {
       "expression": {
@@ -359,18 +411,18 @@
           "PrimaryCriteriaLimit": {"Type": "First"},
           "ObservationWindow": {
             "PostDays": 0,
-            "PriorDays": 1095
+            "PriorDays": 365
           }
         }
       },
-      "createdDate": "2018-10-02T15:37:34.617-0400",
+      "createdDate": "2018-10-10T02:02:56.770-0400",
       "createdBy": null,
-      "name": "[PatientLevelPrediction vignette]:  T : patients who are newly diagnosed with Atrial fibrillation",
-      "modifiedDate": null,
+      "name": "[PatientLevelPrediction vignette]:  T : patients who are newly diagnosed with Atrial fibrillation 1 year",
+      "modifiedDate": "2018-10-10T02:03:18.517-0400",
       "description": "First condition occurrence of atrial fibrillation with >=1095d of prior observation and no prior warfarin exposure",
       "expressionType": "SIMPLE_EXPRESSION",
       "modifiedBy": null,
-      "id": 5305
+      "id": 5380
     }
   ],
   "modelSettings": [{"LassoLogisticRegressionSettings": {

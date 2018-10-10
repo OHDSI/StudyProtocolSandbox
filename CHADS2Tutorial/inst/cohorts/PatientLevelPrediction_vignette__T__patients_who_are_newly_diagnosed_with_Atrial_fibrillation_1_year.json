@@ -129,7 +129,7 @@
     "PrimaryCriteriaLimit": {"Type": "First"},
     "ObservationWindow": {
       "PostDays": 0,
-      "PriorDays": 1095
+      "PriorDays": 365
     }
   }
 }
