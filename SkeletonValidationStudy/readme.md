@@ -43,6 +43,9 @@ cdmDatabaseSchema <- 'your cdm database schema'
 # add the work database schema this requires read/write privileges 
 cohortDatabaseSchema <- 'your work database schema'
 
+# if using oracle please set the location of your temp schema
+oracleTempSchema <- NULL
+
 # the name of the table that will be created in cohortDatabaseSchema to hold the cohorts
 cohortTable <- 'SkeletonValidationStudyCohortTable'
 
@@ -67,6 +70,7 @@ SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
                  databaseName = databaseName,
                  cdmDatabaseSchema = cdmDatabaseSchema,
                  cohortDatabaseSchema = cohortDatabaseSchema,
+                 oracleTempSchema = oracleTempSchema,
                  cohortTable = cohortTable,
                  outputFolder = outputFolder,
                  createCohorts = T,
