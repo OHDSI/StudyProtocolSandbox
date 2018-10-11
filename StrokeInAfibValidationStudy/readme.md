@@ -51,6 +51,9 @@ cdmDatabaseSchema <- 'cdm_yourdatabase.dbo'
 # add the work database schema this requires read/write privileges 
 cohortDatabaseSchema <- 'yourworkdatabase.dbo'
 
+# enter the oracle temp schema if using oracle
+oracleTempSchema <- NULL
+
 # the name of the table that will be created in cohortDatabaseSchema to hold the cohorts
 cohortTable <- 'studyAfibStrokeCohortTable'
 
@@ -75,6 +78,7 @@ StrokeInAfibValidationStudy::execute(connectionDetails = connectionDetails,
         databaseName = databaseName,
         cdmDatabaseSchema = cdmDatabaseSchema,
         cohortDatabaseSchema = cohortDatabaseSchema,
+        oracleTempSchema = oracleTempSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
         createCohorts = T,

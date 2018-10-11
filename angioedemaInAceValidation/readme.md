@@ -43,6 +43,9 @@ cdmDatabaseSchema <- 'your cdm database schema'
 # add the work database schema this requires read/write privileges 
 cohortDatabaseSchema <- 'your work database schema'
 
+# add the temp schema for oracle here:
+oracleTempSchema <- NULL
+
 # the name of the table that will be created in cohortDatabaseSchema to hold the cohorts
 cohortTable <- 'angioedemaInAceValidationCohortTable'
 
@@ -67,6 +70,7 @@ angioedemaInAceValidation::execute(connectionDetails = connectionDetails,
                  databaseName = databaseName,
                  cdmDatabaseSchema = cdmDatabaseSchema,
                  cohortDatabaseSchema = cohortDatabaseSchema,
+                 oracleTempSchema = oracleTempSchema,
                  cohortTable = cohortTable,
                  outputFolder = outputFolder,
                  createCohorts = T,

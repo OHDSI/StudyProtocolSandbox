@@ -32,7 +32,7 @@ Instructions To Run Package
   PatientLevelPrediction::checkPlpInstallation()
   
   # install the network package
-  devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonPredictionStudy"")
+  devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonPredictionStudy")
 ```
 
 - Get users to execute the study by running the code in (extras/CodeToRun.R) but replace 'SkeletonPredictionStudy' with your study name:
