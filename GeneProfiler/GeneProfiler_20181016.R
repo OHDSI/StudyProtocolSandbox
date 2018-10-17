@@ -1,40 +1,11 @@
 
-## Install (required) packages ############
-packages<-function(x){
-  x<-as.character(match.call()[[2]])
-  if (!require(x,character.only=TRUE)){
-    install.packages(pkgs=x,repos="http://cran.r-project.org")
-    require(x,character.only=TRUE)
-  }
-  else
-  {
-    require(x,character.only=TRUE)
-  }
-}
-
-options(expressions=500000)
-setTimeLimit()
-
-packages(shiny)
-packages(xlsx)
-packages(shinydashboard)
-packages(SqlRender)
-packages(DatabaseConnector)
-gpclibPermit()
-############################################
-
 library(shiny)
 library(xlsx)
 library(shinydashboard)
+library(SqlRender)
+library(DatabaseConnector)
 library(dplyr)
 library(GenVisR)
-
-getwd()
-setwd('C:/Users/ssj/Desktop/12. GCDM Shiny')
-
-Data <- read.xlsx('./Data/Data.xlsx', sheetIndex = 1)
-row.names(Data) <- Data[, 'NA.']
-Data <- Data[, c(2:4)]
 
 ############################################
 
@@ -53,7 +24,7 @@ shinyApp(
                                  menuItem('Mutation Type', tabName='MutationType'),
                                  menuItem('Pathogeny', tabName='PathogenyPlot'),
                                  menuItem('Gene', tabName='GenePlot'),
-                                 menuItem('Variant', tabName='VariantPlot')
+                                 menuItem('Variant', tabName='VariantTable')
                                  )),
     
     #3
@@ -68,17 +39,12 @@ shinyApp(
                   
                   sidebarPanel(
                     #input text to db information
-                    textInput("ip","IP", value = '128.1.99.58')
-                    ,textInput("user","USER", value = 'ssj')
-                    ,passwordInput("pw","PASSWORD", "qwer1234!@")
-                    ,textInput("GCDM_db","GCDM Database","SSJ_GCDM_AJOU_v3")
-                    ,textInput("Cohort_table","Cohort Table","cohort")
-                    
+                    textInput("ip","IP")
+                    ,textInput("user","USER")
+                    ,passwordInput("pw","PASSWORD")
+                    ,textInput("schema","GCDM Database")
+                    ,textInput("Cohort_table","Cohort Table")
                     ,actionButton("db_load","Load DB")
-                    #,hr()
-                    
-                    #,uiOutput("db_conn")
-                    #,actionButton("cohort_load","Load cohort")
                     ,width=10),
                   
                   mainPanel(
@@ -140,15 +106,15 @@ shinyApp(
         
         
         # 3-6 Variant
-        tabItem(tabName = "VariantPlot",
+        tabItem(tabName = "VariantTable",
                 fluidRow(
-                  titlePanel("Variant Plot"),
+                  titlePanel("Variant Table"),
                   
                   sidebarPanel(
-                    actionButton(inputId = 'Show_VariantPlot', label = 'Go!'), width=2),
+                    actionButton(inputId = 'Show_VariantTable', label = 'Go!'), width=2),
                   
                   mainPanel(
-                    plotOutput(outputId = "VariantPlot"), width=12)
+                    tableOutput(outputId = "VariantTable"), width=12)
                 ))
         
       ))), # End of dashboardPage
@@ -161,27 +127,19 @@ shinyApp(
 
   server <- function(input, output, session) {
     
-    # ip = "128.1.99.58"
-    # GCDM_db = "SSJ_GCDM_AJOU_v3"
-    # Cohort_table = 'cohort'
-    # usr="ssj"
-    # pw="qwer1234!@"
 
-    
     ##### 3-1 DB Connection
     cohort_personID <- eventReactive(input$db_load, {
       connectionDetails <<- DatabaseConnector::createConnectionDetails(dbms="sql server", 
-                                                                      server=ip,
-                                                                      schema=GCDM_db,
-                                                                      user=usr,
-                                                                      password=pw)
-      connection <<- DatabaseConnector::connect(connectionDetails)
-      GCDMschema <<- paste0(GCDM_db,".dbo")
-      #Sys.setlocale(category="LC_CTYPE", locale="UTF-8")
-      #Sys.setlocale(category = "LC_ALL", locale = "us")
+                                                                      server=input$ip,
+                                                                      user=input$user,
+                                                                      password=input$pw,
+                                                                      schema=input$schema)
       
-      sql <- "SELECT distinct subject_id FROM @GCDMschema.@Cohort_table order by subject_id"
-      sql <- SqlRender::renderSql(sql, GCDMschema=GCDMschema, Cohort_table=Cohort_table)$sql
+      connection <<- DatabaseConnector::connect(connectionDetails)
+
+      sql <- "SELECT distinct subject_id FROM @schema.dbo.@Cohort_table order by subject_id"
+      sql <- SqlRender::renderSql(sql, schema=input$schema, Cohort_table=input$Cohort_table)$sql
       sql <- SqlRender::translateSql(sql, targetDialect=connectionDetails$dbms)$sql
       cohort_personID <<- DatabaseConnector::querySql(connection, sql)})
     
@@ -193,45 +151,44 @@ shinyApp(
     ##### 3-2 WaterFall Plot
     draw.WF <- eventReactive(input$Show_WF, {
       
+      connectionDetails <<- DatabaseConnector::createConnectionDetails(dbms="sql server", 
+                                                                       server=input$ip,
+                                                                       user=input$user,
+                                                                       password=input$pw,
+                                                                       schema=input$schema)
+      
+      connection <<- DatabaseConnector::connect(connectionDetails)
+      
       sql <- "SELECT A.person_id, B.target_gene_source_value, A.hgvs_p, A.sequence_alteration, A.variant_feature
-              FROM (SELECT * FROM @GCDMschema.variant_occurrence 
-              WHERE person_id IN (SELECT distinct subject_id FROM @GCDMschema.@Cohort_table)) A
-              LEFT OUTER JOIN @GCDMschema.[target_gene] B ON A.target_gene_id = B.target_gene_concept_id"
-      sql <- SqlRender::renderSql(sql, GCDMschema=GCDMschema, Cohort_table=Cohort_table)$sql
+              FROM (SELECT * FROM @schema.dbo.variant_occurrence 
+              WHERE person_id IN (SELECT distinct subject_id FROM @schema.dbo.@Cohort_table)) A
+              LEFT OUTER JOIN @schema.dbo.[target_gene] B ON A.target_gene_id = B.target_gene_concept_id"
+      sql <- SqlRender::renderSql(sql, schema=input$schema, Cohort_table=input$Cohort_table)$sql
       sql <- SqlRender::translateSql(sql, targetDialect=connectionDetails$dbms)$sql
       cohort_variant <- DatabaseConnector::querySql(connection, sql)
       # View(cohort_variant)
       
-      # unique(cohort_variant$SEQUENCE_ALTERATION)
-      # cohort_variant$VARIANT_FEATURE[cohort_variant$SEQUENCE_ALTERATION =='TRA']
-      # cohort_variant$VARIANT_FEATURE[cohort_variant$SEQUENCE_ALTERATION =='TRA'] <- 'Fusion'
       cohort_variant$VARIANT_FEATURE[cohort_variant$SEQUENCE_ALTERATION == 'Amplification'] <- 'Amplification'
+      
       cohort_variant$VARIANT_FEATURE[cohort_variant$SEQUENCE_ALTERATION == 'Deletion'] <- 'Deletion'
       
-      # unique(cohort_variant$VARIANT_FEATURE)
-      # dim(cohort_variant) # 29823, 5
       cohort_variant <- cohort_variant[complete.cases(cohort_variant[ , c("VARIANT_FEATURE")]), ]
-      # dim(cohort_variant) # 29689, 5
+
       cohort_variant <- cohort_variant[cohort_variant$VARIANT_FEATURE!='Intron', ]
-      # dim(cohort_variant) # 12247, 5
+
       cohort_variant <- cohort_variant[cohort_variant$VARIANT_FEATURE!='Synonymous', ]
-      # dim(cohort_variant) # 5838, 5
+
       cohort_variant <- cohort_variant[cohort_variant$VARIANT_FEATURE!='Other', ]
-      # dim(cohort_variant) # 5504, 5
-      # unique(cohort_variant$VARIANT_FEATURE)
-      
-      # unique(cohort_variant$TARGET_GENE_SOURCE_VALUE)
+
       cohort_variant <- cohort_variant[complete.cases(cohort_variant[ , c("TARGET_GENE_SOURCE_VALUE")]), ]
-      # dim(cohort_variant) # 5432, 5
+
 
       # Create a data frame of random elements to plot
       inputData <- data.frame("sample" = cohort_variant$PERSON_ID,
                               "gene" = cohort_variant$TARGET_GENE_SOURCE_VALUE,
                               "variant_class" = cohort_variant$VARIANT_FEATURE)
       colnames(inputData) <- c('sample', 'gene', 'variant_class')
-      # dim(inputData) # 5432, 3
-      # head(inputData)
-      # table(inputData$variant_class)
+
       table <- as.data.frame(table(inputData$variant_class))
       table <- table[order(-table$Freq), ]
       
@@ -254,15 +211,22 @@ shinyApp(
       
       draw.MutationType <- eventReactive(input$Show_MutationType, {
         
+        connectionDetails <<- DatabaseConnector::createConnectionDetails(dbms="sql server", 
+                                                                         server=input$ip,
+                                                                         user=input$user,
+                                                                         password=input$pw,
+                                                                         schema=input$schema)
+        
+        connection <<- DatabaseConnector::connect(connectionDetails)
+        
         sql <- "SELECT A.person_id, B.target_gene_source_value, A.hgvs_p, A.sequence_alteration, A.variant_feature
-              FROM (SELECT * FROM @GCDMschema.variant_occurrence 
-        WHERE person_id IN (SELECT distinct subject_id FROM @GCDMschema.@Cohort_table)) A
-        LEFT OUTER JOIN @GCDMschema.[target_gene] B ON A.target_gene_id = B.target_gene_concept_id"
-        sql <- SqlRender::renderSql(sql, GCDMschema=GCDMschema, Cohort_table=Cohort_table)$sql
+              FROM (SELECT * FROM @schema.dbo.variant_occurrence 
+        WHERE person_id IN (SELECT distinct subject_id FROM @schema.dbo.@Cohort_table)) A
+        LEFT OUTER JOIN @schema.dbo.[target_gene] B ON A.target_gene_id = B.target_gene_concept_id"
+        sql <- SqlRender::renderSql(sql, schema=input$schema, Cohort_table=input$Cohort_table)$sql
         sql <- SqlRender::translateSql(sql, targetDialect=connectionDetails$dbms)$sql
         cohort_forMT <- DatabaseConnector::querySql(connection, sql)
-        # View(cohort_forMT)
-        
+   
         par(mfrow=c(1,2))
 
         Tbl4BarPlot <- as.data.frame(table(cohort_forMT$SEQUENCE_ALTERATION))
@@ -292,17 +256,26 @@ shinyApp(
       ##### 3-4 Pathogeny Plot
       
       draw.PathogenyPlot <- eventReactive(input$Show_Pathogeny, {
+        
+        connectionDetails <<- DatabaseConnector::createConnectionDetails(dbms="sql server", 
+                                                                         server=input$ip,
+                                                                         user=input$user,
+                                                                         password=input$pw,
+                                                                         schema=input$schema)
+        
+        connection <<- DatabaseConnector::connect(connectionDetails)
+        
         sql <- "SELECT A.person_id, B.target_gene_source_value, A.variant_exon_number, 
                        A.hgvs_p, A.sequence_alteration, A.variant_feature,
                        C.variant_origin, C.variant_pathogeny
-                FROM (SELECT * FROM @GCDMschema.variant_occurrence 
-                      WHERE person_id IN (SELECT subject_id FROM @GCDMschema.@Cohort_table)) A
-                LEFT OUTER JOIN @GCDMschema.[target_gene] B ON A.target_gene_id = B.target_gene_concept_id
-                LEFT OUTER JOIN @GCDMschema.[variant_annotation] C ON A.variant_occurrence_id = C.variant_occurrence_id"
-        sql <- SqlRender::renderSql(sql, GCDMschema=GCDMschema, Cohort_table=Cohort_table)$sql
+                FROM (SELECT * FROM @schema.dbo.variant_occurrence 
+                      WHERE person_id IN (SELECT subject_id FROM @schema.dbo.@Cohort_table)) A
+                LEFT OUTER JOIN @schema.dbo.[target_gene] B ON A.target_gene_id = B.target_gene_concept_id
+                LEFT OUTER JOIN @schema.dbo.[variant_annotation] C ON A.variant_occurrence_id = C.variant_occurrence_id"
+        sql <- SqlRender::renderSql(sql, schema=input$schema, Cohort_table=input$Cohort_table)$sql
         sql <- SqlRender::translateSql(sql, targetDialect=connectionDetails$dbms)$sql
-        cohort_forPathogeny <- DatabaseConnector::querySql(connection, sql)
-        # View(cohort_forPathogeny)
+        cohort_forPathogeny <<- DatabaseConnector::querySql(connection, sql)
+  
         
         par(mfrow=c(1,2))
         
@@ -329,33 +302,85 @@ shinyApp(
       
       
       
-      
       ##### 3-5 Pathogeny & Drug Response Genes
       
       draw.GenePlot <- eventReactive(input$Show_GenePlot, {
-        cohort_forGenes <- cohort_forPathogeny[cohort_forPathogeny$VARIANT_PATHOGENY %in% 
-                                                 c('Pathogenic/Likely pathogenic', 'Drug response'), ]
-        table(cohort_forGenes$TARGET_GENE_SOURCE_VALUE)
         
+        connectionDetails <<- DatabaseConnector::createConnectionDetails(dbms="sql server", 
+                                                                         server=input$ip,
+                                                                         user=input$user,
+                                                                         password=input$pw,
+                                                                         schema=input$schema)
         
+        connection <<- DatabaseConnector::connect(connectionDetails)
+        
+        sql <- "SELECT A.person_id, B.target_gene_source_value, A.variant_exon_number, 
+        A.hgvs_p, A.sequence_alteration, A.variant_feature,
+        C.variant_origin, C.variant_pathogeny
+        FROM (SELECT * FROM @schema.dbo.variant_occurrence 
+        WHERE person_id IN (SELECT subject_id FROM @schema.dbo.@Cohort_table)) A
+        LEFT OUTER JOIN @schema.dbo.[target_gene] B ON A.target_gene_id = B.target_gene_concept_id
+        LEFT OUTER JOIN @schema.dbo.[variant_annotation] C ON A.variant_occurrence_id = C.variant_occurrence_id"
+        sql <- SqlRender::renderSql(sql, schema=input$schema, Cohort_table=input$Cohort_table)$sql
+        sql <- SqlRender::translateSql(sql, targetDialect=connectionDetails$dbms)$sql
+        cohort_forPathogeny <<- DatabaseConnector::querySql(connection, sql)
+        # View(cohort_forPathogeny)
+        
+        cohort_forGenes <<- cohort_forPathogeny[cohort_forPathogeny$VARIANT_PATHOGENY %in% 
+                                                 c('Pathogenic/Likely pathogenic', 'Drug response') &
+                                                 cohort_forPathogeny$VARIANT_ORIGIN %in% 'somatic', ]
+        Tbl4Gene <- as.data.frame(table(cohort_forGenes$TARGET_GENE_SOURCE_VALUE))
+        Tbl4Gene <- Tbl4Gene[order(-Tbl4Gene$Freq),]
+        par(mfrow=c(1,1))
+        slices <- Tbl4Gene$Freq
+        lbls <- as.character(Tbl4Gene$Var1)
+        pct <- round(slices/sum(slices)*100)
+        lbls <- paste(lbls, pct) # add percents to labels
+        lbls <- paste(lbls,"%",sep="") # ad % to labels
+        pie(slices, labels = lbls, main="Proportion of Pathogeny & Drug Response Genes", clockwise = TRUE )
       }) # End of draw.GenePlot
-      
       
       output$GenePlot <- renderPlot({draw.GenePlot()}, execOnResize = TRUE) 
       
       
       
       
-      
       ##### 3-6 Variant
       
-      draw.VariantPlot <- eventReactive(input$Show_VariantPlot, {
+      draw.VariantTable <- eventReactive(input$Show_VariantTable, {
+        
+        connectionDetails <<- DatabaseConnector::createConnectionDetails(dbms="sql server", 
+                                                                         server=input$ip,
+                                                                         user=input$user,
+                                                                         password=input$pw,
+                                                                         schema=input$schema)
+        
+        connection <<- DatabaseConnector::connect(connectionDetails)
+        
+        sql <- "SELECT A.person_id, B.target_gene_source_value, A.variant_exon_number, 
+        A.hgvs_p, A.sequence_alteration, A.variant_feature,
+        C.variant_origin, C.variant_pathogeny
+        FROM (SELECT * FROM @schema.dbo.variant_occurrence 
+        WHERE person_id IN (SELECT subject_id FROM @schema.dbo.@Cohort_table)) A
+        LEFT OUTER JOIN @schema.dbo.[target_gene] B ON A.target_gene_id = B.target_gene_concept_id
+        LEFT OUTER JOIN @schema.dbo.[variant_annotation] C ON A.variant_occurrence_id = C.variant_occurrence_id"
+        sql <- SqlRender::renderSql(sql, schema=input$schema, Cohort_table=input$Cohort_table)$sql
+        sql <- SqlRender::translateSql(sql, targetDialect=connectionDetails$dbms)$sql
+        cohort_forPathogeny <<- DatabaseConnector::querySql(connection, sql)
+        
+        cohort_forGenes <<- cohort_forPathogeny[cohort_forPathogeny$VARIANT_PATHOGENY %in% 
+                                                  c('Pathogenic/Likely pathogenic', 'Drug response') &
+                                                  cohort_forPathogeny$VARIANT_ORIGIN %in% 'somatic', ]
         
         
-      }) # End of draw.VariantPlot
+        colnames(cohort_forGenes) <- c('Person', 'Gene', 'Exon', 'HGVSp', 
+                                       'Sequence Alteration', 'Variant Feature', 'Origin', 'Pathogeny')
+        cohort_forGenes <- cohort_forGenes[order(cohort_forGenes$Gene),]
+        cohort_forGenes
+        
+      }) # End of draw.VariantTable
       
-      
-      output$VariantPlot <- renderPlot({draw.VariantPlot()}, execOnResize = TRUE) 
+      output$VariantTable <- renderTable({draw.VariantTable()}, execOnResize = TRUE) 
       
       
     
