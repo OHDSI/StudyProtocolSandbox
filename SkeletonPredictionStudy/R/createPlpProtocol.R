@@ -5,6 +5,10 @@ createPlpProtocol <- function(outputLocation = getwd()){
                                             "predictionAnalysisList.json",
                                             package = "SkeletonPredictionStudy")
   
+  #figure1 <- 'vignettes/Figure1.png'
+  figure1 <- system.file("doc",
+              "Figure1.png",
+              package = "PatientLevelPrediction")
   
   #============== STYLES =======================================================
   style_title <- officer::shortcuts$fp_bold(font.size = 28)
@@ -217,7 +221,7 @@ createPlpProtocol <- function(outputLocation = getwd()){
     officer::body_add_par("") %>%
     officer::body_add_par("Figure 1, illustrates the prediction problem we will address. Among a population at risk, we aim to predict which patients at a defined moment in time (t = 0) will experience some outcome during a time-at-risk. Prediction is done using only information about the patients in an observation window prior to that moment in time.", style="Normal") %>%
     officer::body_add_par("") %>%
-    officer::body_add_img(src = 'vignettes/Figure1.png', width = 6.5, height = 2.01, style = "centered") %>%
+    officer::body_add_img(src = figure1, width = 6.5, height = 2.01, style = "centered") %>%
     officer::body_add_par("Figure 1: The prediction problem", style="graphic title") %>%
     officer::body_add_par("") %>%
     officer::body_add_fpar(
@@ -685,15 +689,24 @@ createMultiPlpReport <- function(analysisLocation,
         officer::body_add_par("") %>%
         officer::body_add_par("Internal Performance", style = heading3) %>%
         officer::body_add_table(model$internalPerformance, style = tableStyle) %>%
-        officer::body_add_gg(model$scatterPlot) %>%
-        rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, c(model$internalPlots, list(layout_matrix=rbind(c(1,2),
-                                                                                                                 c(3,4),
-                                                                                                                 c(5,6),
-                                                                                                                 c(7,7),
-                                                                                                                 c(7,7),
-                                                                                                                 c(8,8),
-                                                                                                                 c(9,9)
-        )))))
+        officer::body_add_gg(model$scatterPlot) 
+      if(!is.null(model$internalPlots[[7]])){
+        doc %>% rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, c(model$internalPlots, list(layout_matrix=rbind(c(1,2),
+                                                                                                                         c(3,4),
+                                                                                                                         c(5,6),
+                                                                                                                         c(7,7),
+                                                                                                                         c(7,7),
+                                                                                                                         c(8,8),
+                                                                                                                         c(9,9)
+        )))))} else{
+          model$internalPlots[[7]] <- NULL
+          doc %>% rvg::body_add_vg(code = do.call(gridExtra::grid.arrange, c(model$internalPlots, list(layout_matrix=rbind(c(1,2),
+                                                                                                                           c(3,4),
+                                                                                                                           c(5,6),
+                                                                                                                           c(7,7),
+                                                                                                                           c(8,8)
+          )))))   
+        }
     }
     
     if(!is.null(model$externalPerformance)){
@@ -736,11 +749,11 @@ createMultiPlpReport <- function(analysisLocation,
 getModelInfo <- function(analysisLocation){
   settings <- read.csv(file.path(analysisLocation, "settings.csv"))
   
-  modelSettings <- lapply((1:nrow(settings))[order(settings$analysisId)], function(i) {getModelFromSettings(settings[i,])})
+  modelSettings <- lapply((1:nrow(settings))[order(settings$analysisId)], function(i) {getModelFromSettings(analysisLocation,settings[i,])})
   return(modelSettings)
 }
 
-getModelFromSettings <- function(x){
+getModelFromSettings <- function(analysisLocation,x){
   result <- list(analysisId = x$analysisId, T = x$cohortName, 
                  D = x$devDatabase, O = x$outcomeName, 
                  tar = paste0(x$riskWindowStart, ' days after ', 
@@ -748,6 +761,10 @@ getModelFromSettings <- function(x){
                               ' to ', x$riskWindowEnd, ' days after ',
                               ifelse(x$addExposureDaysToEnd==1, 'cohort end','cohort start')),
                  model = x$modelSettingName)
+  
+  if(!dir.exists(file.path(as.character(x$plpResultFolder),'plpResult'))){
+    return(NULL)
+  }
   
   plpResult <- PatientLevelPrediction::loadPlpResult(file.path(as.character(x$plpResultFolder),'plpResult'))
   modelTable <- plpResult$model$varImp
@@ -782,9 +799,9 @@ getModelFromSettings <- function(x){
   # get external results if they exist
   externalPerformance <- c()  
   ind <- grep(paste0('Analysis_', x$analysisId,'/'), 
-              dir(file.path(analysisLocation,'validation'), recursive = T))
+              dir(file.path(analysisLocation,'Validation'), recursive = T))
   if(length(ind)>0){
-    vals <- dir(file.path(analysisLocation,'validation'), recursive = T)[ind]
+    vals <- dir(file.path(analysisLocation,'Validation'), recursive = T)[ind]
     externalRocPlots <- list() 
     externalCalPlots <- list() 
     length(externalRocPlots) <- length(vals)
@@ -792,7 +809,7 @@ getModelFromSettings <- function(x){
     for(k in 1:length(vals)){
       val <- vals[k]
       nameDat <- strsplit(val, '\\/')[[1]][1]
-      val <- readRDS(file.path(analysisLocation,'validation',val))
+      val <- readRDS(file.path(analysisLocation,'Validation',val))
       sum <- as.data.frame(val[[1]]$performanceEvaluation$evaluationStatistics)
       sum$database <- nameDat
       externalPerformance <- rbind(externalPerformance, sum)

@@ -33,7 +33,6 @@ Getting Started
 #devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonValidationStudy")
 
 library(SkeletonValidationStudy)
-package <- F
 
 # add details of your database setting:
 databaseName <- 'add a shareable name for the database used to develop the models'
@@ -43,6 +42,9 @@ cdmDatabaseSchema <- 'your cdm database schema'
 
 # add the work database schema this requires read/write privileges 
 cohortDatabaseSchema <- 'your work database schema'
+
+# if using oracle please set the location of your temp schema
+oracleTempSchema <- NULL
 
 # the name of the table that will be created in cohortDatabaseSchema to hold the cohorts
 cohortTable <- 'SkeletonValidationStudyCohortTable'
@@ -68,18 +70,16 @@ SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
                  databaseName = databaseName,
                  cdmDatabaseSchema = cdmDatabaseSchema,
                  cohortDatabaseSchema = cohortDatabaseSchema,
+                 oracleTempSchema = oracleTempSchema,
                  cohortTable = cohortTable,
                  outputFolder = outputFolder,
                  createCohorts = T,
                  runValidation = T,
                  packageResults = T,
-                 minCellCount = 5)
+                 minCellCount = 5,
+                 sampleSize = NULL)
                  
-# now package and submit results to study admin 
-if(package == T){
-submitResults(exportFolder=outputLocation,
-              dbName=databaseName, key, secret)
-            }
+# add code to submit results to study admin here
 
 
 ```

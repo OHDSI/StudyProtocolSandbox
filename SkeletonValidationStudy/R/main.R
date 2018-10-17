@@ -3,12 +3,14 @@ execute <- function(connectionDetails,
                     databaseName,
                     cdmDatabaseSchema,
                     cohortDatabaseSchema,
+                    oracleTempSchema,
                     cohortTable,
                     outputFolder,
                     createCohorts = T,
                     runValidation = T,
                     packageResults = T,
-                    minCellCount = 5){
+                    minCellCount = 5,
+                    sampleSize=NULL){
 
   if (!file.exists(outputFolder))
     dir.create(outputFolder, recursive = TRUE)
@@ -35,9 +37,11 @@ execute <- function(connectionDetails,
                                                        validationSchemaTarget = cohortDatabaseSchema,
                                                        validationSchemaOutcome = cohortDatabaseSchema,
                                                        validationSchemaCdm = cdmDatabaseSchema,
+                                                       oracleTempSchema = oracleTempSchema,
                                                        databaseNames = databaseName,
                                                        validationTableTarget = cohortTable,
-                                                       validationTableOutcome = cohortTable)
+                                                       validationTableOutcome = cohortTable,
+                                                       sampleSize = sampleSize)
   }
 
   # package the results: this creates a compressed file with sensitive details removed - ready to be reviewed and then
@@ -46,7 +50,7 @@ execute <- function(connectionDetails,
   # results saved to outputFolder/databaseName
   if (packageResults) {
     OhdsiRTools::logInfo("Packaging results")
-    packageResults(outputFolder = outputFolder,
+    packageResults(outputFolder = file.path(outputFolder,databaseName),
                    minCellCount = minCellCount)
   }
 
