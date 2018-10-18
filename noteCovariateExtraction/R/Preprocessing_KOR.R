@@ -1,60 +1,36 @@
 #' Custom createCoveriate Settings
 #'
 #' This function is Custom createCoveriate Settings.
-#' @param xmldf
+#' @param covariate_id
 #' @keywordsa createCovariateSetting
 #' @export
 #' @examples
 #' Preprocessing_KOR()
-Preprocessing_KOR <- function(xmldf){
+Preprocessing_KOR <- function(covariate_id){
 
-    xmldf <- gsub('&#x0D;', " ", xmldf)
-    xmldf <- gsub('&lt;', " ", xmldf)
-    xmldf <- gsub('&gt;', " ", xmldf)
-    xmldf <- gsub('&amp;', " ", xmldf)
-    xmldf <- gsub('&quot;', " ", xmldf)
+    covariate_id <- gsub('<[^<>]*>',' ',covariate_id) #Remove Tag
+    #Remove html special characters
+    covariate_id <- gsub('&#x0D;', " ", covariate_id)
+    covariate_id <- gsub('&lt;', " ", covariate_id)
+    covariate_id <- gsub('&gt;', " ", covariate_id)
+    covariate_id <- gsub('&amp;', " ", covariate_id)
+    covariate_id <- gsub('&quot;', " ", covariate_id)
 
-    xmldf <- gsub("[\\]","", xmldf)
-    xmldf <- gsub("[\\+]|[\\{]|[\\}]|[\\(]|[\\)]|[\\<]|[\\>]"," ", xmldf)
-    xmldf <- gsub("\\[","", xmldf)
-    xmldf <- gsub("\\]","", xmldf)
-    xmldf <- gsub("\\/","", xmldf)
-    xmldf <- gsub("\\'"," ", xmldf)
-    xmldf <- gsub('\\"'," ", xmldf)
-    xmldf <- gsub("[~!@#$><%≥=^&×*-:●★¤]"," ", xmldf)
+    #remove hangle typo
+    covariate_id <- gsub('[ㅏ-ㅣ]*','',covariate_id)
+    covariate_id <- gsub('[ㄱ-ㅎ]*','',covariate_id)
 
-    xmldf <- gsub('“', " ", xmldf)
-    xmldf <- gsub('”', " ", xmldf)
-    xmldf <- gsub('‘', " ", xmldf)
-    xmldf <- gsub('’', " ", xmldf)
+    #Only Korean and English are left. (remove special characters)
+    covariate_id <- gsub('[^가-힣a-zA-Z]',' ',covariate_id)
 
-    xmldf <-xmldf <- gsub(',', " ", xmldf)
+    #The spacing is only once
+    covariate_id <- stringr::str_replace_all(covariate_id,"[[:space:]]{1,}"," ")
 
-    xmldf<- tolower(xmldf)
+    #str to vec
+    covariate_id <- strsplit(covariate_id,' ')
 
-    xmldf <- gsub('[ㅏ-ㅣ]*','',xmldf)
-    xmldf <- gsub('[ㄱ-ㅎ]*','',xmldf)
+    #Unique value. (Frequency is not taken into account.)
+    covariate_id <- unique.default(sapply(covariate_id, unique))
 
-    #Spaces Hangul and English
-    pos_start <- as.vector(gregexpr('[^가-힣 ]*[A-Za-z]+[^가-힣 ]*',xmldf)[[1]])
-    pos_length <- as.vector(attr(gregexpr('[^가-힣 ]*[A-Za-z]+[^가-힣 ]*',xmldf)[[1]],'match.length'))
-    pos_end <- pos_start+pos_length-1
-
-    word_data <- c()
-    if(length(pos_start) > 0){
-        for(i in 1:length(pos_start)){
-            word_data[i] <- substr(xmldf,pos_start[i],pos_end[i])
-        }
-
-        new_word_data <- paste("",toupper(word_data),"")
-
-        for(i in 1:length(word_data)){
-            xmldf <- sub(word_data[i],new_word_data[i],xmldf)
-        }
-    }
-    xmldf<- tolower(xmldf)
-
-    xmldf <- stringr::str_replace_all(xmldf,"[[:space:]]{1,}"," ")
-
-    return(xmldf)
+    return(covariate_id)
 }

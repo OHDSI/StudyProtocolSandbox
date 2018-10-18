@@ -57,13 +57,38 @@ getTopicFromNoteSettings <- function(connection,
         rawCovariates <- DatabaseConnector::querySql.ffdf(connection, sql)
         colnames(rawCovariates)<-tolower(colnames(rawCovariates))
 
-        #Word Processing
-        parsed_word_df <- NoteXmlParser(rawCovariates$row_id,rawCovariates$covariate_id)
-        doc.df <- LanguagePreProcessingFunction(parsed_word_df)
-        df <- ExtractorFromDictionary(doc.df)
-        covariates <- cbind(df,rep(1,nrow(df)))
+        ########################
+        if(covariateSettings$selectDictionary == c('KOR')){
+            #ff in list #because Characters can not be inserted into the ff package.
+            rawcovariate_id <- ff::ffapply(x[i1:i2],X= rawCovariates$covariate_id, RETURN=TRUE, CFUN="list", AFUN = Preprocessing_KOR)
 
-        colnames(covariates) <- c('rowId','covariateId','covariateValue')
+            #Create a new dictionary by finding the intersection of all words and dictionaries, Limit: Not recognized if only compound words are found
+            # The kor_dictionary_db is built-in.
+            dictionary <- intersect(as.vector(kor_dictionary_db[,1]),unique(unlist(rawcovariate_id)))
+
+            names(rawcovariate_id) <- 'word'
+            #In the case of Hangul
+            rawcovariate_id <- lapply(rawcovariate_id$'word', EngWordExtraction)
+
+            covariate_id <- list()
+            #Compare dictionary with only Hangul
+            for(i in 1:length(rawcovariate_id)){
+                covariate_id[[i]] <- c(intersect(rawcovariate_id[[i]]$KOR,dictionary),rawcovariate_id[[i]]$ENG)
+            }
+        }
+
+        #Configuring covariate
+        names(covariate_id) <- rawCovariates$row_id[1:length(rawCovariates$row_id)]
+
+        covariates <- reshape2::melt(data = covariate_id)
+        colnames(covariates) <- c('covariateId','rowId')
+        covariates$rowId <- as.numeric(covariates$rowId)
+        covariateValue <- rep(1,nrow(covariates))
+
+        covariates <- cbind(covariates,covariateValue)
+
+        #####################################
+
         covariateId.factor<-as.factor(covariates$covariateId)
 
         #rowIds<-levels(as.factor(covariates$rowId))
