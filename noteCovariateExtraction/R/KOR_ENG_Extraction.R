@@ -5,8 +5,8 @@
 #' @keywordsa createCovariateSetting
 #' @export
 #' @examples
-#' EngWordExtraction()
-EngWordExtraction <- function(rawcovariate_id){
+#' KOR_ENG_Extraction()
+KOR_ENG_Extraction <- function(rawcovariate_id){
 
     #Divide English and Hangul
     eng_word <- gsub('[^a-zA-Z]','',rawcovariate_id)

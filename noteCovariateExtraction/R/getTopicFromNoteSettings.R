@@ -68,7 +68,7 @@ getTopicFromNoteSettings <- function(connection,
 
             names(rawcovariate_id) <- 'word'
             #In the case of Hangul
-            rawcovariate_id <- lapply(rawcovariate_id$'word', EngWordExtraction)
+            rawcovariate_id <- lapply(rawcovariate_id$'word', KOR_ENG_Extraction)
 
             covariate_id <- list()
             #Compare dictionary with only Hangul
