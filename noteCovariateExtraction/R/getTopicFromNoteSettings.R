@@ -58,22 +58,57 @@ getTopicFromNoteSettings <- function(connection,
         colnames(rawCovariates)<-tolower(colnames(rawCovariates))
 
         ########################
-        if(covariateSettings$selectDictionary == c('KOR')){
-            #ff in list #because Characters can not be inserted into the ff package.
-            rawcovariate_id <- ff::ffapply(x[i1:i2],X= rawCovariates$covariate_id, RETURN=TRUE, CFUN="list", AFUN = Preprocessing_KOR)
 
-            #Create a new dictionary by finding the intersection of all words and dictionaries, Limit: Not recognized if only compound words are found
-            # The kor_dictionary_db is built-in.
-            dictionary <- intersect(as.vector(kor_dictionary_db[,1]),unique(unlist(rawcovariate_id)))
+        #ff in list #because Characters can not be inserted into the ff package.
+        rawcovariate_id <- ff::ffapply(x[i1:i2],X= rawCovariates$covariate_id, RETURN=TRUE, CFUN="list", AFUN = notePreprocessing)
 
-            names(rawcovariate_id) <- 'word'
-            #In the case of Hangul
-            rawcovariate_id <- lapply(rawcovariate_id$'word', KOR_ENG_Extraction)
+        #Create a new dictionary by finding the intersection of all words and dictionaries, Limit: Not recognized if only compound words are found
+        # The kor_dictionary_db is built-in.
+        if('KOR' %in% covariateSettings$selectDictionary){
+            dictionary_kor <- intersect(as.vector(kor_dictionary_db[,1]),unique(unlist(rawcovariate_id)))
+        }
+        if('ENG' %in% covariateSettings$selectDictionary){
+            stop('ENG is not implement')
+            #dictionary_eng <- intersect(as.vector(eng_dictionary_db[,1]),unique(unlist(rawcovariate_id)))
+        }
+        # if('Other' %in% covariateSettings$selectDictionary){
+        #     dictionary_Other <- intersect(as.vector(Other_dictionary_db[,1]),unique(unlist(rawcovariate_id)))
+        # }
 
-            covariate_id <- list()
-            #Compare dictionary with only Hangul
-            for(i in 1:length(rawcovariate_id)){
-                covariate_id[[i]] <- c(intersect(rawcovariate_id[[i]]$KOR,dictionary),rawcovariate_id[[i]]$ENG)
+        names(rawcovariate_id) <- 'word'
+        #In the case of Hangul
+        rawcovariate_id <- lapply(rawcovariate_id$'word', medicalTermExtraction)
+
+        covariate_id <- list()
+        #Compare dictionary with two language
+        if(sum(covariateSettings$selectDictionary %in% covariateSettings$implementLanguage) == 2){
+
+            ##Compared with Other and English dictionary
+            # for(i in 1:length(rawcovariate_id)){
+            #     covariate_id[[i]] <- c(intersect(rawcovariate_id[[i]]$Other,dictionary_Other),intersect(rawcovariate_id[[i]]$ENG,dictionary_eng))
+            # }
+        }
+
+        #Compare dictionary with one language
+        else{
+            ##Compared with Other language EX)KOR
+            #EX) KOR
+            if(covariateSettings$selectDictionary == 'KOR'){
+                for(i in 1:length(rawcovariate_id)){
+                    covariate_id[[i]] <- c(intersect(rawcovariate_id[[i]]$KOR,dictionary_kor),rawcovariate_id[[i]]$ENG)
+                }
+            }
+            else if (covariateSettings$selectDictionary == 'Other'){
+                # for(i in 1:length(rawcovariate_id)){
+                #     covariate_id[[i]] <- c(intersect(rawcovariate_id[[i]]$Other,dictionary_kor),rawcovariate_id[[i]]$ENG)
+                # }
+            }
+
+            ##Compared with Only English
+            else if(covariateSettings$selectDictionary == 'ENG'){
+                # for(i in 1:length(rawcovariate_id)){
+                #     covariate_id[[i]] <- c(intersect(rawcovariate_id[[i]]$ENG,dictionary_eng))
+                # }
             }
         }
 
