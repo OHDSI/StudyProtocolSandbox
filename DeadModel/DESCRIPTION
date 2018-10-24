@@ -1,0 +1,25 @@
+Package: DeadModel
+Type: Package
+Title: A package containing a prediction model for predicting risk of death for an end of observation
+Version: 0.0.1
+Date: 2018-06-01
+Author: Jenna Reps
+Maintainer: Jenna Reps <jreps@ohdsi.org>
+Description:The package contains functions for validating the DEAD model, DEAD model risk creating covariates or applying the DEAD model to a cohort of patients 
+License: Apache License 2.0
+Depends:
+    R (>= 3.3.0), 
+    DatabaseConnector (>= 1.11.4),
+    FeatureExtraction (>= 2.0.0),
+    Cyclops (>= 1.2.2),
+    PatientLevelPrediction (>= 2.0.0)
+Imports:
+    ggplot2,
+    gridExtra,
+    ff,
+    ffbase (>= 0.12.1)
+Suggests:
+  testthat,
+LinkingTo: Rcpp
+NeedsCompilation: No
+RoxygenNote: 6.0.1
