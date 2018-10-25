@@ -65,7 +65,7 @@ cohortDatabaseSchema <- 'cohort database schema'
 cohortTable <- 'cohortTable containing people who you want to predict risk of being dead'
 cohortId <- 'cohortDefinitionId for target cohort people in cohortTable'
 
-cohortId <- '(if externally validating model) cohortDefinitionId for dead people in cohortTable'
+outcomeId <- '(if externally validating model) cohortDefinitionId for dead people in cohortTable'
 
 # Now run the following to check plp is working:
 checkInstall(connectionDetails=connectionDetails)
