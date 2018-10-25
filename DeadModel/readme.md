@@ -32,8 +32,7 @@ Getting Started
 install.packages("devtools")
 devtools::install_github("OHDSI/StudyProtocolSandbox/DeadModel")
 
-# Now run the following to check plp is working:
-checkInstall(connectionDetails=connectionDetails)
+library(DeadModel)
 
 #==============
 # EXPLORE
@@ -67,6 +66,9 @@ cohortTable <- 'cohortTable containing people who you want to predict risk of be
 cohortId <- 'cohortDefinitionId for target cohort people in cohortTable'
 
 cohortId <- '(if externally validating model) cohortDefinitionId for dead people in cohortTable'
+
+# Now run the following to check plp is working:
+checkInstall(connectionDetails=connectionDetails)
 
 # code to do prediction for each patient in the cohortTable with cohort_definition_id 1
 prediction <- applyDeadModel(connectionDetails = connectionDetails,
