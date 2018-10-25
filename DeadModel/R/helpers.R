@@ -43,7 +43,7 @@ validateDeadModel <- function(connectionDetails,
                                    outcomeId,
                                    packageName='DeadModel'){
 
-  plpResult <- loadPlpResult(system.file('plp_models', package=packageName))
+  plpResult <- PatientLevelPrediction::loadPlpResult(system.file('plp_models', package=packageName))
   writeLines('Implementing DEAD model...')
   result <- PatientLevelPrediction::externalValidatePlp(plpResult = plpResult,
                                                         oracleTempSchema = oracleTempSchema,
@@ -82,7 +82,7 @@ createDeadCovariate <- function(covariateConstructionName = 'DeadRiskCov',
                                    analysisId = 967,
                                    eniviron){
 
-  plpResult <- loadPlpResult(system.file('plp_models', package='DeadModel'))
+  plpResult <- PatientLevelPrediction::loadPlpResult(system.file('plp_models', package='DeadModel'))
 
   result <- PatientLevelPrediction::createLrSql(models = plpResult$model,
                                       modelNames = 'DEAD model risk score',
@@ -124,7 +124,7 @@ applyDeadModel <- function(connectionDetails,
                               cohortTable,
                               cohortId){
 
-  plpResult <- loadPlpResult(system.file('plp_models', package='DeadModel'))
+  plpResult <- PatientLevelPrediction::loadPlpResult(system.file('plp_models', package='DeadModel'))
 
   # get similar plpData
   newData <- PatientLevelPrediction::similarPlpData(plpModel = plpResult,
@@ -165,7 +165,7 @@ applyDeadModel <- function(connectionDetails,
 #' @export
 
 checkInstall <- function(connectionDetails=NULL){
-  result <- checkPlpInstallation(connectionDetails=connectionDetails,
+  result <- PatientLevelPrediction::checkPlpInstallation(connectionDetails=connectionDetails,
                        python=F)
   return(result)
 }
@@ -189,7 +189,7 @@ flog.warn <- OhdsiRTools::logWarn
 #' @export
 viewDeadShiny <- function(packageName='DeadModel'){
 
-  plpResult <- loadPlpResult(system.file('plp_models', package=packageName))
+  plpResult <- PatientLevelPrediction::loadPlpResult(system.file('plp_models', package=packageName))
   PatientLevelPrediction::viewPlp(plpResult)
 
 }
@@ -206,7 +206,7 @@ viewDeadShiny <- function(packageName='DeadModel'){
 #' @export
 viewDeadCoefficients <- function(packageName='DeadModel'){
 
-  plpResult <- loadPlpResult(system.file('plp_models', package=packageName))
+  plpResult <- PatientLevelPrediction::loadPlpResult(system.file('plp_models', package=packageName))
 
   covs <- plpResult$covariateSummary[!is.na(plpResult$covariateSummary$covariateValue),]
   covs <- covs[covs$covariateValue!=0,]
