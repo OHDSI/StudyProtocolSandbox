@@ -47,96 +47,79 @@ synthesizePositiveControls <- function(connectionDetails,
                                        oracleTempSchema,
                                        outputFolder,
                                        maxCores = 1) {
-  # Set to TRUE if you don't want to use synthetic positive controls in your study:
-  skipSynthesis <- FALSE
   
-  if (!skipSynthesis) {
-    synthesisFolder <- file.path(outputFolder, "positiveControlSynthesis")
-    if (!file.exists(synthesisFolder))
-      dir.create(synthesisFolder)
-    
-    synthesisSummaryFile <- file.path(outputFolder, "SynthesisSummary.csv")
-    if (!file.exists(synthesisSummaryFile)) {
-      pathToCsv <- system.file("settings", "NegativeControls.csv", package = "COX2vsNSAIDsAKI")
-      negativeControls <- read.csv(pathToCsv)
-      exposureOutcomePairs <- data.frame(exposureId = negativeControls$targetId,
-                                         outcomeId = negativeControls$outcomeId)
-      exposureOutcomePairs <- unique(exposureOutcomePairs)
-      prior = Cyclops::createPrior("laplace", exclude = 0, useCrossValidation = TRUE)
-      control = Cyclops::createControl(cvType = "auto",
-                                       startingVariance = 0.01,
-                                       noiseLevel = "quiet",
-                                       cvRepetitions = 1,
-                                       threads = min(c(10, maxCores)))
-      covariateSettings <- FeatureExtraction::createCovariateSettings(useDemographicsAgeGroup = TRUE,
-                                                                      useDemographicsGender = TRUE,
-                                                                      useDemographicsIndexYear = TRUE,
-                                                                      useDemographicsIndexMonth = TRUE,
-                                                                      useConditionGroupEraLongTerm = TRUE,
-                                                                      useDrugGroupEraLongTerm = TRUE,
-                                                                      useProcedureOccurrenceLongTerm = TRUE,
-                                                                      useMeasurementLongTerm = TRUE,
-                                                                      useObservationLongTerm = TRUE,
-                                                                      useCharlsonIndex = TRUE,
-                                                                      useDcsi = TRUE,
-                                                                      useChads2Vasc = TRUE,
-                                                                      longTermStartDays = 365,
-                                                                      endDays = 0)
-      result <- MethodEvaluation::injectSignals(connectionDetails,
-                                                cdmDatabaseSchema = cdmDatabaseSchema,
-                                                oracleTempSchema = oracleTempSchema,
-                                                exposureDatabaseSchema = cohortDatabaseSchema,
-                                                exposureTable = cohortTable,
-                                                outcomeDatabaseSchema = cohortDatabaseSchema,
-                                                outcomeTable = cohortTable,
-                                                outputDatabaseSchema = cohortDatabaseSchema,
-                                                outputTable = cohortTable,
-                                                createOutputTable = FALSE,
-                                                outputIdOffset = 10000,
-                                                exposureOutcomePairs = exposureOutcomePairs,
-                                                firstExposureOnly = TRUE,
-                                                firstOutcomeOnly = TRUE,
-                                                removePeopleWithPriorOutcomes = TRUE,
-                                                modelType = "survival",
-                                                washoutPeriod = 183,
-                                                riskWindowStart = 0,
-                                                riskWindowEnd = 30,
-                                                addExposureDaysToEnd = TRUE,
-                                                effectSizes = c(1.5, 2, 4),
-                                                precision = 0.01,
-                                                prior = prior,
-                                                control = control,
-                                                maxSubjectsForModel = 250000,
-                                                minOutcomeCountForModel = 50,
-                                                minOutcomeCountForInjection = 25,
-                                                workFolder = synthesisFolder,
-                                                modelThreads = max(1, round(maxCores/8)),
-                                                generationThreads = min(6, maxCores),
-                                                covariateSettings = covariateSettings)
-      write.csv(result, synthesisSummaryFile, row.names = FALSE)
-    } 
-    OhdsiRTools::logTrace("Merging positive with negative controls ")
+  
+  synthesisFolder <- file.path(outputFolder, "positiveControlSynthesis")
+  if (!file.exists(synthesisFolder))
+    dir.create(synthesisFolder)
+  
+  synthesisSummaryFile <- file.path(outputFolder, "SynthesisSummary.csv")
+  if (!file.exists(synthesisSummaryFile)) {
     pathToCsv <- system.file("settings", "NegativeControls.csv", package = "COX2vsNSAIDsAKI")
     negativeControls <- read.csv(pathToCsv)
+    exposureOutcomePairs <- data.frame(exposureId = negativeControls$targetId,
+                                       outcomeId = negativeControls$outcomeId)
+    exposureOutcomePairs <- unique(exposureOutcomePairs)
+    pathToJson <- system.file("settings", "positiveControlSynthArgs.json", package = "COX2vsNSAIDsAKI")
+    args <- ParallelLogger::loadSettingsFromJson(pathToJson)
+    args$control$threads <- min(c(10, maxCores))
     
-    synthesisSummary <- read.csv(synthesisSummaryFile)
-    synthesisSummary$targetId <- synthesisSummary$exposureId
-    synthesisSummary <- merge(synthesisSummary, negativeControls)
-    synthesisSummary <- synthesisSummary[synthesisSummary$trueEffectSize != 0, ]
-    synthesisSummary$outcomeName <- paste0(synthesisSummary$OutcomeName, ", RR=", synthesisSummary$targetEffectSize)
-    synthesisSummary$oldOutcomeId <- synthesisSummary$outcomeId
-    synthesisSummary$outcomeId <- synthesisSummary$newOutcomeId
+    result <- MethodEvaluation::injectSignals(connectionDetails = connectionDetails,
+                                              cdmDatabaseSchema = cdmDatabaseSchema,
+                                              oracleTempSchema = oracleTempSchema,
+                                              exposureDatabaseSchema = cohortDatabaseSchema,
+                                              exposureTable = cohortTable,
+                                              outcomeDatabaseSchema = cohortDatabaseSchema,
+                                              outcomeTable = cohortTable,
+                                              outputDatabaseSchema = cohortDatabaseSchema,
+                                              outputTable = cohortTable,
+                                              createOutputTable = FALSE,
+                                              exposureOutcomePairs = exposureOutcomePairs,
+                                              workFolder = synthesisFolder,
+                                              modelThreads = max(1, round(maxCores/8)),
+                                              generationThreads = min(6, maxCores),
+                                              # External args start here
+                                              outputIdOffset = args$outputIdOffset,
+                                              firstExposureOnly = args$firstExposureOnly,
+                                              firstOutcomeOnly = args$firstOutcomeOnly,
+                                              removePeopleWithPriorOutcomes = args$removePeopleWithPriorOutcomes,
+                                              modelType = args$modelType,
+                                              washoutPeriod = args$washoutPeriod,
+                                              riskWindowStart = args$riskWindowStart,
+                                              riskWindowEnd = args$riskWindowEnd,
+                                              addExposureDaysToEnd = args$addExposureDaysToEnd,
+                                              effectSizes = args$effectSizes,
+                                              precision = args$precision,
+                                              prior = args$prior,
+                                              control = args$control,
+                                              maxSubjectsForModel = args$maxSubjectsForModel,
+                                              minOutcomeCountForModel = args$minOutcomeCountForModel,
+                                              minOutcomeCountForInjection = args$minOutcomeCountForInjection,
+                                              covariateSettings = args$covariateSettings
+                                              # External args stop here
+    )
+    write.csv(result, synthesisSummaryFile, row.names = FALSE)
+  } else {
+    result <- read.csv(synthesisSummaryFile)
   }
+  ParallelLogger::logTrace("Merging positive with negative controls ")
+  pathToCsv <- system.file("settings", "NegativeControls.csv", package = "COX2vsNSAIDsAKI")
+  negativeControls <- read.csv(pathToCsv)
+  
+  synthesisSummary <- read.csv(synthesisSummaryFile)
+  synthesisSummary$targetId <- synthesisSummary$exposureId
+  synthesisSummary <- merge(synthesisSummary, negativeControls)
+  synthesisSummary <- synthesisSummary[synthesisSummary$trueEffectSize != 0, ]
+  synthesisSummary$outcomeName <- paste0(synthesisSummary$OutcomeName, ", RR=", synthesisSummary$targetEffectSize)
+  synthesisSummary$oldOutcomeId <- synthesisSummary$outcomeId
+  synthesisSummary$outcomeId <- synthesisSummary$newOutcomeId
+  
   pathToCsv <- system.file("settings", "NegativeControls.csv", package = "COX2vsNSAIDsAKI")
   negativeControls <- read.csv(pathToCsv)
   negativeControls$targetEffectSize <- 1
   negativeControls$trueEffectSize <- 1
   negativeControls$trueEffectSizeFirstExposure <- 1
   negativeControls$oldOutcomeId <- negativeControls$outcomeId
-  if (skipSynthesis) {
-    allControls <- negativeControls
-  } else {
-    allControls <- rbind(negativeControls, synthesisSummary[, names(negativeControls)])
-  }
+  allControls <- rbind(negativeControls, synthesisSummary[, names(negativeControls)])
   write.csv(allControls, file.path(outputFolder, "AllControls.csv"), row.names = FALSE)
 }

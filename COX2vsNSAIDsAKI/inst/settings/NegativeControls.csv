@@ -1,36 +1,103 @@
-targetId,targetName,comparatorId,comparatorName,outcomeId,outcomeName,type
-1,Celecoxib,2,Diclofenac,24609,Hypoglycemia,Outcome
-1,Celecoxib,2,Diclofenac,29735,Candidiasis of mouth,Outcome
-1,Celecoxib,2,Diclofenac,73754,Restless legs,Outcome
-1,Celecoxib,2,Diclofenac,80004,Injury of hand,Outcome
-1,Celecoxib,2,Diclofenac,134718,Hirsutism,Outcome
-1,Celecoxib,2,Diclofenac,139099,Ingrowing nail,Outcome
-1,Celecoxib,2,Diclofenac,141932,Senile hyperkeratosis,Outcome
-1,Celecoxib,2,Diclofenac,192367,Dysplasia of cervix,Outcome
-1,Celecoxib,2,Diclofenac,193739,Ovarian failure,Outcome
-1,Celecoxib,2,Diclofenac,194997,Prostatitis,Outcome
-1,Celecoxib,2,Diclofenac,197236,Uterine leiomyoma,Outcome
-1,Celecoxib,2,Diclofenac,199074,Acute pancreatitis,Outcome
-1,Celecoxib,2,Diclofenac,255573,Chronic obstructive lung disease,Outcome
-1,Celecoxib,2,Diclofenac,257007,Allergic rhinitis,Outcome
-1,Celecoxib,2,Diclofenac,313459,Sleep apnea,Outcome
-1,Celecoxib,2,Diclofenac,314658,Cardiomegaly,Outcome
-1,Celecoxib,2,Diclofenac,316084,Lymphadenitis,Outcome
-1,Celecoxib,2,Diclofenac,319843,Mitral valve disorder,Outcome
-1,Celecoxib,2,Diclofenac,321596,Peripheral venous insufficiency,Outcome
-1,Celecoxib,2,Diclofenac,374366,Sensorineural hearing loss,Outcome
-1,Celecoxib,2,Diclofenac,375292,Perforation of tympanic membrane,Outcome
-1,Celecoxib,2,Diclofenac,380094,Carpal tunnel syndrome,Outcome
-1,Celecoxib,2,Diclofenac,433753,Alcohol abuse,Outcome
-1,Celecoxib,2,Diclofenac,433811,Hydronephrosis,Outcome
-1,Celecoxib,2,Diclofenac,436665,Bipolar disorder,Outcome
-1,Celecoxib,2,Diclofenac,436676,Posttraumatic stress disorder,Outcome
-1,Celecoxib,2,Diclofenac,436940,Metabolic syndrome X,Outcome
-1,Celecoxib,2,Diclofenac,437784,Infectious mononucleosis,Outcome
-1,Celecoxib,2,Diclofenac,438134,Hypersomnia,Outcome
-1,Celecoxib,2,Diclofenac,440358,Lipoma,Outcome
-1,Celecoxib,2,Diclofenac,440374,Obsessive-compulsive disorder,Outcome
-1,Celecoxib,2,Diclofenac,443617,Conduct disorder,Outcome
-1,Celecoxib,2,Diclofenac,443800,Amenorrhea,Outcome
-1,Celecoxib,2,Diclofenac,4084966,Candida infection of genital region,Outcome
-1,Celecoxib,2,Diclofenac,4288310,Carotid artery obstruction,Outcome
+targetId,comparatorId,outcomeId,outcomeName,type
+917,979,378256,Abnormal reflex,outcome
+917,979,4218106,Alcoholism,outcome
+917,979,317585,Aortic aneurysm,outcome
+917,979,440424,Aphasia,outcome
+917,979,439237,Assault,outcome
+917,979,378424,Astigmatism,outcome
+917,979,261880,Atelectasis,outcome
+917,979,134118,Atrophic condition of skin,outcome
+917,979,4224118,Bladder dysfunction,outcome
+917,979,80509,Bone cyst,outcome
+917,979,434626,Borderline personality disorder,outcome
+917,979,438407,Bulimia nervosa,outcome
+917,979,134765,Cachexia,outcome
+917,979,4172458,Candidiasis of skin,outcome
+917,979,436740,Cervical incompetence,outcome
+917,979,381581,Chalazion,outcome
+917,979,4307254,Closed fracture,outcome
+917,979,4047787,Colles' fracture,outcome
+917,979,198075,Condyloma acuminatum,outcome
+917,979,73302,Curvature of spine,outcome
+917,979,4242416,Cutis laxa,outcome
+917,979,433163,Deficiency of macronutrients,outcome
+917,979,4047269,Deformity of foot,outcome
+917,979,133228,Dental caries,outcome
+917,979,4095288,Diabetic coma with ketoacidosis,outcome
+917,979,4044391,Diabetic neuropathy,outcome
+917,979,443767,Diabetic oculopathy,outcome
+917,979,4174977,Diabetic retinopathy,outcome
+917,979,4132130,Dilatation of aorta,outcome
+917,979,4147672,Disease due to Papilloma virus,outcome
+917,979,4153380,Disorder of carotid artery,outcome
+917,979,4140510,Disorder of lymphatic vessel,outcome
+917,979,433440,Dysthymia,outcome
+917,979,376132,Ectropion,outcome
+917,979,440695,Encopresis,outcome
+917,979,438872,Excessive eating - polyphagia,outcome
+917,979,78804,Fibrocystic disease of breast,outcome
+917,979,4131595,Fracture of radius,outcome
+917,979,74855,Genital herpes simplex,outcome
+917,979,441788,Human papilloma virus infection,outcome
+917,979,76737,Hydrocele,outcome
+917,979,4029582,Hyperandrogenization syndrome,outcome
+917,979,195212,Hypercortisolism,outcome
+917,979,438134,Hypersomnia,outcome
+917,979,45768449,Hypertensive crisis,outcome
+917,979,140362,Hypoparathyroidism,outcome
+917,979,4322737,Infection of tooth,outcome
+917,979,4207688,Infectious enteritis,outcome
+917,979,79072,Inflammatory disorder of breast,outcome
+917,979,139099,Ingrowing nail,outcome
+917,979,4288544,Inguinal hernia,outcome
+917,979,444191,Injury of face,outcome
+917,979,444130,Injury of foot,outcome
+917,979,134222,Injury of forearm,outcome
+917,979,4029966,Intracranial aneurysm,outcome
+917,979,437409,Intracranial injury,outcome
+917,979,4297984,Local infection of wound,outcome
+917,979,4018050,Localized infection,outcome
+917,979,439840,Lymphangitis,outcome
+917,979,4163232,Mastitis,outcome
+917,979,440389,Mental retardation,outcome
+917,979,436100,Narcolepsy,outcome
+917,979,4262178,Neurogenic dysfunction of the urinary bladder,outcome
+917,979,193874,Nocturnal enuresis,outcome
+917,979,4171549,Nodular goiter,outcome
+917,979,442274,Oligomenorrhea,outcome
+917,979,4215978,Onychomycosis,outcome
+917,979,4171915,Orchitis,outcome
+917,979,380731,Otitis externa,outcome
+917,979,378160,Otorrhea,outcome
+917,979,192606,Paraplegia,outcome
+917,979,253796,Pneumothorax,outcome
+917,979,195501,Polycystic ovaries,outcome
+917,979,4164337,Polyp of large intestine,outcome
+917,979,4153877,Post-traumatic wound infection,outcome
+917,979,434319,Premature ejaculation,outcome
+917,979,373478,Presbyopia,outcome
+917,979,199876,Prolapse of female genital organs,outcome
+917,979,4295888,Prolapse of intestine,outcome
+917,979,194997,Prostatitis,outcome
+917,979,4146239,Pruritus of genital organs,outcome
+917,979,4285569,Pupillary disorder,outcome
+917,979,81336,Rectal prolapse,outcome
+917,979,380395,Retinal dystrophy,outcome
+917,979,141825,Simple goiter,outcome
+917,979,137054,Skin striae,outcome
+917,979,434630,Sleep-wake schedule disorder,outcome
+917,979,4195698,Tenosynovitis,outcome
+917,979,4339088,Testicular mass,outcome
+917,979,133141,Tinea pedis,outcome
+917,979,440814,Torticollis,outcome
+917,979,435140,Toxic effect of alcohol,outcome
+917,979,4270490,Tracheitis,outcome
+917,979,4028970,Tracheobronchitis,outcome
+917,979,4114197,Tumor of hypothalamus,outcome
+917,979,193326,Urge incontinence of urine,outcome
+917,979,4092565,Uterine prolapse,outcome
+917,979,140641,Verruca vulgaris,outcome
+917,979,197036,Vesicoureteric reflux,outcome
+917,979,133551,Vesicular eczema of hands and/or feet,outcome
+917,979,4223947,"Viral hepatitis, type A",outcome
+917,979,261326,Viral pneumonia,outcome

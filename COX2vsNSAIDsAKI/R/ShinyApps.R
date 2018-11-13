@@ -16,46 +16,65 @@
 
 #' Prepare results for the Evidence Explorer Shiny app.
 #'
-#' @param studyFolder  The root folder containing the study results. The app expects each database to have a subfolder in this 
-#'                     folder, containing the packaged results.
+#' @param resultsZipFile  Path to a zip file containing results from a study executed by this package.
+#' @param dataFolder      A folder where the data files for the Evidence Explorer app will be stored.
+#' 
+#' @examples 
+#' 
+#' \dontrun{
+#' # Add results from three databases to the Shiny app data folder:
+#' prepareForEvidenceExplorer("ResultsMDCD.zip", "/shinyData")
+#' prepareForEvidenceExplorer("ResultsMDCR.zip", "/shinyData")
+#' prepareForEvidenceExplorer("ResultsCCAE.zip", "/shinyData")
+#' 
+#' # Launch the Shiny app:
+#' launchEvidenceExplorer("/shinyData")
+#' }
 #'
 #' @export
-prepareForEvidenceExplorer <- function(studyFolder) {
-  databases <- list.files(studyFolder, include.dirs = TRUE)
-  for (database in databases) {
-    OhdsiRTools::logInfo("Prepraring results from database ", database) 
-    fileName <- file.path(studyFolder, database, "AllEstimates.csv")
-    estimates <- read.csv(fileName, stringsAsFactors = FALSE)
-    tcas <- unique(estimates[, c("targetId", "comparatorId", "analysisId")])
-    for (i in 1:nrow(tcas)) {
-      targetId <- tcas$targetId[i]
-      comparatorId <- tcas$comparatorId[i]
-      analysisId <- tcas$analysisId[i]
-      ncs <- estimates[estimates$targetId == targetId &
-                         estimates$comparatorId == comparatorId &
-                         estimates$analysisId == analysisId &
-                         estimates$targetEffectSize == 1,]
-      null <- EmpiricalCalibration::fitMcmcNull(ncs$logRr, ncs$seLogRr)
-      fileName <- file.path(studyFolder, database, paste0("null_a",analysisId,"_t",targetId,"_c",comparatorId,".rds"))
-      saveRDS(null, fileName)
-      idx <- estimates$targetId == targetId &
-        estimates$comparatorId == comparatorId &
-        estimates$analysisId == analysisId 
-      calP <- EmpiricalCalibration::calibrateP(null = null,
-                                               logRr = estimates$logRr[idx],
-                                               seLogRr = estimates$seLogRr[idx])
-      estimates$calP[idx] <- calP$p
-    }
-    fileName <- file.path(studyFolder, database, "AllCalibratedEstimates.rds")
-    saveRDS(estimates, fileName)
+prepareForEvidenceExplorer <- function(resultsZipFile, dataFolder) {
+  # resultsZipFile <- "c:/temp/ResultsMDCD.zip"
+  # dataFolder <- "c:/temp/shinyData"
+  if (!file.exists(dataFolder)) {
+    dir.create(dataFolder, recursive = TRUE)
   }
+  tempFolder <- tempdir()
+  on.exit(unlink(tempFolder, recursive = TRUE))
+  utils::unzip(resultsZipFile, exdir = tempFolder)
+  databaseFileName <- file.path(tempFolder, "database.csv")
+  if (!file.exists(databaseFileName)) {
+    stop("Cannot find file database.csv in zip file")
+  }
+  databaseId <- read.csv(databaseFileName, stringsAsFactors = FALSE)$database_id
+  splittableTables <- c("covariate_balance", "preference_score_dist", "kaplan_meier_dist")
+  
+  processSubet <- function(subset, tableName) {
+    targetId <- subset$target_id[1]
+    comparatorId <- subset$comparator_id[1]
+    fileName <- sprintf("%s_t%s_c%s_%s.rds", tableName, targetId, comparatorId, databaseId)
+    saveRDS(subset, file.path(dataFolder, fileName))
+  }
+  
+  processFile <- function(file) {
+    tableName <- gsub(".csv$", "", file)
+    table <- read.csv(file.path(tempFolder, file))
+    if (tableName %in% splittableTables) {
+      subsets <- split(table, list(table$target_id, table$comparator_id))
+      plyr::l_ply(subsets, processSubet, tableName = tableName)
+    } else {
+      saveRDS(table, file.path(dataFolder, sprintf("%s_%s.rds", tableName, databaseId)))  
+    }
+  }
+
+  files <- list.files(tempFolder, ".*.csv")
+  plyr::l_ply(files, processFile, .progress = "text")
 }
 
 
 #' Launch the SqlRender Developer Shiny app
 #' 
-#' @param studyFolder  The root folder containing the study results. The app expects each database to have a subfolder in this 
-#'                     folder, containing the packaged results.
+#' @param dataFolder   A folder where the data files for the Evidence Explorer app will be stored. Use the
+#'                     \code{\link{prepareForEvidenceExplorer}} to populate this folder.
 #' @param blind        Should the user be blinded to the main results?
 #' @param launch.browser    Should the app be launched in your default browser, or in a Shiny window.
 #'                          Note: copying to clipboard will not work in a Shiny window.
@@ -64,10 +83,10 @@ prepareForEvidenceExplorer <- function(studyFolder) {
 #' Launches a Shiny app that allows the user to explore the evidence
 #' 
 #' @export
-launchEvidenceExplorer <- function(studyFolder, blind = TRUE, launch.browser = TRUE) {
+launchEvidenceExplorer <- function(dataFolder, blind = TRUE, launch.browser = TRUE) {
   ensure_installed("DT")
   appDir <- system.file("shiny", "EvidenceExplorer", package = "COX2vsNSAIDsAKI")
-  .GlobalEnv$shinySettings <- list(studyFolder = studyFolder, blind = blind)
+  .GlobalEnv$shinySettings <- list(dataFolder = dataFolder, blind = blind)
   on.exit(rm(shinySettings, envir=.GlobalEnv))
   shiny::runApp(appDir) 
 }

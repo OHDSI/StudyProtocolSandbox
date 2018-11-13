@@ -4,11 +4,11 @@
 \alias{launchEvidenceExplorer}
 \title{Launch the SqlRender Developer Shiny app}
 \usage{
-launchEvidenceExplorer(studyFolder, blind = TRUE, launch.browser = TRUE)
+launchEvidenceExplorer(dataFolder, blind = TRUE, launch.browser = TRUE)
 }
 \arguments{
-\item{studyFolder}{The root folder containing the study results. The app expects each database to have a subfolder in this 
-folder, containing the packaged results.}
+\item{dataFolder}{A folder where the data files for the Evidence Explorer app will be stored. Use the
+\code{\link{prepareForEvidenceExplorer}} to populate this folder.}
 
 \item{blind}{Should the user be blinded to the main results?}
 

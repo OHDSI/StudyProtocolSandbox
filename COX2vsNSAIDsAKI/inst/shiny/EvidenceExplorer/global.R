@@ -1,48 +1,41 @@
-unlink("s:/temp/log.txt")
-OhdsiRTools::addDefaultFileLogger("s:/temp/log.txt")
+source("DataPulls.R")
+source("PlotsAndTables.R")
 
-# shinySettings <- list(studyFolder = "S:/SkeletonStudy", blind = TRUE)
-studyFolder <- shinySettings$studyFolder
+# shinySettings <- list(dataFolder = "c:/temp/shinyDataNoPcs", blind = FALSE)
+dataFolder <- shinySettings$dataFolder
 blind <- shinySettings$blind
-OhdsiRTools::logDebug(studyFolder)
+connection <- NULL
+positiveControlOutcome <- NULL
 
-databases <- list.files(studyFolder, include.dirs = TRUE)
+splittableTables <- c("covariate_balance", "preference_score_dist", "kaplan_meier_dist")
 
-loadEstimates <- function(database) {
-  fileName <- file.path(studyFolder, database, "AllCalibratedEstimates.rds")
-  dbEstimates <- readRDS(fileName)
-  dbEstimates$database <- database
-  return(dbEstimates)
+files <- list.files(dataFolder, pattern = ".rds")
+
+# Remove data already in global environment:
+tableNames <- gsub("(_t[0-9]+_c[0-9]+)|(_)[^_]*\\.rds", "", files) 
+camelCaseNames <- SqlRender::snakeCaseToCamelCase(tableNames)
+camelCaseNames <- unique(camelCaseNames)
+camelCaseNames <- camelCaseNames[!(camelCaseNames %in% SqlRender::snakeCaseToCamelCase(splittableTables))]
+rm(list = camelCaseNames)
+
+# Load data from data folder:
+loadFile <- function(file) {
+  # file = files[13]
+  tableName <- gsub("(_t[0-9]+_c[0-9]+)|(_)[^_]*\\.rds", "", file) 
+  camelCaseName <- SqlRender::snakeCaseToCamelCase(tableName)
+  if (!(tableName %in% splittableTables)) {
+    newData <- readRDS(file.path(dataFolder, file))
+    colnames(newData) <- SqlRender::snakeCaseToCamelCase(colnames(newData))
+    if (exists(camelCaseName, envir = .GlobalEnv)) {
+      existingData <- get(camelCaseName, envir = .GlobalEnv)
+      newData <- rbind(existingData, newData)
+    }
+    assign(camelCaseName, newData, envir = .GlobalEnv)
+  }
+  invisible(NULL)
 }
-estimates <- lapply(databases, loadEstimates)
-estimates <- do.call(rbind, estimates)
+lapply(files, loadFile)
 
-resultsControls <- estimates[!is.na(estimates$targetEffectSize), ]
-resultsHois <- estimates[is.na(estimates$targetEffectSize), ]
-if (blind) {
-  resultsHois$rr <- as.numeric(NA)
-  resultsHois$ci95lb <- as.numeric(NA)
-  resultsHois$ci95ub <- as.numeric(NA)
-  resultsHois$logRr <- as.numeric(NA)
-  resultsHois$seLogRr <- as.numeric(NA)
-  resultsHois$p <- as.numeric(NA)
-  resultsHois$calP <- as.numeric(NA)
-}
-resultsHois$comparison <- paste(resultsHois$targetName, resultsHois$comparatorName, sep = " vs. ")
-resultsHois$psStrategy <- "Stratification"
-
-comparisons <- unique(resultsHois$comparison)
-comparisons <- comparisons[order(comparisons)]
-
-outcomes <- as.character(unique(resultsHois$outcomeName))
-analyses <- as.character(unique(resultsHois$description))
-
-loadMdrrs <- function(database) {
-  fileName <- file.path(studyFolder, database, "Mdrrs.csv")
-  dbMdrrs <- read.csv(fileName)
-  dbMdrrs$database <- database
-  return(dbMdrrs)
-}
-mdrrs <- lapply(databases, loadMdrrs)
-mdrrs <- do.call(rbind, mdrrs)
-resultsHois <- merge(resultsHois, mdrrs[, c("targetId", "comparatorId", "outcomeId", "analysisId", "database", "mdrr")])
+tcos <- unique(cohortMethodResult[, c("targetId", "comparatorId", "outcomeId")])
+tcos <- tcos[tcos$outcomeId %in% outcomeOfInterest$outcomeId, ]
+               
