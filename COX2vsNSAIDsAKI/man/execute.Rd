@@ -7,9 +7,11 @@
 execute(connectionDetails, cdmDatabaseSchema,
   cohortDatabaseSchema = cdmDatabaseSchema, cohortTable = "cohort",
   oracleTempSchema = cohortDatabaseSchema, outputFolder,
-  createCohorts = TRUE, synthesizePositiveControls = TRUE,
-  runAnalyses = TRUE, runDiagnostics = TRUE, packageResults = TRUE,
-  maxCores = 4, minCellCount = 5)
+  databaseId = "Unknown", databaseName = "Unknown",
+  databaseDescription = "Unknown", createCohorts = TRUE,
+  synthesizePositiveControls = TRUE, runAnalyses = TRUE,
+  runDiagnostics = TRUE, packageResults = TRUE, maxCores = 4,
+  minCellCount = 5)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -34,6 +36,14 @@ priviliges for storing temporary tables.}
 \item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
 (/). Do not use a folder on a network drive since this greatly impacts
 performance.}
+
+\item{databaseId}{A short string for identifying the database (e.g.
+'Synpuf').}
+
+\item{databaseName}{The full name of the database (e.g. 'Medicare Claims
+Synthetic Public Use Files (SynPUFs)').}
+
+\item{databaseDescription}{A short description (several sentences) of the database.}
 
 \item{createCohorts}{Create the cohortTable table with the exposure and outcome cohorts?}
 

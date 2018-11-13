@@ -22,195 +22,171 @@
 #' @param outputFolder         Name of local folder where the results were generated; make sure to use forward slashes
 #'                             (/). Do not use a folder on a network drive since this greatly impacts
 #'                             performance.
+#' @param maxCores              How many parallel cores should be used? If more cores are made
+#'                              available this can speed up the analyses.
 #'
 #' @export
-generateDiagnostics <- function(outputFolder) {
-  packageName <- "COX2vsNSAIDsAKI"
-  modelType <- "cox" # For MDRR computation
-  psStrategy <- "stratification" # For covariate balance labels
+generateDiagnostics <- function(outputFolder, maxCores) {
   cmOutputFolder <- file.path(outputFolder, "cmOutput")
   diagnosticsFolder <- file.path(outputFolder, "diagnostics")
-  if (!file.exists(diagnosticsFolder))
+  if (!file.exists(diagnosticsFolder)) {
     dir.create(diagnosticsFolder)
-  
-  pathToCsv <- system.file("settings", "TcosOfInterest.csv", package = packageName)
-  tcosOfInterest <- read.csv(pathToCsv, stringsAsFactors = FALSE)
-  
-  reference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
-  reference <- unique(reference)
-  analysisSummary <- CohortMethod::summarizeAnalyses(reference)
-  cmAnalysisList <- CohortMethod::loadCmAnalysisList(system.file("settings", "cmAnalysisList.json", package = packageName))
-  for (i in 1:length(cmAnalysisList)) {
-    analysisSummary$description[analysisSummary$analysisId == cmAnalysisList[[i]]$analysisId] <-  cmAnalysisList[[i]]$description
   }
-  #allControlsFile <- file.path(outputFolder, "AllControls.csv")
-  #allControls <- read.csv(allControlsFile)
-  tcsOfInterest <- unique(tcosOfInterest[, c("targetId", "comparatorId")])
-  mdrrs <- data.frame()
-  for (i in 1:nrow(tcsOfInterest)) {
-    targetId <- tcsOfInterest$targetId[i]
-    comparatorId <- tcsOfInterest$comparatorId[i]
-    targetLabel <- tcosOfInterest$targetName[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId][1]
-    comparatorLabel <- tcosOfInterest$comparatorName[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId][1]
-    outcomeIds <- as.character(tcosOfInterest$outcomeIds[tcosOfInterest$targetId == targetId & tcosOfInterest$comparatorId == comparatorId])
-    outcomeIds <- as.numeric(strsplit(outcomeIds, split = ";")[[1]])
-    for (analysisId in unique(reference$analysisId)) {
-      #controlSubset <- allControls[allControls$targetId == targetId & allControls$comparatorId == comparatorId, ]
-      #controlSubset <- merge(controlSubset[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")], analysisSummary[analysisSummary$analysisId == analysisId, ])
-      controlSubset <- analysisSummary[analysisSummary$analysisId == analysisId, ]
-      
-      # Outcome controls
-      label <- "OutcomeControls"
-      
-      negControlSubset <- controlSubset[controlSubset$targetEffectSize == 1, ]
-      
-      validNcs <- sum(!is.na(negControlSubset$seLogRr))
-      if (validNcs >= 5) {
-        null <- EmpiricalCalibration::fitMcmcNull(negControlSubset$logRr, negControlSubset$seLogRr)
-        
-        fileName <-  file.path(diagnosticsFolder, paste0("nullDistribution_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".png"))
-        EmpiricalCalibration::plotCalibrationEffect(logRrNegatives = negControlSubset$logRr,
-                                                    seLogRrNegatives = negControlSubset$seLogRr,
-                                                    null = null,
-                                                    showCis = TRUE,
-                                                    fileName = fileName)
-      } else {
-        null <- NULL
-      }
-      if (sum(!is.na(controlSubset$seLogRr)) >= 5) {
-        fileName <-  file.path(diagnosticsFolder, paste0("trueAndObs_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".png"))
-        EmpiricalCalibration::plotTrueAndObserved(logRr = controlSubset$logRr, 
+  reference <- readRDS(file.path(cmOutputFolder, "outcomeModelReference.rds"))
+  reference <- addCohortNames(reference, "targetId", "targetName")
+  reference <- addCohortNames(reference, "comparatorId", "comparatorName")
+  reference <- addCohortNames(reference, "outcomeId", "outcomeName")
+  reference <- addAnalysisDescription(reference, "analysisId", "analysisDescription")
+  analysisSummary <- read.csv(file.path(outputFolder, "analysisSummary.csv"))
+  reference <- merge(reference, analysisSummary[, c("targetId", "comparatorId", "outcomeId", "analysisId", "logRr", "seLogRr")])
+  allControls <- getAllControls(outputFolder)
+  subsets <- split(reference, list(reference$targetId, reference$comparatorId, reference$analysisId))
+  # subset <- subsets[[1]]
+  cluster <- ParallelLogger::makeCluster(min(4, maxCores))
+  ParallelLogger::clusterApply(cluster = cluster, 
+                               x = subsets, 
+                               fun = createDiagnosticsForSubset, 
+                               allControls = allControls, 
+                               outputFolder = outputFolder, 
+                               cmOutputFolder = cmOutputFolder, 
+                               diagnosticsFolder = diagnosticsFolder)
+  ParallelLogger::stopCluster(cluster)
+}
+
+createDiagnosticsForSubset <- function(subset, allControls, outputFolder, cmOutputFolder, diagnosticsFolder) {
+  targetId <- subset$targetId[1]
+  comparatorId <- subset$comparatorId[1]
+  analysisId <- subset$analysisId[1]
+  ParallelLogger::logTrace("Generating diagnostics for target ", targetId, ", comparator ", comparatorId, ", analysis ", analysisId)
+  ParallelLogger::logDebug("Subset has ", nrow(subset)," entries with ", sum(!is.na(subset$seLogRr)), " valid estimates")
+  title <- paste(paste(subset$targetName[1], subset$comparatorName[1], sep = " - "), 
+                 subset$analysisDescription[1], sep = "\n")
+  controlSubset <- merge(subset,
+                         allControls[, c("targetId", "comparatorId", "outcomeId", "oldOutcomeId", "targetEffectSize")])
+  
+  # Empirical calibration ----------------------------------------------------------------------------------
+  
+  # Negative controls
+  negControlSubset <- controlSubset[controlSubset$targetEffectSize == 1, ]
+  validNcs <- sum(!is.na(negControlSubset$seLogRr))
+  ParallelLogger::logDebug("Subset has ", validNcs, " valid negative control estimates")
+  if (validNcs >= 5) {
+    null <- EmpiricalCalibration::fitMcmcNull(negControlSubset$logRr, negControlSubset$seLogRr)
+    fileName <-  file.path(diagnosticsFolder, paste0("nullDistribution_a", analysisId, "_t", targetId, "_c", comparatorId, ".png"))
+    EmpiricalCalibration::plotCalibrationEffect(logRrNegatives = negControlSubset$logRr,
+                                                seLogRrNegatives = negControlSubset$seLogRr,
+                                                null = null,
+                                                showCis = TRUE,
+                                                title = title,
+                                                fileName = fileName)
+  } else {
+    null <- NULL
+  }
+  
+  # Positive and negative controls
+  validPcs <- sum(!is.na(controlSubset$seLogRr[controlSubset$targetEffectSize != 1]))
+  ParallelLogger::logDebug("Subset has ", validPcs, " valid positive control estimates")
+  if (validPcs >= 10) {
+    model <- EmpiricalCalibration::fitSystematicErrorModel(logRr = controlSubset$logRr, 
+                                                           seLogRr = controlSubset$seLogRr, 
+                                                           trueLogRr = log(controlSubset$targetEffectSize), 
+                                                           estimateCovarianceMatrix = FALSE)
+    
+    fileName <-  file.path(diagnosticsFolder, paste0("controls_a", analysisId, "_t", targetId, "_c", comparatorId, ".png"))
+    EmpiricalCalibration::plotCiCalibrationEffect(logRr = controlSubset$logRr, 
                                                   seLogRr = controlSubset$seLogRr, 
                                                   trueLogRr = log(controlSubset$targetEffectSize),
+                                                  model = model,
+                                                  title = title,
                                                   fileName = fileName)
-      }
-      validPcs <- sum(!is.na(controlSubset$seLogRr[controlSubset$targetEffectSize != 1]))
-      if (validPcs >= 10) {
-        model <- EmpiricalCalibration::fitSystematicErrorModel(controlSubset$logRr, controlSubset$seLogRr, log(controlSubset$targetEffectSize), estimateCovarianceMatrix = FALSE)
-        class(model) <- "vector"
-        fileName <-  file.path(diagnosticsFolder, paste0("systematicErrorModel_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".csv"))
-        write.csv(t(model), fileName, row.names = FALSE)
-        
-        fileName <-  file.path(diagnosticsFolder, paste0("ciCoverage_a", analysisId, "_t", targetId, "_c", comparatorId, "_", label, ".png"))
-        evaluation <- EmpiricalCalibration::evaluateCiCalibration(logRr = controlSubset$logRr, 
-                                                                  seLogRr = controlSubset$seLogRr, 
-                                                                  trueLogRr = log(controlSubset$targetEffectSize),
-                                                                  crossValidationGroup = controlSubset$oldOutcomeId)
-        EmpiricalCalibration::plotCiCoverage(evaluation = evaluation,
-                                             fileName = fileName)
-      } 
-      
-      
-      for (outcomeId in outcomeIds) {
-        # Compute MDRR
-        strataFile <- reference$strataFile[reference$analysisId == analysisId &
-                                             reference$targetId == targetId &
-                                             reference$comparatorId == comparatorId &
-                                             reference$outcomeId == outcomeId]
-        if (strataFile == "") {
-          strataFile <- reference$studyPopFile[reference$analysisId == analysisId &
-                                                 reference$targetId == targetId &
-                                                 reference$comparatorId == comparatorId &
-                                                 reference$outcomeId == outcomeId]
-        }
-        population <- readRDS(strataFile)
-        mdrr <- CohortMethod::computeMdrr(population, alpha = 0.05, power = 0.8, twoSided = TRUE, modelType = modelType)
-        mdrr$analysisId <- analysisId
-        mdrr$targetId <- targetId
-        mdrr$comparatorId <- comparatorId
-        mdrr$outcomeId <- outcomeId
-        mdrrs <- rbind(mdrrs, mdrr)
-        fileName <-  file.path(diagnosticsFolder, paste0("attritionDiagram_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId, ".png"))
-        CohortMethod::drawAttritionDiagram(population, treatmentLabel = targetLabel, comparatorLabel = comparatorLabel, fileName = fileName)
-        
-        fileName <-  file.path(diagnosticsFolder, paste0("attritionTable_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId, ".csv"))
-        attritionTable <- CohortMethod::getAttritionTable(population)
-        write.csv(attritionTable, fileName, row.names = FALSE)
-        
-        if (!is.null(null)) {
-          fileName <-  file.path(diagnosticsFolder, paste0("type1Error_a",analysisId,"_t",targetId,"_c",comparatorId, "_o", outcomeId,"_", label, ".png"))
-          EmpiricalCalibration::plotExpectedType1Error(seLogRrPositives = mdrr$se,
-                                                       null = null,
-                                                       showCis = TRUE,
-                                                       title = label,
-                                                       fileName = fileName)
-        }
-      }
-      exampleRef <- reference[reference$analysisId == analysisId &
-                                reference$targetId == targetId &
-                                reference$comparatorId == comparatorId &
-                                reference$outcomeId == outcomeIds[1], ]
-      
-      if(exampleRef$sharedPsFile =="") {
-        ps <- data.frame()
-      } else ps <- readRDS(exampleRef$sharedPsFile)
-      if (  nrow(ps) != 0  ) {
-        if (exampleRef$sharedPsFile == "") {
-          psAfterMatching <- readRDS(exampleRef$studyPopFile)
-        } else {
-          psAfterMatching <- readRDS(exampleRef$strataFile)
-          
-          fileName <-  file.path(diagnosticsFolder, paste0("psBeforeStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
-          psPlot <- CohortMethod::plotPs(data = ps,
-                                         treatmentLabel = targetLabel,
-                                         comparatorLabel = comparatorLabel,
+    
+    fileName <-  file.path(diagnosticsFolder, paste0("ciCoverage_a", analysisId, "_t", targetId, "_c", comparatorId, ".png"))
+    evaluation <- EmpiricalCalibration::evaluateCiCalibration(logRr = controlSubset$logRr, 
+                                                              seLogRr = controlSubset$seLogRr, 
+                                                              trueLogRr = log(controlSubset$targetEffectSize),
+                                                              crossValidationGroup = controlSubset$oldOutcomeId)
+    EmpiricalCalibration::plotCiCoverage(evaluation = evaluation,
+                                         title = title,
                                          fileName = fileName)
-          
-          
-          fileName <-  file.path(diagnosticsFolder, paste0("psAfterStratification_a",analysisId,"_t",targetId,"_c",comparatorId,".png"))
-          psPlot <- CohortMethod::plotPs(data = psAfterMatching,
-                                         unfilteredData = ps,
-                                         treatmentLabel = targetLabel,
-                                         comparatorLabel = comparatorLabel,
-                                         fileName = fileName)
-          
-          prepapredPsPlot <- EvidenceSynthesis::preparePsPlot(data = psAfterMatching,
-                                                              unfilteredData = ps)
-          fileName <-  file.path(diagnosticsFolder, paste0("preparedPsPlot_a",analysisId,"_t",targetId,"_c",comparatorId,".csv"))
-          write.csv(prepapredPsPlot, fileName, row.names = FALSE)
-          
-          cmData <- CohortMethod::loadCohortMethodData(exampleRef$cohortMethodDataFolder)
-          
-          balance <- CohortMethod::computeCovariateBalance(psAfterMatching, cmData)
-          fileName = file.path(diagnosticsFolder, paste("balance_a",analysisId,"_t",targetId,"_c",comparatorId,".csv",sep=""))
-          write.csv(balance, fileName, row.names = FALSE)
-          
-          fileName = file.path(diagnosticsFolder, paste("balanceScatter_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
-          balanceScatterPlot <- CohortMethod::plotCovariateBalanceScatterPlot(balance = balance,
-                                                                              beforeLabel = paste("Before", psStrategy),
-                                                                              afterLabel =  paste("After", psStrategy),
-                                                                              fileName = fileName)
-          
-          fileName = file.path(diagnosticsFolder, paste("balanceTop_a",analysisId,"_t",targetId,"_c",comparatorId,".png",sep=""))
-          balanceTopPlot <- CohortMethod::plotCovariateBalanceOfTopVariables(balance = balance,
-                                                                             beforeLabel = paste("Before", psStrategy),
-                                                                             afterLabel =  paste("After", psStrategy),
-                                                                             fileName = fileName)
-        }
-        fileName = file.path(diagnosticsFolder, paste("table1_a",analysisId,"_t",targetId,"_c",comparatorId,".csv",sep=""))
-        table1 <- CohortMethod::createCmTable1(balance = balance,  
-                                               beforeTargetPopSize = sum(cmData$cohorts$treatment == 1),
-                                               afterTargetPopSize = sum(psAfterMatching$treatment == 1),
-                                               beforeComparatorPopSize = sum(cmData$cohorts$treatment == 0),
-                                               afterComparatorPopSize = sum(psAfterMatching$treatment == 0),
-                                               targetLabel = targetLabel,
-                                               comparatorLabel = comparatorLabel,
-                                               beforeLabel = paste("Before", psStrategy), 
-                                               afterLabel =  paste("After", psStrategy))
-        write.csv(table1, fileName, row.names = FALSE)
-        
-        fileName = file.path(diagnosticsFolder, paste("followupDist_a",analysisId,"_t",targetId,"_c",comparatorId, ".png",sep=""))
-        CohortMethod::plotFollowUpDistribution(psAfterMatching, 
-                                               targetLabel = targetLabel,
-                                               comparatorLabel = comparatorLabel,
-                                               fileName = fileName)
-      }
+  } 
+  
+  # Statistical power --------------------------------------------------------------------------------------
+  outcomeIdsOfInterest <- subset$outcomeId[!(subset$outcomeId %in% controlSubset$outcomeId)]
+  mdrrs <- data.frame()
+  for (outcomeId in outcomeIdsOfInterest) {
+    strataFile <- subset$strataFile[subset$outcomeId == outcomeId]
+    if (strataFile == "") {
+      strataFile <- subset$studyPopFile[subset$outcomeId == outcomeId]
     }
+    population <- readRDS(file.path(cmOutputFolder, strataFile))
+    modelFile <- subset$outcomeModelFile[subset$outcomeId == outcomeId]
+    model <- readRDS(file.path(cmOutputFolder, modelFile))
+    mdrr <- CohortMethod::computeMdrr(population = population, 
+                                      alpha = 0.05, 
+                                      power = 0.8, 
+                                      twoSided = TRUE, 
+                                      modelType =  model$outcomeModelType)
+    
+    mdrr$outcomeId <- outcomeId
+    mdrr$outcomeName <- subset$outcomeName[subset$outcomeId == outcomeId]
+    mdrrs <- rbind(mdrrs, mdrr)
   }
-  mdrrs <- addCohortNames(mdrrs, "targetId", "targetName")
-  mdrrs <- addCohortNames(mdrrs, "comparatorId", "comparatorName")
-  mdrrs <- addCohortNames(mdrrs, "outcomeId", "outcomeName")
-  fileName <-  file.path(diagnosticsFolder, "mdrrs.csv")
+  mdrrs$analysisId <- analysisId
+  mdrrs$analysisDescription <- subset$analysisDescription[1]
+  mdrrs$targetId <- targetId
+  mdrrs$targetName <- subset$targetName[1]
+  mdrrs$comparatorId <- comparatorId
+  mdrrs$comparatorName <- subset$comparatorName[1]
+  fileName <-  file.path(diagnosticsFolder, paste0("mdrr_a", analysisId, "_t", targetId, "_c", comparatorId, ".csv"))
   write.csv(mdrrs, fileName, row.names = FALSE)
   
+  # Covariate balance --------------------------------------------------------------------------------------
+  outcomeIdsOfInterest <- subset$outcomeId[!(subset$outcomeId %in% controlSubset$outcomeId)]
+  outcomeId = outcomeIdsOfInterest[1]
+  for (outcomeId in outcomeIdsOfInterest) {
+    balanceFileName <- file.path(outputFolder,
+                                 "balance",
+                                 sprintf("bal_t%s_c%s_o%s_a%s.rds", targetId, comparatorId, outcomeId, analysisId))
+    if (file.exists(balanceFileName)) {
+      balance <- readRDS(balanceFileName)
+      fileName = file.path(diagnosticsFolder, 
+                           sprintf("bal_t%s_c%s_o%s_a%s.csv", targetId, comparatorId, outcomeId, analysisId))
+      write.csv(balance, fileName, row.names = FALSE)
+      
+      outcomeTitle <- paste(paste(subset$targetName[1], subset$comparatorName[1], sep = " - "), 
+                            subset$outcomeName[subset$outcomeId == outcomeId], 
+                            subset$analysisDescription[1], sep = "\n")
+      fileName = file.path(diagnosticsFolder, 
+                           sprintf("balanceScatter_t%s_c%s_o%s_a%s.png", targetId, comparatorId, outcomeId, analysisId))
+      balanceScatterPlot <- CohortMethod::plotCovariateBalanceScatterPlot(balance = balance,
+                                                                          beforeLabel = "Before PS adjustment",
+                                                                          afterLabel =  "After PS adjustment",
+                                                                          showCovariateCountLabel = TRUE,
+                                                                          showMaxLabel = TRUE,
+                                                                          title = outcomeTitle,
+                                                                          fileName = fileName)
+      
+      fileName = file.path(diagnosticsFolder, 
+                           sprintf("balanceTop_t%s_c%s_o%s_a%s.png", targetId, comparatorId, outcomeId, analysisId))
+      balanceTopPlot <- CohortMethod::plotCovariateBalanceOfTopVariables(balance = balance,
+                                                                         beforeLabel = "Before PS adjustment",
+                                                                         afterLabel =  "After PS adjustment",
+                                                                         title = outcomeTitle,
+                                                                         fileName = fileName)
+    }
+  }
+  # Propensity score distribution --------------------------------------------------------------------------
+  psFile <- subset$sharedPsFile[1]
+  if (psFile != "") {
+    ps <- readRDS(file.path(cmOutputFolder, psFile))
+    fileName <-  file.path(diagnosticsFolder, paste0("ps_a", analysisId, "_t", targetId, "_c", comparatorId, ".png"))
+    CohortMethod::plotPs(data = ps,
+                         targetLabel = subset$targetName[1],
+                         comparatorLabel = subset$comparatorName[1],
+                         showCountsLabel = TRUE,
+                         showAucLabel = TRUE,
+                         showEquiposeLabel = TRUE,
+                         title = subset$analysisDescription[1],
+                         fileName = fileName)
+  }
 }

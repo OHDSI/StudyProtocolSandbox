@@ -4,12 +4,26 @@
 \alias{prepareForEvidenceExplorer}
 \title{Prepare results for the Evidence Explorer Shiny app.}
 \usage{
-prepareForEvidenceExplorer(studyFolder)
+prepareForEvidenceExplorer(resultsZipFile, dataFolder)
 }
 \arguments{
-\item{studyFolder}{The root folder containing the study results. The app expects each database to have a subfolder in this 
-folder, containing the packaged results.}
+\item{resultsZipFile}{Path to a zip file containing results from a study executed by this package.}
+
+\item{dataFolder}{A folder where the data files for the Evidence Explorer app will be stored.}
 }
 \description{
 Prepare results for the Evidence Explorer Shiny app.
+}
+\examples{
+
+\dontrun{
+# Add results from three databases to the Shiny app data folder:
+prepareForEvidenceExplorer("ResultsMDCD.zip", "/shinyData")
+prepareForEvidenceExplorer("ResultsMDCR.zip", "/shinyData")
+prepareForEvidenceExplorer("ResultsCCAE.zip", "/shinyData")
+
+# Launch the Shiny app:
+launchEvidenceExplorer("/shinyData")
+}
+
 }
