@@ -5,7 +5,7 @@ A skeleton package, to be used as a starting point when implementing patient-lev
 
 Vignette: [Using the package skeleton for patient-level prediction studies](https://raw.githubusercontent.com/OHDSI/StudyProtocolSandbox/master/SkeletonPredictionStudy/inst/doc/UsingSkeletonPackage.pdf)
 
-Instructions 
+Instructions To Prepare Package Outside Atlas
 ===================
 
 - Step 1: Change package name, readme and description (replace (SkeletonPredictionStudy with the package name)
@@ -13,8 +13,17 @@ Instructions
 - Step 3: Add inst/settings/CohortToCreate.csv - a csv containing three columns, cohortId, atlasId and name - the cohorts in your local atlas with the atlasId will be downloaded into the package and given the cohortId cohort_definition_id when the user creates the cohorts.
 - Step 4: Create prediction analysis detail r code that specifies the models, populations, covariates, Ts and Os used in the study (extras/CreatePredictionAnalysisDetails)
 - Step 5: Run package management to extract cohorts (using CohortToCreate.csv) and create json specification (using extras/CreatePredictionAnalysisDetails.R)
-- Step 6: Now build the package by clicking the R studio 'Install and Restart' button in the built tab 
-- Step 7: Share the package and get people to install by running but replace 'SkeletonPredictionStudy' with your study name:
+
+
+Instructions To Build Package
+===================
+
+- Build the package by clicking the R studio 'Install and Restart' button in the built tab 
+
+Instructions To Run Package
+===================
+
+- Share the package by adding it to the OHDSI/StudyProtocolSandbox github repo and get people to install by running but replace 'SkeletonPredictionStudy' with your study name if not using atlas:
 ```r
   # get the latest PatientLevelPrediction
   install.packages("devtools")
@@ -23,26 +32,26 @@ Instructions
   PatientLevelPrediction::checkPlpInstallation()
   
   # install the network package
-  devtools::install_github(OHDSI/SkeletonPredictionStudy)
+  devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonPredictionStudy")
 ```
 
-- Step 8: Get users to execute the study by running the code in (extras/CodeToRun.R) but replace 'SkeletonPredictionStudy' with your study name:
+- Get users to execute the study by running the code in (extras/CodeToRun.R) but replace 'SkeletonPredictionStudy' with your study name:
 ```r
   library(SkeletonPredictionStudy)
   # USER INPUTS
 #=======================
 # Specify where the temporary files (used by the ff package) will be created:
-options(fftempdir = "s:/FFtemp")
+options(fftempdir = "location with space to save big data")
 
 # The folder where the study intermediate and result files will be written:
-outputFolder <- "s:/SkeletonPredictionStudyResults"
+outputFolder <- "./SkeletonPredictionStudyResults"
 
 # Details for connecting to the server:
-dbms <- "pdw"
-user <- NULL
-pw <- NULL
-server <- Sys.getenv('server')
-port <- Sys.getenv('port')
+dbms <- "you dbms"
+user <- 'your username'
+pw <- 'your password'
+server <- 'your server'
+port <- 'your port'
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
@@ -51,9 +60,11 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 port = port)
 
 # Add the database containing the OMOP CDM data
-cdmDatabaseSchema <- 'cdm_database.dbo'
+cdmDatabaseSchema <- 'cdm database schema'
 # Add a database with read/write access as this is where the cohorts will be generated
-cohortDatabaseSchema <- 'workdatabase.dbo'
+cohortDatabaseSchema <- 'work database schema'
+
+oracleTempSchema <- NULL
 
 # table name where the cohorts will be generated
 cohortTable <- 'SkeletonPredictionStudyCohort'
@@ -63,14 +74,17 @@ execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
+        oracleTempSchema = oracleTempSchema,
         outputFolder = outputFolder,
+        createProtocol = T,
         createCohorts = T,
         runAnalyses = T,
+        createResultsDoc = T,
         packageResults = T,
         createValidationPackage = F,
         minCellCount= 5)
 ```
-- [Still Under Development] Step 9: You can then easily transport these results into a network study package by running:
+- You can then easily transport the trained models into a network validation study package by running:
   ```r
   
   execute(connectionDetails = connectionDetails,
@@ -78,8 +92,10 @@ execute(connectionDetails = connectionDetails,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
+        createProtocol = F,
         createCohorts = F,
         runAnalyses = F,
+        createResultsDoc = F,
         packageResults = F,
         createValidationPackage = T,
         minCellCount= 5)

@@ -12,8 +12,7 @@ Depends:
   DatabaseConnector (>= 1.11.4),
   FeatureExtraction (>= 2.0.0),
   Cyclops (>= 1.2.2),
-  PatientLevelPrediction (>= 2.0.0),
-  Hydra
+  PatientLevelPrediction (>= 2.0.0)
 Imports:
   ggplot2,
   gridExtra,

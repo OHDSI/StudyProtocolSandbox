@@ -1,0 +1,181 @@
+2018-09-25 04:54:41	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-09-25 04:54:48	[Main thread]	FATAL	DatabaseConnector	.createErrorReport	Error: Error executing SQL: com.microsoft.sqlserver.jdbc.SQLServerException: User does not have permission to perform this action. Changed database context to 'CDM_Truven_CCAE_v778'. An error report has been created at  S:/rwilliams/git/ohdsi/StudyProtocolSandbox/HFinT2DMValidation/errorReport.txt 
+2018-09-25 04:58:23	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-09-25 04:58:23	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-09-25 05:02:51	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-09-25 05:02:51	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-09-25 05:02:53	[Main thread]	FATAL	HFinT2DMValidation	execute	Error in HFinT2DMValidation::execute(connectionDetails = connectionDetails,  :    object 'runValidations' not found 
+2018-09-25 05:02:53	[Main thread]	FATAL	HFinT2DMValidation	execute	Error in HFinT2DMValidation::execute(connectionDetails = connectionDetails,  :    object 'runValidations' not found 
+2018-09-25 05:03:50	[Main thread]	INFO			Creating Cohorts
+2018-09-25 05:03:50	[Main thread]	INFO			Creating Cohorts
+2018-09-25 05:08:16	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-09-25 05:08:16	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-09-25 05:10:24	[Main thread]	FATAL			Error in HFinT2DMValidation::execute(connectionDetails = connectionDetails,  :    unused argument (runValidations = T) 
+2018-09-25 05:10:24	[Main thread]	FATAL			Error in HFinT2DMValidation::execute(connectionDetails = connectionDetails,  :    unused argument (runValidations = T) 
+2018-09-25 05:10:53	[Main thread]	FATAL			Error in HFinT2DMValidation::execute(connectionDetails = connectionDetails,  :    unused argument (runValidations = T) 
+2018-09-25 05:10:53	[Main thread]	FATAL			Error in HFinT2DMValidation::execute(connectionDetails = connectionDetails,  :    unused argument (runValidations = T) 
+2018-09-25 05:11:28	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-09-25 05:11:28	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-09-25 05:11:28	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-09-25 05:16:05	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-09-25 05:16:05	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-09-25 05:16:05	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-09-25 05:16:06	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-09-25 05:16:06	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-09-25 05:16:06	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-09-25 05:16:06	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in NA
+2018-09-25 05:16:06	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in NA
+2018-09-25 05:16:06	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in NA
+2018-09-25 05:16:06	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in 
+2018-09-25 05:16:06	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in 
+2018-09-25 05:16:06	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in 
+2018-10-03 09:34:38	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 09:47:50	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 09:56:21	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 09:56:23	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 09:56:23	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in NA
+2018-10-03 09:56:23	[Main thread]	INFO	PatientLevelPrediction	evaluateMultiplePlp	Evaluating model in 
+2018-10-03 09:56:23	[Main thread]	FATAL	PatientLevelPrediction	evaluateMultiplePlp	Error in if (dir.exists(file.path(modelSettings[i], "plpResult"))) { :    argument is of length zero 
+2018-10-03 09:58:13	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 09:58:13	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 10:09:34	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 10:09:34	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 10:09:37	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 10:09:37	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 10:09:37	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:09:37	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:09:37	[Main thread]	FATAL	PatientLevelPrediction	clearLoggerType	Error in if (is.integer(x) || as.numeric(x)) { :    missing value where TRUE/FALSE needed 
+2018-10-03 10:09:37	[Main thread]	FATAL	PatientLevelPrediction	clearLoggerType	Error in if (is.integer(x) || as.numeric(x)) { :    missing value where TRUE/FALSE needed 
+2018-10-03 10:14:13	[Main thread]	FATAL			Error in if (createCohorts) { : argument is not interpretable as logical 
+2018-10-03 10:14:13	[Main thread]	FATAL			Error in if (createCohorts) { : argument is not interpretable as logical 
+2018-10-03 10:14:25	[Main thread]	INFO			Creating Cohorts
+2018-10-03 10:14:25	[Main thread]	INFO			Creating Cohorts
+2018-10-03 10:21:27	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 10:21:27	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 10:26:52	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:26:52	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:26:52	[Main thread]	FATAL	PatientLevelPrediction	clearLoggerType	Error in if (is.integer(x) || as.numeric(x)) { :    missing value where TRUE/FALSE needed 
+2018-10-03 10:26:52	[Main thread]	FATAL	PatientLevelPrediction	clearLoggerType	Error in if (is.integer(x) || as.numeric(x)) { :    missing value where TRUE/FALSE needed 
+2018-10-03 10:31:42	[Main thread]	FATAL	PatientLevelPrediction	loadPlpResult	Error in file.exists(dirPath) :    argument "dirPath" is missing, with no default 
+2018-10-03 10:31:42	[Main thread]	FATAL	PatientLevelPrediction	loadPlpResult	Error in file.exists(dirPath) :    argument "dirPath" is missing, with no default 
+2018-10-03 10:31:50	[Main thread]	FATAL			Error: 'loadPlpResultplp_location' is not an exported object from 'namespace:PatientLevelPrediction' 
+2018-10-03 10:31:50	[Main thread]	FATAL			Error: 'loadPlpResultplp_location' is not an exported object from 'namespace:PatientLevelPrediction' 
+2018-10-03 10:31:58	[Main thread]	FATAL	PatientLevelPrediction	loadPlpResult	Error in PatientLevelPrediction::loadPlpResult(plp_location) :    Cannot find folder C:/Users/prijnbee/Documents/R/win-library/3.4/HFinT2DMValidation/plp_models/plpResult 
+2018-10-03 10:31:58	[Main thread]	FATAL	PatientLevelPrediction	loadPlpResult	Error in PatientLevelPrediction::loadPlpResult(plp_location) :    Cannot find folder C:/Users/prijnbee/Documents/R/win-library/3.4/HFinT2DMValidation/plp_models/plpResult 
+2018-10-03 10:38:16	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:38:16	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:41:33	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 10:41:33	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 10:41:33	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 10:41:33	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 10:43:46	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:43:46	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 10:50:25	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 10:50:25	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 10:50:25	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 10:50:25	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 10:51:11	[Main thread]	INFO			Creating Cohorts
+2018-10-03 10:51:11	[Main thread]	INFO			Creating Cohorts
+2018-10-03 10:57:52	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 10:57:52	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 11:03:05	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 11:03:05	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 11:03:05	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 11:11:49	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 11:11:49	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 11:11:49	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 11:11:51	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 11:11:51	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 11:11:51	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 11:11:51	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 11:11:57	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 11:11:57	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:20:32	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 15:20:32	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 15:20:32	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 15:20:32	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 15:28:10	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 15:28:10	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 15:28:10	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 15:28:10	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 15:28:11	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 15:28:11	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 15:28:11	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 15:28:11	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 15:28:11	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 15:28:19	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 15:28:24	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 15:28:24	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 15:28:24	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:28:24	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:28:24	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:28:24	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:39:52	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:39:52	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:39:52	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:39:52	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:39:52	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:39:52	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:39:52	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:39:52	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:40:09	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:40:09	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:40:09	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:40:09	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:40:09	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:40:09	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:40:09	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:40:09	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:45:30	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:45:30	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:45:30	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:45:30	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:45:30	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:45:30	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:45:30	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:45:30	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:46:58	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:46:58	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:46:59	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:46:59	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:46:59	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:46:59	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:46:59	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:46:59	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:49:53	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:49:53	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:49:53	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:49:53	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 15:50:46	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:50:46	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:50:46	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:50:46	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Loading model data extraction settings
+2018-10-03 15:50:46	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:50:46	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:50:46	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:50:46	[Main thread]	TRACE	PatientLevelPrediction	similarPlpData	Adding new settings if set...
+2018-10-03 15:52:32	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 15:52:32	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 15:52:36	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 15:52:36	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 15:52:36	[Main thread]	INFO	HFinT2DMValidation	execute	Creating Cohorts
+2018-10-03 16:02:41	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 16:02:41	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 16:02:41	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 16:02:41	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 16:02:41	[Main thread]	INFO	HFinT2DMValidation	createCohorts	Counting cohorts
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	Validating Models
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 16:02:48	[Main thread]	INFO	HFinT2DMValidation	execute	analyses located
+2018-10-03 16:02:48	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 16:02:48	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 16:02:48	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 16:02:48	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion
+2018-10-03 16:02:48	[Main thread]	WARN	PatientLevelPrediction	clearLoggerType	NAs introduced by coercion

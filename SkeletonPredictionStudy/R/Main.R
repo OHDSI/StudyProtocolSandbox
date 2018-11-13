@@ -37,12 +37,23 @@
 #' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
 #'                             (/). Do not use a folder on a network drive since this greatly impacts
 #'                             performance.
+#' @param createProtocol       Creates a protocol based on the analyses specification                             
 #' @param createCohorts        Create the cohortTable table with the target population and outcome cohorts?
 #' @param runAnalyses          Run the model development
+#' @param createResultsDoc     Create a document containing the results of each prediction
 #' @param createValidationPackage  Create a package for sharing the models 
 #' @param packageResults       Should results be packaged for later sharing?     
 #' @param minCellCount         The minimum number of subjects contributing to a count before it can be included 
 #'                             in packaged results.
+#' @param verbosity            Sets the level of the verbosity. If the log level is at or higher in priority than the logger threshold, a message will print. The levels are:
+#'                                         \itemize{
+#'                                         \item{DEBUG}{Highest verbosity showing all debug statements}
+#'                                         \item{TRACE}{Showing information about start and end of steps}
+#'                                         \item{INFO}{Show informative information (Default)}
+#'                                         \item{WARN}{Show warning messages}
+#'                                         \item{ERROR}{Show error messages}
+#'                                         \item{FATAL}{Be silent except for fatal errors}
+#'                                         }                              
 #' @param cdmVersion           The version of the common data model                             
 #'
 #' @examples
@@ -59,11 +70,14 @@
 #'         cohortTable = "cohort",
 #'         oracleTempSchema = NULL,
 #'         outputFolder = "c:/temp/study_results", 
+#'         createProtocol = T,
 #'         createCohorts = T,
 #'         runAnalyses = T,
+#'         createResultsDoc = T,
 #'         createValidationPackage = T,
 #'         packageResults = F,
 #'         minCellCount = 5,
+#'         verbosity = "INFO",
 #'         cdmVersion = 5)
 #' }
 #'
@@ -75,15 +89,24 @@ execute <- function(connectionDetails,
                     cohortTable = "cohort",
                     oracleTempSchema = cohortDatabaseSchema,
                     outputFolder,
-                    createCohorts = TRUE,
-                    runAnalyses = T,
-                    createValidationPackage = TRUE,
-                    packageResults = TRUE,
+                    createProtocol = F,
+                    createCohorts = F,
+                    runAnalyses = F,
+                    createResultsDoc = F,
+                    createValidationPackage = F,
+                    packageResults = F,
                     minCellCount= 5,
+                    verbosity = "INFO",
                     cdmVersion = 5) {
   if (!file.exists(outputFolder))
     dir.create(outputFolder, recursive = TRUE)
-
+  
+  OhdsiRTools::addDefaultFileLogger(file.path(outputFolder, "log.txt"))
+  
+  if(createProtocol){
+    createPlpProtocol(outputFolder)
+  }
+  
   if (createCohorts) {
     OhdsiRTools::logInfo("Creating cohorts")
     createCohorts(connectionDetails = connectionDetails,
@@ -95,23 +118,24 @@ execute <- function(connectionDetails,
   }
   
   if(runAnalyses){
-  OhdsiRTools::logInfo("Running predictions")
-  predictionAnalysisListFile <- system.file("settings",
-                                            "predictionAnalysisList.json",
-                                            package = "SkeletonPredictionStudy")
-  predictionAnalysisList <- PatientLevelPrediction::loadPredictionAnalysisList(predictionAnalysisListFile)
-  predictionAnalysisList$connectionDetails = connectionDetails
-  predictionAnalysisList$cdmDatabaseSchema = cdmDatabaseSchema
-  predictionAnalysisList$cdmDatabaseName = cdmDatabaseName
-  predictionAnalysisList$oracleTempSchema = oracleTempSchema
-  predictionAnalysisList$cohortDatabaseSchema = cohortDatabaseSchema
-  predictionAnalysisList$cohortTable = cohortTable
-  predictionAnalysisList$outcomeDatabaseSchema = cohortDatabaseSchema
-  predictionAnalysisList$outcomeTable = cohortTable
-  predictionAnalysisList$cdmVersion = cdmVersion
-  predictionAnalysisList$outputFolder = outputFolder
-  
-  result <- do.call(PatientLevelPrediction::runPlpAnalyses, predictionAnalysisList)
+    OhdsiRTools::logInfo("Running predictions")
+    predictionAnalysisListFile <- system.file("settings",
+                                              "predictionAnalysisList.json",
+                                              package = "SkeletonPredictionStudy")
+    predictionAnalysisList <- PatientLevelPrediction::loadPredictionAnalysisList(predictionAnalysisListFile)
+    predictionAnalysisList$connectionDetails = connectionDetails
+    predictionAnalysisList$cdmDatabaseSchema = cdmDatabaseSchema
+    predictionAnalysisList$cdmDatabaseName = cdmDatabaseName
+    predictionAnalysisList$oracleTempSchema = oracleTempSchema
+    predictionAnalysisList$cohortDatabaseSchema = cohortDatabaseSchema
+    predictionAnalysisList$cohortTable = cohortTable
+    predictionAnalysisList$outcomeDatabaseSchema = cohortDatabaseSchema
+    predictionAnalysisList$outcomeTable = cohortTable
+    predictionAnalysisList$cdmVersion = cdmVersion
+    predictionAnalysisList$outputFolder = outputFolder
+    predictionAnalysisList$verbosity = verbosity
+    
+    result <- do.call(PatientLevelPrediction::runPlpAnalyses, predictionAnalysisList)
   }
   
   if (packageResults) {
@@ -120,19 +144,27 @@ execute <- function(connectionDetails,
                    minCellCount = minCellCount)
   }
   
+  if(createResultsDoc){
+    createMultiPlpReport(analysisLocation=outputFolder,
+                         protocolLocation = file.path(outputFolder,'protocol.docx'),
+                         includeModels = F)
+  }
+  
   if(createValidationPackage){
     predictionAnalysisListFile <- system.file("settings",
-                "predictionAnalysisList.json",
-                package = "SkeletonPredictionStudy")
-    jsonSettings <-  tryCatch({rjson::fromJSON(file=predictionAnalysisListFile)},
-                                        error=function(cond) {
-                                          stop('Issue with json file...')
-                                        })
-    jsonSettings$skeletonType <- 'SimpleValidationStudy'
-    jsonSettings$packageName <- paste0(jsonSettings$packageName,'Validation')
+                                              "predictionAnalysisList.json",
+                                              package = "SkeletonPredictionStudy")
+    jsonSettings <-  tryCatch({Hydra::loadSpecifications(file=predictionAnalysisListFile)},
+                              error=function(cond) {
+                                stop('Issue with json file...')
+                              })
+    pn <- jsonlite::fromJSON(jsonSettings)$packageName
+    jsonSettings <- gsub(pn,paste0(pn,'Validation'),jsonSettings)
+    jsonSettings <- gsub('PatientLevelPredictionStudy','PatientLevelPredictionValidationStudy',jsonSettings)
+    
     
     createValidationPackage(modelFolder = outputFolder, 
-                            outputFolder = file.path(outputFolder, jsonSettings$packageName),
+                            outputFolder = file.path(outputFolder, paste0(pn,'Validation')),
                             minCellCount = minCellCount,
                             databaseName = cdmDatabaseName,
                             jsonSettings = jsonSettings )

@@ -149,8 +149,8 @@ addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumn
 #'
 #' @export
 getTable1 <- function(connectionDetails,
-                      cdmDatabaseschema,
-                      cohortDatabaseschema,
+                      cdmDatabaseSchema,
+                      cohortDatabaseSchema,
                       cohortTable,
                       targetId,
                       outcomeId,
@@ -159,13 +159,13 @@ getTable1 <- function(connectionDetails,
   covariateSettings <- FeatureExtraction::createCovariateSettings(useDemographicsGender = T)
 
   plpData <- PatientLevelPrediction::getPlpData(connectionDetails,
-                                     cdmDatabaseSchema = cdmDatabaseschema,
-                                     cohortId = targetId, outcomeIds = outcomeId,
-                                     cohortDatabaseSchema = cohortDatabaseschema,
-                                     outcomeDatabaseSchema = cohortDatabaseschema,
-                                     cohortTable = cohortTable,
-                                     outcomeTable = cohortTable,
-                                     covariateSettings=covariateSettings)
+                                                cdmDatabaseSchema = cdmDatabaseSchema,
+                                                cohortId = targetId, outcomeIds = outcomeId,
+                                                cohortDatabaseSchema = cohortDatabaseSchema,
+                                                outcomeDatabaseSchema = cohortDatabaseSchema,
+                                                cohortTable = cohortTable,
+                                                outcomeTable = cohortTable,
+                                                covariateSettings=covariateSettings)
 
   population <- PatientLevelPrediction::createStudyPopulation(plpData = plpData,
                                                               outcomeId = outcomeId,
@@ -204,7 +204,7 @@ getTable1 <- function(connectionDetails,
 
 checkInstall <- function(connectionDetails=NULL){
   result <- checkPlpInstallation(connectionDetails=connectionDetails,
-                       python=F)
+                                 python=F)
   return(result)
 }
 

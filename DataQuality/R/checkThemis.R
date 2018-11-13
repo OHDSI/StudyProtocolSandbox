@@ -31,7 +31,8 @@ checkThemis <- function(connectionDetails,
   
   
   
-  ref<-read.csv(system.file("csv","S4-preferred_units-A.csv",package="DataQuality"),as.is=T)
+  #ref<-read.csv(system.file("csv","S4-preferred_units-A.csv",package="DataQuality"),as.is=T)
+  ref<-read.csv(system.file("csv","S7-preferred_units-ABC.csv",package="DataQuality"),as.is=T)
   
   #make sure one error concept is not considered
   ref<-dplyr::filter(ref,concept_id != 4046263)
@@ -41,13 +42,20 @@ checkThemis <- function(connectionDetails,
   #join by concept_id
   #str(a)
   #str(ref)
+  #on redshift, some names are "" and dplyr complains
+  vars<-c('analysis_id','measurement_concept_id','unit_concept_id','count_value')
+  a<-a[vars]
   
+  
+  #a<-a %>% select(analysis_id,measurement_concept_id,unit_concept_id,count_value)
   comp<-dplyr::inner_join(a,ref,by=c('measurement_concept_id' = 'concept_id'))
   comp2<-dplyr::filter(comp,unit_concept_id.x!=unit_concept_id.y)
   #comp2
   #names(comp2)
-  output<-dplyr::select(comp2,measurement_concept_id,dataset_unit_concept_id=unit_concept_id.y,expected_unit_concept_id=unit_concept_id.x
+  output<-dplyr::select(comp2,measurement_concept_id
+                        ,dataset_unit_concept_id=unit_concept_id.x
                         ,count_value
+                        ,expected_unit_concept_id=unit_concept_id.y
                         ,expected_unit_concept_name=concept_name.y
                         ,measurement_concept_name=concept_name.x.x)
   
@@ -57,8 +65,9 @@ checkThemis <- function(connectionDetails,
   
   writeLines(paste('Dataset rows considered:',nrow(a)))   
   writeLines(paste('Reference data rows considered:',nrow(ref)))   
-  writeLines(paste('Output rows:',nrow(output)))   
-  writeLines('Comparison was written to export folder.')  
+  writeLines(paste('Compliant rows (with reference):',nrow(comp)-nrow(comp2)))   
+  writeLines(paste('Noncompliant rows (with reference):',nrow(output)))   
+  writeLines('Noncompliant rows were written to export folder and provided as output.')  
   writeLines('Done with checking.')  
   return(output)
 }

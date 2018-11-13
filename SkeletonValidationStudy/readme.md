@@ -28,21 +28,26 @@ Getting Started
   1. In R, use the following commands to run the study:
 
   ```r
-install.packages("devtools")
-devtools::install_github("OHDSI/SkeletonValidationStudy")
-package <- F
+  # If not building locally uncomment and run:
+#install.packages("devtools")
+#devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonValidationStudy")
+
+library(SkeletonValidationStudy)
 
 # add details of your database setting:
 databaseName <- 'add a shareable name for the database used to develop the models'
 
 # add the cdm database schema with the data
-cdmDatabaseschema <- 'cdm_yourdatabase.dbo'
+cdmDatabaseSchema <- 'your cdm database schema'
 
 # add the work database schema this requires read/write privileges 
-cohortDatabaseschema <- 'yourworkdatabase.dbo'
+cohortDatabaseSchema <- 'your work database schema'
+
+# if using oracle please set the location of your temp schema
+oracleTempSchema <- NULL
 
 # the name of the table that will be created in cohortDatabaseSchema to hold the cohorts
-cohortTable <- 'studyCohortTable'
+cohortTable <- 'SkeletonValidationStudyCohortTable'
 
 # the location to save the prediction models results to:
 outputFolder <- getwd()
@@ -61,22 +66,20 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 port = port)
 
 # Now run the study
-execute(connectionDetails = connectionDetails,
+SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
                  databaseName = databaseName,
-                 cdmDatabaseschema = cdmDatabaseschema,
-                 cohortDatabaseschema = cohortDatabaseschema,
+                 cdmDatabaseSchema = cdmDatabaseSchema,
+                 cohortDatabaseSchema = cohortDatabaseSchema,
+                 oracleTempSchema = oracleTempSchema,
                  cohortTable = cohortTable,
                  outputFolder = outputFolder,
                  createCohorts = T,
                  runValidation = T,
                  packageResults = T,
-                 minCellCount = 5)
+                 minCellCount = 5,
+                 sampleSize = NULL)
                  
-# now package and submit results to study admin 
-if(package == T){
-submitResults(exportFolder=outputLocation,
-              dbName=databaseName, key, secret)
-            }
+# add code to submit results to study admin here
 
 
 ```
@@ -88,4 +91,3 @@ License
 Development
 ===========
   PredictionNetworkStudySkeleton is being developed in R Studio.
-

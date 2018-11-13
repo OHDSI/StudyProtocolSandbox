@@ -1,0 +1,25 @@
+Package: SmokingModel
+Type: Package
+Title: A package containing a prediction model for current smoking status
+Version: 0.0.1
+Date: 2018-06-01
+Author: Jenna Reps
+Maintainer: Jenna Reps <jreps@ohdsi.org>
+Description:The package contains function for validating the smoking model, applying the smoking model or create custom covariates corresponding to smoking risk
+License: Apache License 2.0
+Depends:
+    R (>= 3.3.0), 
+    DatabaseConnector (>= 1.11.4),
+    FeatureExtraction (>= 2.0.0),
+    Cyclops (>= 1.2.2),
+    PatientLevelPrediction (>= 2.0.0)
+Imports:
+    ggplot2,
+    gridExtra,
+    ff,
+    ffbase (>= 0.12.1)
+Suggests:
+  testthat,
+LinkingTo: Rcpp
+NeedsCompilation: No
+RoxygenNote: 6.0.1

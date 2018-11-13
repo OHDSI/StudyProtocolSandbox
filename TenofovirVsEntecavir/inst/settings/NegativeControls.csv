@@ -1,0 +1,36 @@
+targetId,targetName,comparatorId,comparatorName,outcomeId,outcomeName,type
+627,Tenofovir,628,Entecavir,24609,Hypoglycemia,Outcome
+627,Tenofovir,628,Entecavir,29735,Candidiasis of mouth,Outcome
+627,Tenofovir,628,Entecavir,73754,Restless legs,Outcome
+627,Tenofovir,628,Entecavir,80004,Injury of hand,Outcome
+627,Tenofovir,628,Entecavir,134718,Hirsutism,Outcome
+627,Tenofovir,628,Entecavir,139099,Ingrowing nail,Outcome
+627,Tenofovir,628,Entecavir,141932,Senile hyperkeratosis,Outcome
+627,Tenofovir,628,Entecavir,192367,Dysplasia of cervix,Outcome
+627,Tenofovir,628,Entecavir,193739,Ovarian failure,Outcome
+627,Tenofovir,628,Entecavir,194997,Prostatitis,Outcome
+627,Tenofovir,628,Entecavir,197236,Uterine leiomyoma,Outcome
+627,Tenofovir,628,Entecavir,199074,Acute pancreatitis,Outcome
+627,Tenofovir,628,Entecavir,255573,Chronic obstructive lung disease,Outcome
+627,Tenofovir,628,Entecavir,257007,Allergic rhinitis,Outcome
+627,Tenofovir,628,Entecavir,313459,Sleep apnea,Outcome
+627,Tenofovir,628,Entecavir,314658,Cardiomegaly,Outcome
+627,Tenofovir,628,Entecavir,316084,Lymphadenitis,Outcome
+627,Tenofovir,628,Entecavir,319843,Mitral valve disorder,Outcome
+627,Tenofovir,628,Entecavir,321596,Peripheral venous insufficiency,Outcome
+627,Tenofovir,628,Entecavir,374366,Sensorineural hearing loss,Outcome
+627,Tenofovir,628,Entecavir,375292,Perforation of tympanic membrane,Outcome
+627,Tenofovir,628,Entecavir,380094,Carpal tunnel syndrome,Outcome
+627,Tenofovir,628,Entecavir,433753,Alcohol abuse,Outcome
+627,Tenofovir,628,Entecavir,433811,Hydronephrosis,Outcome
+627,Tenofovir,628,Entecavir,436665,Bipolar disorder,Outcome
+627,Tenofovir,628,Entecavir,436676,Posttraumatic stress disorder,Outcome
+627,Tenofovir,628,Entecavir,436940,Metabolic syndrome X,Outcome
+627,Tenofovir,628,Entecavir,437784,Infectious mononucleosis,Outcome
+627,Tenofovir,628,Entecavir,438134,Hypersomnia,Outcome
+627,Tenofovir,628,Entecavir,440358,Lipoma,Outcome
+627,Tenofovir,628,Entecavir,440374,Obsessive-compulsive disorder,Outcome
+627,Tenofovir,628,Entecavir,443617,Conduct disorder,Outcome
+627,Tenofovir,628,Entecavir,443800,Amenorrhea,Outcome
+627,Tenofovir,628,Entecavir,4084966,Candida infection of genital region,Outcome
+627,Tenofovir,628,Entecavir,4288310,Carotid artery obstruction,Outcome

@@ -1,0 +1,414 @@
+{
+  "ExpressionLimit": {"Type": "All"},
+  "CollapseSettings": {
+    "CollapseType": "ERA",
+    "EraPad": 90
+  },
+  "CensorWindow": {
+    "StartDate": null,
+    "EndDate": null
+  },
+  "ConceptSets": [{
+    "expression": {"items": [
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1335471,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "18867",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "benazepril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1340128,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "1998",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "Captopril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 19050216,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "21102",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "Cilazapril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1341927,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "3827",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "Enalapril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1342001,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "3829",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "Enalaprilat",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1363749,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "50166",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "Fosinopril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 19122327,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "60245",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "imidapril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1308216,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "29046",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "Lisinopril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1310756,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "30131",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "moexipril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1373225,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "54552",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "Perindopril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1331235,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "35208",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "quinapril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1334456,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "35296",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "Ramipril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 19040051,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "36908",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "spirapril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 1342439,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "38454",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "trandolapril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      },
+      {
+        "isExcluded": false,
+        "concept": {
+          "INVALID_REASON_CAPTION": "Valid",
+          "CONCEPT_ID": 19102107,
+          "STANDARD_CONCEPT": "S",
+          "CONCEPT_CODE": "39990",
+          "VOCABULARY_ID": "RxNorm",
+          "CONCEPT_NAME": "zofenopril",
+          "DOMAIN_ID": "Drug",
+          "STANDARD_CONCEPT_CAPTION": "Standard",
+          "CONCEPT_CLASS_ID": "Ingredient",
+          "INVALID_REASON": "V"
+        },
+        "includeMapped": false,
+        "includeDescendants": true
+      }
+    ]},
+    "name": "ace inhibitors plp atlas test ",
+    "id": 0
+  }],
+  "EndStrategy": {"DateOffset": {
+    "DateField": "EndDate",
+    "Offset": 30
+  }},
+  "CensoringCriteria": [],
+  "Title": null,
+  "AdditionalCriteria": {
+    "CriteriaList": [{
+      "RestrictVisit": false,
+      "StartWindow": {
+        "UseEventEnd": false,
+        "Start": {
+          "Days": null,
+          "Coeff": -1
+        },
+        "End": {
+          "Days": 0,
+          "Coeff": -1
+        },
+        "UseIndexEnd": null
+      },
+      "EndWindow": null,
+      "Criteria": {"DrugExposure": {
+        "OccurrenceEndDate": null,
+        "CorrelatedCriteria": {
+          "CriteriaList": [{
+            "RestrictVisit": false,
+            "StartWindow": {
+              "UseEventEnd": false,
+              "Start": {
+                "Days": null,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 365,
+                "Coeff": -1
+              },
+              "UseIndexEnd": null
+            },
+            "EndWindow": {
+              "UseEventEnd": true,
+              "Start": {
+                "Days": 1,
+                "Coeff": 1
+              },
+              "End": {
+                "Days": null,
+                "Coeff": 1
+              },
+              "UseIndexEnd": null
+            },
+            "Criteria": {"ObservationPeriod": {
+              "PeriodType": null,
+              "CorrelatedCriteria": null,
+              "AgeAtStart": null,
+              "UserDefinedPeriod": null,
+              "AgeAtEnd": null,
+              "First": null,
+              "PeriodEndDate": null,
+              "PeriodStartDate": null,
+              "PeriodLength": null
+            }},
+            "Occurrence": {
+              "Type": 2,
+              "IsDistinct": false,
+              "Count": 1
+            }
+          }],
+          "Type": "ALL",
+          "DemographicCriteriaList": [],
+          "Groups": [],
+          "Count": null
+        },
+        "DrugSourceConcept": null,
+        "CodesetId": 0,
+        "DrugTypeExclude": false,
+        "Quantity": null,
+        "DrugType": null,
+        "ProviderSpecialty": null,
+        "EffectiveDrugDose": null,
+        "Gender": null,
+        "DaysSupply": null,
+        "DoseUnit": null,
+        "VisitType": null,
+        "Refills": null,
+        "First": true,
+        "OccurrenceStartDate": {
+          "Op": "gt",
+          "Extent": null,
+          "Value": "2015-01-01"
+        },
+        "RouteConcept": null,
+        "StopReason": null,
+        "LotNumber": null,
+        "Age": null
+      }},
+      "Occurrence": {
+        "Type": 2,
+        "IsDistinct": false,
+        "Count": 1
+      }
+    }],
+    "Type": "ALL",
+    "DemographicCriteriaList": [],
+    "Groups": [],
+    "Count": null
+  },
+  "QualifiedLimit": {"Type": "All"},
+  "InclusionRules": [],
+  "PrimaryCriteria": {
+    "CriteriaList": [{"DrugExposure": {
+      "OccurrenceEndDate": null,
+      "CorrelatedCriteria": null,
+      "DrugSourceConcept": null,
+      "CodesetId": 0,
+      "DrugTypeExclude": false,
+      "Quantity": null,
+      "DrugType": null,
+      "ProviderSpecialty": null,
+      "EffectiveDrugDose": null,
+      "Gender": null,
+      "DaysSupply": null,
+      "DoseUnit": null,
+      "VisitType": null,
+      "Refills": null,
+      "First": null,
+      "OccurrenceStartDate": {
+        "Op": "gt",
+        "Extent": null,
+        "Value": "2015-01-01"
+      },
+      "RouteConcept": null,
+      "StopReason": null,
+      "LotNumber": null,
+      "Age": null
+    }}],
+    "PrimaryCriteriaLimit": {"Type": "All"},
+    "ObservationWindow": {
+      "PostDays": 0,
+      "PriorDays": 365
+    }
+  }
+}

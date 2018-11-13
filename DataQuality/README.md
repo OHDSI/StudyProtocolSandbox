@@ -162,8 +162,14 @@ Themis aims to generate stricter conventions. The checks tested here will be inc
 
 Current checks include testing if laboratory tests results (`analysis 1807`) are using units that were derived in [Themis study](https://github.com/OHDSI/StudyProtocolSandbox/tree/master/themis)
 
+Essentially a reference file with 300+ units (classified into categories A (perfect agreement), B and C is compared to the dataset units.  
+Any differences are outputed in a form of dataset unit vs expected unit (from reference)  
+
+Reference units are in Themis study resutls and also in this package [here](inst/csv/S7-preferred_units-ABC.csv)
 
 Results of the check are provided as data.frame output of the function (and also saved into `export` sub-folder of the `workFolder`) as file name `ThemisMeasurementsUnitsCheck.csv`.
+
+Example output is [here](inst/csv/ThemisMeasurementsUnitsCheck.csv)
 
 ```R
 workFolder <- 'c:/temp/DQStudy-dataset1'  #ideally, use one workFolder per database
@@ -175,11 +181,21 @@ dir.create(workFolder)
  #connectionDetails #make sure this object exists
 
 
-dq_check_results<-checkThemis(connectionDetails = connectionDetails,
+cT<-checkThemis(connectionDetails = connectionDetails,
   cdmDatabaseSchema = cdmDatabaseSchema,
   resultsDatabaseSchema = resultsDatabaseSchema,
   outputFolder = workFolder
   )
+  
+cT #view the output
+
+#You are done. The steps below are optional
+	#get concept table into R
+	  s<-'select concept_id,concept_name from concept where invalid_reason is  null'
+	  concept<-DatabaseConnector::querySql(conn,s);concept %<>% rename_all(tolower)
+	#add concept names to the output  
+	cT %<>% left_join(concept, by=c('dataset_unit_concept_id'='concept_id'))
+  
 ```
 
 Example output is [here](inst/csv/ThemisMeasurementsUnitsCheck.csv)
