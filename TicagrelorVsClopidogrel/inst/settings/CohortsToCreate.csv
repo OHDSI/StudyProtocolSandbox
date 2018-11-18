@@ -1,0 +1,12 @@
+atlasId,atlasName,cohortId,name
+874,[SCYou]HIRA: Ticagrelor for ACS_KOR,874,SCYouHIRA_Ticagrelor_for_ACS_KOR
+929,[SCYou]HIRA: Clopidogrel for ACS_KOR,929,SCYouHIRA_Clopidogrel_for_ACS_KOR
+1033,SCYou: Net Adverse Clinical Event,1033,SCYou_Net_Adverse_Clinical_Event
+1036,SCYou: Hemorrhagic Event,1036,SCYou_Hemorrhagic_Event
+1034,SCYou: Ischemic event,1034,SCYou_Ischemic_event
+1030,SCYou: Revascularization,1030,SCYou_Revascularization
+1029,SCYou: GI bleeding,1029,SCYou_GI_bleeding
+1028,SCYou: Intracranial hemorrhage,1028,SCYou_Intracranial_hemorrhage
+1027,SCYou:SuddenCardiacDeath,1027,SCYouSuddenCardiacDeath
+1025,SCYou:(outcome)Acute myocardial infarction,1025,SCYououtcomeAcute_myocardial_infarction
+1026,[SCYou]Ischemic stroke,1026,SCYouIschemic_stroke
