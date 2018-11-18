@@ -1,0 +1,103 @@
+targetId,comparatorId,outcomeId,outcomeName,type
+874,929,378256,Abnormal reflex,outcome
+874,929,4218106,Alcoholism,outcome
+874,929,317585,Aortic aneurysm,outcome
+874,929,440424,Aphasia,outcome
+874,929,439237,Assault,outcome
+874,929,378424,Astigmatism,outcome
+874,929,261880,Atelectasis,outcome
+874,929,134118,Atrophic condition of skin,outcome
+874,929,4224118,Bladder dysfunction,outcome
+874,929,80509,Bone cyst,outcome
+874,929,434626,Borderline personality disorder,outcome
+874,929,438407,Bulimia nervosa,outcome
+874,929,134765,Cachexia,outcome
+874,929,4172458,Candidiasis of skin,outcome
+874,929,436740,Cervical incompetence,outcome
+874,929,381581,Chalazion,outcome
+874,929,4307254,Closed fracture,outcome
+874,929,4047787,Colles' fracture,outcome
+874,929,198075,Condyloma acuminatum,outcome
+874,929,73302,Curvature of spine,outcome
+874,929,4242416,Cutis laxa,outcome
+874,929,433163,Deficiency of macronutrients,outcome
+874,929,4047269,Deformity of foot,outcome
+874,929,133228,Dental caries,outcome
+874,929,4095288,Diabetic coma with ketoacidosis,outcome
+874,929,4044391,Diabetic neuropathy,outcome
+874,929,443767,Diabetic oculopathy,outcome
+874,929,4174977,Diabetic retinopathy,outcome
+874,929,4132130,Dilatation of aorta,outcome
+874,929,4147672,Disease due to Papilloma virus,outcome
+874,929,4153380,Disorder of carotid artery,outcome
+874,929,4140510,Disorder of lymphatic vessel,outcome
+874,929,433440,Dysthymia,outcome
+874,929,376132,Ectropion,outcome
+874,929,440695,Encopresis,outcome
+874,929,438872,Excessive eating - polyphagia,outcome
+874,929,78804,Fibrocystic disease of breast,outcome
+874,929,4131595,Fracture of radius,outcome
+874,929,74855,Genital herpes simplex,outcome
+874,929,441788,Human papilloma virus infection,outcome
+874,929,76737,Hydrocele,outcome
+874,929,4029582,Hyperandrogenization syndrome,outcome
+874,929,195212,Hypercortisolism,outcome
+874,929,438134,Hypersomnia,outcome
+874,929,45768449,Hypertensive crisis,outcome
+874,929,140362,Hypoparathyroidism,outcome
+874,929,4322737,Infection of tooth,outcome
+874,929,4207688,Infectious enteritis,outcome
+874,929,79072,Inflammatory disorder of breast,outcome
+874,929,139099,Ingrowing nail,outcome
+874,929,4288544,Inguinal hernia,outcome
+874,929,444191,Injury of face,outcome
+874,929,444130,Injury of foot,outcome
+874,929,134222,Injury of forearm,outcome
+874,929,4029966,Intracranial aneurysm,outcome
+874,929,437409,Intracranial injury,outcome
+874,929,4297984,Local infection of wound,outcome
+874,929,4018050,Localized infection,outcome
+874,929,439840,Lymphangitis,outcome
+874,929,4163232,Mastitis,outcome
+874,929,440389,Mental retardation,outcome
+874,929,436100,Narcolepsy,outcome
+874,929,4262178,Neurogenic dysfunction of the urinary bladder,outcome
+874,929,193874,Nocturnal enuresis,outcome
+874,929,4171549,Nodular goiter,outcome
+874,929,442274,Oligomenorrhea,outcome
+874,929,4215978,Onychomycosis,outcome
+874,929,4171915,Orchitis,outcome
+874,929,380731,Otitis externa,outcome
+874,929,378160,Otorrhea,outcome
+874,929,192606,Paraplegia,outcome
+874,929,253796,Pneumothorax,outcome
+874,929,195501,Polycystic ovaries,outcome
+874,929,4164337,Polyp of large intestine,outcome
+874,929,4153877,Post-traumatic wound infection,outcome
+874,929,434319,Premature ejaculation,outcome
+874,929,373478,Presbyopia,outcome
+874,929,199876,Prolapse of female genital organs,outcome
+874,929,4295888,Prolapse of intestine,outcome
+874,929,194997,Prostatitis,outcome
+874,929,4146239,Pruritus of genital organs,outcome
+874,929,4285569,Pupillary disorder,outcome
+874,929,81336,Rectal prolapse,outcome
+874,929,380395,Retinal dystrophy,outcome
+874,929,141825,Simple goiter,outcome
+874,929,137054,Skin striae,outcome
+874,929,434630,Sleep-wake schedule disorder,outcome
+874,929,4195698,Tenosynovitis,outcome
+874,929,4339088,Testicular mass,outcome
+874,929,133141,Tinea pedis,outcome
+874,929,440814,Torticollis,outcome
+874,929,435140,Toxic effect of alcohol,outcome
+874,929,4270490,Tracheitis,outcome
+874,929,4028970,Tracheobronchitis,outcome
+874,929,4114197,Tumor of hypothalamus,outcome
+874,929,193326,Urge incontinence of urine,outcome
+874,929,4092565,Uterine prolapse,outcome
+874,929,140641,Verruca vulgaris,outcome
+874,929,197036,Vesicoureteric reflux,outcome
+874,929,133551,Vesicular eczema of hands and/or feet,outcome
+874,929,4223947,"Viral hepatitis, type A",outcome
+874,929,261326,Viral pneumonia,outcome
