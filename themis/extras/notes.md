@@ -85,7 +85,46 @@ order by e.stratum_1, count_value desc
 ```
 
 
-### Unit Results
+### measurement-coded-values
+
+```SQL
+select * from (
+select measurement_concept_id, value_as_concept_id, count(*) as cnt 
+ from measurement 
+ where value_as_concept_id is not null 
+ and measurement_concept_id <> 0
+ and value_as_concept_id  <> 0
+ group by measurement_concept_id, value_as_concept_id
+)a
+where cnt > 50 
+```
+
+
+If you have the latest Achilles working, this info is also in achilles under analysis_id 1822
+
+### observation-coded-values
+
+Since some coded value are also in observation, the same query can be made on that table so
+
+
+```SQL
+
+select * from (
+select observation_concept_id, value_as_concept_id, count(*) as cnt 
+ from observation 
+ where value_as_concept_id is not null 
+ and observation_concept_id <> 0
+ and value_as_concept_id  <> 0
+ group by observation_concept_id, value_as_concept_id
+)a
+where cnt > 50 
+```
+
+This is in Achilles as  analysis_id  - 822 
+
+---End of SQL queries section for the study---
+
+# Unit Results
 
 Units poster at 2017 OHDSI symposium: http://www.ohdsi.org/web/wiki/lib/exe/fetch.php?media=resources:huser-2017-ohdsi-symp-units.pdf
 
