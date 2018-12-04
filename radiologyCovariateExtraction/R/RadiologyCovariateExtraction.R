@@ -94,7 +94,7 @@ buildRadiologyVae<-function(dataPaths=imagePaths, vaeValidationSplit= 0.2, vaeBa
         if(samplingGenerator){
                 #validation data
                 valIndex<-sample(seq(actualPaths),length(actualPaths)*vaeValidationSplit )
-                valImages<-lapply(as.array(actualPaths[valIndex]),function(x){
+                valImages<-lapply(as.array(actualPaths[valIndex]),function(x){ ##parallel::parLapply(cl = parallel::detectCores(), actualPaths$imagePaths,function(x){
                         try(
                                 {x<-oro.dicom::dicom2nifti(oro.dicom::readDICOM(x, verbose = FALSE))
                                 x<-EBImage::resize(x,w=originalDimension[1],h=originalDimension[2] )[ROI2D[[1]],ROI2D[[2]] ]
@@ -113,7 +113,7 @@ buildRadiologyVae<-function(dataPaths=imagePaths, vaeValidationSplit= 0.2, vaeBa
                                 #gc()
                                 index<-sample(length(dataPath), batchSize, replace=FALSE)
                                 data.mat<-as.array(dataPath[index])
-                                images<-lapply(data.mat,function(x) {
+                                images<-lapply(data.mat,function(x) { ##parallel::parLapply(cl = parallel::detectCores(), actualPaths$imagePaths,function(x){
                                         try(
                                                 {x<-oro.dicom::dicom2nifti(oro.dicom::readDICOM(x, verbose = FALSE))
                                                 x<-EBImage::resize(x,w=originalDimension[1],h=originalDimension[2] ) [ROI2D[[1]],ROI2D[[2]] ]
@@ -136,7 +136,7 @@ buildRadiologyVae<-function(dataPaths=imagePaths, vaeValidationSplit= 0.2, vaeBa
                 )
         }else{
                 data.mat<-as.array(actualPaths)
-                images<-lapply(data.mat,function(x) {
+                images<-lapply(data.mat,function(x) { ##parallel::parLapply(cl = parallel::detectCores(), actualPaths$imagePaths,function(x){
                         try(
                                 {x<-oro.dicom::dicom2nifti(oro.dicom::readDICOM(x, verbose = FALSE))
                                 x<-EBImage::resize(x,w=originalDimension[1],h=originalDimension[2] ) [ROI2D[[1]],ROI2D[[2]] ]
@@ -295,7 +295,7 @@ getDbRadiologyCovariateData<-function(connection,
         actualPaths<-aggregate(imagePaths$imageFilepath,by = list(imagePaths$rowId), function(x){paste0(file.path(dataFolder,x),collapse=";")})
         colnames(actualPaths)<-c("rowId","imagePaths")
         #Load the radiology data
-        images<-lapply(actualPaths$imagePaths,function(x) {
+        images<-lapply(actualPaths$imagePaths,function(x) { ##parallel::parLapply(cl = parallel::detectCores(), actualPaths$imagePaths,function(x){
                 try(
                         {x<-strsplit(x,";")
                         x<-oro.dicom::dicom2nifti(oro.dicom::readDICOM(x[[1]], verbose = FALSE))
@@ -308,7 +308,7 @@ getDbRadiologyCovariateData<-function(connection,
         })
         print("half done")
 
-        images<-lapply(images, function(x){
+        images<-lapply(images, function(x){ ##parallel::parLapply(cl = parallel::detectCores(), actualPaths$imagePaths,function(x){
                 #resize the data width x height->one dimension
                 x[is.na(x)]<-0
                 x<-apply(x, 3, as.numeric)
