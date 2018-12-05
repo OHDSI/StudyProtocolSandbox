@@ -242,6 +242,19 @@ applyExistingstrokeModels <- function(connectionDetails,
                                                     requireTimeAtRisk = T,
                                                     minTimeAtRisk = 364, includeAllOutcomes = T)
 
+  writeLines('Implementing ORBIT model...')
+  orbit<-PredictionComparison::orbitModel(connectionDetails, cdmDatabaseSchema,
+                                          cohortDatabaseSchema = cohortDatabaseSchema,
+                                         outcomeDatabaseSchema = cohortDatabaseSchema,
+                                         cohortTable = cohortTable,
+                                         outcomeTable = cohortTable,
+                                         cohortId = targetId, outcomeId = outcomeId,
+                                         removePriorOutcome=T,
+                                         riskWindowStart = 1,
+                                         riskWindowEnd = 365,
+                                         requireTimeAtRisk = T,
+                                         minTimeAtRisk = 364, includeAllOutcomes = T)
+
   writeLines('Implementing HFRS model...')
   hfrs <- PredictionComparison::hfrsModel(connectionDetails, cdmDatabaseSchema,
                                                     cohortDatabaseSchema = cohortDatabaseSchema,
@@ -262,6 +275,7 @@ applyExistingstrokeModels <- function(connectionDetails,
                   chads2=chads2,
                   chads2vas=chads2vas,
                   hasBled = hasBled,
+                  orbit = orbit,
                   hfrs = hfrs)
 
  return(results)
