@@ -1,4 +1,4 @@
-cohortId,atlasId,name
-764,764,COX2
-765,765,NSAID
-766,766,AKI
+atlasId,atlasName,cohortId,name
+917,[SCYou]COX2 inhibitor with osteoarthritis,917,SCYouCOX2_inhibitor_with_osteoarthritis
+979,[SCYou]NSAIDs with osteoarthritis,979,SCYouNSAIDs_with_osteoarthritis
+978,SCYou: AKI,978,SCYou_AKI

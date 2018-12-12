@@ -3,6 +3,13 @@ Themis group (sub-group: measurements) aims to standardize lab tests and related
 # Introduction
 This effort will be based on real world data at OHDSI sites.
 
+
+## Update 2018-11
+
+results presented at AMIA. Data driven consensus will be recomputed. KB submitted as PR to Achilles Heel and will be implemented as R function there.
+SQL queries extended to cover more DQ aspects.
+
+
 ## Update 2018-05
 
 Slight update to the data collected for ThemisMeasurement Database (looks at Measurements and Observations). Achilles Heel implementation discussion. Posting of units results.
@@ -47,9 +54,9 @@ Email me is you need parametized SQL for this translation tool. http://data.ohds
 ### measurements-concepts
 
 ```SQL
-    select * from (select analysis_id, stratum_1,count_value from achilles_results where analysis_id = 1800 and count_value > 500 order by count_value desc limit 300) a
+    select * from (select analysis_id, stratum_1,count_value from achilles_results where analysis_id = 1800 and count_value > 500 order by count_value desc limit 5000) a
     union
-    select * from (select analysis_id, stratum_1,count_value from achilles_results where analysis_id = 800 and count_value > 500 order by count_value desc limit 300) b
+    select * from (select analysis_id, stratum_1,count_value from achilles_results where analysis_id = 800 and count_value > 500 order by count_value desc limit 5000) b
 ```
 
 
@@ -78,7 +85,46 @@ order by e.stratum_1, count_value desc
 ```
 
 
-### Unit Results
+### measurement-coded-values
+
+```SQL
+select * from (
+select measurement_concept_id, value_as_concept_id, count(*) as cnt 
+ from measurement 
+ where value_as_concept_id is not null 
+ and measurement_concept_id <> 0
+ and value_as_concept_id  <> 0
+ group by measurement_concept_id, value_as_concept_id
+)a
+where cnt > 50 
+```
+
+
+If you have the latest Achilles working, this info is also in achilles under analysis_id 1822
+
+### observation-coded-values
+
+Since some coded value are also in observation, the same query can be made on that table so
+
+
+```SQL
+
+select * from (
+select observation_concept_id, value_as_concept_id, count(*) as cnt 
+ from observation 
+ where value_as_concept_id is not null 
+ and observation_concept_id <> 0
+ and value_as_concept_id  <> 0
+ group by observation_concept_id, value_as_concept_id
+)a
+where cnt > 50 
+```
+
+This is in Achilles as  analysis_id  - 822 
+
+---End of SQL queries section for the study---
+
+# Unit Results
 
 Units poster at 2017 OHDSI symposium: http://www.ohdsi.org/web/wiki/lib/exe/fetch.php?media=resources:huser-2017-ohdsi-symp-units.pdf
 

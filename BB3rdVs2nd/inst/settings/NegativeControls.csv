@@ -1,0 +1,11 @@
+targetId,comparatorId,outcomeId,outcomeName,type
+951,947,257007,Allergic rhinitis,outcome
+951,947,378425,Blepharitis,outcome
+951,947,75860,Constipation,outcome
+951,947,196523,Diarrhea,outcome
+951,947,440674,Gout,outcome
+951,947,140673,Hypothyroidism,outcome
+951,947,139099,Ingrowing nail,outcome
+951,947,80809,Rheumatoid arthritis,outcome
+951,947,26662,Testicular hypofunction,outcome
+951,947,432870,Thrombocytopenic disorder,outcome

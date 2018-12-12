@@ -1,0 +1,26 @@
+Package: ExistingBleedingValidationInAF
+Type: Package
+Title: OHDSI network bleeding risk validation package
+Version: 0.0.1
+Date: 2018-12-04
+Author: Seng Chan You [aut]
+Maintainer: Seng Chan You <applegna@gmail.com>
+Description: A package for running the OHDSI network study to externally validate existing bleeding risk prediction models using the PatientLevelPrediction framework
+License: Apache License 2.0
+Depends:
+    R (>= 3.3.0), 
+    DatabaseConnector (>= 1.11.4),
+    FeatureExtraction (>= 2.0.0),
+    Cyclops (>= 1.2.2),
+    PatientLevelPrediction (>= 2.0.0),
+    PredictionComparison
+Imports:
+    ggplot2,
+    gridExtra,
+    ff,
+    ffbase (>= 0.12.1)
+Suggests:
+  testthat,
+LinkingTo: Rcpp
+NeedsCompilation: No
+RoxygenNote: 6.0.1

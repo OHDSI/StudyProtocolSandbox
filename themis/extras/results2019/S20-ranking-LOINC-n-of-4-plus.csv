@@ -1,0 +1,47 @@
+stratum_1,n,global_rank,ranks,concept_name,domain_id,vocabulary_id,concept_class_id,concept_code
+3004327,4,124,"5,50,41,28",Lymphocytes [#/volume] in Blood by Automated count,Measurement,LOINC,Lab Test,731-0
+3023314,4,151,"20,40,80,11",Hematocrit [Volume Fraction] of Blood by Automated count,Measurement,LOINC,Lab Test,4544-3
+3013429,4,164,"12,63,57,32",Basophils [#/volume] in Blood by Automated count,Measurement,LOINC,Lab Test,704-7
+3028615,5,266,"69,23,53,90,31",Eosinophils [#/volume] in Blood by Automated count,Measurement,LOINC,Lab Test,711-2
+3024929,5,364,"63,22,182,84,13",Platelets [#/volume] in Blood by Automated count,Measurement,LOINC,Lab Test,777-3
+3000963,6,383,"2,3,27,40,12,299",Hemoglobin,Measurement,LOINC,Lab Test,718-7
+3000905,6,416,"1,2,62,39,14,298",Leukocytes [#/volume] in Blood by Automated count,Measurement,LOINC,Lab Test,6690-2
+3001122,4,472,"3,47,120,302",Ferritin [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2276-4
+3012030,5,477,"10,8,56,17,386",Erythrocyte mean corpuscular hemoglobin [Entitic mass] by Automated count,Measurement,LOINC,Lab Test,785-6
+3011948,4,487,"9,55,39,384",Monocytes/100 leukocytes in Blood by Automated count,Measurement,LOINC,Lab Test,5905-5
+3004501,5,501,"10,104,43,20,324",Glucose lab,Measurement,LOINC,Lab Test,2345-7
+3006906,4,510,"92,44,25,349",Calcium serum/plasma serum/plasma,Measurement,LOINC,Lab Test,17861-6
+3013869,4,530,"15,61,46,408",Basophils/100 leukocytes in Blood by Automated count,Measurement,LOINC,Lab Test,706-2
+3018010,4,542,"41,18,45,438",Neutrophils %,Measurement,LOINC,Lab Test,26511-6
+3004410,4,558,"111,42,82,323",Hemoglobin A1c (Glycated),Measurement,LOINC,Lab Test,4548-4
+3013721,5,579,"30,48,60,36,405",Aspartate aminotransferase serum/plasma,Measurement,LOINC,Lab Test,1920-8
+3007070,6,583,"14,81,4,46,86,352",Cholesterol in HDL [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2085-9
+3006923,5,592,"13,150,45,34,350",Alanine aminotransferase serum/plasma,Measurement,LOINC,Lab Test,1742-6
+3001420,4,592,"4,195,89,304",Magnesium [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,19123-9
+3025315,6,595,"9,6,14,66,2,498",Body weight,Measurement,LOINC,Clinical Observation,29463-7
+3009744,5,599,"8,151,51,18,371",Erythrocyte mean corpuscular hemoglobin concentration [Mass/volume] by Automated count,Measurement,LOINC,Lab Test,786-4
+3013682,6,601,"29,14,70,59,27,402",Urea nitrogen serum/plasma,Measurement,LOINC,Lab Test,3094-0
+3013603,4,603,"46,23,133,401",PSA serum/plasma,Measurement,LOINC,Lab Test,2857-1
+3015632,4,651,"145,64,24,418",Carbon dioxide serum/plasma,Measurement,LOINC,Lab Test,2028-9
+3023599,5,663,"21,55,81,16,490",Erythrocyte mean corpuscular volume [Entitic volume] by Automated count,Measurement,LOINC,Lab Test,787-2
+3009201,4,683,"157,49,111,366",Thyrotropin [Units/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,3016-3
+3020416,5,695,"50,97,71,15,462",Erythrocytes [#/volume] in Blood by Automated count,Measurement,LOINC,Lab Test,789-8
+3014576,5,733,"31,199,63,26,414",Chloride serum/plasma,Measurement,LOINC,Lab Test,2075-0
+3017250,4,735,"44,103,155,433",Creatinine [Mass/volume] in Urine,Measurement,LOINC,Lab Test,2161-8
+3020630,5,761,"51,136,73,37,464",Protein serum/plasma,Measurement,LOINC,Lab Test,2885-2
+3033575,5,765,"24,88,92,30,531",Monocytes [#/volume] in Blood by Automated count,Measurement,LOINC,Lab Test,742-7
+3027114,5,767,"49,64,86,63,505",Cholesterol [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2093-3
+3024128,5,772,"61,105,82,33,491",Total Bilirubin serum/plasma,Measurement,LOINC,Lab Test,1975-2
+3019550,6,773,"48,17,159,68,23,458",Sodium serum/plasma,Measurement,LOINC,Lab Test,2951-2
+3019897,5,785,"18,190,70,48,459",Erythrocyte distribution width [Ratio] by Automated count,Measurement,LOINC,Lab Test,788-0
+3023103,6,788,"58,19,124,79,22,486",Potassium serum/plasma,Measurement,LOINC,Lab Test,2823-3
+3016723,7,796,"40,16,130,95,65,21,429",Creatinine serum/plasma,Measurement,LOINC,Lab Test,2160-0
+3024561,5,826,"62,126,83,61,494",Albumin serum/plasma,Measurement,LOINC,Lab Test,1751-7
+3035995,5,869,"74,122,94,38,541",Alkaline phosphatase serum/plasma,Measurement,LOINC,Lab Test,6768-6
+3026910,4,883,"65,60,255,503",Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2324-2
+3027597,5,914,"67,151,69,117,510",Direct bilirubin serum/plasma,Measurement,LOINC,Lab Test,1968-7
+3022217,5,991,"164,200,69,78,480",INR,Measurement,LOINC,Lab Test,6301-6
+3038553,6,1002,"40,144,140,113,9,556",Body mass index,Measurement,LOINC,Clinical Observation,39156-5
+3022192,6,1024,"54,158,194,77,62,479",Triglyceride [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,2571-8
+3037110,4,1050,"41,149,313,547",Fasting glucose [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,1558-6
+3036277,7,1060,"83,127,101,100,99,8,542",Body height,Measurement,LOINC,Clinical Observation,8302-2

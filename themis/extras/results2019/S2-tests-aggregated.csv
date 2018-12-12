@@ -1,0 +1,767 @@
+concept_id,concept_name.x,QualUnitCnt,allQualUnits,allQualUnitsNs,allQualUnitsMedians
+3025315,Body weight,1,kg,8,1
+3014576,Chloride serum/plasma,1,mmol/L,6,0.83
+3018010,Neutrophils %,1,%,6,0.82
+3019550,Sodium serum/plasma,1,mmol/L,6,0.83
+3022192,Triglyceride [Mass/volume] in Serum or Plasma,1,mg/dL,6,1
+3023103,Potassium serum/plasma,1,mmol/L,6,0.81
+3000285,Sodium [Moles/volume] in Blood,1,mmol/L,5,0.86
+3003785,Carcinoembryonic Ag [Mass/volume] in Serum or Plasma,1,ng/mL,5,0.95
+3005456,Potassium [Moles/volume] in Blood,1,mmol/L,5,0.86
+3007070,Cholesterol in HDL [Mass/volume] in Serum or Plasma,1,mg/dL,5,1
+3015632,Carbon dioxide serum/plasma,1,mmol/L,5,0.84
+3017250,Creatinine [Mass/volume] in Urine,1,mg/dL,5,1
+3018572,Chloride [Moles/volume] in Blood,1,mmol/L,5,0.73
+3027114,Cholesterol [Mass/volume] in Serum or Plasma,1,mg/dL,5,0.91
+3027597,Direct bilirubin serum/plasma,1,mg/dL,5,1
+3037110,Fasting glucose [Mass/volume] in Serum or Plasma,1,mg/dL,5,1
+4152194,Systolic blood pressure,1,mm[Hg],5,1
+3000185,Iron saturation [Mass Fraction] in Serum or Plasma,1,%,4,0.87
+3000620,Complement C3 [Mass/volume] in Serum or Plasma,1,mg/dL,4,0.73
+3000666,Metamyelocytes/100 leukocytes in Blood by Manual count,1,%,4,0.82
+3002030,Lymphocytes %,1,%,4,0.99
+3003181,Sodium [Moles/volume] in Urine,1,mmol/L,4,0.85
+3004410,Hemoglobin A1c (Glycated),1,%,4,0.8
+3004501,Glucose lab,1,mg/dL,4,0.97
+3005715,Vancomycin [Mass/volume] in Serum or Plasma,1,ug/mL,4,0.8
+3006923,Alanine aminotransferase serum/plasma,1,[U]/L,4,0.93
+3007733,Chloride [Moles/volume] in Urine,1,mmol/L,4,0.81
+3008295,Osmolality of Serum or Plasma,1,mosm/kg,4,0.66
+3009306,Alpha-1-Fetoprotein [Mass/volume] in Serum or Plasma,1,ng/mL,4,0.93
+3009542,Hematocrit,1,%,4,0.99
+3010084,C peptide [Mass/volume] in Serum or Plasma,1,ng/mL,4,0.97
+3010375,Cyclosporine [Mass/volume] in Blood,1,ng/mL,4,0.99
+3011335,Digoxin [Mass/volume] in Serum or Plasma,1,ng/mL,4,1
+3011587,Promyelocytes/100 leukocytes in Blood by Manual count,1,%,4,0.83
+3012501,Base excess of blood,1,mmol/L,4,0.66
+3013682,Urea nitrogen serum/plasma,1,mg/dL,4,0.97
+3013721,Aspartate aminotransferase serum/plasma,1,[U]/L,4,0.92
+3015183,Erythrocyte sedimentation rate,1,mm/h,4,0.89
+3015956,Eosinophils/100 leukocytes in Blood by Manual count,1,%,4,0.99
+3016038,Potassium [Moles/volume] in Urine,1,mmol/L,4,0.92
+3016723,Creatinine serum/plasma,1,mg/dL,4,0.96
+3018229,Myelocytes/100 leukocytes in Blood by Manual count,1,%,4,0.81
+3019897,Erythrocyte distribution width [Ratio] by Automated count,1,%,4,0.96
+3020630,Protein serum/plasma,1,g/dL,4,0.96
+3021119,Calcium.ionized [Moles/volume] in Blood,1,mmol/L,4,0.73
+3021337,Troponin I.cardiac [Mass/volume] in Serum or Plasma,1,ng/mL,4,0.98
+3022407,Monocytes/100 leukocytes in Blood by Manual count,1,%,4,0.99
+3023314,Hematocrit [Volume Fraction] of Blood by Automated count,1,%,4,0.83
+3024128,Total Bilirubin serum/plasma,1,mg/dL,4,0.97
+3024666,Lithium [Moles/volume] in Serum or Plasma,1,mmol/L,4,0.87
+3025547,Thyroglobulin Ab [Units/volume] in Serum or Plasma,1,[U]/mL,4,0.58
+3026250,Tacrolimus [Mass/volume] in Blood,1,ng/mL,4,0.98
+3027238,Thyroperoxidase Ab [Units/volume] in Serum or Plasma,1,[U]/mL,4,0.66
+3028437,Cholesterol in LDL [Mass/volume] in Serum or Plasma,1,mg/dL,4,1
+3033526,Urate [Mass/volume] in Urine,1,mg/dL,4,0.97
+3035995,Alkaline phosphatase serum/plasma,1,[U]/L,4,0.92
+3036987,Folate [Mass/volume] in Serum or Plasma,1,ng/mL,4,0.99
+3037511,Lymphocytes/100 leukocytes in Blood by Automated count,1,%,4,0.89
+3000034,Microalbumin urine,1,mg/dL,3,0.94
+3000067,Parathyrin.intact [Mass/volume] in Serum or Plasma,1,pg/mL,3,1
+3000515,Antithrombin actual/normal in Platelet poor plasma by Chromogenic method,1,%,3,1
+3000899,Streptococcus pneumoniae Danish serotype 7F IgG Ab [Mass/volume] in Serum,1,ug/mL,3,0.99
+3000905,Leukocytes [#/volume] in Blood by Automated count,1,10*3/uL,3,0.17
+3002032,Base excess in Venous blood by calculation,1,mmol/L,3,0.47
+3002400,Iron [Mass/volume] in Serum or Plasma,1,ug/dL,3,0.99
+3002617,Acetaminophen [Mass/volume] in Serum or Plasma,1,ug/mL,3,1
+3002666,Glucose [Mass/volume] in Serum or Plasma --baseline,1,mg/dL,3,0.92
+3003129,Base excess in Capillary blood by calculation,1,mmol/L,3,0.94
+3003396,Base excess in Arterial blood by calculation,1,mmol/L,3,0.72
+3004248,Sex hormone binding globulin [Moles/volume] in Serum or Plasma,1,nmol/L,3,0.98
+3004722,Prolactin [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.99
+3004789,Transferrin [Mass/volume] in Serum or Plasma,1,mg/dL,3,0.94
+3004809,Bands %,1,%,3,0.92
+3005013,Free PSA serum/plasma,1,ng/mL,3,0.97
+3005260,Streptococcus pneumoniae Danish serotype 9V IgG Ab [Mass/volume] in Serum,1,ug/mL,3,0.99
+3005353,Prothrombin activity actual/normal in Platelet poor plasma by Coagulation assay,1,%,3,1
+3005665,Streptococcus pneumoniae Danish serotype 6B IgG Ab [Mass/volume] in Serum,1,ug/mL,3,0.99
+3005719,IgG [Mass/volume] in Serum or Plasma,1,mg/dL,3,0.98
+3005785,Creatine kinase.MB [Mass/volume] in Serum or Plasma,1,ng/mL,3,1
+3005839,10-Hydroxycarbazepine [Mass/volume] in Serum or Plasma,1,ug/mL,3,0.9
+3005893,Phenytoin Free [Mass/volume] in Serum or Plasma,1,ug/mL,3,0.99
+3006028,Cotinine [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.99
+3006473,Urobilinogen [Units/volume] in Urine by Test strip,1,mg/dL,3,0.25
+3006504,Eosinophils %,1,%,3,1
+3006576,Bicarbonate in blood,1,mmol/L,3,0.99
+3006588,Cancer Ag 15-3 [Units/volume] in Serum or Plasma,1,[U]/mL,3,0.85
+3006661,Calcium [Mass/volume] in Urine,1,mg/dL,3,0.98
+3006665,Streptococcus pneumoniae Danish serotype 18C IgG Ab [Mass/volume] in Serum,1,ug/mL,3,0.99
+3006906,Calcium serum/plasma serum/plasma,1,mg/dL,3,0.94
+3007124,Reticulocytes/100 erythrocytes in Blood by Automated count,1,%,3,0.98
+3007164,IgA [Mass/volume] in Serum or Plasma,1,mg/dL,3,0.97
+3007449,CD3+CD8+ (T8 suppressor cells) cells/100 cells in Blood,1,%,3,1
+3007930,Methemoglobin/Hemoglobin.total in Blood,1,%,3,1
+3008037,Lactate [Moles/volume] in Venous blood,1,mmol/L,3,1
+3008152,Bicarbonate [Moles/volume] in Arterial blood,1,mmol/L,3,0.62
+3008342,Neutrophils/100 leukocytes in Blood by Automated count,1,%,3,0.92
+3008598,Thyroxine (T4) free [Mass/volume] in Serum or Plasma,1,ng/dL,3,0.98
+3009131,Hemoglobin A/Hemoglobin.total in Blood by Electrophoresis,1,%,3,1
+3009178,Nicotine [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.99
+3009609,"Carbon dioxide, total [Moles/volume] in Arterial blood",1,mmol/L,3,0.69
+3009682,Cortisol [Mass/volume] in Serum or Plasma,1,ug/dL,3,0.84
+3009797,Basophils/100 leukocytes in Blood by Manual count,1,%,3,1
+3010140,"Carbon dioxide, total [Moles/volume] in Venous blood",1,mmol/L,3,0.85
+3010340,Triiodothyronine (T3) [Mass/volume] in Serum or Plasma,1,ng/dL,3,0.98
+3010457,Eosinophils/100 leukocytes in Blood by Automated count,1,%,3,0.86
+3010989,Calcitonin [Mass/volume] in Serum or Plasma,1,pg/mL,3,0.97
+3011185,Granulocytes/100 leukocytes in Blood by Automated count,1,%,3,1
+3011904,Phosphate,1,mg/dL,3,0.92
+3011948,Monocytes/100 leukocytes in Blood by Automated count,1,%,3,0.92
+3012030,Erythrocyte mean corpuscular hemoglobin [Entitic mass] by Automated count,1,pg,3,0.99
+3013201,Beta-2-Microglobulin [Mass/volume] in Serum or Plasma,1,mg/L,3,0.93
+3013273,Insulin-like growth factor-I [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.98
+3013603,PSA serum/plasma,1,ng/mL,3,0.92
+3013707,Erythrocyte sedimentation rate by Westergren method,1,mm/h,3,0.33
+3013869,Basophils/100 leukocytes in Blood by Automated count,1,%,3,0.92
+3014007,Fractional oxyhemoglobin in Arterial blood,1,%,3,0.91
+3014037,CD3+CD4+ (T4 helper) cells/100 cells in Blood,1,%,3,1
+3014094,"Carbon dioxide, total [Moles/volume] in Blood",1,mmol/L,3,0.8
+3015884,Dehydroepiandrosterone sulfate (DHEA-S) [Mass/volume] in Serum or Plasma,1,ug/dL,3,0.95
+3016254,Gentamicin [Mass/volume] in Serum or Plasma --trough,1,ug/mL,3,0.61
+3016502,Oxygen saturation in Arterial blood,1,%,3,0.79
+3016724,Homocysteine [Moles/volume] in Serum or Plasma,1,umol/L,3,0.96
+3016771,Amylase [Enzymatic activity/volume] in Serum or Plasma,1,[U]/L,3,1
+3016991,Thyroxine (T4) [Mass/volume] in Serum or Plasma,1,ug/dL,3,0.72
+3018405,Lactate [Moles/volume] in Arterial blood,1,mmol/L,3,1
+3019069,Monocytes %,1,%,3,0.98
+3019250,Coagulation factor VIII activity actual/normal in Platelet poor plasma by Coagulation assay,1,%,3,1
+3019599,Protein S actual/normal in Platelet poor plasma by Chromogenic method,1,%,3,1
+3019839,Fructosamine [Moles/volume] in Serum or Plasma,1,umol/L,3,0.98
+3019900,Cholesterol [Moles/volume] in Serum or Plasma,1,mmol/L,3,1
+3020149,Calcidiol [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.98
+3020416,Erythrocytes [#/volume] in Blood by Automated count,1,10*6/uL,3,0.95
+3020666,Levetiracetam serum/plasma,1,ug/mL,3,0.95
+3020784,Hemoglobin A2/Hemoglobin.total in Blood,1,%,3,0.99
+3021009,Hemoglobin A2/Hemoglobin.total in Blood by Electrophoresis,1,%,3,1
+3021374,Sirolimus [Mass/volume] in Blood,1,ng/mL,3,0.95
+3021600,Valproate Free [Mass/volume] in Serum or Plasma,1,ug/mL,3,0.98
+3021717,Triiodothyronine resin uptake (T3RU) in Serum or Plasma,1,%,3,0.83
+3022533,CD3 cells/100 cells in Blood,1,%,3,1
+3022563,Serotonin [Mass/volume] in Blood,1,ng/mL,3,0.98
+3022914,Cancer Ag 19-9 [Units/volume] in Serum or Plasma,1,[U]/mL,3,0.93
+3023081,Carboxyhemoglobin % in blood,1,%,3,0.96
+3023261,Lamotrigine serum/plasma,1,ug/mL,3,0.96
+3023599,Erythrocyte mean corpuscular volume [Entitic volume] by Automated count,1,fL,3,1
+3023602,Cholesterol in HDL [Moles/volume] in Serum or Plasma,1,mmol/L,3,1
+3023643,Blasts/100 leukocytes in Blood by Manual count,1,%,3,0.64
+3023709,Somatotropin [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.97
+3024561,Albumin serum/plasma,1,g/dL,3,1
+3024929,Platelets [#/volume] in Blood by Automated count,1,10*3/uL,3,0.17
+3025285,Estradiol (E2) [Mass/volume] in Serum or Plasma,1,pg/mL,3,0.96
+3025411,Phenobarbital serum/plasma,1,ug/mL,3,0.99
+3025455,Estriol (E3).unconjugated [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.87
+3025481,Topiramate serum/plasma,1,ug/mL,3,0.96
+3026729,Phosphate [Mass/volume] in Urine,1,mg/dL,3,0.95
+3026782,Osmolality of Urine,1,mosm/kg,3,1
+3027144,Progesterone [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.96
+3027273,Bicarbonate [Moles/volume] in Venous blood,1,mmol/L,3,0.34
+3028286,Albumin [Mass/volume] in Serum or Plasma by Electrophoresis,1,g/L,3,1
+3028772,Osteocalcin [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.95
+3029187,NT proBNP serum/plasma,1,pg/mL,3,0.9
+3030612,Hemoglobin S/Hemoglobin.total in Blood by Electrophoresis,1,%,3,1
+3030703,Everolimus [Mass/volume] in Blood,1,ng/mL,3,0.96
+3031248,Chloride [Moles/volume] in Arterial blood,1,mmol/L,3,1
+3031569,Natriuretic peptide B [Mass/volume] in Blood,1,pg/mL,3,1
+3032560,Acetylcholine receptor blocking Ab/Acetylcholine Ab.total in Serum,1,%,3,1
+3033745,Troponin I.cardiac [Mass/volume] in Blood,1,ng/mL,3,0.97
+3034548,Prostate specific Ag [Mass/volume] in Serum or Plasma by Detection limit <= 0.01 ng/mL,1,ng/mL,3,0.96
+3035569,Folate [Mass/volume] in Red Blood Cells,1,ng/mL,3,0.82
+3035637,Corticotropin [Mass/volume] in Plasma,1,pg/mL,3,0.94
+3036035,von Willebrand factor (vWf) Ag actual/normal in Platelet poor plasma by Immunoassay,1,%,3,1
+3036663,Lymphocytes/100 leukocytes in Cerebral spinal fluid by Manual count,1,%,3,0.99
+3037384,Protein C actual/normal in Platelet poor plasma by Chromogenic method,1,%,3,1
+3037551,Cancer Ag 125 [Units/volume] in Serum or Plasma,1,[U]/mL,3,0.79
+3037556,Urate [Mass/volume] in Serum or Plasma,1,mg/dL,3,1
+3038058,Lymphocytes/100 leukocytes in Blood by Manual count,1,%,3,0.98
+3038232,Streptococcus pneumoniae Danish serotype 33F IgG Ab [Mass/volume] in Serum,1,ug/mL,3,1
+3039000,Anion gap in Blood,1,mmol/L,3,0.82
+3039783,Alpha-1-fetoprotein.tumor marker [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.72
+3042065,Streptococcus pneumoniae Danish serotype 15B IgG Ab [Mass/volume] in Serum,1,ug/mL,3,1
+3043409,Potassium [Moles/volume] in Arterial blood,1,mmol/L,3,0.81
+3043706,Sodium [Moles/volume] in Arterial blood,1,mmol/L,3,0.74
+3044491,Cholesterol non HDL [Mass/volume] in Serum or Plasma,1,mg/dL,3,0.38
+3044549,Streptococcus pneumoniae Danish serotype 19A IgG Ab [Mass/volume] in Serum,1,ug/mL,3,1
+3045405,Hemoglobin F/Hemoglobin.total in Blood by Electrophoresis,1,%,3,1
+3045716,Anion gap serum/plasma,1,mmol/L,3,0.78
+3046000,Immature reticulocytes/Reticulocytes.total in Blood,1,%,3,1
+3047826,Mullerian inhibiting substance [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.99
+3048918,Histoplasma capsulatum Ag [Mass/volume] in Urine,1,ng/mL,3,0.94
+3049536,25-Hydroxycalciferol [Mass/volume] in Serum or Plasma,1,ng/mL,3,0.99
+3051825,Creatinine [Mass/volume] in Blood,1,mg/dL,3,0.97
+4012477,Glucose tolerance test,1,No matching concept,3,1
+4040728,Semen analysis,1,No matching concept,3,1
+4149883,"Glucose measurement, urine",1,No matching concept,3,1
+4326835,Measurement of substance,1,No matching concept,3,1
+40758583,Hemoglobin A1c in Blood,1,%,3,1
+40762388,Lacosamide [Mass/volume] in Serum or Plasma,1,ug/mL,3,0.83
+40766929,How many cigarettes do you smoke per day now [PhenX],1,/(24.h),3,1
+3000138,Arsenic [Mass/volume] in Blood,1,ug/L,2,0.82
+3000483,Glucose [Mass/volume] in Blood,1,mg/dL,2,0.97
+3000518,Abnormal lymphocytes/100 leukocytes in Blood by Manual count,1,%,2,0.98
+3000570,Elastase.pancreatic [Mass/mass] in Stool,1,ug/g,2,0.32
+3000571,Amphetamine [Mass/volume] in Urine,1,ng/mL,2,0.9
+3000593,Cobalamin (Vitamin B12) [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.95
+3000598,Mesothelial cells/100 leukocytes in Body fluid by Manual count,1,%,2,0.97
+3000722,Carnitine free (C0) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.98
+3000764,Benzodiazepines [Presence] in Urine,1,ng/mL,2,0.4
+3000845,Glucose [Mass/volume] in Serum or Plasma --2 hours post XXX challenge,1,mg/dL,2,0.93
+3001111,3-Hydroxypalmitoleylcarnitine (C16:1-OH) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3001123,Platelet mean volume [Entitic volume] in Blood,1,fL,2,1
+3001127,Alpha 1 antitrypsin [Mass/volume] in Serum or Plasma by Nephelometry,1,mg/dL,2,0.99
+3001138,Prostate Specific Ag Free [Units/volume] in Serum or Plasma,1,ng/mL,2,0.95
+3001308,Cholesterol in LDL [Moles/volume] in Serum or Plasma,1,mmol/L,2,1
+3001482,17-Hydroxypregnenolone [Mass/volume] in Serum or Plasma,1,ng/dL,2,0.89
+3001490,Nucleated erythrocytes [#/volume] in Blood,1,10*3/uL,2,0.11
+3001599,Carotene [Mass/volume] in Serum,1,ug/dL,2,0.76
+3001604,Monocytes [#/volume] in Blood,1,%,2,0.53
+3001793,Complement C2 [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.95
+3001795,Weight of Unspecified specimen,1,mg,2,0.93
+3001850,Coagulation factor XI activity actual/normal in Platelet poor plasma by Coagulation assay,1,%,2,0.84
+3002020,Barbiturates [Presence] in Urine,1,ng/mL,2,0.31
+3002051,Oleoylcarnitine (C18:1) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3002173,Hemoglobin [Mass/volume] in Arterial blood,1,g/dL,2,0.86
+3002179,Metamyelocytes %,1,%,2,0.75
+3002278,Androstenedione [Mass/volume] in Serum or Plasma,1,ng/dL,2,0.85
+3002299,Octenoylcarnitine (C8:1) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.53
+3002348,Coagulation factor XII activity actual/normal in Platelet poor plasma by Coagulation assay,1,%,2,0.81
+3002435,Spermatozoa Motile [Presence] in Semen by Light microscopy,1,%,2,0.35
+3003101,Alpha 1 antitrypsin [Mass/mass] in Stool,1,mg/g,2,0.93
+3003209,3-Hydroxyoleoylcarnitine (C18:1-OH) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3003245,Complement C1 esterase inhibitor [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.94
+3003329,Lymphocytes/100 leukocytes in Synovial fluid,1,%,2,1
+3003388,Carnitine [Presence] in Serum or Plasma,1,umol/L,2,0.88
+3003458,Phosphate [Moles/volume] in Serum or Plasma,1,mg/dL,2,1
+3003480,Octanoylcarnitine (C8) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3003515,Hemoglobin F/Hemoglobin.total in Blood by Kleihauer-Betke method,1,%,2,1
+3003540,Lymphocytes/100 leukocytes in Body fluid by Manual count,1,%,2,0.97
+3003603,Dehydroepiandrosterone (DHEA).unconjugated [Mass/volume] in Serum or Plasma,1,ng/dL,2,0.96
+3003700,Normetanephrine [Mass/volume] in 24 hour Urine,1,ug/L,2,0.95
+3003809,3-Hydroxydodecanoylcarnitine (C12-OH) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.54
+3003816,Linoleoylcarnitine (C18:2) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3003985,Beta hydroxybutyrate [Moles/volume] in Serum or Plasma,1,mmol/L,2,0.93
+3004090,Tobramycin [Mass/volume] in Serum or Plasma --peak,1,ug/mL,2,0.59
+3004119,Hemoglobin [Mass/volume] in Venous blood,1,g/dL,2,0.75
+3004254,Isoleucine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3004295,Urea nitrogen [Mass/volume] in Blood,1,mg/dL,2,1
+3004327,Lymphocytes [#/volume] in Blood by Automated count,1,10*3/uL,2,0.11
+3004409,Coagulation factor X activity actual/normal in Platelet poor plasma by Coagulation assay,1,%,2,0.88
+3004411,Monocytes/100 leukocytes in Body fluid by Manual count,1,%,2,0.84
+3004559,Base deficit in Venous blood,1,mmol/L,2,0.51
+3004691,Service comment,1,No matching concept,2,0.96
+3004775,Volume in Urine collected for unspecified duration,1,mL,2,0.73
+3004839,Deoxyhemoglobin/Hemoglobin.total in Arterial blood,1,%,2,1
+3004905,Lipase [Enzymatic activity/volume] in Serum or Plasma,1,[U]/L,2,0.98
+3004955,Tyrosine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3004959,Base excess in Arterial cord blood by calculation,1,mmol/L,2,0.83
+3005018,Tetradecenoylcarnitine (C14:1) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3005029,Protein [Mass/volume] in Body fluid,1,g/dL,2,0.56
+3005087,Macrophages/100 leukocytes in Body fluid by Manual count,1,%,2,0.65
+3005168,Iron binding capacity.unsaturated [Mass/volume] in Serum or Plasma,1,ug/dL,2,0.92
+3005190,Oxycodone [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,1
+3005229,Alpha 2 globulin [Mass/volume] in Serum or Plasma by Electrophoresis,1,g/dL,2,0.97
+3005244,Beta+gamma tocopherol [Mass/volume] in Serum or Plasma,1,mg/L,2,0.96
+3005335,Cystine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.96
+3005446,Hemoglobin A1/Hemoglobin.total in Blood,1,%,2,0.8
+3005577,Microalbumin [Mass/time] in 24 hour Urine,1,mg/dL,2,0.21
+3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,1,%,2,0.86
+3005757,Coagulation factor V activity actual/normal in Platelet poor plasma by Coagulation assay,1,%,2,0.88
+3005769,Clonazepam serum/plasma,1,ng/mL,2,0.81
+3005770,Creatinine renal clearance in 24 hour,1,mL/min,2,0.74
+3005791,Eosinophil cationic protein (ECP) [Mass/volume] in Serum,1,ug/L,2,0.69
+3006109,Coagulation factor IX activity actual/normal in Platelet poor plasma by Coagulation assay,1,%,2,0.85
+3006302,Buprenorphine [Mass/volume] in Urine,1,ng/mL,2,0.99
+3006407,Chromogranin A [Mass/volume] in Serum or Plasma,1,ng/mL,2,0.94
+3006615,Calciferol (Vit D2) [Mass/volume] in Serum or Plasma,1,ng/mL,2,0.59
+3006638,Tobramycin [Mass/volume] in Serum or Plasma --trough,1,ug/mL,2,0.55
+3006689,Flecainide [Mass/volume] in Serum or Plasma,1,ug/mL,2,0.86
+3006762,Serine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3006889,Leucine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.96
+3006898,Lactate dehydrogenase 1/Lactate dehydrogenase.total in Serum or Plasma by Electrophoresis,1,%,2,0.97
+3006932,Cannabinoids [Presence] in Urine by Screen method,1,ng/mL,2,0.89
+3007150,Creatine kinase.MB/Creatine kinase.total in Serum or Plasma by Electrophoresis,1,%,2,0.9
+3007359,Indirect bilirubin serum/plasma,1,mg/dL,2,0.57
+3007368,IgG [Mass/volume] in Cerebral spinal fluid,1,mg/dL,2,0.93
+3007430,Valine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3007435,Base excess in Venous cord blood by calculation,1,mmol/L,2,0.86
+3007461,Platelet count,1,10*3/uL,2,0.68
+3007498,Thyroid stimulating immunoglobulins [Units/volume] in Serum,1,%,2,0.52
+3007527,Weight of Stone,1,mg,2,0.82
+3007591,Band form neutrophils/100 leukocytes in Blood by Manual count,1,%,2,0.66
+3007854,Proline [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3007858,Lactate dehydrogenase 3/Lactate dehydrogenase.total in Serum or Plasma by Electrophoresis,1,%,2,0.96
+3007950,Urobilinogen [Mass/volume] in Urine,1,mg/dL,2,0.53
+3007953,Mercury [Mass/volume] in 24 hour Urine,1,ug/L,2,0.85
+3008269,Chromium [Mass/volume] in Serum or Plasma,1,ug/L,2,0.79
+3008364,Apolipoprotein A-I [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.88
+3008377,Lysine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3008575,Glycine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3008625,Epinephrine [Mass/volume] in Plasma,1,pg/mL,2,0.9
+3008839,Basophils/100 leukocytes in Body fluid by Manual count,1,%,2,0.94
+3008893,Testosterone [Mass/volume] in Serum or Plasma,1,ng/dL,2,0.96
+3008939,Band form neutrophils [#/volume] in Blood by Manual count,1,10*3/uL,2,0.22
+3008977,Amikacin [Mass/volume] in Serum or Plasma --peak,1,ug/mL,2,0.73
+3009010,Asparagine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3009172,Alanine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3009201,Thyrotropin [Units/volume] in Serum or Plasma,1,10*-3.[iU]/L,2,0.38
+3009261,Glucose [Presence] in Urine by Test strip,1,mg/dL,2,0.03
+3009293,"Carbon dioxide, total [Moles/volume] in Capillary blood",1,mmol/L,2,1
+3009508,Creatinine [Moles/volume] in Urine,1,mmol/L,2,0.14
+3009583,Codeine [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,0.99
+3009596,Cholesterol in VLDL [Mass/volume] in Serum or Plasma by calculation,1,mg/dL,2,0.82
+3009799,Methylmalonate [Mass/volume] in Serum or Plasma,1,nmol/L,2,0.99
+3009864,Neutrophils.hypersegmented/100 leukocytes in Blood,1,%,2,1
+3009917,Gentamicin [Mass/volume] in Serum or Plasma --peak,1,ug/mL,2,0.6
+3009927,Gastrin [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.9
+3009932,Eosinophils [#/volume] in Blood by Manual count,1,10*3/uL,2,0.14
+3009966,Cholesterol in LDL [Mass/volume] in Serum or Plasma by Direct assay,1,mg/dL,2,0.6
+3010119,Morphine [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,0.99
+3010454,Acetylcholine receptor binding Ab,1,nmol/L,2,0.98
+3010493,Viscosity of Serum,1,cP,2,0.35
+3010910,Erythrocytes [#/volume] in Body fluid,1,/uL,2,0.2
+3010912,Zonisamide serum/plasma,1,ug/mL,2,0.93
+3010921,Helicobacter pylori IgM Ab [Units/volume] in Serum by Immunoassay,1,eV,2,0.51
+3010966,Palmitoleylcarnitine (C16:1) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3011066,Myoglobin [Mass/volume] in Urine,1,ng/mL,2,0.08
+3011099,Sex hormone binding globulin [Mass/volume] in Serum or Plasma,1,nmol/L,2,1
+3011295,Gamma globulin/Protein.total in 24 hour Urine by Electrophoresis,1,%,2,0.97
+3011337,Aldosterone [Mass/volume] in Serum or Plasma,1,ng/dL,2,0.9
+3011508,Hexanoylcarnitine (C6) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3011547,Coagulation factor VII activity actual/normal in Platelet poor plasma by Coagulation assay,1,%,2,0.86
+3011793,Glutamate [Moles/volume] in Serum or Plasma,1,umol/L,2,0.96
+3011802,Propoxyphene [Presence] in Urine,1,ng/mL,2,0.5
+3011960,Natriuretic peptide B [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.98
+3012110,Lysozyme [Mass/volume] in Serum or Plasma,1,ug/mL,2,0.88
+3012336,Haptoglobin [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.98
+3012481,Lactate dehydrogenase 5/Lactate dehydrogenase.total in Serum or Plasma by Electrophoresis,1,%,2,0.96
+3012516,Albumin [Mass/volume] in Urine,1,mg/dL,2,0.66
+3012565,Volume of 24 hour Urine,1,mL,2,0.67
+3012598,Dodecenoylcarnitine (C12:1) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.53
+3012920,Ethanol [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.85
+3013142,Albumin/Protein.total in 24 hour Urine by Electrophoresis,1,%,2,0.96
+3013184,Phencyclidine (PCP) screen in urine,1,ng/mL,2,0.46
+3013281,Haemophilus influenzae B IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.78
+3013347,Stearoylcarnitine (C18) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3013393,Acetylcholine receptor blocking Ab,1,%,2,0.77
+3013412,Gabapentin serum/plasma,1,ug/mL,2,0.71
+3013429,Basophils [#/volume] in Blood by Automated count,1,10*3/uL,2,0.11
+3013474,6-Monoacetylmorphine (6-MAM) [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,1
+3013490,Dopamine [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.96
+3013498,Variant lymphocytes/100 leukocytes in Blood,1,%,2,0.82
+3013502,Oxygen saturation in Blood,1,%,2,0.96
+3013572,Beta globulin/Protein.total in 24 hour Urine by Electrophoresis,1,%,2,0.98
+3013650,Neutrophils [#/volume] in Blood by Automated count,1,10*3/uL,2,0.11
+3013741,Hydromorphone [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,0.99
+3013751,Clozapine [Mass/volume] in Serum or Plasma,1,ng/mL,2,0.85
+3013784,Calcium.ionized [Moles/volume] in Serum or Plasma by Ion-selective membrane electrode (ISE),1,mmol/L,2,0.93
+3013861,Lipoprotein a [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.79
+3013870,Mycophenolate glucuronide [Mass/volume] in Serum or Plasma,1,ug/mL,2,0.78
+3013947,Dodecanoylcarnitine (C12) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3014111,Lactate [Moles/volume] in Serum or Plasma,1,mmol/L,2,0.77
+3014173,Calcitriol [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.98
+3014188,Size [Entitic volume] of Stone,1,mm,2,0.92
+3014204,Oxygen saturation in Venous cord blood,1,%,2,0.87
+3014290,Tetrahydrocannabinol [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,0.99
+3014295,Oxygen saturation in Arterial cord blood,1,%,2,0.8
+3014399,Arginine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.96
+3014404,Nicotine [Mass/volume] in Urine,1,ng/mL,2,0.96
+3014502,Neutrophils/100 leukocytes in Body fluid,1,%,2,0.96
+3014512,Acetylcholine receptor modulation Ab/Acetylcholine Ab.total,1,%,2,0.97
+3014524,Tetradecanoylcarnitine (C14) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3014535,Oxymorphone [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,1
+3014637,Bicarbonate [Moles/volume] in Unspecified specimen,1,mmol/L,2,0.84
+3014700,Hepatitis B virus DNA [Units/volume] in Serum,1,pg/mL,2,0.3
+3014791,Apolipoprotein B [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.78
+3015049,Glutamine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3015182,Erythrocyte distribution width [Entitic volume] by Automated count,1,%,2,0.2
+3015235,Bicarbonate [Moles/volume] in Capillary blood,1,mmol/L,2,0.78
+3015322,Alpha 1 globulin [Mass/volume] in Serum or Plasma by Electrophoresis,1,g/dL,2,0.97
+3015377,Calcium [Moles/volume] in Serum or Plasma,1,mg/dL,2,0.98
+3015455,CD16+CD56+ cells/100 cells in Blood,1,%,2,0.95
+3015473,Bicarbonate [Moles/volume] in Plasma,1,mmol/L,2,1
+3015481,Prolactin [Mass/volume] in Serum or Plasma by Immunoassay,1,ng/mL,2,0.98
+3015546,Aspartate [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3015603,Hydrocodone [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,0.99
+3015745,Hemoglobin F [Presence] in Blood,1,%,2,0.93
+3015916,Alpha-1-Fetoprotein [Units/volume] in Serum or Plasma,1,ng/mL,2,0.63
+3016072,Theophylline [Mass/volume] in Serum or Plasma,1,ug/mL,2,0.78
+3016087,Cholesterol.total/Cholesterol in HDL [Molar ratio] in Serum or Plasma,1,mmol/L,2,0.51
+3016103,Fatty acids [Moles/volume] in Serum or Plasma,1,mmol/L,2,0.95
+3016115,Histidine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.96
+3016293,Bicarbonate [Moles/volume] in Serum,1,mmol/L,2,0.55
+3016407,Fibrinogen [Mass/volume] in Platelet poor plasma by Coagulation assay,1,mg/dL,2,0.97
+3016410,Helicobacter pylori IgA Ab [Units/volume] in Serum by Immunoassay,1,eV,2,0.53
+3016426,Methylmalonate [Moles/volume] in Serum or Plasma,1,umol/L,2,0.47
+3016450,Mercury [Mass/volume] in Blood,1,ug/L,2,0.82
+3016520,Beta globulin [Mass/volume] in Serum or Plasma by Electrophoresis,1,g/dL,2,0.97
+3016543,Leukocytes [#/volume] in Cerebral spinal fluid,1,/uL,2,0.46
+3016879,Cocaine [Presence] in Urine,1,ng/mL,2,0.05
+3016999,Rubella virus IgG,1,[iU]/mL,2,0.47
+3017085,Methionine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3017115,Methotrexate [Moles/volume] in Serum or Plasma,1,umol/L,2,0.6
+3017126,Decanoylcarnitine (C10) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3017181,Myelocytes %,1,%,2,0.76
+3017205,Methylenedioxyethylamphetamine [Mass/volume] in Urine,1,ng/mL,2,0.74
+3017264,Hydroxyproline [Moles/volume] in Serum or Plasma,1,umol/L,2,0.96
+3017330,Ornithine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3017354,Segmented neutrophils/100 leukocytes in Blood,1,%,2,0.74
+3017597,Amitriptyline [Mass/volume] in Serum or Plasma,1,ng/mL,2,0.33
+3017721,Decenoylcarnitine (C10:1) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3017766,Complement C4 [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.74
+3017809,Bicarbonate [Moles/volume] in Arterial cord blood,1,mmol/L,2,0.9
+3017840,Spermatozoa Motile/100 spermatozoa in Semen,1,%,2,0.21
+3017872,Arsenic [Mass/volume] in 24 hour Urine,1,ug/L,2,0.91
+3017925,Prealbumin [Mass/volume] in Serum or Plasma by Immunoassay,1,mg/dL,2,1
+3018039,3-Hydroxytetradecenoylcarnitine (C14:1-OH) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.54
+3018199,Band form neutrophils [#/volume] in Blood,1,10*3/uL,2,0.51
+3018524,Acetylcarnitine (C2) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.83
+3018590,Tetradecadienoylcarnitine (C14:2) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3018595,Inhibin A [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.97
+3018650,Bicarbonate [Moles/volume] in Venous cord blood,1,mmol/L,2,0.82
+3018718,Plasma cells/100 leukocytes in Blood,1,%,2,0.99
+3018737,Fibrin D-dimer [Units/volume] in Platelet poor plasma by Immunoassay,1,ng/mL,2,0.15
+3018738,Hemoglobin F/Hemoglobin.total in Blood,1,%,2,0.95
+3018910,Alkaline phosphatase.bone [Mass/volume] in Serum or Plasma,1,ug/L,2,0.82
+3018920,Vancomycin [Mass/volume] in Serum or Plasma --trough,1,ug/mL,2,0.84
+3018948,Eosinophils/100 leukocytes in Cerebral spinal fluid by Manual count,1,%,2,0.91
+3019210,Glucose [Mass/volume] in Body fluid,1,mg/dL,2,0.94
+3019230,Fractional oxyhemoglobin in Venous blood,1,%,2,0.77
+3019473,Protein [Mass/volume] in Cerebral spinal fluid,1,mg/dL,2,0.93
+3019652,Selenium [Mass/volume] in Serum or Plasma,1,ug/L,2,0.83
+3019660,Alloisoleucine [Moles/volume] in Serum or Plasma,1,umol/L,2,1
+3019736,Quinidine [Mass/volume] in Serum or Plasma,1,mg/L,2,0.71
+3019738,Magnesium [Mass/volume] in Urine,1,mg/dL,2,0.9
+3019909,Hematocrit [Volume Fraction] of Blood by Centrifugation,1,%,2,0.69
+3020059,Calcium [Moles/volume] corrected for albumin in Serum or Plasma,1,mmol/L,2,1
+3020629,Protein S Free Ag actual/normal in Platelet poor plasma by Immunoassay,1,%,2,0.94
+3020725,Methylenedioxymethamphetamine [Mass/volume] in Urine,1,ng/mL,2,0.99
+3021044,Iron binding capacity [Mass/volume] in Serum or Plasma,1,ug/dL,2,0.88
+3021391,Anion gap 3 in Serum or Plasma,1,mmol/L,2,0.43
+3021440,Promyelocytes %,1,%,2,0.58
+3021447,Carbon dioxide [Partial pressure] in Venous blood,1,mm[Hg],2,0.09
+3021453,Eosinophils/100 leukocytes in Body fluid,1,%,2,1
+3021737,Glucose [Mass/volume] in Serum or Plasma --2 hours post meal,1,mg/dL,2,0.93
+3021800,Base deficit in Blood,1,mmol/L,2,0.36
+3022096,Basophils %,1,%,2,0.95
+3022174,Leukocytes [#/volume] in Body fluid,1,/uL,2,0.34
+3022217,INR,1,No matching concept,2,1
+3022231,Eosinophils/100 leukocytes in Body fluid by Manual count,1,%,2,0.97
+3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,1,[U]/L,2,0.86
+3022417,Norepinephrine [Mass/volume] in Plasma,1,pg/mL,2,0.97
+3022487,Cholesterol in VLDL [Moles/volume] in Serum or Plasma,1,mmol/L,2,1
+3022493,Free Hemoglobin [Mass/volume] in Plasma,1,mg/dL,2,0.79
+3022548,Glucose [Mass/volume] in Cerebral spinal fluid,1,mg/dL,2,0.95
+3022756,Ceruloplasmin [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.94
+3022813,Phenylalanine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3022878,CD20 cells/100 cells in Blood,1,%,2,0.91
+3023028,5-Hydroxyindoleacetate [Mass/volume] in 24 hour Urine,1,mg/L,2,0.99
+3023083,Methamphetamine [Mass/volume] in Urine,1,ng/mL,2,0.9
+3023211,Isovalerylcarnitine+Methylbutyrylcarnitine (C5) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.83
+3023230,Hematocrit [Volume Fraction] of Arterial blood,1,%,2,0.77
+3023456,Valproate Free/Valproate.total in Serum or Plasma,1,%,2,0.99
+3023465,Gamma globulin [Mass/volume] in Serum or Plasma by Electrophoresis,1,g/dL,2,0.97
+3023548,Base deficit in Arterial blood,1,mmol/L,2,0.59
+3023589,Pancreatic polypeptide [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.99
+3023640,Estrone (E1) [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.95
+3023659,Complement C1 esterase inhibitor.functional/Complement C1 esterase inhibitor.total in Serum or Plasma,1,%,2,0.58
+3023919,Lactate dehydrogenase 2/Lactate dehydrogenase.total in Serum or Plasma by Electrophoresis,1,%,2,0.96
+3024139,IgG subclass 3 [Mass/volume] in Serum,1,mg/dL,2,0.97
+3024303,Vasopressin [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.96
+3024354,Oxygen [Partial pressure] in Venous blood,1,mm[Hg],2,0.56
+3024386,Platelet mean volume [Entitic volume] in Blood by Rees-Ecker,1,fL,2,0.96
+3024408,Eosinophils/100 leukocytes in Urine sediment by Manual count,1,%,2,0.77
+3024474,Albumin [Mass/volume] in Cerebral spinal fluid,1,mg/dL,2,0.91
+3024557,Polymorphonuclear cells/100 leukocytes in Blood by Manual count,1,%,2,1
+3024674,Palmitoylcarnitine (C16) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3024675,Thyroxine (T4) free [Mass/volume] in Serum or Plasma by Dialysis,1,ng/dL,2,0.92
+3024731,MCV,1,fL,2,0.98
+3024802,Tryptophan [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3024821,Threonine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3024830,Lactate dehydrogenase 4/Lactate dehydrogenase.total in Serum or Plasma by Electrophoresis,1,%,2,0.96
+3024865,Alpha tocopherol [Mass/volume] in Serum or Plasma,1,mg/L,2,0.89
+3024928,Oxygen saturation in Venous blood,1,%,2,0.77
+3024980,IgG subclass 4 [Mass/volume] in Serum,1,mg/dL,2,0.97
+3025159,Blasts %,1,%,2,0.72
+3025222,Cobalamin (Vitamin B12).unsaturated Binding Capacity [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.94
+3025232,Glucose [Mass/volume] in Serum or Plasma --1 hour post XXX challenge,1,mg/dL,2,0.95
+3025234,Taurine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.97
+3025313,Albumin [Mass/volume] in Body fluid,1,g/dL,2,0.84
+3025524,Oxygen/Inspired gas Inhaled gas by Gas dilution.rebreath,1,%,2,0.93
+3025909,Creatine kinase.MB/Creatine kinase.total in Serum or Plasma by calculation,1,%,2,0.98
+3025911,Cotinine [Mass/volume] in Urine,1,ng/mL,2,0.99
+3026018,Alpha 1 globulin/Protein.total in 24 hour Urine by Electrophoresis,1,%,2,0.97
+3026179,Normetanephrine [Moles/volume] in Serum or Plasma,1,nmol/L,2,0.88
+3026285,Alpha 1 antitrypsin [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.95
+3026925,Triiodothyronine (T3) Free [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.95
+3027008,Opiates [Presence] in Urine,1,ng/mL,2,0.35
+3027126,Copper [Mass/volume] in Serum or Plasma,1,ug/dL,2,0.79
+3027135,IgG subclass 1 [Mass/volume] in Serum,1,mg/dL,2,0.97
+3027180,Monocytes+Macrophages/100 leukocytes in Body fluid by Manual count,1,%,2,0.99
+3027227,Creatine kinase.BB/Creatine kinase.total in Serum or Plasma by Electrophoresis,1,%,2,0.92
+3027361,Cholecalciferol (Vit D3) [Mass/volume] in Serum or Plasma,1,ng/mL,2,0.99
+3027401,Testosterone Free/Testosterone.total in Serum or Plasma,1,%,2,0.79
+3027651,Basophils [#/volume] in Blood by Manual count,1,10*3/uL,2,0.08
+3027653,Mycophenolate [Mass/volume] in Serum or Plasma,1,ug/mL,2,0.81
+3027694,Calcium.ionized [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.97
+3027801,Oxygen [Partial pressure] in Arterial blood,1,mm[Hg],2,0.07
+3027833,Creatine kinase.MM/Creatine kinase.total in Serum or Plasma by Electrophoresis,1,%,2,0.92
+3027944,Amphetamines [Presence] in Urine,1,ng/mL,2,0.81
+3027945,Reticulocytes %,1,%,2,0.96
+3027946,Carbon dioxide [Partial pressure] in Arterial blood,1,mm[Hg],2,0.07
+3027970,Globulin [Mass/volume] in Serum by calculation,1,g/dL,2,0.6
+3027978,Alpha 2 globulin/Protein.total in 24 hour Urine by Electrophoresis,1,%,2,0.97
+3028026,IgM [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.98
+3028054,Vasoactive intestinal peptide [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.93
+3028079,Lymphocytes/100 leukocytes in Body fluid,1,%,2,0.98
+3028110,Bile acid [Moles/volume] in Serum,1,umol/L,2,0.93
+3028150,Glutarylcarnitine (C5-DC) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3028192,IgG subclass 2 [Mass/volume] in Serum,1,mg/dL,2,0.97
+3028247,Glucose [Mass/volume] in Serum or Plasma --30 minutes post dose glucose,1,mg/dL,2,0.98
+3028288,Cholesterol in LDL [Mass/volume] in Serum or Plasma by calculation,1,mg/dL,2,0.82
+3028515,Gamma glutamyl transferase [Enzymatic activity/volume] in Urine,1,[U]/L,2,1
+3028531,Enolase.neuron specific [Mass/volume] in Serum or Plasma,1,ug/L,2,0.57
+3028615,Eosinophils [#/volume] in Blood by Automated count,1,10*3/uL,2,0.11
+3028653,Carboxyhemoglobin/Hemoglobin.total in Arterial blood,1,%,2,0.99
+3028717,Thiamine [Mass/volume] in Blood,1,nmol/L,2,0.46
+3028718,17-Hydroxyprogesterone [Mass/volume] in Serum or Plasma,1,ng/dL,2,0.93
+3029080,Hemoglobin [Entitic mass] in Reticulocytes,1,pg,2,1
+3029197,Voltage-gated calcium channel N type binding Ab [Moles/volume] in Serum,1,nmol/L,2,0.93
+3030366,Cystatin C [Mass/volume] in Serum or Plasma,1,mg/L,2,0.93
+3030384,Norbuprenorphine [Mass/volume] in Urine,1,ng/mL,2,0.99
+3030595,Trans-3-Hydroxycotinine [Mass/volume] in Serum or Plasma,1,ng/mL,2,1
+3030602,Arachidate (C20:0) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3030841,Docosatetraenoate (C22:4w6) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3031103,Voltage-gated potassium channel Ab [Moles/volume] in Serum,1,nmol/L,2,0.9
+3031114,Protein.monoclonal/Protein.total in 24 hour Urine by Electrophoresis,1,%,2,1
+3031135,Docosenoate (C22:1) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3031146,Palmitate (C16:0) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,1
+3031148,Octadecanoate (C18:0) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,1
+3031157,Palmitoleate (C16:1w7) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.69
+3031167,Gamma Linolenate (C18:3w6) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3031177,Alpha linolenate (C18:3w3) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3031194,Linoleate (C18:2w6) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,1
+3031266,Glucose [Mass/volume] in Arterial blood,1,mg/dL,2,1
+3031429,Oleate (C18:1w9) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,1
+3031440,Vaccenate (C18:1w7) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3031445,Docosapentaenate (C22:5w3) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3031450,Arachidonate (C20:4w6) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.94
+3031462,Docosapentaenate (C22:5w6) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3031477,Laurate (C12:0) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3031748,Cortisol Free [Mass/volume] in 24 hour Urine by HPLC,1,ug/L,2,0.58
+3031767,Vascular endothelial growth factor [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.72
+3032325,Omega 3 fatty acids (w3) [Moles/volume] in Serum or Plasma,1,mmol/L,2,0.91
+3032337,Omega 6 fatty acids (w6) [Moles/volume] in Serum or Plasma,1,mmol/L,2,0.91
+3032380,Hexadecenoate (C16:1w9) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3032613,Myristate (C14:0) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3032623,Nervonate (C24:1) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3032635,Homo-gamma Linolenate (C20:3w6) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3032643,Mead acid (C20:3w9) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3032660,Eicosapentaenoate (C20:5w3) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.96
+3032884,Docosahexaenoate (C22:6w3) [Moles/volume] in Serum or Plasma,1,nmol/mL,2,0.97
+3033408,Glucose [Mass/volume] in Venous blood,1,mg/dL,2,1
+3033575,Monocytes [#/volume] in Blood by Automated count,1,10*3/uL,2,0.11
+3033625,Serotonin [Mass/volume] in Serum,1,ng/mL,2,0.99
+3033670,Parathyrin related protein [Moles/volume] in Serum or Plasma,1,pmol/L,2,0.98
+3033882,Carnitine [Moles/volume] in Serum or Plasma,1,umol/L,2,0.98
+3033951,3-Hydroxystearoylcarnitine (C18-OH) [Moles/volume] in Serum or Plasma,1,umol/L,2,1
+3034360,"1,3 beta glucan [Mass/volume] in Serum",1,pg/mL,2,0.74
+3034860,Immunoglobulin light chains.kappa.free [Mass/volume] in Serum,1,mg/dL,2,0.53
+3035282,Streptococcus pneumoniae serotype IgG Ab [Interpretation] in Serum Narrative,1,ug/mL,2,0.05
+3035283,Acetylcholine receptor ganglionic neuronal Ab [Moles/volume] in Serum,1,nmol/L,2,0.94
+3035801,Estradiol (E2) [Mass/volume] in Serum or Plasma by High sensitivity method,1,pg/mL,2,0.96
+3036148,Oxcarbazepine serum/plasma,1,ug/mL,2,0.98
+3036180,Methadone [Presence] in Urine,1,ng/mL,2,0.5
+3036343,3-Hydroxylinoleoylcarnitine (C18:2-OH) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3036426,Calcium.ionized [Mass/volume] in Blood,1,mmol/L,2,0.57
+3036567,Thyroid stimulating immunoglobulins actual/normal in Serum,1,%,2,0.99
+3036603,Volume of Urine,1,mL,2,0.83
+3036864,3-Hydroxytetradecanoylcarnitine (C14-OH) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3036866,Desethylamiodarone [Mass/volume] in Serum or Plasma,1,ug/mL,2,0.81
+3036887,Ammonia [Mass/volume] in Plasma,1,umol/L,2,0.14
+3036931,Citrate [Mass/volume] in 24 hour Urine,1,mg/L,2,0.55
+3037043,Immunoglobulin light chains.lambda.free [Mass/volume] in Urine,1,mg/L,2,0.87
+3037072,Urobilinogen [Mass/volume] in Urine by Test strip,1,mg/dL,2,0.84
+3037123,Amikacin [Mass/volume] in Serum or Plasma --trough,1,ug/mL,2,0.6
+3037185,Protein [Presence] in Urine,1,mg/dL,2,0.64
+3037194,Monocytes/100 leukocytes in Cerebral spinal fluid by Manual count,1,%,2,0.96
+3037278,Anion gap 4 in Serum or Plasma,1,mmol/L,2,0.75
+3037426,Urobilinogen [Presence] in Urine by Test strip,1,mg/dL,2,0.12
+3037585,Homocysteine [Mass/volume] in Serum or Plasma,1,umol/L,2,0.61
+3037663,"Carbon dioxide, total [Moles/volume] in Arterial blood by calculation",1,mmol/L,2,0.56
+3037684,Citrulline [Moles/volume] in Serum or Plasma,1,umol/L,2,0.96
+3037808,Alpha subunit free [Mass/volume] in Serum or Plasma,1,ng/mL,2,1
+3037812,Catecholamines [Mass/volume] in Plasma,1,pg/mL,2,0.94
+3038104,Monocytes/100 leukocytes in Body fluid,1,%,2,1
+3038126,Propionylcarnitine (C3) [Moles/volume] in Serum or Plasma,1,umol/L,2,0.81
+3039426,Oxygen saturation Calculated from oxygen partial pressure in Arterial blood,1,%,2,0.84
+3041084,Immature granulocytes [#/volume] in Blood by Automated count,1,10*3/uL,2,0.16
+3041253,Oxygen saturation Calculated from oxygen partial pressure in Venous blood,1,%,2,0.95
+3041354,Potassium [Moles/volume] in Venous blood,1,mmol/L,2,0.81
+3041449,Collagen crosslinked C-telopeptide [Mass/volume] in Serum or Plasma,1,pg/mL,2,0.93
+3043111,Platelet mean volume [Entitic volume] in Blood by Automated count,1,fL,2,0.97
+3043147,Voltage-gated calcium channel P/Q type binding Ab [Moles/volume] in Serum,1,nmol/L,2,1
+3044331,Calcium.ionized [Moles/volume] in Arterial blood,1,mmol/L,2,0.9
+3044870,Hemoglobin C/Hemoglobin.total in Blood by Electrophoresis,1,%,2,1
+3046279,Procalcitonin [Mass/volume] in Serum or Plasma,1,ng/mL,2,0.88
+3046538,Tissue transglutaminase IgA Ab [Units/volume] in Serum by Immunoassay,1,[U]/mL,2,0.85
+3047169,Immunoglobulin light chains.lambda.free [Mass/volume] in Serum or Plasma,1,mg/dL,2,0.51
+3047181,Lactate [Moles/volume] in Blood,1,mmol/L,2,0.56
+3047500,Thyroglobulin recovery in Serum or Plasma,1,%,2,0.69
+3048689,Calprotectin [Mass/mass] in Stool,1,ug/g,2,0.8
+3050254,Soluble liver IgG Ab [Units/volume] in Serum by Immunoassay,1,u,2,0.34
+3050479,Immature granulocytes/100 leukocytes in Blood,1,%,2,1
+3050746,Hematocrit [Volume Fraction] of Blood by Estimated,1,%,2,0.8
+3051447,Retinyl palmitate [Mass/volume] in Serum or Plasma,1,mg/L,2,0.99
+3051714,Fibrin D-dimer FEU,1,ng/mL,2,0.14
+4007831,"Vitamin D, 25-hydroxy measurement",1,mmol/L,2,0.09
+4013104,Human immunodeficiency virus test,1,No matching concept,2,1
+4013964,"Creatinine measurement, serum",1,mmol/L,2,0.07
+4014121,Rheumatoid arthritis latex test,1,[iU]/mL,2,0.34
+4014134,Blood chemistry,1,mmol/L,2,0.06
+4018315,"Glucose measurement, blood, test strip",1,mmol/L,2,0.86
+4030871,Red blood cell count,1,10*9/mL,2,0.06
+4034850,Laboratory test,1,No matching concept,2,1
+4041697,Blood glucose method,1,mmol/L,2,0.97
+4042066,Glucometer blood glucose,1,mmol/L,2,0.91
+4042243,Urine ketone test,1,No matching concept,2,1
+4042762,Measurement of renal clearance of creatinine,1,mL/min,2,0.09
+4055970,Urine glucose chemical titer measurement,1,mmol/L,2,0.43
+4064074,Tonometry,1,mm[Hg],2,0.97
+4092969,In vivo test of hypersensitivity,1,No matching concept,2,1
+4095027,Antibody titer measurement,1,No matching concept,2,1
+4095055,ALT - blood measurement,1,[U]/L,2,0.39
+4098179,Immunology laboratory test,1,No matching concept,2,1
+4098346,Vital capacity test,1,%,2,0.03
+4098519,LDH blood measurement,1,[U]/L,2,0.11
+4144235,"Glucose measurement, blood",1,No matching concept,2,1
+4148592,Biochemical evaluation of blood urea/renal function,1,mmol/L,2,0.65
+4151549,Fluid sample alkaline phosphatase measurement,1,[U]/L,2,0.9
+4153000,Hemoglobin level estimation,1,g/L,2,0.13
+4153004,Serum angiotensin I and II measurement,1,[U]/L,2,0.47
+4153111,Random blood glucose measurement,1,mmol/L,2,0.74
+4155237,Measurement of liver enzyme,1,[U]/L,2,0.25
+4156643,Blood urate measurement,1,mmol/L,2,0.46
+4156817,"Creatine measurement, urine",1,mmol/L,2,0.79
+4158890,Serum total lactate dehydrogenase measurement,1,[U]/L,2,0.09
+4197971,HbA1c measurement,1,%,2,0.61
+4198132,Hematology screening test,1,No matching concept,2,1
+4208414,C-reactive protein measurement,1,mg/L,2,0.91
+4212065,Erythrocyte sedimentation rate measurement,1,No matching concept,2,1
+4215539,Urine ratio,1,g/mol,2,0.17
+4216098,Eosinophil count,1,%,2,0.3
+4229110,Insulin C-peptide measurement,1,[U]/mL,2,0.4
+4229586,"Glucose measurement, 2 hour post prandial",1,mmol/L,2,0.74
+4260765,Serum total cholesterol measurement,1,mmol/L,2,0.55
+4272032,Prostate specific antigen measurement,1,ng/mL,2,0.4
+4290096,"Folic acid measurement, RBC",1,ng/mL,2,0.18
+4301868,Pulse rate,1,min,2,0.04
+4308739,Vitamin D measurement,1,mmol/L,2,0.12
+4311463,Mantoux test,1,No matching concept,2,1
+36203231,Streptococcus pneumoniae Danish serotype 12F IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.92
+36203821,Streptococcus pneumoniae Danish serotype 1 IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.91
+36203922,Streptococcus pneumoniae Danish serotype 14 IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.92
+36204005,Streptococcus pneumoniae Danish serotype 19F IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.92
+36204094,Streptococcus pneumoniae Danish serotype 23F IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.92
+36204110,Streptococcus pneumoniae Danish serotype 3 IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.91
+36204187,Streptococcus pneumoniae Danish serotype 4 IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.92
+36204286,Streptococcus pneumoniae Danish serotype 5 IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.61
+36204351,Streptococcus pneumoniae Danish serotype 8 IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.92
+36204373,Streptococcus pneumoniae Danish serotype 9N IgG Ab [Mass/volume] in Serum,1,ug/mL,2,0.92
+40758478,Ethyl glucuronide [Presence] in Urine,1,ng/mL,2,0.89
+40758926,Cyclosporine [Mass/volume] in Blood by LC/MS/MS,1,ng/mL,2,0.64
+40761476,Ethyl glucuronide [Presence] in Urine by Screen method,1,ng/mL,2,0.81
+40761478,Ethyl glucuronide [Presence] in Urine by Confirmatory method,1,ng/mL,2,0.5
+40761514,Nucleated erythrocytes/100 leukocytes [Ratio] in Blood by Automated count,1,%,2,0.78
+40762125,Lactate [Mass/volume] in Blood,1,mmol/L,2,1
+40762887,Creatinine [Moles/volume] in Blood,1,mg/dL,2,1
+40763528,Reticulocytes [#/volume] in Blood by Automated count,1,%,2,0.55
+40764183,Norhydrocodone [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,1
+40764186,Noroxycodone [Mass/volume] in Urine by Confirmatory method,1,ng/mL,2,0.99
+40766183,Gliadin peptide IgA Ab [Units/volume] in Serum by Immunoassay,1,[U]/mL,2,0.92
+40770918,von Willebrand factor (vWf).activity actual/normal in Platelet poor plasma by Immunoassay,1,%,2,1
+42869450,Platelets reticulated/100 platelets in Blood by Automated count,1,%,2,0.5
+42869452,Immature granulocytes/100 leukocytes in Blood by Automated count,1,%,2,0.89
+44786754,Tacrolimus [Mass/volume] in Blood by LC/MS/MS,1,ng/mL,2,0.69
+44791053,Serum fasting total cholesterol,1,mmol/L,2,0.24
+44807246,Plasma pregnancy associated plasma protein A multiple of median measurement,1,10*-3.[U]/L,2,0.35
+46235078,"Potassium [Moles/volume] in Serum, Plasma or Blood",1,mmol/L,2,1
+46235358,Vascular cell adhesion molecule 1 [Mass/volume] in Serum or Plasma,1,ug/mL,2,0.57
+3001784,Free/Total PSA serum/plasme,2,"%,No matching concept","6,2","0.77,0.42"
+3038553,Body mass index,2,"kg/m2,No matching concept","6,2","1,0.79"
+3000963,Hemoglobin,2,"g/dL,g/L","5,2","0.91,0.98"
+3036535,Thyroglobulin [Mass/volume] in Serum or Plasma,2,"ng/mL,ug/L","5,2","0.96,0.49"
+4154790,Diastolic blood pressure,2,"mm[Hg],cm","5,2","1,0.06"
+3001122,Ferritin [Mass/volume] in Serum or Plasma,2,"ng/mL,ug/L","4,3","0.94,0.31"
+3001420,Magnesium [Mass/volume] in Serum or Plasma,2,"mg/dL,10*-3.eq/L","4,2","0.91,0.49"
+3009744,Erythrocyte mean corpuscular hemoglobin concentration [Mass/volume] by Automated count,2,"g/dL,%","4,2","0.57,0.04"
+3019800,Troponin T.cardiac [Mass/volume] in Serum or Plasma,2,"ng/mL,ug/L","4,2","0.96,0.14"
+3020460,C reactive protein [Mass/volume] in Serum or Plasma,2,"mg/L,mg/dL","4,2","0.97,0.18"
+3028639,Carbamazepine serum/plasma,2,"ug/mL,mg/L","4,2","1,0.39"
+3005895,Myoglobin [Mass/volume] in Serum or Plasma,2,"ng/mL,ug/L","3,2","0.89,0.05"
+3016201,Valproate serum/plasma,2,"ug/mL,mg/L","3,2","1,0.38"
+3022000,Dehydroepiandrosterone (DHEA) [Mass/volume] in Serum or Plasma,2,"ng/mL,ng/dL","3,2","0.78,0.49"
+3022616,Phenytoin serum/plasma,2,"ug/mL,mg/L","3,2","0.99,0.39"
+3026910,Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma,2,"[U]/L,[iU]/L","3,2","1,0.61"
+3027370,Insulin-like growth factor binding protein 3 [Mass/volume] in Serum or Plasma,2,"mg/L,ng/mL","3,2","0.74,0.11"
+4046263,Enzyme measurement,2,"No matching concept,ng/mL","3,2","1,0.03"
+40765040,25-Hydroxyvitamin D2+25-Hydroxyvitamin D3 [Mass/volume] in Serum or Plasma,2,"ng/mL,pg/mL","3,2","0.88,0.11"
+40771922,Glomerular filtration rate/1.73 sq M.predicted [Volume Rate/Area] in Serum or Plasma,2,"mL/min,mL/min/1.73.m2","3,2","0.45,0.55"
+3000167,Desipramine [Mass/volume] in Serum or Plasma,2,"ug/L,ng/mL","2,2","0.19,0.37"
+3002888,Erythrocyte distribution width [Entitic volume],2,"%,fL","2,2","0.97,0.53"
+3004739,Amitriptyline+Nortriptyline [Mass/volume] in Serum or Plasma,2,"ug/L,ng/mL","2,2","0.08,0.56"
+3007808,Renin [Enzymatic activity/volume] in Plasma,2,"ng/dL/h,ng/mL/h","2,2","0.04,0.4"
+3007857,Nortriptyline [Mass/volume] in Serum or Plasma,2,"ug/L,ng/mL","2,2","0.18,0.52"
+3010156,C reactive protein [Mass/volume] in Serum or Plasma by High sensitivity method,2,"mg/L,mg/dL","2,2","0.99,0.67"
+3015375,Amiodarone [Mass/volume] in Serum or Plasma,2,"mg/L,ug/mL","2,2","0.15,0.68"
+3016049,Testosterone Free [Mass/volume] in Serum or Plasma,2,"ng/dL,pg/mL","2,2","0.35,0.63"
+3017394,Zinc [Mass/volume] in Serum or Plasma,2,"ug/L,ug/dL","2,2","0.05,0.78"
+3019420,Tryptase [Mass/volume] in Serum or Plasma,2,"ug/L,ng/mL","2,2","0.76,0.41"
+3020622,Pristanate (C15:0(CH3)4) [Moles/volume] in Serum or Plasma,2,"umol/L,nmol/mL","2,2","0.46,0.37"
+3020924,Thyroxine binding globulin [Mass/volume] in Serum or Plasma,2,"mg/dL,ug/mL","2,2","0.09,0.81"
+3021664,Phytanate (C16:0(CH3)4) [Moles/volume] in Serum or Plasma,2,"umol/L,nmol/mL","2,2","0.47,0.37"
+3021886,Globulin [Mass/volume] in Serum,2,"g/L,g/dL","2,2","1,0.89"
+3022338,Retinol [Mass/volume] in Serum or Plasma,2,"mg/L,ug/dL","2,2","0.44,0.4"
+3023436,Glucagon [Mass/volume] in Serum or Plasma,2,"ng/L,pg/mL","2,2","0.46,0.51"
+3027514,Triiodothyronine (T3).reverse [Mass/volume] in Serum or Plasma,2,"ng/dL,pg/mL","2,2","0.72,0.22"
+3030354,Glomerular filtration rate/1.73 sq M.predicted [Volume Rate/Area] in Serum or Plasma by Creatinine-based formula (MDRD),2,"mL/min,mL/min/1.73.m2","2,2","0.05,0.77"
+3035510,Gentamicin [Mass/volume] in Serum or Plasma,2,"mg/L,ug/mL","2,2","0.17,0.37"
+3036509,Ethosuximide serum/plasma,2,"mg/L,ug/mL","2,2","0.14,0.67"
+3037121,Protein [Mass/volume] in Urine,2,"No matching concept,mg/dL","2,2","0.75,0.69"
+3037534,Parathyrin related protein [Mass/volume] in Serum or Plasma,2,"pmol/L,pg/mL","2,2","0.12,0.8"
+3037701,Pyridoxine [Mass/volume] in Serum or Plasma,2,"nmol/L,ng/mL","2,2","0.39,0.24"
+4012479,Low density lipoprotein cholesterol measurement,2,"g/L,nmol/L","2,2","0.58,0.05"
+4041881,Urine protein test,2,"g/L,mg/L","2,2","0.19,0.25"
+4101237,"Metanephrines measurement, total, urine",2,"umol/(24.h),umol","2,2","0.17,0.07"
+4149519,Glucose measurement,2,"g/L,nmol/L","2,2","0.55,0.11"
+4150339,24 hour urine sample volume measurement,2,"mL,/h","2,2","0.06,0.03"
+4151358,Hematocrit determination,2,"{ratio},%","2,2","0.09,0.79"
+4151412,Fetoplacental hormone measurement,2,"[U]/L,mg/L","2,2","0.38,0.14"
+4153143,Plasma viscosity measurement,2,"No matching concept,mPas","2,2","0.66,0.69"
+4168705,Albuminuria,2,"g/L,mg/L","2,2","0.29,0.03"
+4172647,Basophil count,2,"pH,%","2,2","0.04,0.22"
+4195214,Cholesterol/HDL ratio measurement,2,"{ratio},mmol/L","2,2","0.16,0.21"
+4196844,Urine sample volume measurement,2,"mL,'","2,2","0.05,0.03"
+4204380,Rheumatoid factor measurement,2,"10*3.[U]/L,[iU]/mL","2,2","0.36,0.19"
+4211845,"Protein measurement, urine",2,"No matching concept,g/L","2,2","0.77,0.45"
+4214677,Total beta human chorionic gonadotrophin level,2,"[U]/L,mmol/L","2,2","0.38,0.07"
+4245152,Potassium measurement,2,"nmol/L,10*-3.eq","2,2","0.53,0.33"
+4267147,Platelet count,2,"%,10*9","2,2","0.46,0.06"
+40762330,Prostate Specific Ag Free [Mass/volume] in Body fluid,2,"g/L,ng/mL","2,2","0.03,0.42"
+44793131,Total PSA level,2,"g/L,ng/mL","2,2","0.04,0.59"
+3036277,Body height,3,"cm,[in_us],m","6,2,2","1,1,1"
+3000787,Salicylates [Mass/volume] in Serum or Plasma,3,"mg/dL,mg/L,ug/mL","3,2,2","0.48,0.13,0.41"
+3026493,Urate [Moles/volume] in Serum or Plasma,3,"g/L,mg/L,umol","2,2,2","0.03,0.52,0.04"
+4014768,"Alpha-1-fetoprotein measurement, serum",3,"10*3.[U]/L,ng/mL,[iU]/mL","2,2,2","0.32,0.02,0.02"
+4032789,Triglycerides measurement,3,"g/L,nmol/L,mmol","2,2,2","0.62,0.09,0.05"
+4090979,Hematology test,3,"%,mg,g/L","2,2,2","0.07,0.09,0.02"
+4101713,High density lipoprotein cholesterol measurement,3,"%,g/L,nmol/L","2,2,2","0.04,0.57,0.07"
+4141733,Hematology procedure,3,"%,mg,L/L","2,2,2","0.06,0.05,0.03"
+4155236,Enzyme/specific protein level measurement,3,"%,mmol/L,mg/kg","2,2,2","0.02,0.07,0.03"
+4250176,Protein measurement,3,"No matching concept,g/L,mmol/L","2,2,2","0.53,0.65,0.3"
+4263307,Microalbuminuria measurement,3,"%,mg/L,mg/kg/h","2,2,2","0.02,0.46,0.09"
+4275203,Creatinine level - finding,3,"mg/L,mmol,umol","2,2,2","0.52,0.07,0.12"
+4313992,Uric acid measurement,3,"mg/L,mmol,umol","2,2,2","0.59,0.07,0.09"
+4097664,Albumin measurement,4,"No matching concept,%,[G'U],g/L","2,2,2,2","0.61,0.42,0.03,0.33"
+4182052,"Glucose measurement, fasting",4,"[G'U],g/L,nmol/L,mmol","2,2,2,2","0.02,0.59,0.12,0.04"
+4118986,Bilirubin measurement,5,"No matching concept,mg/L,mmol/L,mm[Hg],umol","2,2,2,2,2","0.64,0.22,0.39,0.08,0.04"
+4008265,Total cholesterol measurement,6,"No matching concept,[G'U],g/L,nmol/L,mmol/L,mmol","2,2,2,2,2,2","0.14,0.02,0.6,0.09,0.96,0.05"
