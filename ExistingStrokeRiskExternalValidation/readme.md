@@ -68,14 +68,14 @@ ExistingStrokeRiskExternalValidation::main(
   cohortDatabaseSchema=cohortDatabaseSchema,
   outputLocation=outputLocation,
   cohortTable=cohortTable,
-  createCohorts = F,
-  runAtria = F,
-  runFramingham = F,
-  runChads2 = F,
-  runChads2Vas = F,
-  runQstroke = F,
-  summariseResults = F,
-  packageResults = F,
+  createCohorts = T,
+  runAtria = T,
+  runFramingham = T,
+  runChads2 = T,
+  runChads2Vas = T,
+  runQstroke = T,
+  summariseResults = T,
+  packageResults = T,
   N=10)
 
 # After checking the compressed folder containing the shareable results submit the results
