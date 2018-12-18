@@ -1,6 +1,6 @@
 # Copyright 2018 Observational Health Data Sciences and Informatics
 #
-# This file is part of Existing Stroke Risk External Valiation study
+# This file is part of SkeletonValidationStudy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,81 +14,122 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-#' Create and summarise the target and outcome cohorts
+#' Create the exposure and outcome cohorts
 #'
 #' @details
-#' This will create the risk prediciton cohorts and then count the table sizes
+#' This function will create the exposure and outcome cohorts following the definitions included in
+#' this package.
 #'
-#' @param connectioDetails The connections details for connecting to the CDM
-#' @param cdmDatabaseSchema  The schema holding the CDM data
-#' @param cohortDatabaseSchema The schema holding the cohort table
-#' @param cohortTable         The name of the cohort table
-#' @param targetId          The cohort definition id of the target population
-#' @param outcomeIds         The cohort definition ids of the outcomes
-#'
-#' @return
-#' A summary of the cohort counts
+#' @param connectionDetails    An object of type \code{connectionDetails} as created using the
+#'                             \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+#'                             DatabaseConnector package.
+#' @param cdmDatabaseSchema    Schema name where your patient-level data in OMOP CDM format resides.
+#'                             Note that for SQL Server, this should include both the database and
+#'                             schema name, for example 'cdm_data.dbo'.
+#' @param cohortDatabaseSchema Schema name where intermediate data can be stored. You will need to have
+#'                             write priviliges in this schema. Note that for SQL Server, this should
+#'                             include both the database and schema name, for example 'cdm_data.dbo'.
+#' @param cohortTable          The name of the table that will be created in the work database schema.
+#'                             This table will hold the exposure and outcome cohorts used in this
+#'                             study.
+#' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
+#'                             priviliges for storing temporary tables.
+#' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
+#'                             (/)
 #'
 #' @export
 createCohorts <- function(connectionDetails,
                           cdmDatabaseSchema,
                           cohortDatabaseSchema,
-                          cohortTable,
-                          targetId,
-                          outcomeIds){
+                          cohortTable = "cohort",
+                          oracleTempSchema,
+                          outputFolder) {
+  if (!file.exists(outputFolder))
+    dir.create(outputFolder)
 
-  cohortDetails <- NULL
-  if(!missing(outcomeIds)){
-    if(length(unique(outcomeIds))!=4){
-      stop('Need to enter four outcome ids')
-    }
-    if(length(targetId)!=1){
-      stop('Need to enter one target id')
-    }
+  conn <- DatabaseConnector::connect(connectionDetails)
 
-    cohortDetails <- data.frame(cohortName=c('Females newly diagnosed with atrial fibrilation aged 65 to 95',
-                                       'Stroke definition 1 Broad stroke Inpatient',
-                                       'Stroke definition 2 Broad stroke',
-                                       'Stroke definition 3 Haemorrhagic stroke',
-                                       'Stroke definition 4 Ischaemic stroke'),
-                          cohortId = c(targetId, outcomeIds))
+  .createCohorts(connection = conn,
+                 cdmDatabaseSchema = cdmDatabaseSchema,
+                 cohortDatabaseSchema = cohortDatabaseSchema,
+                 cohortTable = cohortTable,
+                 oracleTempSchema = oracleTempSchema,
+                 outputFolder = outputFolder)
 
-    }
+  # Check number of subjects per cohort:
+  OhdsiRTools::logInfo("Counting cohorts")
+  sql <- SqlRender::loadRenderTranslateSql("GetCounts.sql",
+                                           "ExistingStrokeRiskExternalValidation",
+                                           dbms = connectionDetails$dbms,
+                                           oracleTempSchema = oracleTempSchema,
+                                           cdm_database_schema = cdmDatabaseSchema,
+                                           work_database_schema = cohortDatabaseSchema,
+                                           study_cohort_table = cohortTable)
+  counts <- DatabaseConnector::querySql(conn, sql)
+  colnames(counts) <- SqlRender::snakeCaseToCamelCase(colnames(counts))
+  counts <- addCohortNames(counts)
+  write.csv(counts, file.path(outputFolder, "CohortCounts.csv"), row.names = FALSE)
 
-  connection <- DatabaseConnector::connect(connectionDetails)
+  DatabaseConnector::disconnect(conn)
+}
 
-  #checking whether cohort table exists and creating if not..
-  # create the cohort table if it doesnt exist
-  existTab <- toupper(cohortTable)%in%toupper(DatabaseConnector::getTableNames(connection, cohortDatabaseSchema))
-  if(!existTab){
-    sql <- SqlRender::loadRenderTranslateSql("createTable.sql",
+addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumnName = "cohortName") {
+  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "ExistingStrokeRiskExternalValidation")
+  cohortsToCreate <- read.csv(pathToCsv)
+
+  idToName <- data.frame(cohortId = c(cohortsToCreate$cohortId),
+                         cohortName = c(as.character(cohortsToCreate$name)))
+  idToName <- idToName[order(idToName$cohortId), ]
+  idToName <- idToName[!duplicated(idToName$cohortId), ]
+  names(idToName)[1] <- IdColumnName
+  names(idToName)[2] <- nameColumnName
+  data <- merge(data, idToName, all.x = TRUE)
+  # Change order of columns:
+  idCol <- which(colnames(data) == IdColumnName)
+  if (idCol < ncol(data) - 1) {
+    data <- data[, c(1:idCol, ncol(data) , (idCol+1):(ncol(data)-1))]
+  }
+  return(data)
+}
+
+.createCohorts <- function(connection,
+                           cdmDatabaseSchema,
+                           vocabularyDatabaseSchema = cdmDatabaseSchema,
+                           cohortDatabaseSchema,
+                           cohortTable,
+                           oracleTempSchema,
+                           outputFolder) {
+
+  # Create study cohort table structure:
+  sql <- SqlRender::loadRenderTranslateSql(sqlFilename = "CreateCohortTable.sql",
+                                           packageName = "ExistingStrokeRiskExternalValidation",
+                                           dbms = attr(connection, "dbms"),
+                                           oracleTempSchema = oracleTempSchema,
+                                           cohort_database_schema = cohortDatabaseSchema,
+                                           cohort_table = cohortTable)
+  DatabaseConnector::executeSql(connection, sql, progressBar = FALSE, reportOverallTime = FALSE)
+
+
+
+  # Instantiate cohorts:
+  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "ExistingStrokeRiskExternalValidation")
+  cohortsToCreate <- read.csv(pathToCsv)
+  for (i in 1:nrow(cohortsToCreate)) {
+    writeLines(paste("Creating cohort:", cohortsToCreate$name[i]))
+    sql <- SqlRender::loadRenderTranslateSql(sqlFilename = paste0(cohortsToCreate$name[i], ".sql"),
                                              packageName = "ExistingStrokeRiskExternalValidation",
                                              dbms = attr(connection, "dbms"),
+                                             oracleTempSchema = oracleTempSchema,
+                                             cdm_database_schema = cdmDatabaseSchema,
+                                             vocabulary_database_schema = vocabularyDatabaseSchema,
+
                                              target_database_schema = cohortDatabaseSchema,
-                                             target_cohort_table = cohortTable)
+                                             target_cohort_table = cohortTable,
+                                             target_cohort_id = cohortsToCreate$cohortId[i])
     DatabaseConnector::executeSql(connection, sql)
   }
-
-  if(is.null(cohortDetails)){
-  result <- PatientLevelPrediction::createCohort(connectionDetails = connectionDetails,
-                                       cdmDatabaseSchema = cdmDatabaseSchema,
-                                       cohortDatabaseSchema = cohortDatabaseSchema,
-                                       cohortTable = cohortTable,
-                                       package = 'ExistingStrokeRiskExternalValidation')
-  } else {
-    result <- PatientLevelPrediction::createCohort(cohortDetails = cohortDetails,
-                                                   connectionDetails = connectionDetails,
-                                                   cdmDatabaseSchema = cdmDatabaseSchema,
-                                                   cohortDatabaseSchema = cohortDatabaseSchema,
-                                                   cohortTable = cohortTable,
-                                                   package = 'ExistingStrokeRiskExternalValidation')
-  }
-
-  print(result)
-
-  return(result)
 }
+
 
 #' Creates the target population and outcome summary characteristics
 #'
@@ -96,8 +137,8 @@ createCohorts <- function(connectionDetails,
 #' This will create the patient characteristic table
 #'
 #' @param connectioDetails The connections details for connecting to the CDM
-#' @param cdmDatabaseSchema  The schema holding the CDM data
-#' @param cohortDatabaseSchema The schema holding the cohort table
+#' @param cdmDatabaseschema  The schema holding the CDM data
+#' @param cohortDatabaseschema The schema holding the cohort table
 #' @param cohortTable         The name of the cohort table
 #' @param targetId          The cohort definition id of the target population
 #' @param outcomeId         The cohort definition id of the outcome
@@ -118,13 +159,13 @@ getTable1 <- function(connectionDetails,
   covariateSettings <- FeatureExtraction::createCovariateSettings(useDemographicsGender = T)
 
   plpData <- PatientLevelPrediction::getPlpData(connectionDetails,
-                                     cdmDatabaseSchema = cdmDatabaseSchema,
-                                     cohortId = targetId, outcomeIds = outcomeId,
-                                     cohortDatabaseSchema = cohortDatabaseSchema,
-                                     outcomeDatabaseSchema = cohortDatabaseSchema,
-                                     cohortTable = cohortTable,
-                                     outcomeTable = cohortTable,
-                                     covariateSettings=covariateSettings)
+                                                cdmDatabaseSchema = cdmDatabaseSchema,
+                                                cohortId = targetId, outcomeIds = outcomeId,
+                                                cohortDatabaseSchema = cohortDatabaseSchema,
+                                                outcomeDatabaseSchema = cohortDatabaseSchema,
+                                                cohortTable = cohortTable,
+                                                outcomeTable = cohortTable,
+                                                covariateSettings=covariateSettings)
 
   population <- PatientLevelPrediction::createStudyPopulation(plpData = plpData,
                                                               outcomeId = outcomeId,
@@ -145,102 +186,79 @@ getTable1 <- function(connectionDetails,
   return(table1)
 }
 
-#' Applies the five existing stroke prediction models
+
+#' Package the results for sharing with OHDSI researchers
 #'
 #' @details
-#' This will run and evaluate five existing stroke risk prediction models
+#' This function packages the results.
 #'
-#' @param connectioDetails The connections details for connecting to the CDM
-#' @param cdmDatabaseSchema  The schema holding the CDM data
-#' @param cohortDatabaseSchema The schema holding the cohort table
-#' @param cohortTable         The name of the cohort table
-#' @param targetId          The cohort definition id of the target population
-#' @param outcomeId         The cohort definition id of the outcome
-#'
-#' @return
-#' A list with the performance and plots
+#' @param outputFolder        Name of folder containing the study analysis results
+#' @param dbName              A shareable name for the database used in this study
+#' @param minCellCount        The minimum number of subjects contributing to a count before it can be included in the results.
 #'
 #' @export
-applyExistingstrokeModels <- function(connectionDetails,
-                                      cdmDatabaseSchema,
-                                      cohortDatabaseSchema,
-                                      cohortTable,
-                                      targetId,
-                                      outcomeId){
+packageResults <- function(outputFolder, dbName,
+                           minCellCount = 5) {
+  if(missing(outputFolder)){
+    stop('Missing outputFolder...')
+  }
 
-  writeLines('Implementing Astria stroke risk model...')
-  astria <- PredictionComparison::atriaStrokeModel(connectionDetails, cdmDatabaseSchema,
-                                       cohortDatabaseSchema = cohortDatabaseSchema,
-                                       outcomeDatabaseSchema = cohortDatabaseSchema,
-                                       cohortTable = cohortTable,
-                                       outcomeTable = cohortTable,
-                                       cohortId = targetId, outcomeId = outcomeId,
-                                       removePriorOutcome=T,
-                                       riskWindowStart = 1,
-                                       riskWindowEnd = 365,
-                                       requireTimeAtRisk = T,
-                                       minTimeAtRisk = 364, includeAllOutcomes = T)
+  #create export subfolder in workFolder
+  exportFolder <- file.path(outputFolder, dbName)
+  dir.create(exportFolder, recursive = T)
 
-  writeLines('Implementing Qstroke stroke risk model...')
-  qstroke <- PredictionComparison::qstrokeModel(connectionDetails, cdmDatabaseSchema,
-                                                 cohortDatabaseSchema = cohortDatabaseSchema,
-                                                 outcomeDatabaseSchema = cohortDatabaseSchema,
-                                                 cohortTable = cohortTable,
-                                                 outcomeTable = cohortTable,
-                                                 cohortId = targetId, outcomeId = outcomeId,
-                                                 removePriorOutcome=T,
-                                                riskWindowStart = 1,
-                                                riskWindowEnd = 365,
-                                                requireTimeAtRisk = T,
-                                                minTimeAtRisk = 364, includeAllOutcomes = T)
+  # move the summary
+  if(file.exists(file.path(outputFolder,'resultSummary.csv'))){
+    summary <- read.csv(file.path(outputFolder,'resultSummary.csv'))
+    write.csv(summary, file.path(exportFolder,'resultSummary.csv'))
+  }
 
-  writeLines('Implementing Framington stroke risk model...')
-  framington <- PredictionComparison::framinghamModel(connectionDetails, cdmDatabaseSchema,
-                                              cohortDatabaseSchema = cohortDatabaseSchema,
-                                              outcomeDatabaseSchema = cohortDatabaseSchema,
-                                              cohortTable = cohortTable,
-                                              outcomeTable = cohortTable,
-                                              cohortId = targetId, outcomeId = outcomeId,
-                                              removePriorOutcome=T,
-                                              riskWindowStart = 1,
-                                              riskWindowEnd = 365,
-                                              requireTimeAtRisk = T,
-                                              minTimeAtRisk = 364, includeAllOutcomes = T)
+  # for each analysis copy the requested files...
+  folders <- list.dirs(path = outputFolder, recursive = F, full.names = F)
+  folders <- folders[grep('Analysis_', folders)]
 
-  writeLines('Implementing chads2 stroke risk model...')
-  chads2 <- PredictionComparison::chads2Model(connectionDetails, cdmDatabaseSchema,
-                                              cohortDatabaseSchema = cohortDatabaseSchema,
-                                              outcomeDatabaseSchema = cohortDatabaseSchema,
-                                              cohortTable = cohortTable,
-                                              outcomeTable = cohortTable,
-                                              cohortId = targetId, outcomeId = outcomeId,
-                                              removePriorOutcome=T,
-                                              riskWindowStart = 1,
-                                              riskWindowEnd = 365,
-                                              requireTimeAtRisk = T,
-                                              minTimeAtRisk = 364, includeAllOutcomes = T)
+  for(folder in folders){
+    #copy all plots across
+    if (!file.exists(file.path(exportFolder,folder))){
+      dir.create(file.path(exportFolder,folder), recursive = T)
+    }
 
-  writeLines('Implementing chads2vas stroke risk model...')
-  chads2vas <- PredictionComparison::chads2vasModel(connectionDetails, cdmDatabaseSchema,
-                                              cohortDatabaseSchema = cohortDatabaseSchema,
-                                              outcomeDatabaseSchema = cohortDatabaseSchema,
-                                              cohortTable = cohortTable,
-                                              outcomeTable = cohortTable,
-                                              cohortId = targetId, outcomeId = outcomeId,
-                                              removePriorOutcome=T,
-                                              riskWindowStart = 1,
-                                              riskWindowEnd = 365,
-                                              requireTimeAtRisk = T,
-                                              minTimeAtRisk = 364, includeAllOutcomes = T)
+    # loads analysis results
+    if(dir.exists(file.path(outputFolder,folder, 'plpResult'))){
+      plpResult <- PatientLevelPrediction::loadPlpResult(file.path(outputFolder,folder, 'plpResult'))
 
-# format the results... [TODO...]
-  results <- list(astria=astria,
-                  qstroke=qstroke,
-                  framington=framington,
-                  chads2=chads2,
-                  chads2vas=chads2vas)
+      if(minCellCount!=0){
+        PatientLevelPrediction::transportPlp(plpResult,
+                                             outputFolder=file.path(exportFolder,folder, 'plpResult'),
+                                             n=minCellCount,
+                                             includeEvaluationStatistics=T,
+                                             includeThresholdSummary=T,
+                                             includeDemographicSummary=T,
+                                             includeCalibrationSummary =T,
+                                             includePredictionDistribution=T,
+                                             includeCovariateSummary=T)
+      } else {
+        PatientLevelPrediction::transportPlp(plpResult,outputFolder=file.path(exportFolder,folder, 'plpResult'),
+                                             n=NULL,
+                                             includeEvaluationStatistics=T,
+                                             includeThresholdSummary=T,
+                                             includeDemographicSummary=T,
+                                             includeCalibrationSummary =T,
+                                             includePredictionDistribution=T,
+                                             includeCovariateSummary=T)
+      }
+    }
+  }
 
- return(results)
+
+  ### Add all to zip file ###
+  zipName <- paste0(exportFolder, '.zip')
+  OhdsiSharing::compressFolder(exportFolder, zipName)
+  # delete temp folder
+  unlink(exportFolder, recursive = T)
+
+  writeLines(paste("\nStudy results are compressed and ready for sharing at:", zipName))
+  return(zipName)
 }
 
 #' Submit the study results to the study coordinating center
@@ -249,8 +267,7 @@ applyExistingstrokeModels <- function(connectionDetails,
 #' This will upload the file \code{StudyResults.zip} to the study coordinating center using Amazon S3.
 #' This requires an active internet connection.
 #'
-#' @param exportFolder   The path to the folder containing the \code{StudyResults.zip} file.
-#' @param dbName         Database name used in the zipName
+#' @param exportFolder   The path to the folder containing the \code{export.zip} file.
 #' @param key            The key string as provided by the study coordinator
 #' @param secret         The secret string as provided by the study coordinator
 #'
@@ -259,34 +276,11 @@ applyExistingstrokeModels <- function(connectionDetails,
 #'
 #' @export
 submitResults <- function(exportFolder,dbName, key, secret) {
-  zipName <- file.path(exportFolder, paste0(dbName,"-StudyResults.zip"))
-  folderName <- file.path(exportFolder, paste0(dbName,"-StudyResults"))
-  if (!dir.exists(folderName)) {
-    dir.create(folderName, recursive = T)
+  if (!file.exists(exportFolder)) {
+    stop(paste("Cannot find zipped folder", exportFolder))
   }
-
-  # move all zipped files into folder
-  files <- list.files(exportFolder)
-  files <- files[grep('.zip', files)]
-  for(file in files){
-    file.copy(file.path(exportFolder,file), file.path(folderName), recursive=TRUE)
-  }
-
-  if(file.exists(file.path(exportFolder, 'predictionDetails.txt'))){
-    file.copy(file.path(exportFolder, 'predictionDetails.txt'), file.path(folderName), recursive=TRUE)
-  }
-
-  # compress complete folder
-  OhdsiSharing::compressFolder(folderName, zipName)
-  # delete temp folder
-  unlink(folderName, recursive = T)
-
-  if (!file.exists(zipName)) {
-    stop(paste("Cannot find file", zipName))
-  }
-  PatientLevelPrediction::submitResults(exportFolder = file.path(exportFolder, paste0(dbName,"-StudyResults.zip")),
+  PatientLevelPrediction::submitResults(exportFolder = exportFolder,
                                         key =  key, secret = secret)
-
 
 }
 

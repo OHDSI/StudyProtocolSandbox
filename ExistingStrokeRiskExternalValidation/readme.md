@@ -31,64 +31,56 @@ Getting Started
   1. In R, use the following commands to download and install:
 
   ```r
-install.packages("drat")
-drat::addRepo("OHDSI")
-install.packages("PatientLevelPrediction")
+  #================================= STEP 1: INSTALL PACKAGES ==================================
 install.packages("devtools")
+devtools::install_github("OHDSI/PatientLevelPrediction")
 devtools::install_github("OHDSI/PredictionComparison")
 devtools::install_github("OHDSI/StudyProtocolSandbox/ExistingStrokeRiskExternalValidation")
 
 library('ExistingStrokeRiskExternalValidation')
-# Add inputs for the site:
-options(fftempdir = 'C:/fftemp')
-dbms <- "pdw"
-user <- NULL
-pw <- NULL
+# view the models - this should pop up a View with the model info
+viewModels()
+                    
+#================================= STEP 2: MAIN STUDY ==================================
+options(fftempdir = 'T:/yourFftemp')
+dbms <- yourDbms
+user <- yourUsername
+pw <-yourPassword
 server <- Sys.getenv('server')
 port <- Sys.getenv('port')
-
-databaseName <- 'database name'
-cdmDatabaseSchema <- 'cdmDatabase.dbo'
-cohortDatabaseSchema <- 'cohortDatabase.dbo'
-outputLocation <- file.path(getwd(),'External Stroke Validation')
-cohortTable <- 'stroke_cohort'
-getTable1 <- F
-
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = server,
                                                                 user = user,
                                                                 password = pw,
                                                                 port = port)
-# Now run the following:
-checkPlpInstallation(connectionDetails=connectionDetails,
-                     python=F)
-                     
-# view the models
-viewModels()
-                     
-# NOTE IF THE ABOVE DOESN'T RETURN 1 THEN THERE IS AN ISSUE WITH THE PatientLevelPrediction INSTALL
-# OR SETTINGS THAT NEEDS TO BE FIXED BEFORE YOU CONTINUE
-              
-# Check cohort definitions work for the database:                     
-cohorts <- createCohorts(connectionDetails=connectionDetails,
-                       cdmDatabaseSchema=cdmDatabaseSchema,
-                       cohortDatabaseSchema=cohortDatabaseSchema,
-                       cohortTable=cohortTable) 
-                       
-# If the check passes and you have cohort values submit the cohort counts to the study
-# organizor to confirm the cohort definitions run across the network.  
-                       
-#================================= STEP 2: MAIN STUDY ==================================
-#  Once definitons have been checked across sites run:
-main(connectionDetails=connectionDetails,
-                 databaseName=databaseName,
-                 cdmDatabaseSchema=cdmDatabaseSchema,
-                 cohortDatabaseSchema=cohortDatabaseSchema,
-                 outputLocation=outputLocation,
-                 cohortTable=cohortTable)
-submitResults(exportFolder=outputLocation,
-              dbName=databasename, key, secret)
 
+databaseName = 'friendlyDatabaseName'
+cdmDatabaseSchema <- 'yourCdmDatabaseSchema'
+cohortDatabaseSchema <- 'yourCohortDatabaseSchema'
+cohortTable <- 'existingStrokeVal'
+outputLocation <- 'C:/existingStrokeVal'
+
+ExistingStrokeRiskExternalValidation::main(
+  connectionDetails=connectionDetails,
+  oracleTempSchema = NULL,
+  databaseName=databaseName,
+  cdmDatabaseSchema=cdmDatabaseSchema,
+  cohortDatabaseSchema=cohortDatabaseSchema,
+  outputLocation=outputLocation,
+  cohortTable=cohortTable,
+  createCohorts = F,
+  runAtria = F,
+  runFramingham = F,
+  runChads2 = F,
+  runChads2Vas = F,
+  runQstroke = F,
+  summariseResults = F,
+  packageResults = F,
+  N=10)
+
+# After checking the compressed folder containing the shareable results submit the results
+# either email them to study admin or run
+submitResults(exportFolder = outputLocation, dbName = databaseName, key, secret)
 # where key and secret are provided by request
 
 

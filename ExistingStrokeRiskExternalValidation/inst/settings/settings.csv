@@ -1,0 +1,21 @@
+analysisId,targetId,outcomeId,riskStartDay,riskEndDay,addExposureToEnd,model,resultsLocation,description
+1,7540,7464,1,0,T,atriaStrokeModel,./analysis_1,Use ATRIA model to predict stroke in females 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+2,7540,7464,1,365,F,atriaStrokeModel,./analysis_2,Use ATRIA model to predict stroke in females 1-year after initial atrial fibrilation
+3,7540,7464,1,0,T,qstrokeModel,./analysis_3,Use Q-stroke model to predict stroke in females 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+4,7540,7464,1,365,F,qstrokeModel,./analysis_4,Use Q-stroke model to predict stroke in females 1-year after initial atrial fibrilation
+5,7540,7464,1,0,T,framinghamModel,./analysis_5,Use Framingham model to predict stroke in females 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+6,7540,7464,1,365,F,framinghamModel,./analysis_6,Use  Framingham model to predict stroke in females 1-year after initial atrial fibrilation
+7,7540,7464,1,0,T,chads2Model,./analysis_7,Use CHADS2 model to predict stroke in females 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+8,7540,7464,1,365,F,chads2Model,./analysis_8,Use  CHADS2 model to predict stroke in females 1-year after initial atrial fibrilation
+9,7540,7464,1,0,T,chads2vasModel,./analysis_9,Use CHADS2VAS model to predict stroke in females 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+10,7540,7464,1,365,F,chads2vasModel,./analysis_10,Use  CHADS2VAS model to predict stroke in females 1-year after initial atrial fibrilation
+11,7996,7464,1,0,T,atriaStrokeModel,./analysis_11,Use ATRIA model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+12,7996,7464,1,365,F,atriaStrokeModel,./analysis_12,Use ATRIA model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation
+13,7996,7464,1,0,T,qstrokeModel,./analysis_13,Use Q-stroke model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+14,7996,7464,1,365,F,qstrokeModel,./analysis_14,Use Q-stroke model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation
+15,7996,7464,1,0,T,framinghamModel,./analysis_15,Use Framingham model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+16,7996,7464,1,365,F,framinghamModel,./analysis_16,Use Framingham model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation
+17,7996,7464,1,0,T,chads2Model,./analysis_17,Use CHADS2 model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+18,7996,7464,1,365,F,chads2Model,./analysis_18,Use CHADS2 model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation
+19,7996,7464,1,0,T,chads2vasModel,./analysis_19,Use CHADS2VAS model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation (excluding people who have anticoagulant and no stroke)
+20,7996,7464,1,365,F,chads2vasModel,./analysis_20,Use CHADS2VAS model to predict stroke in females aged 65 plus 1-year after initial atrial fibrilation
