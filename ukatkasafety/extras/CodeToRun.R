@@ -88,7 +88,9 @@ prepareForEvidenceExplorer(resultsZipFile = resultsZipFile, dataFolder = dataFol
 # meta-analysis ----------------------------------------------------------------
 doMetaAnalysis(outputFolders = c(file.path(studyFolder, "CCAE"),
                                  file.path(studyFolder, "MDCR"),
-                                 file.path(studyFolder, "Optum")), # execute with thin and pmtx
+                                 file.path(studyFolder, "Optum"),
+                                 file.path(studyFolder, "thin"),
+                                 file.path(studyFolder, "pmtx")),
                maOutputFolder = file.path(studyFolder, "MetaAnalysis"),
                maxCores = maxCores)
 # prepare meta analysis results for shiny --------------------------------------
