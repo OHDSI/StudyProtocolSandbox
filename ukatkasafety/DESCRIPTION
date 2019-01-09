@@ -1,10 +1,13 @@
 Package: UkaTkaSafetyFull
 Type: Package
-Title: A Package Skeleton for Comparative Effectiveness Studies
+Title: Comparative safety of unicompartmental knee arthroplasty vs total knee arthroplasty
 Version: 0.0.1
 Author: Martijn Schuemie [aut, cre]
-Maintainer: Martijn J. Schuemie <schuemie@ohdsi.org>
-Description: A skeleton package, to be used as a starting point when implementing comprative effect studies.
+    James Weaver [aut]
+Maintainer: James Weaver <jweave17@its.jnj.com>
+Description: Comparative safety study evaluating the risk of post operative infection, venous thromboembolism,
+    readmission, revision, opioid use, and mortality during 5 time at risk periods among patients who underwent
+    unicompartmental knee arthroplasty vs total knee arthroplasty.
 Depends:
     DatabaseConnector (>= 2.2.0)
 Imports:

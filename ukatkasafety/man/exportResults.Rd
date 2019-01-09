@@ -5,7 +5,7 @@
 \title{Export all results to tables}
 \usage{
 exportResults(outputFolder, databaseId, databaseName, databaseDescription,
-  minCellCount = 5, maxCores)
+  minCellCount = 5, maxCores, timeAtRiskLabel)
 }
 \arguments{
 \item{outputFolder}{Name of local folder to place results; make sure to use forward slashes

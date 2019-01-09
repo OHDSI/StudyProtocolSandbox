@@ -1,6 +1,6 @@
 # Copyright 2018 Observational Health Data Sciences and Informatics
 #
-# This file is part of UkaTkaVte
+# This file is part of UkaTkaSafetyFull
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -112,5 +112,35 @@ ensure_installed <- function(pkg) {
     } else {
       stop(msg, call. = FALSE)
     }
+  }
+}
+
+#' @export
+compileShinyData <- function(studyFolder,
+                             databases) {
+  fullShinyDataFolder <- file.path(studyFolder, "shinyDataAll")
+  if (!file.exists(fullShinyDataFolder))
+    dir.create(fullShinyDataFolder)
+  
+  dummyFolder <- file.path(studyFolder, databases[1], "shinyData")
+  resultNames <- list.files(dummyFolder, pattern = ".*\\.rds$")
+  resultNames <- sub(paste0("_", databases[1], ".rds"), "", resultNames)
+  
+  # rbind database-specific files
+  for (resultName in resultNames) { 
+    shinyFileNames <- NULL
+    for (database in databases) { 
+      shinyDataFolder <- file.path(studyFolder, database, "shinyData")
+      shinyFileName <- file.path(shinyDataFolder, paste0(resultName, "_", database, ".rds"))
+      shinyFileNames <- c(shinyFileNames, shinyFileName)
+    }
+    shinyDataList <- lapply(shinyFileNames, readRDS)
+    if (resultName == "cohort_method_analysis") {
+      shinyData <- shinyDataList[[1]] # settings unique across DBs
+    } else {
+      shinyData <- do.call("rbind", shinyDataList)
+      shinyData <- shinyData[!duplicated(shinyData), ]
+    }
+    saveRDS(shinyData, file.path(fullShinyDataFolder, paste0(resultName, ".rds")))
   }
 }

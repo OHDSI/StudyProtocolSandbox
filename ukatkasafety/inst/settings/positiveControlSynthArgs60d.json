@@ -5,7 +5,7 @@
   "control": {
     "maxIterations": 1000,
     "autoSearch": true,
-    "seed": null,
+    "seed": 123,
     "initialBound": 2,
     "gridSteps": 10,
     "threads": 1,

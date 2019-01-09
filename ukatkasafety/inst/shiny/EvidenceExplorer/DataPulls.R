@@ -186,7 +186,9 @@ getMainResults <- function(connection,
   if (length(analysisIds) != 0) {
     idx <- idx & cohortMethodResult$analysisId %in% analysisIds
   }
-  return(cohortMethodResult[idx, ])
+  result <- cohortMethodResult[idx, ]
+  result <- result[order(result$analysisId), ]
+  return(result)
 }
 
 getSubgroupResults <- function(connection,
@@ -276,10 +278,17 @@ getCovariateBalance <- function(connection,
                                 databaseId,
                                 analysisId,
                                 outcomeId = NULL) {
-  file <- sprintf("covariate_balance_t%s_c%s_%s.rds", targetId, comparatorId, databaseId)
+  # file <- sprintf("covariate_balance_t%s_c%s_%s.rds", targetId, comparatorId, databaseId)
+  file <- sprintf("covariate_balance_t%s_c%s.rds", targetId, comparatorId)
   balance <- readRDS(file.path(dataFolder, file))
   colnames(balance) <- SqlRender::snakeCaseToCamelCase(colnames(balance))
-  balance <- balance[balance$analysisId == analysisId & balance$outcomeId == outcomeId, ]
+  
+  # if (databaseId == "MDCR" & analysisId == 1) {
+  #   analysisId <- 2
+  # }
+  
+  # balance <- balance[balance$analysisId == analysisId & balance$outcomeId == outcomeId, ]
+  balance <- balance[balance$analysisId == analysisId & balance$outcomeId == outcomeId & balance$databaseId == databaseId, ]
   balance <- merge(balance, covariate[covariate$databaseId == databaseId, c("covariateId", "covariateAnalysisId", "covariateName")])
   balance <- balance[ c("covariateId",
                         "covariateName",
@@ -305,19 +314,20 @@ getCovariateBalance <- function(connection,
 }
 
 getPs <- function(connection, targetIds, comparatorIds, databaseId) {
-  file <- sprintf("preference_score_dist_t%s_c%s_%s.rds", targetIds, comparatorIds, databaseId)
+  file <- sprintf("preference_score_dist_t%s_c%s.rds", targetIds, comparatorIds)
   ps <- readRDS(file.path(dataFolder, file))
   colnames(ps) <- SqlRender::snakeCaseToCamelCase(colnames(ps))
+  ps <- ps[ps$databaseId == databaseId, ]
   return(ps)
 }
 
 getKaplanMeier <- function(connection, targetId, comparatorId, outcomeId, databaseId, analysisId) {
-  file <- sprintf("kaplan_meier_dist_t%s_c%s_%s.rds", targetId, comparatorId, databaseId)
+  file <- sprintf("kaplan_meier_dist_t%s_c%s.rds", targetId, comparatorId)
   km <- readRDS(file.path(dataFolder, file))
   colnames(km) <- SqlRender::snakeCaseToCamelCase(colnames(km))
   km <- km[km$outcomeId == outcomeId &
-             km$analysisId == analysisId, ]
-  
+             km$analysisId == analysisId &
+             km$databaseId == databaseId, ]
   return(km)
 }
 

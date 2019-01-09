@@ -1,7 +1,8 @@
 library(shiny)
 library(DT)
 
-mainColumns <- c("description", 
+mainColumns <- c("analysisType",
+                 "description", 
                  "databaseId", 
                  "rr", 
                  "ci95Lb",
@@ -12,7 +13,8 @@ mainColumns <- c("description",
                  "calibratedCi95Ub",
                  "calibratedP")
 
-mainColumnNames <- c("<span title=\"Analysis\">Analysis</span>", 
+mainColumnNames <- c("<span title=\"Analysis\">Analysis</span>",
+                     "<span title=\"Analysis\">Specification</span>", 
                      "<span title=\"Data source\">Data source</span>", 
                      "<span title=\"Hazard ratio (uncalibrated)\">HR</span>",
                      "<span title=\"Lower bound of the 95 percent confidence interval (uncalibrated)\">LB</span>",
@@ -538,4 +540,65 @@ shinyServer(function(input, output, session) {
       return(subgroupTable)
     }
   })
+  
+  observeEvent(input$dbInfo, {
+    showModal(modalDialog(
+      title = "Data source",
+      easyClose = TRUE,
+      footer = NULL,
+      size = "l",
+      HTML(dbInfoHtml)
+    ))
+  })
+  
+  observeEvent(input$targetCohortsInfo, {
+    showModal(modalDialog(
+      title = "Target cohort",
+      easyClose = TRUE,
+      footer = NULL,
+      size = "l",
+      HTML(targetCohortsInfoHtml)
+    ))
+  })
+  
+  observeEvent(input$comparatorCohortsInfo, {
+    showModal(modalDialog(
+      title = "Comparator cohort",
+      easyClose = TRUE,
+      footer = NULL,
+      size = "l",
+      HTML(comparatorCohortsInfoHtml)
+    ))
+  })
+  
+  observeEvent(input$outcomesInfo, {
+    showModal(modalDialog(
+      title = "Outcome",
+      easyClose = TRUE,
+      footer = NULL,
+      size = "l",
+      HTML(outcomesInfoHtml)
+    ))
+  })
+  
+  observeEvent(input$analysesInfo, {
+    showModal(modalDialog(
+      title = "Analysis specification",
+      easyClose = TRUE,
+      footer = NULL,
+      size = "l",
+      HTML(analysesInfoHtml)
+    ))
+  })
+  
+  observeEvent(input$analysisTypeInfo, {
+    showModal(modalDialog(
+      title = "Analyses type",
+      easyClose = TRUE,
+      footer = NULL,
+      size = "l",
+      HTML(analysisTypeInfoHtml)
+    ))
+  })
+  
 })

@@ -6,7 +6,7 @@
 \usage{
 synthesizePositiveControls(connectionDetails, cdmDatabaseSchema,
   cohortDatabaseSchema, cohortTable = "cohort", oracleTempSchema,
-  outputFolder, maxCores = 1)
+  outputFolder, maxCores = 1, timeAtRiskLabel)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
