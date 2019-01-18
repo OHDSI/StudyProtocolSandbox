@@ -29,9 +29,6 @@ Getting Started
   1. In R, use the following commands to download and install:
 
   ```r
-install.packages("drat")
-drat::addRepo("OHDSI")
-install.packages("PatientLevelPrediction")
 install.packages("devtools")
 devtools::install_github("OHDSI/PatientLevelPrediction")
 devtools::install_github("OHDSI/StudyProtocolSandbox/RASeverity")
@@ -50,22 +47,9 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 password = pw,
                                                                 port = port)
                                                                 
-# Now run the following:
-checkInstall(connectionDetails=connectionDetails)
-
-# INPUTS:
-outputLocation <- file.path(getwd(),'RA severity Output')
-cdmDatabaseschema <- 'CDM database schema'
-cohortDatabaseschema <- 'cohort database schema'
-cohortTable <- 'networkStudyTable e.g., cohort'
-
 # apply the model to new data:
 result90 <- applyRASeverity90Risk(plpData, population)
 result730 <- applyRASeverity730Risk(plpData, population)
-
-# create covariate setting for RA severity risk
-covSettingRA <- createRASeverityCovariateSetting()
-
 
 
 ```

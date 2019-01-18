@@ -36,7 +36,7 @@ applyRASeverity90Risk <- function(plpData,
                                   population,
                                   calculatePerformance=F){
 
-  plpResult <- loadPlpResult(sys.file('plp_models/existingModel/raseverity90', package='RASeverity'))
+  plpResult <- PatientLevelPrediction::loadPlpResult(system.file('plp_models/RA_optum_90', package='RASeverity'))
   writeLines('Implementing Developed 90 day prediction of severe RA')
   result <- PatientLevelPrediction::applyModel(population = population,
                                                plpData = plpData,
@@ -62,7 +62,7 @@ applyRASeverity730Risk <- function(plpData,
                                   population,
                                   calculatePerformance=F){
 
-  plpResult <- loadPlpResult(sys.file('plp_models/existingModel/raseverity730', package='RASeverity'))
+  plpResult <- PatientLevelPrediction::loadPlpResult(system.file('plp_models/RA_optum_730', package='RASeverity'))
   writeLines('Implementing Developed 730 day prediction of severe RA')
   result <- PatientLevelPrediction::applyModel(population = population,
                                                plpData = plpData,
@@ -108,3 +108,5 @@ checkInstall <- function(connectionDetails=NULL){
                        python=F)
   return(result)
 }
+
+flog.warn <- OhdsiRTools::logWarn
