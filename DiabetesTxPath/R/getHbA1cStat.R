@@ -57,6 +57,8 @@ getHbA1cStat <- function(results_path){
     bl <- grep("Bal",resFilesOutCome4tcOne)
     balance <- readRDS(paste(results_path,"deleteMeBeforeSharing/",resFilesOutCome4tcOne[bl],sep=""))
     remove(ps,matchPop,studPop,bl)
+    colnames(studyPop)  <- SqlRender::camelCaseToSnakeCase(colnames(studyPop))
+    colnames(matchedPop)  <- SqlRender::camelCaseToSnakeCase(colnames(matchedPop))
     conn <- DatabaseConnector::connect(connectionDetails)
     insertTable(conn,
                 "ohdsiT2DstudyPop",
@@ -215,6 +217,8 @@ getHbA1cStat <- function(results_path){
     bl <- grep("Bal",resFilesOutCome4tcTwo)
     balance <- readRDS(paste(results_path,"deleteMeBeforeSharing/",resFilesOutCome4tcTwo[bl],sep=""))
     remove(ps,matchPop,studPop,bl)
+    colnames(studyPop)  <- SqlRender::camelCaseToSnakeCase(colnames(studyPop))
+    colnames(matchedPop)  <- SqlRender::camelCaseToSnakeCase(colnames(matchedPop))
     conn <- DatabaseConnector::connect(connectionDetails)
     insertTable(conn,
                 "ohdsiT2DstudyPop",
@@ -373,6 +377,8 @@ getHbA1cStat <- function(results_path){
     bl <- grep("Bal",resFilesOutCome4tcThree)
     balance <- readRDS(paste(results_path,"deleteMeBeforeSharing/",resFilesOutCome4tcThree[bl],sep=""))
     remove(ps,matchPop,studPop,bl)
+    colnames(studyPop)  <- SqlRender::camelCaseToSnakeCase(colnames(studyPop))
+    colnames(matchedPop)  <- SqlRender::camelCaseToSnakeCase(colnames(matchedPop))
     conn <- DatabaseConnector::connect(connectionDetails)
     insertTable(conn,
                 "ohdsiT2DstudyPop",
@@ -543,6 +549,8 @@ getHbA1cStat <- function(results_path){
     bl <- grep("Bal",resFilesOutCome5tcOne)
     balance <- readRDS(paste(results_path,"deleteMeBeforeSharing/",resFilesOutCome5tcOne[bl],sep=""))
     remove(ps,matchPop,studPop,bl)
+    colnames(studyPop)  <- SqlRender::camelCaseToSnakeCase(colnames(studyPop))
+    colnames(matchedPop)  <- SqlRender::camelCaseToSnakeCase(colnames(matchedPop))
     conn <- DatabaseConnector::connect(connectionDetails)
     insertTable(conn,
                 "ohdsiT2DstudyPop",
@@ -701,6 +709,8 @@ getHbA1cStat <- function(results_path){
     bl <- grep("Bal",resFilesOutCome5tcTwo)
     balance <- readRDS(paste(results_path,"deleteMeBeforeSharing/",resFilesOutCome5tcTwo[bl],sep=""))
     remove(ps,matchPop,studPop,bl)
+    colnames(studyPop)  <- SqlRender::camelCaseToSnakeCase(colnames(studyPop))
+    colnames(matchedPop)  <- SqlRender::camelCaseToSnakeCase(colnames(matchedPop))
     conn <- DatabaseConnector::connect(connectionDetails)
     insertTable(conn,
                 "ohdsiT2DstudyPop",
@@ -859,6 +869,8 @@ getHbA1cStat <- function(results_path){
     bl <- grep("Bal",resFilesOutCome5tcThree)
     balance <- readRDS(paste(results_path,"deleteMeBeforeSharing/",resFilesOutCome5tcThree[bl],sep=""))
     remove(ps,matchPop,studPop,bl)
+    colnames(studyPop)  <- SqlRender::camelCaseToSnakeCase(colnames(studyPop))
+    colnames(matchedPop)  <- SqlRender::camelCaseToSnakeCase(colnames(matchedPop))
     conn <- DatabaseConnector::connect(connectionDetails)
     insertTable(conn,
                 "ohdsiT2DstudyPop",
