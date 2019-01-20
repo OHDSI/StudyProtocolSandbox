@@ -726,9 +726,12 @@ exportDiagnostics <- function(outputFolder,
       balance$comparatorMeanBefore <- round(balance$comparatorMeanBefore, 3)
       balance$targetMeanAfter <- round(balance$targetMeanAfter, 3)
       balance$comparatorMeanAfter <- round(balance$comparatorMeanAfter, 3)
-      balance <- balance[balance$targetMeanBefore != 0 & balance$comparatorMeanBefore != 0 & balance$targetMeanAfter !=
-                           0 & balance$comparatorMeanAfter != 0 & balance$stdDiffBefore != 0 & balance$stdDiffAfter !=
-                           0, ]
+      balance <- balance[balance$targetMeanBefore != 0 & 
+                           balance$comparatorMeanBefore != 0 & 
+                           balance$targetMeanAfter != 0 & 
+                           balance$comparatorMeanAfter != 0, ] # & 
+                           # balance$stdDiffBefore != 0 & 
+                           # balance$stdDiffAfter != 0, ]
       balance <- balance[!is.na(balance$targetId), ]
       colnames(balance) <- SqlRender::camelCaseToSnakeCase(colnames(balance))
       write.table(x = balance,

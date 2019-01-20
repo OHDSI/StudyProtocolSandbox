@@ -26,7 +26,9 @@ createPlotsAndTables <- function(studyFolder,
   source("inst/shiny/EvidenceExplorer/PlotsAndTables.R")
   dataFolder <- file.path(studyFolder, "shinyDataAll")
   reportFolder <- file.path(studyFolder, "report")
-  
+  if (!file.exists(reportFolder)) {
+    dir.create(reportFolder)
+  }
   splittableTables <- c("covariate_balance", "preference_score_dist", "kaplan_meier_dist")
   connection <- NULL
   files <- list.files(dataFolder, pattern = ".rds")
@@ -71,14 +73,14 @@ createPlotsAndTables <- function(studyFolder,
   outcomeOfInterest$outcomeName <- relabel(outcomeOfInterest$outcomeName, "[OD4] Venous thromboembolism events", "Venous thromboembolism")
   outcomeOfInterest$outcomeName <- relabel(outcomeOfInterest$outcomeName, "[OD4] Mortality", "Mortality")
   outcomeOfInterest$outcomeName <- relabel(outcomeOfInterest$outcomeName, "[OD4] Readmission after knee arthroplasty", "Readmission")
-  outcomeOfInterest$outcomeName <- relabel(outcomeOfInterest$outcomeName, "[OD4] Persons with knee arthroplasty revision", "Knee replacement revision")
+  outcomeOfInterest$outcomeName <- relabel(outcomeOfInterest$outcomeName, "[OD4] Persons with knee arthroplasty revision", "Revision")
   outcomeOfInterest$outcomeName <- relabel(outcomeOfInterest$outcomeName, "[OD4] Opioid use after arthroplasty", "Opioid use")
   outcomeOfInterest$order <- match(outcomeOfInterest$outcomeName, c("Venous thromboembolism",
                                                                     "Post-operative infection",
                                                                     "Readmission",
                                                                     "Mortality",
                                                                     "Opioid use",
-                                                                    "Knee replacement revision"))
+                                                                    "Revision"))
   outcomeOfInterest <- outcomeOfInterest[order(outcomeOfInterest$order), ]
   
   # analyses rename
@@ -228,7 +230,7 @@ createPlotsAndTables <- function(studyFolder,
     tcoas <- tcoas[order(tcoas$targetId, tcoas$analysisId, tcoas$outcomeId), ]
     tcoas <- aggregate(outcomeId ~ analysisId + targetId + comparatorId, tcoas, head, 1)
     
-    for (i in 1) { # 1:nrow(tcoas)) { # i=8
+    for (i in 1) { # 1:nrow(tcoas)) { # i=1
       targetId <- tcoas$targetId[i]
       comparatorId <- tcoas$comparatorId[i]
       analysisId <- tcoas$analysisId[i]
@@ -328,7 +330,7 @@ createPlotsAndTables <- function(studyFolder,
       hrTable <- rbind(hrTable, hrs)
     }
     hrTable$Analysis <- as.character(hrTable$Analysis)
-    hrTable$Analysis[hrTable$targetId == 8260] <- "Without prior spine-hip-foot pathology restriction"
+    hrTable$Analysis[hrTable$targetId == 8260] <- paste(hrTable$Analysis[hrTable$targetId == 8260], "without prior spine-hip-foot pathology restriction", sep = "; ")
     primary <- (hrTable$targetId == 8257 & hrTable$outcomeId %in% c(8208, 8209, 8210, 8211) & hrTable$analysisId == 1) |
                (hrTable$targetId == 8257 & hrTable$outcomeId %in% c(8212) & hrTable$analysisId == 3) |
                (hrTable$targetId == 8257 & hrTable$outcomeId %in% c(8233) & hrTable$analysisId == 8)
@@ -364,9 +366,11 @@ createPlotsAndTables <- function(studyFolder,
                (cohortMethodResult$targetId == 8257 & cohortMethodResult$outcomeId %in% c(8233) & cohortMethodResult$analysisId == 8)
     plotData <- cohortMethodResult[primary, ]
     plotData <- merge(plotData, outcomeOfInterest[, c("outcomeId", "outcomeName")])
+    levels(plotData$outcomeName)[levels(plotData$outcomeName) == "Venous thromboembolism"] <- "VTE"
+    levels(plotData$outcomeName)[levels(plotData$outcomeName) == "Post-operative infection"] <- "Infection"
     plotData$TAR[plotData$analysisId == 1] <- "60 days"
     plotData$TAR[plotData$analysisId == 3] <- "5 years"
-    plotData$TAR[plotData$analysisId == 8] <- "1 year"
+    plotData$TAR[plotData$analysisId == 8] <- "91 days - 1 year"
     ccae <- generateForestPlot(plotData = plotData, databaseId = "CCAE", dropMortality = TRUE)
     optum <- generateForestPlot(plotData = plotData, databaseId = "Optum")
     mdcr <- generateForestPlot(plotData = plotData, databaseId = "MDCR", dropMortality = TRUE)
@@ -384,7 +388,7 @@ createPlotsAndTables <- function(studyFolder,
                                     row5, pmtx,
                                     nrow = 5,
                                     heights = grid::unit(c(5, 6, 5, 3, 6), rep("cm", 5)),
-                                    widths =  grid::unit(c(2, 13), rep("cm", 2)))
+                                    widths =  grid::unit(c(2, 11), rep("cm", 2)))
     plotFile <- file.path(reportFolder, "hr_calibrated_forest_plot_primary.png")
     ggplot2::ggsave(filename = plotFile, plot = plot, height = 26, width = 16, units = "cm")
   }
@@ -396,6 +400,12 @@ createPlotsAndTables <- function(studyFolder,
                         useYLabel = c(TRUE, FALSE),
                         timeOffset = c(TRUE, FALSE))
     refKm <- merge(refKm, database)
+    refKm$order <- match(refKm$databaseId, c("CCAE", 
+                                             "Optum",
+                                             "MDCR",
+                                             "thin",
+                                             "pmtx"))
+    refKm <- refKm[order(refKm$order), ]
     refKm$legendLabel <- c(rep(TRUE, 2), rep(FALSE, 8))
     kmPlotList <- list()
     for (i in 1:nrow(refKm)) { # i=1
@@ -422,8 +432,8 @@ createPlotsAndTables <- function(studyFolder,
                                                                timeOffset = timeOffset)
     }
     col0 <- grid::textGrob("")
-    col1 <- grid::textGrob("Opioid use, 91 days to 1 year", gp = grid::gpar(fontsize = 25))
-    col2 <- grid::textGrob("Knee replacement revision, 5 years", gp = grid::gpar(fontsize = 25))
+    col1 <- grid::textGrob("Opioid use", gp = grid::gpar(fontsize = 25))
+    col2 <- grid::textGrob("Revision", gp = grid::gpar(fontsize = 25))
     row1 <- grid::textGrob("CCAE", rot = 90, gp = grid::gpar(fontsize = 35))
     row2 <- grid::textGrob("Optum", rot = 90, gp = grid::gpar(fontsize = 35))
     row3 <- grid::textGrob("MDCR", rot = 90, gp = grid::gpar(fontsize = 35))
@@ -445,6 +455,12 @@ createPlotsAndTables <- function(studyFolder,
   if (createDiagnosticsPlot) {
     tcoads <- unique(cohortMethodResult[c("analysisId", "targetId", "comparatorId", "outcomeId", "databaseId")])
     refPsBal <- tcoads[tcoads$analysisId == 2 & tcoads$targetId == 8257 & tcoads$comparatorId == 8256 & tcoads$outcomeId == 8208, ]
+    refPsBal$order <- match(refPsBal$databaseId, c("CCAE", 
+                                                   "Optum",
+                                                   "MDCR",
+                                                   "thin",
+                                                   "pmtx"))
+    refPsBal <- refPsBal[order(refPsBal$order), ]
     psPlotList <- list()
     balancePlotList <- list()
     for (i in 1:nrow(refPsBal)) { # i=1
@@ -477,6 +493,12 @@ createPlotsAndTables <- function(studyFolder,
                           targetId = rep(8257, 3),
                           comparatorId = rep(8256, 3))
     refNull <- merge(refNull, database)
+    refNull$order <- match(refNull$databaseId, c("CCAE", 
+                                                 "Optum",
+                                                 "MDCR",
+                                                 "thin",
+                                                 "pmtx"))
+    refNull <- refNull[order(refNull$order), ]
     for (i in 1:nrow(refNull)) { # i=1
       targetId <- refNull$targetId[i]
       comparatorId <- refNull$comparatorId[i]
@@ -494,7 +516,7 @@ createPlotsAndTables <- function(studyFolder,
     col1 <- grid::textGrob("Preference score distribution", gp = grid::gpar(fontsize = 40))
     col2 <- grid::textGrob("Covariate balance", gp = grid::gpar(fontsize = 40))
     col3 <- grid::textGrob("Empirical null, 60 days", gp = grid::gpar(fontsize = 40))
-    col4 <- grid::textGrob("Empirical null, 91 days to 1 year", gp = grid::gpar(fontsize = 40))
+    col4 <- grid::textGrob("Empirical null, 1 year", gp = grid::gpar(fontsize = 40))
     col5 <- grid::textGrob("Empirical null, 5 years", gp = grid::gpar(fontsize = 40))
     row1 <- grid::textGrob("CCAE", rot = 90, gp = grid::gpar(fontsize = 40))
     row2 <- grid::textGrob("Optum", rot = 90, gp = grid::gpar(fontsize = 40))
@@ -531,7 +553,7 @@ generateForestPlot <- function(plotData,
                      database = results$databaseId,
                      TAR = as.factor(results$TAR))
   
-  data$order <- match(data$TAR, c("60 days", "1 year", "5 years"))
+  data$order <- match(data$TAR, c("60 days", "91 days - 1 year", "5 years"))
   data <- data[order(data$order), ]
   
   breaks <- c(0.25, 0.5, 1, 2, 4)
@@ -540,12 +562,12 @@ generateForestPlot <- function(plotData,
   } else {
     labels <- c(0.25, 0.5, 1, 2, 4)
   }
-  limits <- c("Knee replacement revision", 
+  limits <- c("Revision", 
               "Opioid use",
               "Mortality",
               "Readmission",
-              "Post-operative infection",
-              "Venous thromboembolism")
+              "Infection",
+              "VTE")
   if (dropMortality) {
     limits <- limits[! limits %in% "Mortality"]
   }
@@ -553,10 +575,10 @@ generateForestPlot <- function(plotData,
     limits <- limits[! limits %in% "Readmission"]
   }
   if (dropInfection) {
-    limits <- limits[! limits %in% "Post-operative infection"]
+    limits <- limits[! limits %in% "Infection"]
   }
   if (dropVTE) {
-    limits <- limits[! limits %in% "Venous thromboembolism"]
+    limits <- limits[! limits %in% "VTE"]
   }
   if (addLegend) {
     legendPosition <- "bottom"
@@ -639,7 +661,7 @@ plotKaplanMeier2 <- function(kaplanMeier,
     xlims <- c(-max(data$time)/40, max(data$time))
   }
   xBreaks <- kaplanMeier$time[!is.na(kaplanMeier$targetAtRisk)] + xAxisOffset
-  xLabel <- "Time in days"
+  xLabel <- "Days since surgery"
   ylims <- c(yLimLower, 1)
   if (useYLabel) {
     yLabel <- "Survival probability"

@@ -20,10 +20,7 @@ doMetaAnalysis <- function(outputFolders,
                            maxCores) {
   
   OhdsiRTools::logInfo("Performing meta-analysis")
-  resultsFolder <- file.path(maOutputFolder, "results")
-  if (!file.exists(resultsFolder))
-    dir.create(resultsFolder, recursive = TRUE)
-  shinyDataFolder <- file.path(resultsFolder, "shinyData")
+  shinyDataFolder <- file.path(maOutputFolder, "shinyData")
   if (!file.exists(shinyDataFolder))
     dir.create(shinyDataFolder)
   

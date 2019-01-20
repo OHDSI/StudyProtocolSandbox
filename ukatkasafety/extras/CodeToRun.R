@@ -5,10 +5,18 @@ studyFolder <- "S:/StudyResults/UkaTkaSafetyFull"
 
 # server connection:
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "pdw",
-                                                                server = Sys.getenv("PDW_SERVER"),
+                                                                server = Sys.getenv("server"),
                                                                 user = NULL,
                                                                 password = NULL,
-                                                                port = Sys.getenv("PDW_PORT"))
+                                                                port = Sys.getenv("port"))
+
+mailSettings <- list(from = Sys.getenv("emailAddress"),
+                     to = c(Sys.getenv("emailAddress")),
+                     smtp = list(host.name = Sys.getenv("emailHost"), port = 25,
+                                 user.name = Sys.getenv("emailAddress"),
+                                 passwd = Sys.getenv("emailPassword"), ssl = FALSE),
+                     authenticate = FALSE,
+                     send = TRUE)
 
 # MDCR settings ----------------------------------------------------------------
 databaseId <- "MDCR"
@@ -23,7 +31,7 @@ cohortTable <- ""
 databaseId <- "MDCD"
 databaseName <- "MDCD"
 databaseDescription <- "MDCD"
-cdmDatabaseSchema = ""
+cdmDatabaseSchema = "cdm_truven_ccae_v698.dbo"
 outputFolder <- file.path(studyFolder, databaseId)
 cohortDatabaseSchema <- "scratch.dbo"
 cohortTable <- ""
@@ -65,21 +73,23 @@ cohortDatabaseSchema <- ""
 cohortTable <- ""
 
 # Run --------------------------------------------------------------------------
-execute(connectionDetails = connectionDetails,
-        cdmDatabaseSchema = cdmDatabaseSchema,
-        cohortDatabaseSchema = cohortDatabaseSchema,
-        cohortTable = cohortTable,
-        oracleTempSchema = NULL,
-        outputFolder = outputFolder,
-        databaseId = databaseId,
-        databaseName = databaseName,
-        databaseDescription = databaseDescription,
-        createCohorts = FALSE,
-        synthesizePositiveControls = FALSE,
-        runAnalyses = FALSE,
-        runDiagnostics = FALSE,
-        packageResults = FALSE,
-        maxCores = maxCores)
+OhdsiRTools::runAndNotify(expression = {
+  execute(connectionDetails = connectionDetails,
+          cdmDatabaseSchema = cdmDatabaseSchema,
+          cohortDatabaseSchema = cohortDatabaseSchema,
+          cohortTable = cohortTable,
+          oracleTempSchema = NULL,
+          outputFolder = outputFolder,
+          databaseId = databaseId,
+          databaseName = databaseName,
+          databaseDescription = databaseDescription,
+          createCohorts = FALSE,
+          synthesizePositiveControls = FALSE,
+          runAnalyses = FALSE,
+          runDiagnostics = FALSE,
+          packageResults = FALSE,
+          maxCores = maxCores)
+}, mailSettings = mailSettings, label = paste0("Uka Tka ", databaseId), stopOnWarning = FALSE)
 
 resultsZipFile <- file.path(outputFolder, "exportFull", paste0("Results", databaseId, ".zip"))
 dataFolder <- file.path(outputFolder, "shinyData")
@@ -90,7 +100,7 @@ doMetaAnalysis(outputFolders = c(file.path(studyFolder, "CCAE"),
                                  file.path(studyFolder, "MDCR"),
                                  file.path(studyFolder, "Optum"),
                                  file.path(studyFolder, "thin"),
-                                 file.path(studyFolder, "pmtx")),
+                                 file.path(studyFolder, "pmtx")), 
                maOutputFolder = file.path(studyFolder, "MetaAnalysis"),
                maxCores = maxCores)
 # prepare meta analysis results for shiny --------------------------------------
@@ -104,8 +114,8 @@ launchEvidenceExplorer(dataFolder = fullShinyDataFolder, blind = FALSE, launch.b
 
 # Plots and tables for manuscript ----------------------------------------------
 createPlotsAndTables(studyFolder = studyFolder,
-                     createTable1 = FALSE,
-                     createHrTable = FALSE,
-                     createForestPlot = FALSE,
-                     createKmPlot = FALSE,
-                     createDiagnosticsPlot = FALSE)
+                     createTable1 = TRUE,
+                     createHrTable = TRUE,
+                     createForestPlot = TRUE,
+                     createKmPlot = TRUE,
+                     createDiagnosticsPlot = TRUE)
