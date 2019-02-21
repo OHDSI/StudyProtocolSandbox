@@ -282,12 +282,8 @@ getCovariateBalance <- function(connection,
   file <- sprintf("covariate_balance_t%s_c%s.rds", targetId, comparatorId)
   balance <- readRDS(file.path(dataFolder, file))
   colnames(balance) <- SqlRender::snakeCaseToCamelCase(colnames(balance))
-  
-  # if (databaseId == "MDCR" & analysisId == 1) {
-  #   analysisId <- 2
-  # }
-  
-  # balance <- balance[balance$analysisId == analysisId & balance$outcomeId == outcomeId, ]
+  levels(balance$databaseId)[levels(balance$databaseId) == "thin"] <- "THIN"
+  levels(balance$databaseId)[levels(balance$databaseId) == "pmtx"] <- "PharMetrics"
   balance <- balance[balance$analysisId == analysisId & balance$outcomeId == outcomeId & balance$databaseId == databaseId, ]
   balance <- merge(balance, covariate[covariate$databaseId == databaseId, c("covariateId", "covariateAnalysisId", "covariateName")])
   balance <- balance[ c("covariateId",
@@ -317,6 +313,8 @@ getPs <- function(connection, targetIds, comparatorIds, databaseId) {
   file <- sprintf("preference_score_dist_t%s_c%s.rds", targetIds, comparatorIds)
   ps <- readRDS(file.path(dataFolder, file))
   colnames(ps) <- SqlRender::snakeCaseToCamelCase(colnames(ps))
+  levels(ps$databaseId)[levels(ps$databaseId) == "thin"] <- "THIN"
+  levels(ps$databaseId)[levels(ps$databaseId) == "pmtx"] <- "PharMetrics"
   ps <- ps[ps$databaseId == databaseId, ]
   return(ps)
 }
@@ -325,6 +323,8 @@ getKaplanMeier <- function(connection, targetId, comparatorId, outcomeId, databa
   file <- sprintf("kaplan_meier_dist_t%s_c%s.rds", targetId, comparatorId)
   km <- readRDS(file.path(dataFolder, file))
   colnames(km) <- SqlRender::snakeCaseToCamelCase(colnames(km))
+  levels(km$databaseId)[levels(km$databaseId) == "thin"] <- "THIN"
+  levels(km$databaseId)[levels(km$databaseId) == "pmtx"] <- "PharMetrics"
   km <- km[km$outcomeId == outcomeId &
              km$analysisId == analysisId &
              km$databaseId == databaseId, ]

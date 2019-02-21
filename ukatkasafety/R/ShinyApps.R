@@ -137,6 +137,8 @@ compileShinyData <- function(studyFolder,
     shinyDataList <- lapply(shinyFileNames, readRDS)
     if (resultName == "cohort_method_analysis") {
       shinyData <- shinyDataList[[1]] # settings unique across DBs
+    } else if (resultName == "exposure_of_interest") {
+      shinyData <- shinyDataList[[1]] # settings unique across DBs
     } else {
       shinyData <- do.call("rbind", shinyDataList)
       shinyData <- shinyData[!duplicated(shinyData), ]
