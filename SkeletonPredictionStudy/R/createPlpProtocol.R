@@ -1,3 +1,9 @@
+#' Create a protocol template for the study 
+#'
+#' @details
+#' This function will create a template protocol 
+#'
+#' @param outputLocation    Directory location where you want the protocol written to
 #' @export
 createPlpProtocol <- function(outputLocation = getwd()){
   
@@ -21,7 +27,7 @@ createPlpProtocol <- function(outputLocation = getwd()){
   style_hidden_text <- officer::shortcuts$fp_italic(color = "#FFFFFF")
   
   #============== VARIABLES ====================================================
-  json <- tryCatch({OhdsiRTools::loadSettingsFromJson(file=predictionAnalysisListFile)},
+  json <- tryCatch({ParallelLogger::loadSettingsFromJson(file=predictionAnalysisListFile)},
                    error=function(cond) {
                      stop('Issue with json file...')
                    })
@@ -79,7 +85,7 @@ createPlpProtocol <- function(outputLocation = getwd()){
   #-----------------------------------------------------------------------------
   
   #============== CITATIONS =====================================================
-  plpCitation <- paste0("Citation:  ", citation("PatientLevelPrediction")$textVersion)
+  plpCitation <- paste0("Citation:  ", utils::citation("PatientLevelPrediction")$textVersion)
   tripodCitation <- paste0("Citation:  Collins, G., et al. (2017.02.01). 'Transparent reporting of a multivariable prediction model for individual prognosis or diagnosis (TRIPOD): The TRIPOD statement.' from https://www.equator-network.org/reporting-guidelines/tripod-statement/ ")
   progressCitation <- paste0("Citation:  Steyerberg EW, Moons KG, van der Windt DA, Hayden JA, Perel P, Schroter S, Riley RD, Hemingway H, Altman DG; PROGRESS Group. Prognosis Research Strategy (PROGRESS) 3: prognostic model research. PLoS Med. 2013;10(2):e1001381. doi: 10.1371/journal.pmed.1001381. Epub 2013 Feb 5. Review. PubMed PMID: 23393430; PubMed Central PMCID: PMC3564751.")
   rCitation <- paste0("Citation:  R Core Team (2013). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL http://www.R-project.org/.")
@@ -747,7 +753,7 @@ createMultiPlpReport <- function(analysisLocation,
 }
 
 getModelInfo <- function(analysisLocation){
-  settings <- read.csv(file.path(analysisLocation, "settings.csv"))
+  settings <- utils::read.csv(file.path(analysisLocation, "settings.csv"))
   
   modelSettings <- lapply((1:nrow(settings))[order(settings$analysisId)], function(i) {getModelFromSettings(analysisLocation,settings[i,])})
   return(modelSettings)

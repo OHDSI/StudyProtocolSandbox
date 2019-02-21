@@ -8,8 +8,8 @@ populateShinyApp <- function(resultFolder,
   }
   
   # copy the settings csv
-  file <- read.csv(file.path(resultFolder,'settings.csv'))
-  write.csv(file, file.path(resultFolder,'data/settings.csv'), row.names = F)
+  file <- utils::read.csv(file.path(resultFolder,'settings.csv'))
+  utils::write.csv(file, file.path(resultFolder,'data/settings.csv'), row.names = F)
   
   # copy each analysis as a rds file and copy the log
   files <- dir(resultFolder, full.names = F)

@@ -1,4 +1,3 @@
-#' @export
 getCohortConceptExpression <- function(cohortDefinitions){
   lapply(cohortDefinitions$expression$ConceptSets, function(x)
     list(originalConceptId = x$id,

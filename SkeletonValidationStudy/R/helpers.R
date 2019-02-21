@@ -57,7 +57,7 @@ createCohorts <- function(connectionDetails,
                  outputFolder = outputFolder)
 
   # Check number of subjects per cohort:
-  OhdsiRTools::logInfo("Counting cohorts")
+  ParallelLogger::logInfo("Counting cohorts")
   sql <- SqlRender::loadRenderTranslateSql("GetCounts.sql",
                                            "SkeletonValidationStudy",
                                            dbms = connectionDetails$dbms,
@@ -68,14 +68,14 @@ createCohorts <- function(connectionDetails,
   counts <- DatabaseConnector::querySql(conn, sql)
   colnames(counts) <- SqlRender::snakeCaseToCamelCase(colnames(counts))
   counts <- addCohortNames(counts)
-  write.csv(counts, file.path(outputFolder, "CohortCounts.csv"), row.names = FALSE)
+  utils::write.csv(counts, file.path(outputFolder, "CohortCounts.csv"), row.names = FALSE)
 
   DatabaseConnector::disconnect(conn)
 }
 
 addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumnName = "cohortName") {
   pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "SkeletonValidationStudy")
-  cohortsToCreate <- read.csv(pathToCsv)
+  cohortsToCreate <- utils::read.csv(pathToCsv)
 
   idToName <- data.frame(cohortId = c(cohortsToCreate$cohortId),
                          cohortName = c(as.character(cohortsToCreate$name)))
@@ -113,7 +113,7 @@ addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumn
 
   # Instantiate cohorts:
   pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "SkeletonValidationStudy")
-  cohortsToCreate <- read.csv(pathToCsv)
+  cohortsToCreate <- utils::read.csv(pathToCsv)
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Creating cohort:", cohortsToCreate$name[i]))
     sql <- SqlRender::loadRenderTranslateSql(sqlFilename = paste0(cohortsToCreate$name[i], ".sql"),
@@ -136,9 +136,9 @@ addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumn
 #' @details
 #' This will create the patient characteristic table
 #'
-#' @param connectioDetails The connections details for connecting to the CDM
-#' @param cdmDatabaseschema  The schema holding the CDM data
-#' @param cohortDatabaseschema The schema holding the cohort table
+#' @param connectionDetails The connections details for connecting to the CDM
+#' @param cdmDatabaseSchema  The schema holding the CDM data
+#' @param cohortDatabaseSchema The schema holding the cohort table
 #' @param cohortTable         The name of the cohort table
 #' @param targetId          The cohort definition id of the target population
 #' @param outcomeId         The cohort definition id of the outcome
@@ -195,7 +195,7 @@ getTable1 <- function(connectionDetails,
 #' @details
 #' This will check that the network study dependancies work
 #'
-#' @param connectioDetails The connections details for connecting to the CDM
+#' @param connectionDetails The connections details for connecting to the CDM
 #'
 #' @return
 #' A number (a value other than 1 means an issue with the install)
@@ -203,13 +203,26 @@ getTable1 <- function(connectionDetails,
 #' @export
 
 checkInstall <- function(connectionDetails=NULL){
-  result <- checkPlpInstallation(connectionDetails=connectionDetails,
+  result <- PatientLevelPrediction::checkPlpInstallation(connectionDetails=connectionDetails,
                                  python=F)
   return(result)
 }
 
 
-
+#' Transport trained PLP models into the validation package
+#'
+#' @details
+#' This will tranport PLP models into a validation package
+#'
+#' @param analysesDir  The directory containing folders with PLP models
+#' @param minCellCount  The min cell count when trasporting the PLP model evaluation results
+#' @param databaseName  The name of the database as a string
+#' @param outputDir  the location to save the transported models (defaults to inst/plp_models)
+#'
+#' @return
+#' The models will now be in the package
+#'
+#' @export
 transportPlpModels <- function(analysesDir,
                                minCellCount = 5,
                                databaseName = 'sharable name of development data',
@@ -226,7 +239,7 @@ transportPlpModels <- function(analysesDir,
 
   for(i in 1:length(filesIn)){
     plpResult <- PatientLevelPrediction::loadPlpResult(filesIn[i])
-    transportPlp(plpResult,
+    PatientLevelPrediction::transportPlp(plpResult,
                  modelName= files[i], dataName=databaseName,
                  outputFolder = filesOut[i],
                  n=minCellCount,

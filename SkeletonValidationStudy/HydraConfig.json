@@ -1,6 +1,6 @@
 {
 "skeletonType": "SkeletonValidationStudy",
-"skeletonVersion": "v0.0.1",
+"skeletonVersion": "v0.0.2",
 "requiredHydraVersion": "v0.0.1",
 "actions":[{
 "type": "fileNameFindAndReplace",

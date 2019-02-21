@@ -1,11 +1,11 @@
 library(SkeletonPredictionStudy)
 # USER INPUTS
 #=======================
-# Specify where the temporary files (used by the ff package) will be created:
-options(fftempdir = "location with space to save big data")
-
 # The folder where the study intermediate and result files will be written:
 outputFolder <- "./SkeletonPredictionStudyResults"
+
+# Specify where the temporary files (used by the ff package) will be created:
+options(fftempdir = "location with space to save big data")
 
 # Details for connecting to the server:
 dbms <- "you dbms"
@@ -36,10 +36,10 @@ execute(connectionDetails = connectionDetails,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
-        createProtocol = T,
-        createCohorts = T,
-        runAnalyses = T,
-        createResultsDoc = T,
-        packageResults = T,
-        createValidationPackage = T,
+        createProtocol = F,
+        createCohorts = F,
+        runAnalyses = F,
+        createResultsDoc = F,
+        packageResults = F,
+        createValidationPackage = F,
         minCellCount= 5)

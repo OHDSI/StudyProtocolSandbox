@@ -101,14 +101,14 @@ execute <- function(connectionDetails,
   if (!file.exists(outputFolder))
     dir.create(outputFolder, recursive = TRUE)
   
-  OhdsiRTools::addDefaultFileLogger(file.path(outputFolder, "log.txt"))
+  ParallelLogger::addDefaultFileLogger(file.path(outputFolder, "log.txt"))
   
   if(createProtocol){
     createPlpProtocol(outputFolder)
   }
   
   if (createCohorts) {
-    OhdsiRTools::logInfo("Creating cohorts")
+    ParallelLogger::logInfo("Creating cohorts")
     createCohorts(connectionDetails = connectionDetails,
                   cdmDatabaseSchema = cdmDatabaseSchema,
                   cohortDatabaseSchema = cohortDatabaseSchema,
@@ -118,7 +118,7 @@ execute <- function(connectionDetails,
   }
   
   if(runAnalyses){
-    OhdsiRTools::logInfo("Running predictions")
+    ParallelLogger::logInfo("Running predictions")
     predictionAnalysisListFile <- system.file("settings",
                                               "predictionAnalysisList.json",
                                               package = "SkeletonPredictionStudy")
@@ -139,7 +139,7 @@ execute <- function(connectionDetails,
   }
   
   if (packageResults) {
-    OhdsiRTools::logInfo("Packaging results")
+    ParallelLogger::logInfo("Packaging results")
     packageResults(outputFolder = outputFolder,
                    minCellCount = minCellCount)
   }

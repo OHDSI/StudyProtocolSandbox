@@ -40,11 +40,11 @@ Instructions To Run Package
   library(SkeletonPredictionStudy)
   # USER INPUTS
 #=======================
-# Specify where the temporary files (used by the ff package) will be created:
-options(fftempdir = "location with space to save big data")
-
 # The folder where the study intermediate and result files will be written:
 outputFolder <- "./SkeletonPredictionStudyResults"
+
+# Specify where the temporary files (used by the ff package) will be created:
+options(fftempdir = "location with space to save big data")
 
 # Details for connecting to the server:
 dbms <- "you dbms"
@@ -76,10 +76,10 @@ execute(connectionDetails = connectionDetails,
         cohortTable = cohortTable,
         oracleTempSchema = oracleTempSchema,
         outputFolder = outputFolder,
-        createProtocol = T,
+        createProtocol = F,
         createCohorts = T,
         runAnalyses = T,
-        createResultsDoc = T,
+        createResultsDoc = F,
         packageResults = T,
         createValidationPackage = F,
         minCellCount= 5)

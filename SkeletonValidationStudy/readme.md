@@ -86,8 +86,8 @@ SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
 
 License
 =======
-  PredictionNetworkStudySkeleton is licensed under Apache License 2.0
+  SkeletonValidationStudy is licensed under Apache License 2.0
 
 Development
 ===========
-  PredictionNetworkStudySkeleton is being developed in R Studio.
+  SkeletonValidationStudy is being developed in R Studio.

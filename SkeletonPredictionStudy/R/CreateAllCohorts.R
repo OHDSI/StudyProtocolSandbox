@@ -57,7 +57,7 @@ createCohorts <- function(connectionDetails,
                  outputFolder = outputFolder)
   
   # Check number of subjects per cohort:
-  OhdsiRTools::logInfo("Counting cohorts")
+  ParallelLogger::logInfo("Counting cohorts")
   sql <- SqlRender::loadRenderTranslateSql("GetCounts.sql",
                                            "SkeletonPredictionStudy",
                                            dbms = connectionDetails$dbms,
@@ -68,14 +68,14 @@ createCohorts <- function(connectionDetails,
   counts <- DatabaseConnector::querySql(conn, sql)
   colnames(counts) <- SqlRender::snakeCaseToCamelCase(colnames(counts))
   counts <- addCohortNames(counts)
-  write.csv(counts, file.path(outputFolder, "CohortCounts.csv"), row.names = FALSE)
+  utils::write.csv(counts, file.path(outputFolder, "CohortCounts.csv"), row.names = FALSE)
   
   DatabaseConnector::disconnect(conn)
 }
 
 addCohortNames <- function(data, IdColumnName = "cohortDefinitionId", nameColumnName = "cohortName") {
   pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = "SkeletonPredictionStudy")
-  cohortsToCreate <- read.csv(pathToCsv)
+  cohortsToCreate <- utils::read.csv(pathToCsv)
   
   idToName <- data.frame(cohortId = c(cohortsToCreate$cohortId),
                          cohortName = c(as.character(cohortsToCreate$name)))

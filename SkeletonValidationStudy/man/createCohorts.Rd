@@ -2,30 +2,38 @@
 % Please edit documentation in R/helpers.R
 \name{createCohorts}
 \alias{createCohorts}
-\title{Create and summarise the target and outcome cohorts}
+\title{Create the exposure and outcome cohorts}
 \usage{
-createCohorts(connectionDetails, cdmDatabaseschema, cohortDatabaseschema,
-  cohortTable, targetId, outcomeId)
+createCohorts(connectionDetails, cdmDatabaseSchema, cohortDatabaseSchema,
+  cohortTable = "cohort", oracleTempSchema, outputFolder)
 }
 \arguments{
-\item{cdmDatabaseschema}{The schema holding the CDM data}
+\item{connectionDetails}{An object of type \code{connectionDetails} as created using the
+\code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+DatabaseConnector package.}
 
-\item{cohortDatabaseschema}{The schema holding the cohort table}
+\item{cdmDatabaseSchema}{Schema name where your patient-level data in OMOP CDM format resides.
+Note that for SQL Server, this should include both the database and
+schema name, for example 'cdm_data.dbo'.}
 
-\item{cohortTable}{The name of the cohort table}
+\item{cohortDatabaseSchema}{Schema name where intermediate data can be stored. You will need to have
+write priviliges in this schema. Note that for SQL Server, this should
+include both the database and schema name, for example 'cdm_data.dbo'.}
 
-\item{targetId}{The cohort definition id of the target population}
+\item{cohortTable}{The name of the table that will be created in the work database schema.
+This table will hold the exposure and outcome cohorts used in this
+study.}
 
-\item{outcomeId}{The cohort definition id of the outcome}
+\item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
+priviliges for storing temporary tables.}
 
-\item{connectioDetails}{The connections details for connecting to the CDM}
-}
-\value{
-A summary of the cohort counts
+\item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
+(/)}
 }
 \description{
-Create and summarise the target and outcome cohorts
+Create the exposure and outcome cohorts
 }
 \details{
-This will create the risk prediciton cohorts and then count the table sizes
+This function will create the exposure and outcome cohorts following the definitions included in
+this package.
 }

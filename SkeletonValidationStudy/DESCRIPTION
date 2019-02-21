@@ -1,7 +1,7 @@
 Package: SkeletonValidationStudy
 Type: Package
 Title: Add the title of the package here
-Version: 0.0.1
+Version: 0.0.2
 Date: 2018-04-01
 Author: your name [aut]
 Maintainer: your name <youremail@address>
@@ -9,17 +9,19 @@ Description: A description of the study
 License: Apache License 2.0
 Depends:
   R (>= 3.3.0), 
-  DatabaseConnector (>= 1.11.4),
-  FeatureExtraction (>= 2.0.0),
-  Cyclops (>= 1.2.2),
-  PatientLevelPrediction (>= 2.0.0)
+  DatabaseConnector (>= 1.11.4)
 Imports:
+  FeatureExtraction (>= 2.0.0),
+  SqlRender,
+  Cyclops (>= 1.2.2),
+  PatientLevelPrediction (>= 3.0.0),
   ggplot2,
   gridExtra,
   ff,
-  ffbase (>= 0.12.1)
+  ffbase (>= 0.12.1),
+  ParallelLogger,
+  OhdsiSharing
 Suggests:
   testthat
-LinkingTo: Rcpp
-NeedsCompilation: No
+NeedsCompilation: no
 RoxygenNote: 6.0.1
