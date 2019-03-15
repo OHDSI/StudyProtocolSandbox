@@ -38,12 +38,21 @@ ui <- shinydashboard::dashboardPage(skin = 'black',
           shinydashboard::menuItem("Summary", tabName = "Summary", icon = shiny::icon("table")),
           shinydashboard::menuItem("Performance", tabName = "Performance", icon = shiny::icon("bar-chart")),
           shinydashboard::menuItem("Model", tabName = "Model", icon = shiny::icon("clipboard")),
-          shinydashboard::menuItem("Log", tabName = "Log", icon = shiny::icon("list"))
+          shinydashboard::menuItem("Log", tabName = "Log", icon = shiny::icon("list")),
+          shinydashboard::menuItem("Help", tabName = "Help", icon = shiny::icon("info"))
         )
         ),
         
         shinydashboard::dashboardBody(
           shinydashboard::tabItems(
+            
+            # help tab
+            shinydashboard::tabItem(tabName = "Help",
+                                    shiny::h2("Information"),
+                                    shiny::p("Click on a row to explore the results for that model.  When you wish to explore a different model, then select the new result row and the tabs will be updated."),
+                                    shiny::a("Demo Video", href = 'https://youtu.be/StpV40yl1UE', target='_blank')
+            ),
+            
             # First tab content
             shinydashboard::tabItem(tabName = "Summary",
                                     
@@ -68,16 +77,22 @@ ui <- shinydashboard::dashboardPage(skin = 'black',
                                                                style = "font-size:70%")),
                                                     
                                                     shiny::tabPanel("Model Settings",
-                                                    shiny::h3('Model Settings: ', shiny::actionLink("modelhelp", "help")),
-                                                    DT::dataTableOutput('modelTable')),
+                                                                    shiny::h3('Model Settings: ', 
+                                                                              shiny::a("help", href="https://ohdsi.github.io/PatientLevelPrediction/reference/index.html", target="_blank") 
+                                                                    ),
+                                                                    DT::dataTableOutput('modelTable')),
                                                     
                                                     shiny::tabPanel("Population Settings",
-                                                    shiny::h3('Population Settings: ', shiny::actionLink("pophelp", "help")),
-                                                    DT::dataTableOutput('populationTable')),
+                                                                    shiny::h3('Population Settings: ', 
+                                                                              shiny::a("help", href="https://ohdsi.github.io/PatientLevelPrediction/reference/createStudyPopulation.html", target="_blank") 
+                                                                    ),
+                                                                    DT::dataTableOutput('populationTable')),
                                                     
                                                     shiny::tabPanel("Covariate Settings",
-                                                    shiny::h3('Covariate Settings: ', shiny::actionLink("covhelp", "help")),
-                                                    DT::dataTableOutput('covariateTable'))
+                                                                    shiny::h3('Covariate Settings: ', 
+                                                                              shiny::a("help", href="http://ohdsi.github.io/FeatureExtraction/reference/createCovariateSettings.html", target="_blank") 
+                                                                    ),
+                                                                    DT::dataTableOutput('covariateTable'))
                                                     )
                                                     
                                       )
@@ -102,9 +117,20 @@ ui <- shinydashboard::dashboardPage(skin = 'black',
                                                  shinydashboard::box(width = 12,
                                                    title = tagList(shiny::icon("gear"), "Input"), 
                                                    status = "info", solidHeader = TRUE,
-                                                   shiny::sliderInput("slider1", 
-                                                                      shiny::h5("Threshold value slider: "), 
-                                                                      min = 1, max = 100, value = 50, ticks = F),
+                                                   shiny::splitLayout(
+                                                     cellWidths = c('5%', '90%', '5%'),
+                                                     shiny::h5(' '),
+                                                     shiny::sliderInput("slider1", 
+                                                                        shiny::h4("Threshold value slider: ", strong(shiny::textOutput('threshold'))), 
+                                                                        min = 1, max = 100, value = 50, ticks = F),
+                                                     shiny::h5(' ')
+                                                   ),
+                                                   shiny::splitLayout(
+                                                     cellWidths = c('5%', '90%', '5%'),
+                                                     shiny::h5(strong('0')),
+                                                     shiny::h5(' '),
+                                                     shiny::h5(strong('1'))
+                                                   ),
                                                    shiny::tags$script(shiny::HTML("
                                                                                   $(document).ready(function() {setTimeout(function() {
                                                                                   supElement = document.getElementById('slider1').parentElement;

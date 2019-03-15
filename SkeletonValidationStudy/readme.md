@@ -35,10 +35,10 @@ Getting Started
 library(SkeletonValidationStudy)
 
 # add details of your database setting:
-databaseName <- 'add a shareable name for the database used to develop the models'
+databaseName <- 'add a shareable name for the database you are currently validating on'
 
 # add the cdm database schema with the data
-cdmDatabaseSchema <- 'your cdm database schema'
+cdmDatabaseSchema <- 'your cdm database schema for the validation'
 
 # add the work database schema this requires read/write privileges 
 cohortDatabaseSchema <- 'your work database schema'

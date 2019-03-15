@@ -1,7 +1,7 @@
 {
 "skeletonType": "PatientLevelPredictionValidationStudy",
-"skeletonVersion": "v0.0.2",
-"requiredHydraVersion": "v0.0.1",
+"skeletonVersion": "v0.0.1",
+"requiredHydraVersion": "v0.0.3",
 "actions":[{
 "type": "fileNameFindAndReplace",
 "input": "packageName",

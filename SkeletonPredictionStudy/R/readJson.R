@@ -25,7 +25,9 @@ getConceptSum  <- function(json){
       originalConceptId = unlist(lapply(x$expression$ConceptSets, function(y) y$id)),
       originalConceptName = unlist(lapply(x$expression$ConceptSets, function(y) y$name))
     )
-    res$cohortDefinitionId <- x$id
+    if(ncol(res)!=0){
+      res$cohortDefinitionId <- x$id
+    }
     return(res)
   }))
 }
