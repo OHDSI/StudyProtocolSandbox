@@ -85,7 +85,7 @@ execute(connectionDetails = connectionDetails,
         minCellCount= 5)
 ```
 - You can then easily transport the trained models into a network validation study package by running:
-  ```r
+```r
   
   execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
