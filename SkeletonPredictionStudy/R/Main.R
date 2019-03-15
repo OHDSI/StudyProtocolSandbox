@@ -42,6 +42,7 @@
 #' @param runAnalyses          Run the model development
 #' @param createResultsDoc     Create a document containing the results of each prediction
 #' @param createValidationPackage  Create a package for sharing the models 
+#' @param analysesToValidate   A vector of analysis ids (e.g., c(1,3,10)) specifying which analysese to export into validation package. Default is NULL and all are exported.
 #' @param packageResults       Should results be packaged for later sharing?     
 #' @param minCellCount         The minimum number of subjects contributing to a count before it can be included 
 #'                             in packaged results.
@@ -94,6 +95,7 @@ execute <- function(connectionDetails,
                     runAnalyses = F,
                     createResultsDoc = F,
                     createValidationPackage = F,
+                    analysesToValidate = NULL,
                     packageResults = F,
                     minCellCount= 5,
                     verbosity = "INFO",
@@ -167,7 +169,8 @@ execute <- function(connectionDetails,
                             outputFolder = file.path(outputFolder, paste0(pn,'Validation')),
                             minCellCount = minCellCount,
                             databaseName = cdmDatabaseName,
-                            jsonSettings = jsonSettings )
+                            jsonSettings = jsonSettings,
+                            analysisIds = analysesToValidate)
   }
   
   
