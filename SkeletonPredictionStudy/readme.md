@@ -103,6 +103,19 @@ execute(connectionDetails = connectionDetails,
 
 ```
 
+- To create the shiny app and view run:
+```r
+  
+populateShinyApp(resultDirectory = outputFolder,
+                 minCellCount = 10, 
+                 databaseName = 'friendly name'
+                 ) 
+        
+viewShiny('SkeletonPredictionStudy')
+  
+
+```
+
 
 # Development status
 Under development. Do not use

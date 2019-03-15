@@ -1,37 +1,95 @@
-populateShinyApp <- function(resultFolder,
+populateShinyApp <- function(shinyDirectory,
+                             resultDirectory,
                              minCellCount = 10,
                              databaseName = 'sharable name of development data'){
   
-  # create the data folder
-  if(!dir.exists(file.path(resultFolder,'data'))){
-    dir.create(file.path(resultFolder,'data'), recursive = T)
+  #check inputs
+  if(missing(shinyDirectory)){
+    shinyDirectory <- system.file("shiny", "PLPViewer", package = "SkeletonPredictionStudy")
+  }
+  if(missing(resultDirectory)){
+    stop('Need to enter the resultDirectory')
+  }
+  if(!dir.exists(resultDirectory)){
+    stop('resultDirectory does not exist')
+  }
+  
+  outputDirectory <- file.path(shinyDirectory,'data')
+  
+  # create the shiny data folder
+  if(!dir.exists(outputDirectory)){
+    dir.create(outputDirectory, recursive = T)
   }
   
   # copy the settings csv
-  file <- utils::read.csv(file.path(resultFolder,'settings.csv'))
-  utils::write.csv(file, file.path(resultFolder,'data/settings.csv'), row.names = F)
+  file <- utils::read.csv(file.path(resultDirectory,'settings.csv'))
+  utils::write.csv(file, file.path(outputDirectory,'settings.csv'), row.names = F)
   
   # copy each analysis as a rds file and copy the log
-  files <- dir(resultFolder, full.names = F)
+  files <- dir(resultDirectory, full.names = F)
   files <- files[grep('Analysis', files)]
   for(file in files){
     
-    if(!dir.exists(file.path(resultFolder,'data',file))){
-      dir.create(file.path(resultFolder,'data',file))
+    if(!dir.exists(file.path(outputDirectory,file))){
+      dir.create(file.path(outputDirectory,file))
     }
     
-    if(dir.exists(file.path(resultFolder,file, 'plpResult'))){
-      res <- PatientLevelPrediction::loadPlpResult(file.path(resultFolder,file, 'plpResult'))
+    if(dir.exists(file.path(resultDirectory,file, 'plpResult'))){
+      res <- PatientLevelPrediction::loadPlpResult(file.path(resultDirectory,file, 'plpResult'))
       res <- PatientLevelPrediction::transportPlp(res, n= minCellCount, 
                                                   save = F, dataName = databaseName)
-      saveRDS(res, file.path(resultFolder,'data',file, 'plpResult.rds'))
+      saveRDS(res, file.path(outputDirectory,file, 'plpResult.rds'))
     }
-    if(file.exists(file.path(resultFolder,file, 'plpLog.txt'))){
-      file.copy(from = file.path(resultFolder,file, 'plpLog.txt'), 
-                to = file.path(resultFolder,'data',file, 'plpLog.txt'))
+    if(file.exists(file.path(resultDirectory,file, 'plpLog.txt'))){
+      file.copy(from = file.path(resultDirectory,file, 'plpLog.txt'), 
+                to = file.path(outputDirectory,file, 'plpLog.txt'))
     }
   }
   
-  return(file.path(resultFolder,'data'))
+  # copy any validation results
+  if(dir.exists(file.path(resultDirectory,'Validation'))){
+    valFolders <-  dir(file.path(resultDirectory,'Validation'), full.names = F)
+    
+    if(length(valFolders)>0){
+      # move each of the validation rds
+      for(valFolder in valFolders){
+        
+        # get the analysisIds
+        valSubfolders <- dir(file.path(resultDirectory,'Validation',valFolder), full.names = F)
+        if(length(valSubfolders)!=0){
+          for(valSubfolder in valSubfolders ){
+            valOut <- file.path(valFolder,valSubfolder)
+            if(!dir.exists(file.path(outputDirectory,'Validation',valOut))){
+              dir.create(file.path(outputDirectory,'Validation',valOut), recursive = T)
+            }
+            
+            
+            if(file.exists(file.path(resultDirectory,'Validation',valOut, 'validationResult.rds'))){
+              res <- readRDS(file.path(resultDirectory,'Validation',valOut, 'validationResult.rds'))
+              res <- PatientLevelPrediction::transportPlp(res, n= minCellCount, 
+                                                          save = F, dataName = databaseName)
+              saveRDS(res, file.path(outputDirectory,'Validation',valOut, 'validationResult.rds'))
+            }
+          }
+        }
+        
+      }
+      
+    }
+    
+  }
   
+  return(outputDirectory)
+  
+}
+
+viewShiny <- function(package = NULL){
+  if(is.null(package)){
+    appDir <- system.file("shiny", "PLPViewer", package = "SkeletonPredictionStudy")
+  }
+  if(!is.null(package)){
+    appDir <- system.file("shiny", "PLPViewer", package = package)
+  }
+  
+  shiny::shinyAppDir(appDir)
 }
