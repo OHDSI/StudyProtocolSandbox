@@ -14,7 +14,10 @@ getAllConceptExpression  <- function(json){
   ))
   
   names(res) <- unlist(lapply(json$cohortDefinitions, function(x){
-    paste0(x$id,'_',lapply(getCohortConceptExpression(x), function(x) x$originalConceptId ))}
+    
+    if(length(x$expression$ConceptSets)!=0){
+      
+      paste0(x$id,'_',lapply(getCohortConceptExpression(x), function(x) x$originalConceptId ))}}
   ))
   res
 }
