@@ -1,3 +1,4 @@
+#' @export
 populateShinyApp <- function(shinyDirectory,
                              resultDirectory,
                              minCellCount = 10,
@@ -83,6 +84,7 @@ populateShinyApp <- function(shinyDirectory,
   
 }
 
+#' @export
 viewShiny <- function(package = NULL){
   if(is.null(package)){
     appDir <- system.file("shiny", "PLPViewer", package = "SkeletonPredictionStudy")

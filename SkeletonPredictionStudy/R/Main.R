@@ -46,6 +46,9 @@
 #' @param packageResults       Should results be packaged for later sharing?     
 #' @param minCellCount         The minimum number of subjects contributing to a count before it can be included 
 #'                             in packaged results.
+#' @param createShiny          Create a shiny app with the results
+#' @param createJournalDocument Do you want to create a template journal document populated with results?
+#' @param analysisIdDocument   Which Analysis_id do you want to create the document for?
 #' @param verbosity            Sets the level of the verbosity. If the log level is at or higher in priority than the logger threshold, a message will print. The levels are:
 #'                                         \itemize{
 #'                                         \item{DEBUG}{Highest verbosity showing all debug statements}
@@ -78,6 +81,7 @@
 #'         createValidationPackage = T,
 #'         packageResults = F,
 #'         minCellCount = 5,
+#'         createShiny = F,
 #'         verbosity = "INFO",
 #'         cdmVersion = 5)
 #' }
@@ -98,6 +102,9 @@ execute <- function(connectionDetails,
                     analysesToValidate = NULL,
                     packageResults = F,
                     minCellCount= 5,
+                    createShiny = F,
+                    createJournalDocument = F,
+                    analysisIdDocument = 1,
                     verbosity = "INFO",
                     cdmVersion = 5) {
   if (!file.exists(outputFolder))
@@ -171,6 +178,28 @@ execute <- function(connectionDetails,
                             databaseName = cdmDatabaseName,
                             jsonSettings = jsonSettings,
                             analysisIds = analysesToValidate)
+  }
+  
+  if (createShiny) {
+    populateShinyApp(resultDirectory = outputFolder,
+                     minCellCount = minCellCount,
+                     databaseName = cdmDatabaseName)
+  }
+  
+  if(createJournalDocument){
+    predictionAnalysisListFile <- system.file("settings",
+                                              "predictionAnalysisList.json",
+                                              package = "SkeletonPredictionStudy")
+    jsonSettings <-  tryCatch({Hydra::loadSpecifications(file=predictionAnalysisListFile)},
+                              error=function(cond) {
+                                stop('Issue with json file...')
+                              })
+    pn <- jsonlite::fromJSON(jsonSettings)
+    createJournalDocument(resultDirectory = outputFolder,
+                                      analysisId = analysisIdDocument, 
+                                      includeValidation = T,
+                                      cohortIds = pn$cohortDefinitions$id,
+                                      cohortNames = pn$cohortDefinitions$name)
   }
   
   

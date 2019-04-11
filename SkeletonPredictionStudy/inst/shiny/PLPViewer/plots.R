@@ -103,40 +103,54 @@ plotCovariateSummary <- function(covariateSummary){
   covariateSummary$size <- 4+4*covariateSummary$size/max(covariateSummary$size)
   
   # color based on analysis id
-  covariateSummary$color <- as.factor(covariateSummary$analysisId)
+  covariateSummary$color <- sapply(covariateSummary$covariateName, function(x) ifelse(is.na(x), '', strsplit(as.character(x), ' ')[[1]][1]))
+  
+  l <- list(x = 0.01, y = 1,
+            font = list(
+              family = "sans-serif",
+              size = 10,
+              color = "#000"),
+            bgcolor = "#E2E2E2",
+            bordercolor = "#FFFFFF",
+            borderwidth = 1)
   
   #covariateSummary$annotation <- sapply(covariateSummary$covariateName, getName)
   covariateSummary$annotation <- covariateSummary$covariateName
   
   
-  ind <- covariateSummary$CovariateMeanWithNoOutcome <1 & covariateSummary$CovariateMeanWithOutcome < 1
+  ind <- covariateSummary$CovariateMeanWithNoOutcome <=1 & covariateSummary$CovariateMeanWithOutcome <= 1
   # create two plots -1 or less or g1
-  binary <- plotly::plot_ly(x = covariateSummary$CovariateMeanWithNoOutcome[ind] ) %>%
+  binary <- plotly::plot_ly(x = covariateSummary$CovariateMeanWithNoOutcome[ind],
+                            #size = covariateSummary$size[ind],
+                            showlegend = F) %>%
     plotly::add_markers(y = covariateSummary$CovariateMeanWithOutcome[ind],
-                        marker = list(size = covariateSummary$size[ind], 
-                                      color=covariateSummary$color[ind]),
-                        text = paste(covariateSummary$annotation[ind])) %>%
+                        color=factor(covariateSummary$color[ind]),
+                        text = paste(covariateSummary$annotation[ind]),
+                        showlegend = T
+    ) %>%
     plotly::add_trace(x= c(0,1), y = c(0,1),mode = 'lines',
                       line = list(dash = "dash"), color = I('black'),
-                      type='scatter') %>%
+                      type='scatter', showlegend = FALSE) %>%
     plotly::layout(#title = 'Prevalance of baseline predictors in persons with and without outcome',
-                   xaxis = list(title = "Prevalance in persons without outcome"),
-                   yaxis = list(title = "Prevalance in persons with outcome"),
-                   showlegend = FALSE)
+      xaxis = list(title = "Prevalance in persons without outcome",
+                   range = c(0, 1)),
+      yaxis = list(title = "Prevalance in persons with outcome",
+                   range = c(0, 1)),
+      legend = l, showlegend = T)
   
   if(sum(!ind)>0){
+    maxValue <- max(c(covariateSummary$CovariateMeanWithNoOutcome[!ind],
+                      covariateSummary$CovariateMeanWithOutcome[!ind]), na.rm = T)
     meas <- plotly::plot_ly(x = covariateSummary$CovariateMeanWithNoOutcome[!ind] ) %>%
       plotly::add_markers(y = covariateSummary$CovariateMeanWithOutcome[!ind],
-                          marker = list(size = covariateSummary$size[!ind], 
-                                        color=covariateSummary$color[!ind]),
                           text = paste(covariateSummary$annotation[!ind])) %>%
-      plotly::add_trace(x= c(0,1), y = c(0,1),mode = 'lines',
+      plotly::add_trace(x= c(0,maxValue), y = c(0,maxValue),mode = 'lines',
                         line = list(dash = "dash"), color = I('black'),
-                        type='scatter') %>%
+                        type='scatter', showlegend = FALSE) %>%
       plotly::layout(#title = 'Prevalance of baseline predictors in persons with and without outcome',
-                     xaxis = list(title = "Prevalance in persons without outcome"),
-                     yaxis = list(title = "Prevalance in persons with outcome"),
-                     showlegend = FALSE)
+        xaxis = list(title = "Mean in persons without outcome"),
+        yaxis = list(title = "Mean in persons with outcome"),
+        showlegend = FALSE)
   } else {
     meas <- NULL
   }
@@ -147,26 +161,7 @@ plotCovariateSummary <- function(covariateSummary){
 
 
 
-getRd <- function(functionName){
-  
-  topic <- attr(functionName, "topic")
-  type <- attr(functionName, "type")
-  paths <- as.character(functionName) 
-  file <- paths
-  
-  path <- dirname(file)
-  dirpath <- dirname(path)
-  pkgname <- basename(dirpath)
-  RdDB <- file.path(path, pkgname)
-  
-  if(file.exists(paste(RdDB, "rdx", sep="."))) {
-    rdo <- tools:::fetchRdDB(RdDB, basename(file))
-  }
-  
-  temp <- tools::Rd2txt(rdo, out=paste0(tempfile("Rtxt"),'.txt'), package=pkgname)
-  
-  return(temp)
-}
+
 
 
 plotPredictedPDF <- function(evaluation, type='test', fileName=NULL){
@@ -266,6 +261,13 @@ plotDemographicSummary <- function(evaluation, type='test', fileName=NULL){
     ind <- evaluation$demographicSummary$Eval==type
     x<- evaluation$demographicSummary[ind,colnames(evaluation$demographicSummary)%in%c('ageGroup','genGroup','averagePredictedProbability',
                                                                                        'PersonCountAtRisk', 'PersonCountWithOutcome')]
+    
+    # remove -1 values:
+    x <- x[x$PersonCountWithOutcome != -1,]
+    if(nrow(x)==0){
+      return(NULL)
+    }
+    # end remove -1 values
     
     x$observed <- x$PersonCountWithOutcome/x$PersonCountAtRisk
     

@@ -22,6 +22,8 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
 
 # Add the database containing the OMOP CDM data
 cdmDatabaseSchema <- 'cdm database schema'
+# Add a sharebale name for the database containing the OMOP CDM data
+cdmDatabaseName <- 'a friendly shareable  name for your database'
 # Add a database with read/write access as this is where the cohorts will be generated
 cohortDatabaseSchema <- 'work database schema'
 
@@ -33,6 +35,7 @@ cohortTable <- 'SkeletonPredictionStudyCohort'
 
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
+        cdmDatabaseName = cdmDatabaseName,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
@@ -41,5 +44,12 @@ execute(connectionDetails = connectionDetails,
         runAnalyses = F,
         createResultsDoc = F,
         packageResults = F,
-        createValidationPackage = F,
-        minCellCount= 5)
+        createValidationPackage = F, 
+        minCellCount= 5,
+        createShiny = F,
+        createJournalDocument = F,
+        analysisIdDocument = 1)
+
+# if you ran execute with: createShiny = T
+# Uncomment and run the next line to see the shiny app:
+# viewShiny()
