@@ -1,3 +1,6 @@
 [submodule "RCDM-ETL"]
 	path = RCDM-ETL
 	url = https://github.com/NEONKID/RCDM-ETL
+[submodule "ConceptPrevalence"]
+	path = ConceptPrevalence
+	url = https://github.com/aostropolets/ConceptPrevalence.git

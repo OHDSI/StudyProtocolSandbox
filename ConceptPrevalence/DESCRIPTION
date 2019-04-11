@@ -1,0 +1,18 @@
+Package: ConceptPrevalence
+Type: Package
+Title: Concept Prevalence Calculation
+Version: 0.1.0
+Author: Anna Ostropolets
+Maintainer: Anna Ostropolets <ao2671@cumc.coolumbia.edu>
+Description: A package to calculate the prevalence of source and standard concept ids
+ across OMOP CDM datasets. It extracts the counts of the concepts from the main 
+ OMOP CDM v5. tables, as well as the part of the concept_relationship table.
+License: Apache License 2.0
+Encoding: UTF-8
+LazyData: true
+Depends:
+  R (>= 3.2.2)
+Imports: 
+  DatabaseConnector,
+  SqlRender
+RoxygenNote: 6.1.1
