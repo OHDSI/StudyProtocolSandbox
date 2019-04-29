@@ -86,7 +86,7 @@ shiny::shinyServer(function(input, output, session) {
       eval <- readRDS(as.character(loc))
       # rounding values to 2dp
       for(coln in c('covariateValue','CovariateMeanWithOutcome','CovariateMeanWithNoOutcome')){
-        eval$covariateSummary[,coln] <- format(round(eval$covariateSummary[,coln], 2), nsmall = 2)
+        eval$covariateSummary[,coln] <- format(round(eval$covariateSummary[,coln], 4), nsmall = 4)
         class(eval$covariateSummary[,coln]) <- "numeric"
       }
       

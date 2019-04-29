@@ -84,6 +84,15 @@ populateShinyApp <- function(shinyDirectory,
   
 }
 
+#' View shiny app 
+#' @details
+#' This function will open an interactive shiny app for viewing the results
+#' @param package The name of the package as a string
+#'
+#' @examples
+#' \dontrun{
+#' viewShiny()
+#' }
 #' @export
 viewShiny <- function(package = NULL){
   if(is.null(package)){

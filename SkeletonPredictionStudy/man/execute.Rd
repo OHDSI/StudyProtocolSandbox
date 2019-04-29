@@ -9,8 +9,10 @@ execute(connectionDetails, cdmDatabaseSchema,
   cohortDatabaseSchema = cdmDatabaseSchema, cohortTable = "cohort",
   oracleTempSchema = cohortDatabaseSchema, outputFolder, createProtocol = F,
   createCohorts = F, runAnalyses = F, createResultsDoc = F,
-  createValidationPackage = F, packageResults = F, minCellCount = 5,
-  verbosity = "INFO", cdmVersion = 5)
+  createValidationPackage = F, analysesToValidate = NULL,
+  packageResults = F, minCellCount = 5, createShiny = F,
+  createJournalDocument = F, analysisIdDocument = 1, verbosity = "INFO",
+  cdmVersion = 5)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -48,10 +50,18 @@ performance.}
 
 \item{createValidationPackage}{Create a package for sharing the models}
 
+\item{analysesToValidate}{A vector of analysis ids (e.g., c(1,3,10)) specifying which analysese to export into validation package. Default is NULL and all are exported.}
+
 \item{packageResults}{Should results be packaged for later sharing?}
 
 \item{minCellCount}{The minimum number of subjects contributing to a count before it can be included 
 in packaged results.}
+
+\item{createShiny}{Create a shiny app with the results}
+
+\item{createJournalDocument}{Do you want to create a template journal document populated with results?}
+
+\item{analysisIdDocument}{Which Analysis_id do you want to create the document for?}
 
 \item{verbosity}{Sets the level of the verbosity. If the log level is at or higher in priority than the logger threshold, a message will print. The levels are:
 \itemize{
@@ -92,6 +102,7 @@ execute(connectionDetails,
         createValidationPackage = T,
         packageResults = F,
         minCellCount = 5,
+        createShiny = F,
         verbosity = "INFO",
         cdmVersion = 5)
 }
