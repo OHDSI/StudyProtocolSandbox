@@ -137,7 +137,7 @@ applyDeadModel <- function(connectionDetails,
                                                     newCohortId = cohortId,
                                                     newOutcomeDatabaseSchema = cohortDatabaseSchema,
                                                     newOutcomeTable = cohortTable,
-                                                    newOutcomeId = -1, sample = NULL,
+                                                    newOutcomeId = -999, sample = NULL,
                                                     createPopulation = F
                                                     )
   # apply Model
