@@ -57,7 +57,7 @@ createCohorts <- function(connectionDetails,
                  outputFolder = outputFolder)
 
   # Check number of subjects per cohort:
-  OhdsiRTools::logInfo("Counting cohorts")
+  writeLines("Counting cohorts")
   sql <- SqlRender::loadRenderTranslateSql("GetCounts.sql",
                                            "ExistingStrokeRiskExternalValidation",
                                            dbms = connectionDetails$dbms,
