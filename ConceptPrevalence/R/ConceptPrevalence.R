@@ -15,7 +15,7 @@
 # limitations under the License.
 
 #' Calculates the counts of standard and source concepts
-#' @param connectioDetails The connections details for connecting to the CDM
+#' @param connectionDetails The connections details for connecting to the CDM
 #' @param cdmName The name of the CDM
 #' @param cdmDatabaseSchema  The schema holding the CDM data
 #' @param vocabDatabaseSchema The schema holding the OMOP Vocabularies
