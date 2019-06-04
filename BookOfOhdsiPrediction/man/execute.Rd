@@ -69,7 +69,7 @@ in packaged results.}
 Execute the Study
 }
 \details{
-This function executes the PlpDoc Study.
+This function executes the BookOfOhdsiPrediction Study.
 }
 \examples{
 \dontrun{

@@ -5,7 +5,7 @@ populateShinyApp <- function(shinyDirectory,
   
   #check inputs
   if(missing(shinyDirectory)){
-    shinyDirectory <- system.file("shiny", "PLPViewer", package = "PlpDoc")
+    shinyDirectory <- system.file("shiny", "PLPViewer", package = "BookOfOhdsiPrediction")
   }
   if(missing(resultDirectory)){
     stop('Need to enter the resultDirectory')
@@ -85,7 +85,7 @@ populateShinyApp <- function(shinyDirectory,
 
 viewShiny <- function(package = NULL){
   if(is.null(package)){
-    appDir <- system.file("shiny", "PLPViewer", package = "PlpDoc")
+    appDir <- system.file("shiny", "PLPViewer", package = "BookOfOhdsiPrediction")
   }
   if(!is.null(package)){
     appDir <- system.file("shiny", "PLPViewer", package = package)

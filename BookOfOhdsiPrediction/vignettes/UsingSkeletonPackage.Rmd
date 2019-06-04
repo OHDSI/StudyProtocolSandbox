@@ -48,14 +48,14 @@ Below is the list of steps needed to adapt the package skeleton to implement ano
 
 # Copy and rename the package
 
-Please copy the `PlpDoc` folder. Choose a name for your study package, and change all references from 'PlpDoc' to your name of choice in the package code. 
+Please copy the `BookOfOhdsiPrediction` folder. Choose a name for your study package, and change all references from 'BookOfOhdsiPrediction' to your name of choice in the package code. 
 
 Next, we can run the following code. The baseUrl needs to point to the WebAPI where the cohort definitions are located. The package name needs to be changed to the name you selected:
 
 ```{r eval=FALSE}
 # Insert cohort definitions from ATLAS into package -----------------------
 createStudyFiles(baseUrl=Sys.getenv("baseUrl"),   
-                 packageName='PlpDoc')
+                 packageName='BookOfOhdsiPrediction')
 ```
 
 This code will fetch the cohort definitions from the WebAPI instance, and will insert them as json files in the `inst/cohorts` folder. It will also create corresponding sql files in the `inst/sql` folder.
@@ -78,7 +78,7 @@ execute(connectionDetails = connectionDetails,
                     createCohorts = TRUE,
                     packageResults = TRUE,
                     minCellCount= 5,
-                    packageName="PlpDoc")
+                    packageName="BookOfOhdsiPrediction")
 ```
 
 

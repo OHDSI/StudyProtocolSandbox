@@ -9,7 +9,7 @@ createPlpProtocol <- function(outputLocation = getwd()){
   
   predictionAnalysisListFile <- system.file("settings",
                                             "predictionAnalysisList.json",
-                                            package = "PlpDoc")
+                                            package = "BookOfOhdsiPrediction")
   
   #figure1 <- 'vignettes/Figure1.png'
   figure1 <- system.file("doc",

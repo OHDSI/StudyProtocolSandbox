@@ -16,12 +16,12 @@
 
 # Format and check code ---------------------------------------------------
 OhdsiRTools::formatRFolder()
-OhdsiRTools::checkUsagePackage("PlpDoc")
+OhdsiRTools::checkUsagePackage("BookOfOhdsiPrediction")
 OhdsiRTools::updateCopyrightYearFolder()
 
 # Create manual -----------------------------------------------------------
-shell("rm extras/PlpDoc.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/PlpDoc.pdf")
+shell("rm extras/BookOfOhdsiPrediction.pdf")
+shell("R CMD Rd2pdf ./ --output=extras/BookOfOhdsiPrediction.pdf")
 
 # Create vignette ---------------------------------------------------------
 rmarkdown::render("vignettes/UsingSkeletonPackage.Rmd",
@@ -37,11 +37,11 @@ OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv"
                                                 insertTableSql = TRUE,
                                                 insertCohortCreationR = TRUE,
                                                 generateStats = FALSE,
-                                                packageName = "PlpDoc")
+                                                packageName = "BookOfOhdsiPrediction")
 
 # Create analysis details -------------------------------------------------
 source("extras/CreatePredictionAnalysisDetails.R")
 createAnalysesDetails("inst/settings")
 
 # Store environment in which the study was executed -----------------------
-OhdsiRTools::insertEnvironmentSnapshotInPackage("PlpDoc")
+OhdsiRTools::insertEnvironmentSnapshotInPackage("BookOfOhdsiPrediction")

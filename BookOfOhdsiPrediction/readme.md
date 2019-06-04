@@ -3,12 +3,12 @@ A Package Skeleton for Patientl-Level Prediction Studies
 
 A skeleton package, to be used as a starting point when implementing patient-level prediction studies.
 
-Vignette: [Using the package skeleton for patient-level prediction studies](https://raw.githubusercontent.com/OHDSI/StudyProtocolSandbox/master/PlpDoc/inst/doc/UsingSkeletonPackage.pdf)
+Vignette: [Using the package skeleton for patient-level prediction studies](https://raw.githubusercontent.com/OHDSI/StudyProtocolSandbox/master/BookOfOhdsiPrediction/inst/doc/UsingSkeletonPackage.pdf)
 
 Instructions To Prepare Package Outside Atlas
 ===================
 
-- Step 1: Change package name, readme and description (replace (PlpDoc with the package name)
+- Step 1: Change package name, readme and description (replace (BookOfOhdsiPrediction with the package name)
 - Step 2: Change all references of package name [in Main.R lines 101 and 126, CreateCohorts.R lines 27,37 and 42, CreateAllCohorts.R lines 62 and 77, readme.md and in PackageMaintenance.R]
 - Step 3: Add inst/settings/CohortToCreate.csv - a csv containing three columns, cohortId, atlasId and name - the cohorts in your local atlas with the atlasId will be downloaded into the package and given the cohortId cohort_definition_id when the user creates the cohorts.
 - Step 4: Create prediction analysis detail r code that specifies the models, populations, covariates, Ts and Os used in the study (extras/CreatePredictionAnalysisDetails)
@@ -23,7 +23,7 @@ Instructions To Build Package
 Instructions To Run Package
 ===================
 
-- Share the package by adding it to the OHDSI/StudyProtocolSandbox github repo and get people to install by running but replace 'PlpDoc' with your study name if not using atlas:
+- Share the package by adding it to the OHDSI/StudyProtocolSandbox github repo and get people to install by running but replace 'BookOfOhdsiPrediction' with your study name if not using atlas:
 ```r
   # get the latest PatientLevelPrediction
   install.packages("devtools")
@@ -32,16 +32,16 @@ Instructions To Run Package
   PatientLevelPrediction::checkPlpInstallation()
   
   # install the network package
-  devtools::install_github("OHDSI/StudyProtocolSandbox/PlpDoc")
+  devtools::install_github("OHDSI/StudyProtocolSandbox/BookOfOhdsiPrediction")
 ```
 
-- Get users to execute the study by running the code in (extras/CodeToRun.R) but replace 'PlpDoc' with your study name:
+- Get users to execute the study by running the code in (extras/CodeToRun.R) but replace 'BookOfOhdsiPrediction' with your study name:
 ```r
-  library(PlpDoc)
+  library(BookOfOhdsiPrediction)
   # USER INPUTS
 #=======================
 # The folder where the study intermediate and result files will be written:
-outputFolder <- "./PlpDocResults"
+outputFolder <- "./BookOfOhdsiPredictionResults"
 
 # Specify where the temporary files (used by the ff package) will be created:
 options(fftempdir = "location with space to save big data")
@@ -67,7 +67,7 @@ cohortDatabaseSchema <- 'work database schema'
 oracleTempSchema <- NULL
 
 # table name where the cohorts will be generated
-cohortTable <- 'PlpDocCohort'
+cohortTable <- 'BookOfOhdsiPredictionCohort'
 #=======================
 
 execute(connectionDetails = connectionDetails,
@@ -111,7 +111,7 @@ populateShinyApp(resultDirectory = outputFolder,
                  databaseName = 'friendly name'
                  ) 
         
-viewShiny('PlpDoc')
+viewShiny('BookOfOhdsiPrediction')
   
 
 ```

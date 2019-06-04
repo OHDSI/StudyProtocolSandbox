@@ -1,6 +1,6 @@
 # Copyright 2018 Observational Health Data Sciences and Informatics
 #
-# This file is part of PlpDoc
+# This file is part of BookOfOhdsiPrediction
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #' Execute the Study
 #'
 #' @details
-#' This function executes the PlpDoc Study.
+#' This function executes the BookOfOhdsiPrediction Study.
 #' 
 #' @param connectionDetails    An object of type \code{connectionDetails} as created using the
 #'                             \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
@@ -123,7 +123,7 @@ execute <- function(connectionDetails,
     ParallelLogger::logInfo("Running predictions")
     predictionAnalysisListFile <- system.file("settings",
                                               "predictionAnalysisList.json",
-                                              package = "PlpDoc")
+                                              package = "BookOfOhdsiPrediction")
     predictionAnalysisList <- PatientLevelPrediction::loadPredictionAnalysisList(predictionAnalysisListFile)
     predictionAnalysisList$connectionDetails = connectionDetails
     predictionAnalysisList$cdmDatabaseSchema = cdmDatabaseSchema
@@ -155,7 +155,7 @@ execute <- function(connectionDetails,
   if(createValidationPackage){
     predictionAnalysisListFile <- system.file("settings",
                                               "predictionAnalysisList.json",
-                                              package = "PlpDoc")
+                                              package = "BookOfOhdsiPrediction")
     jsonSettings <-  tryCatch({Hydra::loadSpecifications(file=predictionAnalysisListFile)},
                               error=function(cond) {
                                 stop('Issue with json file...')

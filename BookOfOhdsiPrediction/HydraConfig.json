@@ -5,11 +5,11 @@
   "actions":[{
     "type": "fileNameFindAndReplace",
     "input": "packageName",
-    "find": "PlpDoc"
+    "find": "BookOfOhdsiPrediction"
   },{
     "type": "stringFindAndReplace",
     "input": "packageName",
-    "find": "PlpDoc"
+    "find": "BookOfOhdsiPrediction"
   },{
     "type": "jsonArrayToCsv",
     "input": "cohortDefinitions",

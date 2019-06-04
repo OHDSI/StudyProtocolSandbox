@@ -2,7 +2,7 @@
   "ExpressionLimit": {"Type": "All"},
   "CollapseSettings": {
     "CollapseType": "ERA",
-    "EraPad": 30
+    "EraPad": 180
   },
   "CensorWindow": {
     "StartDate": null,
@@ -10,24 +10,43 @@
   },
   "ConceptSets": [
     {
-      "expression": {"items": [{
-        "isExcluded": false,
-        "concept": {
-          "INVALID_REASON_CAPTION": "Valid",
-          "CONCEPT_ID": 432791,
-          "STANDARD_CONCEPT": "S",
-          "CONCEPT_CODE": "41291007",
-          "VOCABULARY_ID": "SNOMED",
-          "CONCEPT_NAME": "Angioedema",
-          "DOMAIN_ID": "Condition",
-          "STANDARD_CONCEPT_CAPTION": "Standard",
-          "CONCEPT_CLASS_ID": "Clinical Finding",
-          "INVALID_REASON": "V"
+      "expression": {"items": [
+        {
+          "isExcluded": true,
+          "concept": {
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_ID": 314666,
+            "STANDARD_CONCEPT": "S",
+            "CONCEPT_CODE": "1755008",
+            "VOCABULARY_ID": "SNOMED",
+            "CONCEPT_NAME": "Old myocardial infarction",
+            "DOMAIN_ID": "Condition",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "CONCEPT_CLASS_ID": "Clinical Finding",
+            "INVALID_REASON": "V"
+          },
+          "includeMapped": false,
+          "includeDescendants": true
         },
-        "includeMapped": false,
-        "includeDescendants": true
-      }]},
-      "name": "Angioedema",
+        {
+          "isExcluded": false,
+          "concept": {
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_ID": 4329847,
+            "STANDARD_CONCEPT": "S",
+            "CONCEPT_CODE": "22298006",
+            "VOCABULARY_ID": "SNOMED",
+            "CONCEPT_NAME": "Myocardial infarction",
+            "DOMAIN_ID": "Condition",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "CONCEPT_CLASS_ID": "Clinical Finding",
+            "INVALID_REASON": "V"
+          },
+          "includeMapped": false,
+          "includeDescendants": true
+        }
+      ]},
+      "name": "Acute myocardial Infarction",
       "id": 0
     },
     {
@@ -107,7 +126,7 @@
           "Days": 0,
           "Coeff": 1
         },
-        "UseIndexEnd": null
+        "UseIndexEnd": false
       },
       "IgnoreObservationPeriod": false,
       "EndWindow": {
@@ -120,7 +139,7 @@
           "Days": null,
           "Coeff": 1
         },
-        "UseIndexEnd": null
+        "UseIndexEnd": false
       },
       "Criteria": {"VisitOccurrence": {
         "OccurrenceEndDate": null,
