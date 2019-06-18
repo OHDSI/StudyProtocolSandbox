@@ -24,7 +24,7 @@ DROP TABLE @target_database_schema.count_standard;
 create table @target_database_schema.count_standard
 (
 concept_id int,
-cnt int,
+cnt bigint,
 type varchar (255)
 );
 
@@ -95,7 +95,7 @@ DROP TABLE @target_database_schema.count_source;
 create table @target_database_schema.count_source
 (
 concept_id int,
-cnt int,
+cnt bigint,
 type varchar (255)    
 );
 
@@ -171,7 +171,7 @@ DROP TABLE @target_database_schema.cdm;
 
 create table @target_database_schema.cdm
 (
- patient_cnt int,
+ patient_cnt bigint,
  cdm_name varchar (255),
  start_date date,
  end_date date
