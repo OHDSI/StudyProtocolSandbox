@@ -26,7 +26,8 @@ Imports:
 	jsonlite,
 	shiny,
 	shinycssloaders,
-    shinydashboard
+  shinydashboard,
+  R.utils
 Suggests:
     knitr,
     rmarkdown,

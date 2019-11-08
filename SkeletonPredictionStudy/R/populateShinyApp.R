@@ -1,5 +1,6 @@
 #' @export
-populateShinyApp <- function(shinyDirectory,
+populateShinyApp <- function(outputDirectory = './ShinyApp',
+                             shinyDirectory,
                              resultDirectory,
                              minCellCount = 10,
                              databaseName = 'sharable name of development data'){
@@ -15,12 +16,18 @@ populateShinyApp <- function(shinyDirectory,
     stop('resultDirectory does not exist')
   }
   
-  outputDirectory <- file.path(shinyDirectory,'data')
-  
   # create the shiny data folder
   if(!dir.exists(outputDirectory)){
     dir.create(outputDirectory, recursive = T)
   }
+  
+  # copy shiny folder to outputDirectory 
+  R.utils::copyDirectory(from = shinyDirectory, 
+                       to= outputDirectory,
+                       recursive=TRUE)
+  
+  outputDirectory <- file.path(outputDirectory,'data')
+  #outputDirectory <- file.path(shinyDirectory,'data')
   
   # copy the settings csv
   file <- utils::read.csv(file.path(resultDirectory,'settings.csv'))
@@ -80,27 +87,9 @@ populateShinyApp <- function(shinyDirectory,
     
   }
   
+  ParallelLogger::logInfo(paste0('Shiny App created at: ',  outputDirectory))
+  ParallelLogger::logInfo(paste0('Upload the folder ',  outputDirectory, ' to the shinyDeploy OHDSI github to share the results with others.'))
+  
   return(outputDirectory)
   
-}
-
-#' View shiny app 
-#' @details
-#' This function will open an interactive shiny app for viewing the results
-#' @param package The name of the package as a string
-#'
-#' @examples
-#' \dontrun{
-#' viewShiny()
-#' }
-#' @export
-viewShiny <- function(package = NULL){
-  if(is.null(package)){
-    appDir <- system.file("shiny", "PLPViewer", package = "SkeletonPredictionStudy")
-  }
-  if(!is.null(package)){
-    appDir <- system.file("shiny", "PLPViewer", package = package)
-  }
-  
-  shiny::shinyAppDir(appDir)
 }

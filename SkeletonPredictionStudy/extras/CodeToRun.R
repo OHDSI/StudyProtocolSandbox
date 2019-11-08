@@ -44,12 +44,12 @@ execute(connectionDetails = connectionDetails,
         runAnalyses = F,
         createResultsDoc = F,
         packageResults = F,
-        createValidationPackage = F, 
+        createValidationPackage = F,  
+        #analysesToValidate = 1,
         minCellCount= 5,
         createShiny = F,
         createJournalDocument = F,
         analysisIdDocument = 1)
 
-# if you ran execute with: createShiny = T
-# Uncomment and run the next line to see the shiny app:
-# viewShiny()
+# Uncomment and run the next line to see the shiny results:
+# PatientLevelPrediction::viewMultiplePlp(outputFolder)

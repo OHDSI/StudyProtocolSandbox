@@ -181,7 +181,8 @@ execute <- function(connectionDetails,
   }
   
   if (createShiny) {
-    populateShinyApp(resultDirectory = outputFolder,
+    populateShinyApp(outputDirectory = file.path(outputFolder, 'ShinyApp'),
+                     resultDirectory = outputFolder,
                      minCellCount = minCellCount,
                      databaseName = cdmDatabaseName)
   }

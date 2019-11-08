@@ -3,7 +3,7 @@ packages <- c('DatabaseConnector', 'SqlRender', 'Cyclops', 'FeatureExtraction',
               'PatientLevelPrediction','OhdsiSharing', 'ParallelLogger',
               'ggplot2','ff','ffbase','zip','magrittr','dplyr','officer',
               'gridExtra','rvg','jsonlite','shiny','shinycssloaders',
-              'shinydashboard')
+              'shinydashboard', 'R.utils')
 
 
 # Borrowed from devtools: https://github.com/hadley/devtools/blob/ba7a5a4abd8258c52cb156e7b26bb4bf47a79f0b/R/utils.r#L44
