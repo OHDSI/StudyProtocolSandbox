@@ -116,7 +116,7 @@ execute(connectionDetails = connectionDetails,
         outputFolder = outputFolder,
         createShiny = T,
         minCellCount= 5)
-viewShiny()
+PatientLevelPrediction::viewMultiplePlp(outputFolder)
 
 ```
 
