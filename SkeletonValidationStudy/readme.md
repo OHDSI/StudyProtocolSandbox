@@ -3,13 +3,13 @@ SkeletonValidationStudy
 
   Introduction
 ============
-  Add the background for this study here
-
+  This package contains code to externally validate models for the prediction quesiton <add question> developed on the database <add database>.
 
 Features
 ========
-  - what does the study do as the main thing
-  - what else does it do?
+  - Applies models developed using the OHDSI PatientLevelPrediction package
+  - Evaluates the performance of the models on new data
+  - Packages up the results (after removing sensitive date) to share with study owner
 
 Technology
 ==========
@@ -22,16 +22,26 @@ System Requirements
 Dependencies
 ============
   * PatientLevelPrediction
+  
+  
+A1. Installing the package from GitHub
+===============
+```r
+# To install the package from github:
+install.packages("devtools")
+devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonValidationStudy")
+```
 
-Getting Started
+A2. Building the package inside RStudio
+===============
+  1. Open the validation package project file (file ending in .Rproj) 
+  2. Build the package in RStudio by selecting the 'Build' option in the top right (the tabs contain  'Environment', 'History', 'Connections', 'Build', 'Git') and then clicking on the 'Install and Restart'
+
+B. Getting Started
 ===============
   1. In R, use the following commands to run the study:
 
-  ```r
-  # If not building locally uncomment and run:
-#install.packages("devtools")
-#devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonValidationStudy")
-
+```r
 library(SkeletonValidationStudy)
 
 # add details of your database setting:
@@ -50,7 +60,10 @@ oracleTempSchema <- NULL
 cohortTable <- 'SkeletonValidationStudyCohortTable'
 
 # the location to save the prediction models results to:
-outputFolder <- getwd()
+# NOTE: if you set the outputFolder to the 'Validation' directory in the 
+#       prediction study outputFolder then the external validation will be
+#       saved in a format that can be used by the shiny app 
+outputFolder <- '../Validation'
 
 # add connection details:
 options(fftempdir = 'T:/fftemp')
@@ -75,13 +88,39 @@ SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
                  outputFolder = outputFolder,
                  createCohorts = T,
                  runValidation = T,
-                 packageResults = T,
+                 packageResults = F,
                  minCellCount = 5,
                  sampleSize = NULL)
                  
-# add code to submit results to study admin here
-
-
+# If the validation completes package it up ready to share with the study owner:
+SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
+                 databaseName = databaseName,
+                 cdmDatabaseSchema = cdmDatabaseSchema,
+                 cohortDatabaseSchema = cohortDatabaseSchema,
+                 oracleTempSchema = oracleTempSchema,
+                 cohortTable = cohortTable,
+                 outputFolder = outputFolder,
+                 createCohorts = F,
+                 runValidation = F,
+                 packageResults = T,
+                 minCellCount = 10,
+                 sampleSize = NULL)
+                 
+                 
+# If your target cohort is large use the sampleSize setting to sample from the cohort:
+SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
+                 databaseName = databaseName,
+                 cdmDatabaseSchema = cdmDatabaseSchema,
+                 cohortDatabaseSchema = cohortDatabaseSchema,
+                 oracleTempSchema = oracleTempSchema,
+                 cohortTable = cohortTable,
+                 outputFolder = outputFolder,
+                 createCohorts = T,
+                 runValidation = T,
+                 packageResults = F,
+                 minCellCount = 10,
+                 sampleSize = 1000000)
+                 
 ```
 
 License
