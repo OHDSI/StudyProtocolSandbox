@@ -52,6 +52,8 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
 
 # Add the database containing the OMOP CDM data
 cdmDatabaseSchema <- 'cdm database schema'
+# Add a sharebale name for the database containing the OMOP CDM data
+cdmDatabaseName <- 'a friendly shareable  name for your database'
 # Add a database with read/write access as this is where the cohorts will be generated
 cohortDatabaseSchema <- 'work database schema'
 
@@ -63,6 +65,7 @@ cohortTable <- 'SkeletonPredictionStudyCohort'
 
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
+		cdmDatabaseName = cdmDatabaseName,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         oracleTempSchema = oracleTempSchema,
@@ -84,6 +87,7 @@ The 'createCohorts' option will create the target and outcome cohorts into cohor
   
   execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
+		cdmDatabaseName = cdmDatabaseName,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
@@ -97,6 +101,7 @@ The 'createCohorts' option will create the target and outcome cohorts into cohor
   
   execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
+		cdmDatabaseName = cdmDatabaseName,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
@@ -111,6 +116,7 @@ This will create a new subdirectory in 'outputFolder' that has the name <yourPre
   
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
+		cdmDatabaseName = cdmDatabaseName,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
@@ -127,6 +133,7 @@ If you saved the validation results into the validation folder in the directory 
   
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
+		cdmDatabaseName = cdmDatabaseName,
         cohortDatabaseSchema = cohortDatabaseSchema,
         cohortTable = cohortTable,
         outputFolder = outputFolder,
