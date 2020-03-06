@@ -1,34 +1,47 @@
-\documentclass[]{article}
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-\else % if luatex or xelatex
-  \ifxetex
-    \usepackage{mathspec}
-  \else
-    \usepackage{fontspec}
-  \fi
-  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
-% use upquote if available, for straight quotes in verbatim environments
+% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% use microtype if available
-\IfFileExists{microtype.sty}{%
-\usepackage{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Using the package skeleton for patient-level prediction studies},
+  pdfauthor={Jenna M. Reps},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
-\usepackage{hyperref}
-\hypersetup{unicode=true,
-            pdftitle={Using the package skeleton for patient-level prediction studies},
-            pdfauthor={Jenna M. Reps},
-            pdfborder={0 0 0},
-            breaklinks=true}
-\urlstyle{same}  % don't use monospace font for urls
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -38,37 +51,46 @@
 \usepackage{framed}
 \definecolor{shadecolor}{RGB}{248,248,248}
 \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -78,52 +100,18 @@
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-\IfFileExists{parskip.sty}{%
-\usepackage{parskip}
-}{% else
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
-% Redefines (sub)paragraphs to behave more like sections
-\ifx\paragraph\undefined\else
-\let\oldparagraph\paragraph
-\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-\let\oldsubparagraph\subparagraph
-\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
 
-%%% Use protect on footnotes to avoid problems with footnotes in titles
-\let\rmarkdownfootnote\footnote%
-\def\footnote{\protect\rmarkdownfootnote}
-
-%%% Change title format to be more compact
-\usepackage{titling}
-
-% Create subtitle command for use in maketitle
-\providecommand{\subtitle}[1]{
-  \posttitle{
-    \begin{center}\large#1\end{center}
-    }
-}
-
-\setlength{\droptitle}{-2em}
-
-  \title{Using the package skeleton for patient-level prediction studies}
-    \pretitle{\vspace{\droptitle}\centering\huge}
-  \posttitle{\par}
-    \author{Jenna M. Reps}
-    \preauthor{\centering\large\emph}
-  \postauthor{\par}
-      \predate{\centering\large\emph}
-  \postdate{\par}
-    \date{2019-11-08}
-
+\title{Using the package skeleton for patient-level prediction studies}
+\author{Jenna M. Reps}
+\date{2020-03-06}
 
 \begin{document}
 \maketitle
@@ -132,7 +120,8 @@
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
-\section{Introduction}\label{introduction}
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
 
 This vignette describes how one can use the package skeleton for
 patient-level prediction studies to create one's own study package. This
@@ -161,16 +150,18 @@ The package skeleton currently implements an examplar study, predicting
 various outcomes in multiple target populations. If desired (as a test),
 one can run the package as is.
 
+\hypertarget{open-the-project-in-rstudio}{%
 \subsection{Open the project in
-Rstudio}\label{open-the-project-in-rstudio}
+Rstudio}\label{open-the-project-in-rstudio}}
 
 Make sure to have RStudio installed. Then open the R project downloaded
 from ATLAS by decompressing the downloaded folder and clicking on the
 .Rproj file (where is replaced by the study name you specified in
 ATLAS). This should open an RStudio session.
 
+\hypertarget{installing-all-package-dependencies}{%
 \subsection{Installing all package
-dependencies}\label{installing-all-package-dependencies}
+dependencies}\label{installing-all-package-dependencies}}
 
 Before you can build the package you downloaded from ATLAS you need to
 make sure you have all the dependencies:
@@ -181,7 +172,8 @@ make sure you have all the dependencies:
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Building the package}\label{building-the-package}
+\hypertarget{building-the-package}{%
+\subsection{Building the package}\label{building-the-package}}
 
 Once you have the dependencies installed you can now build the R
 package. This creates a library you can load to run the prediction
@@ -194,7 +186,8 @@ library may not be created. Please report an issue to:
 \url{https://github.com/OHDSI/PatientLevelPrediction/issues} if your
 library does not get created.
 
-\subsection{Running the package}\label{running-the-package}
+\hypertarget{running-the-package}{%
+\subsection{Running the package}\label{running-the-package}}
 
 To run the study, open the extras/CodeToRun.R R script (the file called
 \texttt{CodeToRun.R} in the \texttt{extras} folder). This folder
@@ -233,7 +226,182 @@ By default all the options are set to F for the execute fuction:
 \end{Highlighting}
 \end{Shaded}
 
-If you run the above nothing will happen as each option is false.
+If you run the above nothing will happen as each option is false. See
+the table below for information about each of the inputs.
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\begin{minipage}[b]{0.21\columnwidth}\raggedright
+Input\strut
+\end{minipage} & \begin{minipage}[b]{0.46\columnwidth}\raggedright
+Description\strut
+\end{minipage} & \begin{minipage}[b]{0.24\columnwidth}\raggedright
+Example\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+connectionDetails\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+The details to connected to your OMOP CDM database - use
+DatabaseConnector package's createConnectionDetails()\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+createConnectionDetails( dbms = `postgresql', server = `database
+server', user = `my username', password = `donotshare', port = `database
+port')\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+cdmDatabaseSchema\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+The schema containing your OMOP CDM data\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+`my\_cdm\_data.dbo'\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+cdmDatabaseName\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+A shareable name for the OMOP CDM data\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+`My data'\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+oracleTempSchema\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+The temp schema if dbms = `oracle' - NULL for other dbms\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+`my\_temp.dbo'\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+cohortDatabaseSchema\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+The schema where you have an existing cohort table or where the package
+will create a cohort table and insert the study cohorts\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+`scratch.dbo'\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+cohortTable\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+The table name where you cohorts will be written (if creating the cohort
+pick an unused table name)\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+`myTable'\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+outputFolder\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+The location where the results of the study will be saved\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+`C:/amazingResults'\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+createProtocol\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE indicating whether to create a word document with a
+template protocol based on your study settings (saved to the
+outputFolder location)\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+createCohorts\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE indicating whether to create the target population and
+outcome cohorts for the study\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+runAnalyses\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE indicating whether to run the study analysis - developing
+and internally validating the models\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+createResultsDoc\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE indicating whether to create a word document with the
+results - this is the protocol with the results added (saved to the
+outputFolder location). Note: This requires generating the protocol
+first.\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+packageResults\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE indicating whether to remove sensitive counts (determined
+by the minCellCount input) or sensitive information from the results and
+creates a zipped file with results that are safe to share (saved to the
+outputFolder location). Note: This requires running the study
+successfully first.\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+minCellCount\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+integer that determines the minimum result count required when sharing
+the results. Any result table cells with counts \textless{} minCellCount
+are replaced with -1 to prevent identification issues with rare
+diseases\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+10\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+createValidationPackage\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE indicating whether to create another R package that can be
+run to validate any model developed in the original study. You can
+specifiy the models that you want to validate using the input
+analysesToValidate. The new R package that validates your models will be
+in the outputFolder location with the suffix `Validation'\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+analysesToValidate\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+integer or vector of integers specifying the anaysis ids of the models
+you want to validate. The example shows how to get Analysis\_1 and
+Analysis\_3 models validated.\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+c(1,3)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+createShiny\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE indicating whether to create a shiny app with the results
+from the study - this can be added to the ShinyDeploy OHDSI github to be
+viewable at data.ohdsi.org. Note: This requires running the study
+successfully first. The shiny app will be found as a directory in the
+outputFolder location\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+createJournalDocument\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE indicating whether to create a journal document using the
+TRIPOD statement as guideance with the study results of
+analysisIdDocument already added. Note: This requires running the study
+successfully first. The journal document will be found as a word
+document in the outputFolder location\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+analysisIdDocument\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+integer specifying the anaysis id of the model you want to create a
+journal document for\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+1\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
 
 To create a study protocol set:
 
@@ -335,15 +503,199 @@ To create a template journal document for Analysis 3 run execute with:
 \end{Highlighting}
 \end{Shaded}
 
-You ill then find the document in the outputFolder directory.
+You will then find the document in the outputFolder directory.
 
-\subsection{extras/PackageMaintenance.R}\label{extraspackagemaintenance.r}
+\hypertarget{results}{%
+\subsection{Results}\label{results}}
+
+After running the study you will find the resulls in the specified
+\texttt{outputFolder} directory. The \texttt{outputFolder} directory
+will contain:
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+\begin{minipage}[b]{0.14\columnwidth}\raggedright
+Name\strut
+\end{minipage} & \begin{minipage}[b]{0.31\columnwidth}\raggedright
+Description\strut
+\end{minipage} & \begin{minipage}[b]{0.08\columnwidth}\raggedright
+Type\strut
+\end{minipage} & \begin{minipage}[b]{0.35\columnwidth}\raggedright
+Access\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.14\columnwidth}\raggedright
+folder with the prefix `PlpData\_'\strut
+\end{minipage} & \begin{minipage}[t]{0.31\columnwidth}\raggedright
+saved plpData objects\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright
+Folder\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+use plpData \textless- PatientLevelPrediction::loadPlpData(`folder
+location')\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.14\columnwidth}\raggedright
+folder with the prefix `Analysis\_'\strut
+\end{minipage} & \begin{minipage}[t]{0.31\columnwidth}\raggedright
+contains the saved plpResults for each model developed based on the
+study design and the corresponding log\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright
+Folder\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+To load result i use plpResult \textless-
+PatientLevelPrediction::loadPlpResult(file.path(outputFolder,
+`Analysis\_i', `plpResult'))\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.14\columnwidth}\raggedright
+folder `Validation'\strut
+\end{minipage} & \begin{minipage}[t]{0.31\columnwidth}\raggedright
+initially an empty folder but if you put the results of any study
+validating your models in here with the correct stucture then the shiny
+app and journal document creators will automatically include the
+validation results\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright
+Folder\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+-\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.14\columnwidth}\raggedright
+CohortCounts.csv\strut
+\end{minipage} & \begin{minipage}[t]{0.31\columnwidth}\raggedright
+the sizes of each cohort\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright
+csv\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+read.csv(file.path(outputFolder, `CohortCounts.csv' ))\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.14\columnwidth}\raggedright
+settings.csv\strut
+\end{minipage} & \begin{minipage}[t]{0.31\columnwidth}\raggedright
+the study design settings - this can be used to determine what each
+analysis was running\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright
+csv\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+read.csv(file.path(outputFolder, `settings.csv' ))\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.14\columnwidth}\raggedright
+rds files with the prefix `StudyPop\_'\strut
+\end{minipage} & \begin{minipage}[t]{0.31\columnwidth}\raggedright
+the study populations - this contains the patients used to develop the
+models and the labels indicating whether they had the outcome during
+time-at-risk\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright
+rds\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+loadRDS(file.path(outputFolder, 'StudyPop\_*' ))\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.14\columnwidth}\raggedright
+log.txt, plplog.txt\strut
+\end{minipage} & \begin{minipage}[t]{0.31\columnwidth}\raggedright
+random log files that are redundant\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright
+txt\strut
+\end{minipage} & \begin{minipage}[t]{0.35\columnwidth}\raggedright
+-\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+The plpResult objects are a list with the class `runPlp' containing:
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\begin{minipage}[b]{0.23\columnwidth}\raggedright
+Object\strut
+\end{minipage} & \begin{minipage}[b]{0.51\columnwidth}\raggedright
+Description\strut
+\end{minipage} & \begin{minipage}[b]{0.17\columnwidth}\raggedright
+Edited by packageResult\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{inputSetting}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+All the settings required to reproduce the study\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+Yes - passwords and database settings are removed\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{executionSummary}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+Information about the R version, PatientLevelPrediction version and
+execution platform info\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+No\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{model}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+The trained model\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+No\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{analysisRef}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+Used to store a unique reference for the study\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+No\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{covariateSummary}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+A dataframe with summary information about how often the covariates
+occured for those with and without the outcome\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+Yes - minCellCounts censored\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{performanceEvaluation\$\ evaluationStatistics}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+Performance metrics and sizes\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+No\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{performanceEvaluation\$\ thresholdSummary}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+Operating characteristcs @ 100 thresholds\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+Yes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{performanceEvaluation\$\ demographicSummary}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+Calibration per age group\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+Yes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{performanceEvaluation\$\ calibrationSummary}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+Calibration at risk score deciles\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+Yes\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+\texttt{performanceEvaluation\$\ predictionDistribution}\strut
+\end{minipage} & \begin{minipage}[t]{0.51\columnwidth}\raggedright
+Distribution of risk score for those with and without the outcome\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+Yes\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{extraspackagemaintenance.r}{%
+\subsection{extras/PackageMaintenance.R}\label{extraspackagemaintenance.r}}
 
 This file contains other useful code to be used only by the package
 developer (you), such as code to generate the package manual, and code
 to insert cohort definitions into the package. All statements in this
 file assume the current working directory is set to the root of the
 package.
-
 
 \end{document}
