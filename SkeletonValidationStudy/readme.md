@@ -1,9 +1,9 @@
 SkeletonValidationStudy
 ======================
 
-  Introduction
+Introduction
 ============
-  This package contains code to externally validate models for the prediction quesiton <add question> developed on the database <add database>.
+This package contains code to externally validate models for the prediction quesiton <add question> developed on the database <add database>.
 
 Features
 ========
@@ -17,11 +17,18 @@ Technology
 
 System Requirements
 ===================
-  Requires R (version 3.3.0 or higher).
+  * Requires: OMOP CDM database and connection details
+  * Requires: Java runtime enviroment (for the database connection)
+  * Requires: R (version 3.3.0 or higher).
+  * Sometimes required: Python 
 
 Dependencies
 ============
   * PatientLevelPrediction
+  
+Guide
+============
+A general guide for running a valdiation study package is available here: [Skeleton Validation Study guide](https://github.com/OHDSI/StudyProtocolSandbox/tree/master/SkeletonValidationStudy/inst/doc/UsingSkeletonValidationPackage.pdf)
   
   
 A1. Installing the package from GitHub
@@ -29,7 +36,7 @@ A1. Installing the package from GitHub
 ```r
 # To install the package from github:
 install.packages("devtools")
-devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonValidationStudy")
+devtools::install_github("ohdsi-studies/SkeletonValidationStudy")
 ```
 
 A2. Building the package inside RStudio
@@ -39,8 +46,12 @@ A2. Building the package inside RStudio
 
 B. Getting Started
 ===============
-  1. In R, use the following commands to run the study:
+  1. Make sure to have either: installed (A1) or built (A2) the package 
+  2. In R, run the code in 'extras/codeToRun.R' (see [Skeleton Validation Study guide](https://github.com/OHDSI/StudyProtocolSandbox/tree/master/SkeletonValidationStudy/inst/doc/UsingSkeletonValidationPackage.pdf) for guideance)
 
+
+C. Example Code
+===============
 ```r
 library(SkeletonValidationStudy)
 
@@ -78,7 +89,7 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 password = pw,
                                                                 port = port)
 
-# Now run the study
+# Now run the study:
 SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
                  databaseName = databaseName,
                  cdmDatabaseSchema = cdmDatabaseSchema,
@@ -92,7 +103,7 @@ SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
                  minCellCount = 5,
                  sampleSize = NULL)
                  
-# If the validation completes package it up ready to share with the study owner:
+# If the validation study runs to completion and returns results, package it up ready to share with the study owner (but remove counts less than 10) by running:
 SkeletonValidationStudy::execute(connectionDetails = connectionDetails,
                  databaseName = databaseName,
                  cdmDatabaseSchema = cdmDatabaseSchema,

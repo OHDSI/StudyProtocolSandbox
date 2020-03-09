@@ -24,8 +24,8 @@ shell("rm extras/SkeletonValidationStudy.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/SkeletonValidationStudy.pdf")
 
 # Create vignette ---------------------------------------------------------
-rmarkdown::render("vignettes/UsingSkeletonPackage.Rmd",
-                  output_file = "../inst/doc/UsingSkeletonPackage.pdf",
+rmarkdown::render("vignettes/UsingSkeletonValidationPackage.Rmd",
+                  output_file = "../inst/doc/UsingSkeletonValidationPackage.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
                                           toc = TRUE,
                                           number_sections = TRUE))

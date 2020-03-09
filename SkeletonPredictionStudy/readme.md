@@ -147,7 +147,7 @@ execute(connectionDetails = connectionDetails,
 Instructions To Share Package
 ===================
 
-- Share the package by adding it to the OHDSI/StudyProtocolSandbox github repo and get people to install by:
+- Share the package by adding it to the 'ohdsi-studies' github repo and get people to install by:
 ```r
   # get the latest PatientLevelPrediction
   install.packages("devtools")
@@ -156,7 +156,7 @@ Instructions To Share Package
   PatientLevelPrediction::checkPlpInstallation()
   
   # install the network package
-  devtools::install_github("OHDSI/StudyProtocolSandbox/SkeletonPredictionStudy")
+  devtools::install_github("ohdsi-studies/SkeletonPredictionStudy")
 ```
 
 
