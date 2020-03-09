@@ -5,7 +5,7 @@ A skeleton package, to be used as a starting point when implementing patient-lev
 
 Vignette: [Using the package skeleton for patient-level prediction studies](https://raw.githubusercontent.com/OHDSI/StudyProtocolSandbox/master/SkeletonPredictionStudy/inst/doc/UsingSkeletonPackage.pdf)
 
-For information on how to generate shiny apps using the R skeleton package see: [Creating shiny app for patient-level prediction studies](https://raw.githubusercontent.com/OHDSI/PatientLevelPrediction/master/inst/doc/CreatingShinyApp.pdf).  To combine multiple skeleton package results into a single shiny app [see populate multiple shiny app R code code](https://github.com/OHDSI/StudyProtocolSandbox/blob/master/SkeletonPredictionStudy/extras/populateMultipleShiny.R)
+For information on how to generate shiny apps using the R skeleton package see: [Creating shiny app for patient-level prediction studies](https://raw.githubusercontent.com/OHDSI/PatientLevelPrediction/testcode/inst/doc/CreatingShinyApp.pdf).  To combine multiple skeleton package results into a single shiny app [see populate multiple shiny app R code code](https://github.com/OHDSI/StudyProtocolSandbox/blob/master/SkeletonPredictionStudy/extras/populateMultipleShiny.R)
 
 Suggested Requirements
 ===================
