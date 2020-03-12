@@ -83,6 +83,10 @@ main <- function(connectionDetails,
   }
 
   if(summariseResults==T){
+
+    settingsCsv <- system.file("settings", "settings.csv", package = "ExistingStrokeRiskExternalValidation")
+    settings <- read.csv(settingsCsv)
+
     summary <- c()
     folders <- list.dirs(path = outputLocation, recursive = F, full.names = T)
     folders <- folders[grep('Analysis_', folders)]
@@ -93,7 +97,7 @@ main <- function(connectionDetails,
         resSum <- resSum[resSum$Metric %in% c('populationSize','outcomeCount','AUC','AUC.auc','AUC.auc_lb95ci','AUC.auc_ub95ci'), c('Metric','Value')]
         resSum$Metric <- as.character(resSum$Metric)
         resSum$Metric[resSum$Metric=='AUC.auc'] <- 'AUC'
-        resSum$analysisId <- strsplit(loc,'_')[[1]][2]
+        resSum$analysisId <- strsplit(loc,'Analysis_')[[1]][2]
         summary <- rbind(summary, resSum)
       }
     }

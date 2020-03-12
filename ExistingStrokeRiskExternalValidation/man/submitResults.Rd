@@ -4,16 +4,14 @@
 \alias{submitResults}
 \title{Submit the study results to the study coordinating center}
 \usage{
-submitResults(exportFolder, dbName, key, secret)
+submitResults(exportFolder, keyLocation, userName)
 }
 \arguments{
-\item{exportFolder}{The path to the folder containing the \code{StudyResults.zip} file.}
+\item{exportFolder}{The path to the folder containing the \code{export.zip} file.}
 
-\item{dbName}{Database name used in the zipName}
+\item{keyLocation}{The keyLocation ask study coordinator to sendfile}
 
-\item{key}{The key string as provided by the study coordinator}
-
-\item{secret}{The secret string as provided by the study coordinator}
+\item{userName}{The secret userName as provided by the study coordinator}
 }
 \value{
 TRUE if the upload was successful.

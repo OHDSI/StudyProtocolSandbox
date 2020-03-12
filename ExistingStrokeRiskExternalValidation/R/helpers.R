@@ -204,7 +204,7 @@ packageResults <- function(outputFolder, dbName,
   }
 
   #create export subfolder in workFolder
-  exportFolder <- file.path(outputFolder, dbName)
+  exportFolder <- file.path(outputFolder, 'export',dbName)
   dir.create(exportFolder, recursive = T)
 
   # move the summary
@@ -228,7 +228,7 @@ packageResults <- function(outputFolder, dbName,
       plpResult <- PatientLevelPrediction::loadPlpResult(file.path(outputFolder,folder, 'plpResult'))
 
       if(minCellCount!=0){
-        PatientLevelPrediction::transportPlp(plpResult,
+        res <- PatientLevelPrediction::transportPlp(plpResult,
                                              outputFolder=file.path(exportFolder,folder, 'plpResult'),
                                              n=minCellCount,
                                              includeEvaluationStatistics=T,
@@ -236,16 +236,24 @@ packageResults <- function(outputFolder, dbName,
                                              includeDemographicSummary=T,
                                              includeCalibrationSummary =T,
                                              includePredictionDistribution=T,
-                                             includeCovariateSummary=T)
+                                             includeCovariateSummary=T,
+                                             save = F)
+        res$performanceEvaluation$thresholdSummary <- res$performanceEvaluation$thresholdSummary[,-grep('Count', colnames(res$performanceEvaluation$thresholdSummary))]
+        res$performanceEvaluation$calibrationSummary <- res$performanceEvaluation$calibrationSummary[,colnames(res$performanceEvaluation$calibrationSummary)!='PersonCountWithOutcome']
+        res$performanceEvaluation$calibrationSummary <- res$performanceEvaluation$calibrationSummary[res$performanceEvaluation$calibrationSummary$PersonCountAtRisk >= minCellCount, ]
+        res$performanceEvaluation$predictionDistribution <- res$performanceEvaluation$predictionDistribution[, colnames(res$performanceEvaluation$predictionDistribution)!='PersonCount']
+        saveRDS(res, file.path(exportFolder,folder, 'plpResult.rds'))
       } else {
-        PatientLevelPrediction::transportPlp(plpResult,outputFolder=file.path(exportFolder,folder, 'plpResult'),
+        res <- PatientLevelPrediction::transportPlp(plpResult,outputFolder=file.path(exportFolder,folder, 'plpResult'),
                                              n=NULL,
                                              includeEvaluationStatistics=T,
                                              includeThresholdSummary=T,
                                              includeDemographicSummary=T,
                                              includeCalibrationSummary =T,
                                              includePredictionDistribution=T,
-                                             includeCovariateSummary=T)
+                                             includeCovariateSummary=T,
+                                             save = F)
+        saveRDS(res, file.path(exportFolder,folder, 'plpResult.rds'))
       }
     }
   }
@@ -268,19 +276,21 @@ packageResults <- function(outputFolder, dbName,
 #' This requires an active internet connection.
 #'
 #' @param exportFolder   The path to the folder containing the \code{export.zip} file.
-#' @param key            The key string as provided by the study coordinator
-#' @param secret         The secret string as provided by the study coordinator
+#' @param keyLocation      The keyLocation ask study coordinator to sendfile
+#' @param userName         The secret userName as provided by the study coordinator
 #'
 #' @return
 #' TRUE if the upload was successful.
 #'
 #' @export
-submitResults <- function(exportFolder,dbName, key, secret) {
+submitResults <- function(exportFolder,keyLocation, userName) {
   if (!file.exists(exportFolder)) {
     stop(paste("Cannot find zipped folder", exportFolder))
   }
-  PatientLevelPrediction::submitResults(exportFolder = exportFolder,
-                                        key =  key, secret = secret)
+
+  OhdsiSharing::sftpUploadFile(privateKeyFileName = keyLocation,
+                               userName = userName, fileName = exportFolder)
+
 
 }
 

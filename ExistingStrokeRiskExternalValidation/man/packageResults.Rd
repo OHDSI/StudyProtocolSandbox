@@ -4,18 +4,14 @@
 \alias{packageResults}
 \title{Package the results for sharing with OHDSI researchers}
 \usage{
-packageResults(results, table1 = NULL, saveFolder, dbName, modelComp = T)
+packageResults(outputFolder, dbName, minCellCount = 5)
 }
 \arguments{
-\item{results}{The result of running applyExistingstrokeModels()}
+\item{outputFolder}{Name of folder containing the study analysis results}
 
-\item{table1}{The result of running getTable1()}
+\item{dbName}{A shareable name for the database used in this study}
 
-\item{saveFolder}{Name of the folder where results are saved to}
-
-\item{dbName}{Name of the databased used to validate the models}
-
-\item{modelComp}{whether to include comparisons between the model performances}
+\item{minCellCount}{The minimum number of subjects contributing to a count before it can be included in the results.}
 }
 \description{
 Package the results for sharing with OHDSI researchers

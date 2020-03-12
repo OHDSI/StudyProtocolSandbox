@@ -80,8 +80,8 @@ ExistingStrokeRiskExternalValidation::main(
 
 # After checking the compressed folder containing the shareable results submit the results
 # either email them to study admin or run
-submitResults(exportFolder = outputLocation, dbName = databaseName, key, secret)
-# where key and secret are provided by request
+submitResults(exportFolder = file.path(outputLocation,'export',paste0(databaseName,'.zip') ), keyLocation, userName)
+# where keyLocation, userName are provided by request
 
 
 ```

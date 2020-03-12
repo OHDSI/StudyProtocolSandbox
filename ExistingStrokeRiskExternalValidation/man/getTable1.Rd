@@ -4,14 +4,17 @@
 \alias{getTable1}
 \title{Creates the target population and outcome summary characteristics}
 \usage{
-getTable1(connectionDetails, cdmDatabaseschema, cohortDatabaseschema,
-  cohortTable, targetId, outcomeId, tempCohortTable = "#temp_cohort")
+getTable1(
+  connectionDetails,
+  cdmDatabaseSchema,
+  cohortDatabaseSchema,
+  cohortTable,
+  targetId,
+  outcomeId,
+  tempCohortTable = "#temp_cohort"
+)
 }
 \arguments{
-\item{cdmDatabaseschema}{The schema holding the CDM data}
-
-\item{cohortDatabaseschema}{The schema holding the cohort table}
-
 \item{cohortTable}{The name of the cohort table}
 
 \item{targetId}{The cohort definition id of the target population}
@@ -21,6 +24,10 @@ getTable1(connectionDetails, cdmDatabaseschema, cohortDatabaseschema,
 \item{tempCohortTable}{The name of the temporary table used to hold the cohort}
 
 \item{connectioDetails}{The connections details for connecting to the CDM}
+
+\item{cdmDatabaseschema}{The schema holding the CDM data}
+
+\item{cohortDatabaseschema}{The schema holding the cohort table}
 }
 \value{
 A dataframe with the characteristics
