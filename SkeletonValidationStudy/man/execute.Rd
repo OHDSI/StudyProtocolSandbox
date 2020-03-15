@@ -4,10 +4,22 @@
 \alias{execute}
 \title{Execute the validation study}
 \usage{
-execute(connectionDetails, databaseName, cdmDatabaseSchema,
-  cohortDatabaseSchema, oracleTempSchema, cohortTable, outputFolder,
-  createCohorts = T, runValidation = T, packageResults = T,
-  minCellCount = 5, sampleSize = NULL)
+execute(
+  connectionDetails,
+  databaseName,
+  cdmDatabaseSchema,
+  cohortDatabaseSchema,
+  oracleTempSchema,
+  cohortTable,
+  outputFolder,
+  createCohorts = T,
+  runValidation = T,
+  packageResults = T,
+  minCellCount = 5,
+  sampleSize = NULL,
+  keepPrediction = T,
+  verbosity = "INFO"
+)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -43,6 +55,10 @@ study.}
 \item{minCellCount}{The min count for the result to be included in the package results}
 
 \item{sampleSize}{Whether to sample from the target cohort - if desired add the number to sample}
+
+\item{keepPrediction}{Whether to save the individual predictions}
+
+\item{verbosity}{Log verbosity}
 }
 \description{
 Execute the validation study

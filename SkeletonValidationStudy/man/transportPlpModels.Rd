@@ -4,8 +4,12 @@
 \alias{transportPlpModels}
 \title{Transport trained PLP models into the validation package}
 \usage{
-transportPlpModels(analysesDir, minCellCount = 5,
-  databaseName = "sharable name of development data", outputDir)
+transportPlpModels(
+  analysesDir,
+  minCellCount = 5,
+  databaseName = "sharable name of development data",
+  outputDir
+)
 }
 \arguments{
 \item{analysesDir}{The directory containing folders with PLP models}

@@ -47,7 +47,7 @@ execute <- function(connectionDetails,
   if (!file.exists(outputFolder))
     dir.create(outputFolder, recursive = TRUE)
 
-  ParallelLogger::addDefaultFileLogger(file.path(outputFolder, "log.txt"))
+  ParallelLogger::addDefaultFileLogger(file.path(outputFolder,databaseName, "log.txt"))
 
   if(createCohorts){
     ParallelLogger::logInfo("Creating Cohorts")
@@ -55,7 +55,7 @@ execute <- function(connectionDetails,
                   cdmDatabaseSchema=cdmDatabaseSchema,
                   cohortDatabaseSchema=cohortDatabaseSchema,
                   cohortTable=cohortTable,
-                  outputFolder = outputFolder)
+                  outputFolder = file.path(outputFolder,databaseName))
   }
 
   if(runValidation){

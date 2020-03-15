@@ -1,8 +1,8 @@
 Package: SkeletonValidationStudy
 Type: Package
 Title: Add the title of the package here
-Version: 0.0.2
-Date: 2019-03-01
+Version: 0.0.3
+Date: 2020-03-14
 Author: your name [aut]
 Maintainer: your name <youremail@address>
 Description: A description of the study
@@ -14,7 +14,7 @@ Imports:
   FeatureExtraction (>= 2.0.0),
   SqlRender,
   Cyclops (>= 1.2.2),
-  PatientLevelPrediction (>= 3.0.0),
+  PatientLevelPrediction (>= 3.0.14),
   ggplot2,
   gridExtra,
   ff,
@@ -24,4 +24,4 @@ Imports:
 Suggests:
   testthat
 NeedsCompilation: no
-RoxygenNote: 6.0.1
+RoxygenNote: 7.0.2

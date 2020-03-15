@@ -4,8 +4,15 @@
 \alias{getTable1}
 \title{Creates the target population and outcome summary characteristics}
 \usage{
-getTable1(connectionDetails, cdmDatabaseSchema, cohortDatabaseSchema,
-  cohortTable, targetId, outcomeId, tempCohortTable = "#temp_cohort")
+getTable1(
+  connectionDetails,
+  cdmDatabaseSchema,
+  cohortDatabaseSchema,
+  cohortTable,
+  targetId,
+  outcomeId,
+  tempCohortTable = "#temp_cohort"
+)
 }
 \arguments{
 \item{connectionDetails}{The connections details for connecting to the CDM}
