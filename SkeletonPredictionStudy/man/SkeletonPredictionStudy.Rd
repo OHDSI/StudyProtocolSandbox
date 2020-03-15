@@ -3,7 +3,6 @@
 \docType{package}
 \name{SkeletonPredictionStudy}
 \alias{SkeletonPredictionStudy}
-\alias{SkeletonPredictionStudy-package}
 \title{SkeletonPredictionStudy}
 \description{
 SkeletonPredictionStudy

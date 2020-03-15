@@ -20,7 +20,8 @@
                            cohortDatabaseSchema,
                            cohortTable,
                            oracleTempSchema,
-                           outputFolder) {
+                           outputFolder,
+                           cohortVariableSetting = NULL) {
   
   # Create study cohort table structure:
   sql <- SqlRender::loadRenderTranslateSql(sqlFilename = "CreateCohortTable.sql",
@@ -50,4 +51,38 @@
                                              target_cohort_id = cohortsToCreate$cohortId[i])
     DatabaseConnector::executeSql(connection, sql)
   }
+  
+  if(!is.null(cohortVariableSetting)){
+    # if custom cohort covaraites set:
+    pathToCustom <- system.file("settings", cohortVariableSetting, package = "SkeletonPredictionStudy")
+    if(!file.exists(pathToCustom)){
+      stop('cohortVariableSetting does not exist in package')
+    }
+    cohortVarsToCreate <- utils::read.csv(pathToCustom)
+    
+    if(sum(colnames(cohortVarsToCreate)%in%c('atlasId', 'cohortName', 'startDay', 'endDay'))!=4){
+      stop('Issue with cohortVariableSetting - make sure it is NULL or a setting')  
+    }
+    
+    cohortVarsToCreate <- unique(cohortVarsToCreate[,c('atlasId', 'cohortName')])
+    for (i in 1:nrow(cohortVarsToCreate)) {
+      writeLines(paste("Creating cohort:", cohortVarsToCreate$cohortName[i]))
+      sql <- SqlRender::loadRenderTranslateSql(sqlFilename = paste0(cohortVarsToCreate$cohortName[i], ".sql"),
+                                               packageName = "SkeletonPredictionStudy",
+                                               dbms = attr(connection, "dbms"),
+                                               oracleTempSchema = oracleTempSchema,
+                                               cdm_database_schema = cdmDatabaseSchema,
+                                               vocabulary_database_schema = vocabularyDatabaseSchema,
+                                               
+                                               target_database_schema = cohortDatabaseSchema,
+                                               target_cohort_table = cohortTable,
+                                               target_cohort_id = cohortVarsToCreate$atlasId[i])
+      DatabaseConnector::executeSql(connection, sql)
+    }
+  
+  
+  }
+  
+  
+  
 }

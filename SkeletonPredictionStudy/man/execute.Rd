@@ -4,15 +4,29 @@
 \alias{execute}
 \title{Execute the Study}
 \usage{
-execute(connectionDetails, cdmDatabaseSchema,
+execute(
+  connectionDetails,
+  cdmDatabaseSchema,
   cdmDatabaseName = "friendly database name",
-  cohortDatabaseSchema = cdmDatabaseSchema, cohortTable = "cohort",
-  oracleTempSchema = cohortDatabaseSchema, outputFolder, createProtocol = F,
-  createCohorts = F, runAnalyses = F, createResultsDoc = F,
-  createValidationPackage = F, analysesToValidate = NULL,
-  packageResults = F, minCellCount = 5, createShiny = F,
-  createJournalDocument = F, analysisIdDocument = 1, verbosity = "INFO",
-  cdmVersion = 5)
+  cohortDatabaseSchema = cdmDatabaseSchema,
+  cohortTable = "cohort",
+  oracleTempSchema = cohortDatabaseSchema,
+  outputFolder,
+  createProtocol = F,
+  createCohorts = F,
+  runAnalyses = F,
+  createResultsDoc = F,
+  createValidationPackage = F,
+  analysesToValidate = NULL,
+  packageResults = F,
+  minCellCount = 5,
+  createShiny = F,
+  createJournalDocument = F,
+  analysisIdDocument = 1,
+  verbosity = "INFO",
+  cdmVersion = 5,
+  cohortVariableSetting = NULL
+)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
@@ -74,6 +88,8 @@ in packaged results.}
 }}
 
 \item{cdmVersion}{The version of the common data model}
+
+\item{cohortVariableSetting}{the name of the custom cohort covariate settings to use}
 }
 \description{
 Execute the Study
@@ -104,7 +120,8 @@ execute(connectionDetails,
         minCellCount = 5,
         createShiny = F,
         verbosity = "INFO",
-        cdmVersion = 5)
+        cdmVersion = 5,
+        cohortVariableSetting = NULL)
 }
 
 }

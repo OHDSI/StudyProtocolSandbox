@@ -47,7 +47,9 @@ createJournalDocument <- function(resultDirectory,
       }
       
       #remove nulls
-      results = results[-which(unlist(lapply(results, function(x) is.null(x$performanceEvaluation))))]
+      if(length(which(unlist(lapply(results, function(x) is.null(x$performanceEvaluation)))))!=0){
+        results = results[-which(unlist(lapply(results, function(x) is.null(x$performanceEvaluation))))]
+      }
       
       summary <- do.call(rbind, lapply(1:length(results), function(i) summariseVal(results[[i]], 
                                                                                      database=databaseNames[[i]])))

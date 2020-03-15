@@ -1,6 +1,6 @@
 # Copyright 2018 Observational Health Data Sciences and Informatics
 #
-# This file is part of SkeletonCompartiveEffectStudy
+# This file is part of SkeletonPredictionStudy
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,6 +29,11 @@ rmarkdown::render("vignettes/UsingSkeletonPackage.Rmd",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
                                           toc = TRUE,
                                           number_sections = TRUE))
+rmarkdown::render("vignettes/AddingCohortCovariates.Rmd",
+                  output_file = "../inst/doc/AddingCohortCovariates.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
 
 # Create analysis details -------------------------------------------------
 # Insert cohort definitions from ATLAS into package -----------------------
@@ -45,3 +50,4 @@ createAnalysesDetails("inst/settings")
 
 # Store environment in which the study was executed -----------------------
 OhdsiRTools::insertEnvironmentSnapshotInPackage("SkeletonPredictionStudy")
+

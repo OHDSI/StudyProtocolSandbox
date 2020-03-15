@@ -36,6 +36,7 @@
 #'                             priviliges for storing temporary tables.
 #' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
 #'                             (/)
+#' @param cohortVariableSetting  Option to use custom covariates based on cohorts                            
 #'
 #' @export
 createCohorts <- function(connectionDetails,
@@ -43,7 +44,8 @@ createCohorts <- function(connectionDetails,
                           cohortDatabaseSchema,
                           cohortTable = "cohort",
                           oracleTempSchema,
-                          outputFolder) {
+                          outputFolder,
+                          cohortVariableSetting = NULL) {
   if (!file.exists(outputFolder))
     dir.create(outputFolder)
   
@@ -54,7 +56,8 @@ createCohorts <- function(connectionDetails,
                  cohortDatabaseSchema = cohortDatabaseSchema,
                  cohortTable = cohortTable,
                  oracleTempSchema = oracleTempSchema,
-                 outputFolder = outputFolder)
+                 outputFolder = outputFolder,
+                 cohortVariableSetting = cohortVariableSetting)
   
   # Check number of subjects per cohort:
   ParallelLogger::logInfo("Counting cohorts")

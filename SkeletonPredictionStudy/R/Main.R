@@ -58,7 +58,8 @@
 #'                                         \item{ERROR}{Show error messages}
 #'                                         \item{FATAL}{Be silent except for fatal errors}
 #'                                         }                              
-#' @param cdmVersion           The version of the common data model                             
+#' @param cdmVersion           The version of the common data model 
+#' @param cohortVariableSetting  the name of the custom cohort covariate settings to use                         
 #'
 #' @examples
 #' \dontrun{
@@ -83,7 +84,8 @@
 #'         minCellCount = 5,
 #'         createShiny = F,
 #'         verbosity = "INFO",
-#'         cdmVersion = 5)
+#'         cdmVersion = 5,
+#'         cohortVariableSetting = NULL)
 #' }
 #'
 #' @export
@@ -106,7 +108,9 @@ execute <- function(connectionDetails,
                     createJournalDocument = F,
                     analysisIdDocument = 1,
                     verbosity = "INFO",
-                    cdmVersion = 5) {
+                    cdmVersion = 5,
+                    cohortVariableSetting = NULL) {
+  
   if (!file.exists(outputFolder))
     dir.create(outputFolder, recursive = TRUE)
   
@@ -123,7 +127,8 @@ execute <- function(connectionDetails,
                   cohortDatabaseSchema = cohortDatabaseSchema,
                   cohortTable = cohortTable,
                   oracleTempSchema = oracleTempSchema,
-                  outputFolder = outputFolder)
+                  outputFolder = outputFolder,
+                  cohortVariableSetting = cohortVariableSetting)
   }
   
   if(runAnalyses){
@@ -143,6 +148,31 @@ execute <- function(connectionDetails,
     predictionAnalysisList$cdmVersion = cdmVersion
     predictionAnalysisList$outputFolder = outputFolder
     predictionAnalysisList$verbosity = verbosity
+    
+    if(!is.null(cohortVariableSetting)){
+      ParallelLogger::logInfo("Adding custom covariates to analysis settings")
+
+      pathToCustom <- system.file("settings", cohortVariableSetting, package = "SkeletonPredictionStudy")
+      cohortVarsToCreate <- utils::read.csv(pathToCustom)
+      cohortCov <- list()
+      length(cohortCov) <- nrow(cohortVarsToCreate)+1
+      cohortCov[[1]] <- FeatureExtraction::createCovariateSettings(useDemographicsAgeGroup = T)
+      
+      for(i in 1:nrow(cohortVarsToCreate)){
+        cohortCov[[1+i]] <- createCohortCovariateSettings(covariateName = as.character(cohortVarsToCreate$cohortName[i]),
+                                                          covariateId = cohortVarsToCreate$cohortId[i]*1000+456, count = F,
+                                                          cohortDatabaseSchema = cohortDatabaseSchema,
+                                                          cohortTable = cohortTable,
+                                                          cohortId = cohortVarsToCreate$atlasId[i],
+                                                          startDay=cohortVarsToCreate$startDay[i], 
+                                                          endDay=cohortVarsToCreate$endDay[i])
+      }
+      
+      for(i in 1:length(predictionAnalysisList$modelAnalysisList$covariateSettings)){
+        cohortCov[[1]] <- predictionAnalysisList$modelAnalysisList$covariateSettings[[i]]
+        predictionAnalysisList$modelAnalysisList$covariateSettings[[i]] <- cohortCov
+      }
+    }
     
     result <- do.call(PatientLevelPrediction::runPlpAnalyses, predictionAnalysisList)
   }
@@ -171,13 +201,14 @@ execute <- function(connectionDetails,
     jsonSettings <- gsub(pn,paste0(pn,'Validation'),jsonSettings)
     jsonSettings <- gsub('PatientLevelPredictionStudy','PatientLevelPredictionValidationStudy',jsonSettings)
     
-    
+    # TODO update to move cohorts over and edit cohort covariate to update cohort setting detail
     createValidationPackage(modelFolder = outputFolder, 
                             outputFolder = file.path(outputFolder, paste0(pn,'Validation')),
                             minCellCount = minCellCount,
                             databaseName = cdmDatabaseName,
                             jsonSettings = jsonSettings,
-                            analysisIds = analysesToValidate)
+                            analysisIds = analysesToValidate,
+                            cohortVariableSetting = cohortVariableSetting)
   }
   
   if (createShiny) {

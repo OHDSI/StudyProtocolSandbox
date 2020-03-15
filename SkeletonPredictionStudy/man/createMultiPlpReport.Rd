@@ -4,9 +4,11 @@
 \alias{createMultiPlpReport}
 \title{createMultiPlpReport}
 \usage{
-createMultiPlpReport(analysisLocation,
+createMultiPlpReport(
+  analysisLocation,
   protocolLocation = file.path(analysisLocation, "doc", "protocol.docx"),
-  includeModels = F)
+  includeModels = F
+)
 }
 \arguments{
 \item{analysisLocation}{The location of the multiple patient-level prediction study}

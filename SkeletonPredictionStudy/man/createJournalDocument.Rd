@@ -4,8 +4,13 @@
 \alias{createJournalDocument}
 \title{Create the exposure and outcome cohorts}
 \usage{
-createJournalDocument(resultDirectory, analysisId = 1, cohortIds, cohortNames,
-  includeValidation = T)
+createJournalDocument(
+  resultDirectory,
+  analysisId = 1,
+  cohortIds,
+  cohortNames,
+  includeValidation = T
+)
 }
 \arguments{
 \item{resultDirectory}{The directory containing the results (outputFolder)}
