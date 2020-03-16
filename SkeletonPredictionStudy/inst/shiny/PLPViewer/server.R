@@ -101,25 +101,7 @@ shiny::shinyServer(function(input, output, session) {
     if(!is.null(eval)){
       covariates <- eval$model$metaData$call$covariateSettings
       population <- eval$model$populationSettings
-      covariates <- data.frame(covariateName = names(covariates), 
-                               SettingValue = unlist(lapply(covariates, 
-                                                            function(x) paste0(x, 
-                                                                               collapse='-')))
-      )
-      population$attrition <- NULL # remove the attrition as result and not setting
-      population <- data.frame(Setting = names(population), 
-                               Value = unlist(lapply(population, 
-                                                     function(x) paste0(x, 
-                                                                        collapse='-')))
-      )
-      modelset <- data.frame(Setting = c('Model',names(eval$model$modelSettings[[2]])),
-                             Value = c(eval$model$modelSettings[[1]], unlist(lapply(eval$model$modelSettings[[2]], 
-                                                                                    function(x) paste0(x, collapse=''))))
-      )
-      
-      row.names(covariates) <- NULL
-      row.names(population) <- NULL
-      row.names(modelset) <- NULL
+      modelset <- eval$model$modelSettings
     }
     
     return(list(eval=eval, type=type, 
@@ -206,9 +188,11 @@ shiny::shinyServer(function(input, output, session) {
   output$twobytwo <- shiny::renderTable(plotters()$twobytwo, 
                                         rownames = T, digits = 0)
   
-  output$modelTable <- DT::renderDataTable(dataofint()$modelset)
-  output$covariateTable <- DT::renderDataTable(dataofint()$covariates)
-  output$populationTable <- DT::renderDataTable(dataofint()$population)
+  # input tables
+  output$modelTable <- DT::renderDataTable(formatModSettings(dataofint()$modelset))
+  output$covariateTable <- DT::renderDataTable(formatCovSettings(dataofint()$covariates))
+  output$populationTable <- DT::renderDataTable(formatPopSettings(dataofint()$population))
+  
   
   output$info <- shiny::renderText(plotters()$predictionText)
   output$log <- shiny::renderText( paste(dataofint()$logtext, collapse="\n") )

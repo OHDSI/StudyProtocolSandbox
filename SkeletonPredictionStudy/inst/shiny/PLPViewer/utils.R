@@ -117,5 +117,60 @@ getValidationPerformance <- function(validationLocation){
 }
 
 
+#formatting
+# format modelSettings
+formatModSettings <- function(modelSettings){
+  modelset <- data.frame(Setting = c('Model',names(modelSettings[[2]])),
+                         Value = c(modelSettings[[1]], unlist(lapply(modelSettings[[2]], 
+                                                                     function(x) paste0(x, collapse='')))))
+  row.names(modelset) <- NULL
+  return(modelset)
+}
+
+# format covariateSettings
+formatCovSettings <- function(covariateSettings){
+  if(class(covariateSettings)=='list'){
+    #code for when multiple covariateSettings
+    covariates <- c() 
+    for(i in 1:length(covariateSettings)){
+      if(attr(covariateSettings[[i]],'fun')=='getDbDefaultCovariateData'){
+        covariatesTemp <- data.frame(covariateName = names(covariateSettings[[i]]), 
+                                     SettingValue = unlist(lapply(covariateSettings[[i]], 
+                                                                  function(x) paste0(x, 
+                                                                                     collapse='-'))))
+      } else{
+        covariatesTemp <- data.frame(covariateName = covariateSettings[[i]]$covariateName,
+                                     SettingValue = ifelse(sum(names(covariateSettings[[i]])%in%c("startDay","endDay"))>0,
+                                                           paste(names(covariateSettings[[i]])[names(covariateSettings[[i]])%in%c("startDay","endDay")],
+                                                                 covariateSettings[[i]][names(covariateSettings[[i]])%in%c("startDay","endDay")], sep=':', collapse = '-'),
+                                                           "")
+        )
+        
+      }
+      covariates  <- rbind(covariates,covariatesTemp)
+    }
+  } else{
+    covariates <- data.frame(covariateName = names(covariateSettings), 
+                             SettingValue = unlist(lapply(covariateSettings, 
+                                                          function(x) paste0(x, 
+                                                                             collapse='-'))))
+  }
+  row.names(covariates) <- NULL
+  return(covariates)
+}
+
+# format populationSettings
+formatPopSettings <- function(populationSettings){
+  population <- populationSettings
+  population$attrition <- NULL # remove the attrition as result and not setting
+  population <- data.frame(Setting = names(population), 
+                           Value = unlist(lapply(population, 
+                                                 function(x) paste0(x, 
+                                                                    collapse='-')))
+  ) 
+  row.names(population) <- NULL
+  return(population)
+}
+
 
 
