@@ -7,7 +7,7 @@ populateShinyApp <- function(outputDirectory = './ShinyApp',
   
   #check inputs
   if(missing(shinyDirectory)){
-    shinyDirectory <- system.file("shiny", "PLPViewer", package = "SkeletonPredictionStudy")
+    shinyDirectory <- system.file("shiny", "PLPViewer", package = "PatientLevelPrediction")
   }
   if(missing(resultDirectory)){
     stop('Need to enter the resultDirectory')
