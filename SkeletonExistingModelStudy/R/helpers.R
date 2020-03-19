@@ -63,7 +63,12 @@ predictExisting <- function(plpData, population){
   prediction <- merge(population, prediction, by ="rowId", all.x = TRUE)
   prediction$value[is.na(prediction$value)] <- 0
   
-  attr(prediction, "metaData") <- list(predictionType = 'binary')
+  scaleVal <- max(prediction$value)
+  if(scaleVal>1){
+    prediction$value <- prediction$value/scaleVal
+  }
+  
+  attr(prediction, "metaData") <- list(predictionType = 'binary', scale = scaleVal)
   
   return(prediction)
 }

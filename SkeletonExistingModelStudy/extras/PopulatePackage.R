@@ -56,7 +56,7 @@ populatePackage <- function(targetCohortId,
   
   for (i in 1:nrow(cohortsToCreate)) {
     writeLines(paste("Inserting cohort:", cohortsToCreate$name[i]))
-    OhdsiRTools::insertCohortDefinitionInPackage(definitionId = cohortsToCreate$cohortId[i], 
+    OhdsiRTools::insertCohortDefinitionInPackage(definitionId = cohortsToCreate$atlasId[i], 
                                                  name = cohortsToCreate$name[i], 
                                                  baseUrl = baseUrl, 
                                                  generateStats = F)
@@ -83,7 +83,7 @@ populatePackage <- function(targetCohortId,
   
   
   # add the model
-  model <- data.frame(covaraiteName = paste0(atlasCovariateNames, 
+  model <- data.frame(covariateName = paste0(atlasCovariateNames, 
                                              '- start day: ', startDays,
                                              '- end day: ', endDays),
                       covariateId = 1000*(3:(2+length(atlasCovariateIds)))+456,
@@ -91,7 +91,7 @@ populatePackage <- function(targetCohortId,
   )
   
   model <- rbind(model, standardCovariates)
-  write.csv(cohortsToCreate, file.path("./inst/settings",'SimpleModel.csv' ), row.names = F)
+  write.csv(model, file.path("./inst/settings",'SimpleModel.csv' ), row.names = F)
   
   return(TRUE)
 }

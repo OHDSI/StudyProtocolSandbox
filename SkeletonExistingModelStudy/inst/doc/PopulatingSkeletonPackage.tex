@@ -1,0 +1,370 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Populating the study package},
+  pdfauthor={Jenna M. Reps},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+\title{Populating the study package}
+\author{Jenna M. Reps}
+\date{2020-03-19}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+This vignette describes how one can populate the
+SkeletonExistingModelStudy pacakge with the target cohort, outcome
+cohorts and model settings.
+
+First make sure to open the Skeleton R project in R studio, this can be
+done by finding the SkeletonExistingModelStudy.Rproj file in the folder.
+Once the package project is opened in R studio there are 3 steps that
+must be followed:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Run the function: populatePackage (found in extras/populatePackage.R
+  on line 51) to add all cohorts and settings into the study package
+\item
+  Build the study package
+\item
+  Run the study package execute function
+\end{enumerate}
+
+\hypertarget{step-1-populate-skeleton-settings}{%
+\subsection{Step 1: Populate skeleton
+settings}\label{step-1-populate-skeleton-settings}}
+
+All the settings can be added to the study package by using the function
+`populatePackage()' that is found in extras/populatePackage.R.
+
+To add the function to your environment, make sure the package R project
+is open in R studio and run:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(}\StringTok{'./extras/populatePackage.R'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+This will make the function 'populatePackage()'available to use within
+your R session.
+
+The `populatePackage()' function requires users to specify:
+
+\begin{itemize}
+\tightlist
+\item
+  targetCohortId - The ATLAS id for the target cohort
+\item
+  targetCohortName - A string with a sharable name for the target cohort
+\item
+  outcomeId - The ATLAS id for the outcome cohort
+\item
+  outcomeName - A string with a sharable name for the outcome cohort
+\item
+  standardCovariates - A data.frame with the columns: covariateId (for
+  standard fetures using FeatureExtraction), covariateName and points to
+  assign points for standard covariates
+\item
+  baseUrl - The url for the ATLAS webapi (this will be used to extract
+  the ATLAS cohorts)
+\item
+  atlasIds - an integer or vector of integers specifying the atlas
+  cohort Ids that are used by the custom cohort covariates
+\item
+  atlasNames - a string or vector of strings specifying the names of the
+  atlas ids (must be the same length as atlasIds)
+\item
+  startDays - a negative integer or vector of negative integers
+  specifying the days relative to index to start looking for the patient
+  being in the covariate cohort
+\item
+  endDays - a negative integer (or zero) or vector of negative integers
+  (or zero) specifying the days relative to index to stop looking for
+  the patient being in the covariate cohort
+\item
+  points - a double or vector of doubles specifying the points
+  corresponding to each variable
+\end{itemize}
+
+For example, to create two custom cohort covariates into the package I
+can run:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{populatePackage}\NormalTok{(}\DataTypeTok{targetCohortId =} \DecValTok{10845}\NormalTok{,}
+                \DataTypeTok{targetCohortName =} \StringTok{'neg mamo'}\NormalTok{,}
+                \DataTypeTok{outcomeId =} \DecValTok{10082}\NormalTok{,}
+                \DataTypeTok{outcomeName =} \StringTok{'breast cancer'}\NormalTok{,}
+                \DataTypeTok{standardCovariates =} \KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{covariateId =} \KeywordTok{c}\NormalTok{(}\DecValTok{0003}\NormalTok{, }\DecValTok{1003}\NormalTok{,}
+                                                                \DecValTok{2003}\NormalTok{, }\DecValTok{3003}\NormalTok{,}
+                                                                \DecValTok{4003}\NormalTok{, }\DecValTok{5003}\NormalTok{,}
+                                                                \DecValTok{6003}\NormalTok{, }\DecValTok{7003}\NormalTok{,}
+                                                                \DecValTok{8003}\NormalTok{, }\DecValTok{9003}\NormalTok{,}
+                                                                \DecValTok{10003}\NormalTok{, }\DecValTok{11003}\NormalTok{,}
+                                                                \DecValTok{12003}\NormalTok{, }\DecValTok{13003}\NormalTok{,}
+                                                                \DecValTok{14003}\NormalTok{, }\DecValTok{15003}\NormalTok{,}
+                                                                \DecValTok{16003}\NormalTok{, }\DecValTok{17003}\NormalTok{,}
+                                                                \DecValTok{8507001}\NormalTok{),}
+                                                \DataTypeTok{covariateName =} \KeywordTok{c}\NormalTok{(}\StringTok{'Age 0-4'}\NormalTok{, }\StringTok{'Age 5-9'}\NormalTok{,}
+                                                                  \StringTok{'Age 10-14'}\NormalTok{, }\StringTok{'Age 15-19'}\NormalTok{,}
+                                                                  \StringTok{'Age 20-24'}\NormalTok{, }\StringTok{'Age 25-30'}\NormalTok{,}
+                                                                  \StringTok{'Age 30-34'}\NormalTok{, }\StringTok{'Age 35-40'}\NormalTok{,}
+                                                                  \StringTok{'Age 40-44'}\NormalTok{, }\StringTok{'Age 45-50'}\NormalTok{,}
+                                                                  \StringTok{'Age 50-54'}\NormalTok{, }\StringTok{'Age 55-60'}\NormalTok{,}
+                                                                  \StringTok{'Age 60-64'}\NormalTok{, }\StringTok{'Age 65-70'}\NormalTok{,}
+                                                                  \StringTok{'Age 70-74'}\NormalTok{, }\StringTok{'Age 75-80'}\NormalTok{,}
+                                                                  \StringTok{'Age 80-84'}\NormalTok{, }\StringTok{'Age 85-90'}\NormalTok{,}
+                                                                  \StringTok{'Male'}\NormalTok{), }
+                                                \DataTypeTok{points =} \KeywordTok{c}\NormalTok{(}\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{19}\NormalTok{))),}
+                \DataTypeTok{baseUrl =} \StringTok{'https://yourWebAPI'}\NormalTok{,}
+                \DataTypeTok{atlasCovariateIds =} \KeywordTok{c}\NormalTok{(}\DecValTok{14709}\NormalTok{,}\DecValTok{14709}\NormalTok{, }\DecValTok{14710}\NormalTok{),}
+                \DataTypeTok{atlasCovariateNames =} \KeywordTok{c}\NormalTok{(}\StringTok{'smoking anytime'}\NormalTok{, }\StringTok{'smoking recent'}\NormalTok{, }\StringTok{'traumatic brain injury'}\NormalTok{),}
+                \DataTypeTok{startDays =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{999}\NormalTok{,}\OperatorTok{-}\DecValTok{30}\NormalTok{,}\OperatorTok{-}\DecValTok{999}\NormalTok{),}
+                \DataTypeTok{endDays =}  \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{),}
+                \DataTypeTok{points =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+The code above extracts the target and outcome cohorts and two ATLAS
+cohort (14709, 14710) to create three covariates:
+
+\begin{itemize}
+\tightlist
+\item
+  covariate 1: The ATLAS cohort with the id of 14709 named `smoking
+  anytime' looks for patients who have a smoking anytime
+  cohort\_start\_date between (index date-999 days) and (index date).
+  E.g., If a patient is in the smoking anytime cohort 50 days before the
+  index date then they will have a value of 1 for the custom covariate.
+  If they are not in the smoking anytime cohort between 999 days before
+  index and the day of index then they will have a value of 0 for the
+  custom covariate.
+\item
+  covariate 2: The ATLAS cohort with the id of 14709 named `smoking
+  recent' looks for patients who have a smoking recent
+  cohort\_start\_date between (index date-30 days) and (index date).
+  E.g., If a patient is in the smoking recent cohort 20 days before the
+  index date then they will have a value of 1 for the custom covariate.
+  If they are not in the smoking recent cohort between 30 days before
+  index and the day of index then they will have a value of 0 for the
+  custom covariate.
+\item
+  covariate 3: The ATLAS cohort with the id of 14710 named `traumatic
+  brain injury' looks for patients who have a traumatic brain injury
+  cohort\_start\_date between (index date-999 days) and (index date).
+  E.g., If a patient is in the traumatic brain injury cohort 200 days
+  before the index date then they will have a value of 1 for the custom
+  covariate. If they are not in the traumatic brain injury cohort before
+  index then they will have a value of 0 for the custom covariate.
+\end{itemize}
+
+It also creates three csv files in the inst/settings directory named:
+
+\begin{itemize}
+\tightlist
+\item
+  CohortsToCreate.csv - specifying the target and outcome cohorts
+\item
+  CustomCovariates.csv - specifying the custom covariates
+\item
+  SimpleModel.csv - settings specifying the simple prediction model
+\end{itemize}
+
+\hypertarget{step-2-build-the-study-package}{%
+\subsection{Step 2: Build the study
+package}\label{step-2-build-the-study-package}}
+
+Aftering adding the settings into the package, you now need to build the
+package. Use the standard process (in R studio press the `Build' tab in
+the top right corner and then select the `Install and Restart' button)
+to build the study package so an R library is created.
+
+\hypertarget{step-3-execute-the-study-to-validate-an-existing-model}{%
+\subsection{Step 3: Execute the study to validate an existing
+model}\label{step-3-execute-the-study-to-validate-an-existing-model}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{library}\NormalTok{(SkeletonExistingModelStudy)}
+  \KeywordTok{options}\NormalTok{(}\DataTypeTok{fftempdir =} \StringTok{"location with space to save big data"}\NormalTok{)}
+  
+  \CommentTok{# The folder where the study intermediate and result files will be written:}
+\NormalTok{  outputFolder <-}\StringTok{ "./SkeletonExistingModelStudyResults"}
+  
+  \CommentTok{# Details for connecting to the server:}
+\NormalTok{  dbms <-}\StringTok{ "you dbms"}
+\NormalTok{  user <-}\StringTok{ 'your username'}
+\NormalTok{  pw <-}\StringTok{ 'your password'}
+\NormalTok{  server <-}\StringTok{ 'your server'}
+\NormalTok{  port <-}\StringTok{ 'your port'}
+  
+\NormalTok{  connectionDetails <-}\StringTok{ }\NormalTok{DatabaseConnector}\OperatorTok{::}\KeywordTok{createConnectionDetails}\NormalTok{(}\DataTypeTok{dbms =}\NormalTok{ dbms,}
+                                                                  \DataTypeTok{server =}\NormalTok{ server,}
+                                                                  \DataTypeTok{user =}\NormalTok{ user,}
+                                                                  \DataTypeTok{password =}\NormalTok{ pw,}
+                                                                  \DataTypeTok{port =}\NormalTok{ port)}
+  
+  \CommentTok{# Add the database containing the OMOP CDM data}
+\NormalTok{  cdmDatabaseSchema <-}\StringTok{ 'cdm database schema'}
+  \CommentTok{# Add a database with read/write access as this is where the cohorts will be generated}
+\NormalTok{  cohortDatabaseSchema <-}\StringTok{ 'work database schema'}
+  
+\NormalTok{  oracleTempSchema <-}\StringTok{ }\OtherTok{NULL}
+  
+  \CommentTok{# table name where the cohorts will be generated}
+\NormalTok{  cohortTable <-}\StringTok{ 'SkeletonPredictionStudyCohort'}
+  
+  \CommentTok{# TAR settings}
+\NormalTok{  sampleSize <-}\StringTok{ }\OtherTok{NULL}
+\NormalTok{  riskWindowStart <-}\StringTok{ }\DecValTok{1}
+\NormalTok{  startAnchor <-}\StringTok{ 'cohort start'}
+\NormalTok{  riskWindowEnd <-}\StringTok{ }\DecValTok{365}
+\NormalTok{  endAnchor <-}\StringTok{ 'cohort start'}
+\NormalTok{  firstExposureOnly <-}\StringTok{ }\NormalTok{F}
+\NormalTok{  removeSubjectsWithPriorOutcome <-}\StringTok{ }\NormalTok{F}
+\NormalTok{  priorOutcomeLookback <-}\StringTok{ }\DecValTok{99999}
+\NormalTok{  requireTimeAtRisk <-}\StringTok{ }\NormalTok{F}
+\NormalTok{  minTimeAtRisk <-}\StringTok{ }\DecValTok{1}
+\NormalTok{  includeAllOutcomes <-}\StringTok{ }\NormalTok{T}
+  
+  
+  \CommentTok{#=======================}
+  
+\NormalTok{  standardCovariates <-}\StringTok{ }\NormalTok{FeatureExtraction}\OperatorTok{::}\KeywordTok{createCovariateSettings}\NormalTok{(}\DataTypeTok{useDemographicsAgeGroup =}\NormalTok{ T, }\DataTypeTok{useDemographicsGender =}\NormalTok{ T)}
+  
+\NormalTok{  SkeletonExistingModelStudy}\OperatorTok{::}\KeywordTok{execute}\NormalTok{(}\DataTypeTok{connectionDetails =}\NormalTok{ connectionDetails,}
+                                      \DataTypeTok{cdmDatabaseSchema =}\NormalTok{ cdmDatabaseSchema,}
+                                      \DataTypeTok{cdmDatabaseName =}\NormalTok{ cdmDatabaseName,}
+                                      \DataTypeTok{cohortDatabaseSchema =}\NormalTok{ cohortDatabaseSchema,}
+                                      \DataTypeTok{cohortTable =}\NormalTok{ cohortTable,}
+                                      \DataTypeTok{sampleSize =}\NormalTok{ sampleSize,}
+                                      \DataTypeTok{riskWindowStart =}\NormalTok{ riskWindowStart,}
+                                      \DataTypeTok{startAnchor =}\NormalTok{ startAnchor,}
+                                      \DataTypeTok{riskWindowEnd =}\NormalTok{ riskWindowEnd,}
+                                      \DataTypeTok{endAnchor =}\NormalTok{ endAnchor,}
+                                      \DataTypeTok{firstExposureOnly =}\NormalTok{ firstExposureOnly,}
+                                      \DataTypeTok{removeSubjectsWithPriorOutcome =}\NormalTok{ removeSubjectsWithPriorOutcome,}
+                                      \DataTypeTok{priorOutcomeLookback =}\NormalTok{ priorOutcomeLookback,}
+                                      \DataTypeTok{requireTimeAtRisk =}\NormalTok{ requireTimeAtRisk,}
+                                      \DataTypeTok{minTimeAtRisk =}\NormalTok{ minTimeAtRisk,}
+                                      \DataTypeTok{includeAllOutcomes =}\NormalTok{ includeAllOutcomes,}
+                                      \DataTypeTok{standardCovariates =}\NormalTok{ standardCovariates,}
+                                      \DataTypeTok{outputFolder =}\NormalTok{ outputFolder,}
+                                      \DataTypeTok{createCohorts =}\NormalTok{ T,}
+                                      \DataTypeTok{runAnalyses =}\NormalTok{ T,}
+                                      \DataTypeTok{viewShiny =}\NormalTok{ T,}
+                                      \DataTypeTok{packageResults =}\NormalTok{ F,}
+                                      \DataTypeTok{minCellCount=} \DecValTok{5}\NormalTok{,}
+                                      \DataTypeTok{verbosity =} \StringTok{"INFO"}\NormalTok{,}
+                                      \DataTypeTok{cdmVersion =} \DecValTok{5}\NormalTok{)}
+\ErrorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{document}

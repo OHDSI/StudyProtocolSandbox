@@ -20,8 +20,7 @@
                            cohortDatabaseSchema,
                            cohortTable,
                            oracleTempSchema,
-                           outputFolder,
-                           cohortVariableSetting = NULL) {
+                           outputFolder) {
   
   # Create study cohort table structure:
   sql <- SqlRender::loadRenderTranslateSql(sqlFilename = "CreateCohortTable.sql",
@@ -52,12 +51,9 @@
     DatabaseConnector::executeSql(connection, sql)
   }
   
-  if(!is.null(cohortVariableSetting)){
+  pathToCustom <- system.file("settings", 'CustomCovariates.csv', package = "SkeletonExistingModelStudy")
+  if(file.exists(pathToCustom)){
     # if custom cohort covaraites set:
-    pathToCustom <- system.file("settings", cohortVariableSetting, package = "SkeletonExistingModelStudy")
-    if(!file.exists(pathToCustom)){
-      stop('cohortVariableSetting does not exist in package')
-    }
     cohortVarsToCreate <- utils::read.csv(pathToCustom)
     
     if(sum(colnames(cohortVarsToCreate)%in%c('atlasId', 'cohortName', 'startDay', 'endDay'))!=4){

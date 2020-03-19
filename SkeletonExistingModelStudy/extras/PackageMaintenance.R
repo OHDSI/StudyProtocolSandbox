@@ -30,6 +30,12 @@ rmarkdown::render("vignettes/UsingSkeletonPackage.Rmd",
                                           toc = TRUE,
                                           number_sections = TRUE))
 
+rmarkdown::render("vignettes/PopulatingSkeletonPackage.Rmd",
+                  output_file = "../inst/doc/PopulatingSkeletonPackage.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+
 # Create analysis details -------------------------------------------------
 # Insert cohort definitions from ATLAS into package -----------------------
 OhdsiRTools::insertCohortDefinitionSetInPackage(fileName = "CohortsToCreate.csv",

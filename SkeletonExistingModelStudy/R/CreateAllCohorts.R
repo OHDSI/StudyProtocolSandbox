@@ -35,8 +35,7 @@
 #' @param oracleTempSchema     Should be used in Oracle to specify a schema where the user has write
 #'                             priviliges for storing temporary tables.
 #' @param outputFolder         Name of local folder to place results; make sure to use forward slashes
-#'                             (/)
-#' @param cohortVariableSetting  Option to use custom covariates based on cohorts                            
+#'                             (/)                          
 #'
 #' @export
 createCohorts <- function(connectionDetails,
@@ -44,8 +43,7 @@ createCohorts <- function(connectionDetails,
                           cohortDatabaseSchema,
                           cohortTable = "cohort",
                           oracleTempSchema,
-                          outputFolder,
-                          cohortVariableSetting = NULL) {
+                          outputFolder) {
   if (!file.exists(outputFolder))
     dir.create(outputFolder)
   
@@ -56,8 +54,7 @@ createCohorts <- function(connectionDetails,
                  cohortDatabaseSchema = cohortDatabaseSchema,
                  cohortTable = cohortTable,
                  oracleTempSchema = oracleTempSchema,
-                 outputFolder = outputFolder,
-                 cohortVariableSetting = cohortVariableSetting)
+                 outputFolder = outputFolder)
   
   # Check number of subjects per cohort:
   ParallelLogger::logInfo("Counting cohorts")

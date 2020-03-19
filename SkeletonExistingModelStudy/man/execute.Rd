@@ -26,6 +26,7 @@ execute(
   outputFolder,
   createCohorts = F,
   runAnalyses = F,
+  viewShiny = F,
   packageResults = F,
   minCellCount = 10,
   verbosity = "INFO",
@@ -86,6 +87,8 @@ performance.}
 
 \item{runAnalyses}{Run the model development}
 
+\item{viewShiny}{View the results as a shiny app}
+
 \item{packageResults}{Should results be packaged for later sharing?}
 
 \item{minCellCount}{The minimum number of subjects contributing to a count before it can be included 
@@ -128,10 +131,10 @@ execute(connectionDetails,
         riskWindowEnd = 365,
         endAnchor = 'cohort start',
         standardCovariates = FeatureExtraction::createCovariateSettings(useDemographicsAgeGroup = T, useDemographicsGender = T),
-        customCovariates = 'customAtlasCovariates',
         outputFolder = "c:/temp/study_results", 
         createCohorts = T,
         runAnalyses = T,
+        viewShiny = F,
         packageResults = F,
         minCellCount = 10,
         verbosity = "INFO",

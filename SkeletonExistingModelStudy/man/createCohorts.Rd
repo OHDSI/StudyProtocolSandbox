@@ -10,8 +10,7 @@ createCohorts(
   cohortDatabaseSchema,
   cohortTable = "cohort",
   oracleTempSchema,
-  outputFolder,
-  cohortVariableSetting = NULL
+  outputFolder
 )
 }
 \arguments{
@@ -36,8 +35,6 @@ priviliges for storing temporary tables.}
 
 \item{outputFolder}{Name of local folder to place results; make sure to use forward slashes
 (/)}
-
-\item{cohortVariableSetting}{Option to use custom covariates based on cohorts}
 }
 \description{
 Create the exposure and outcome cohorts

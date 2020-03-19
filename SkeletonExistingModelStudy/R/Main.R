@@ -51,6 +51,7 @@
 #'                             performance.
 #' @param createCohorts        Create the cohortTable table with the target population and outcome cohorts?
 #' @param runAnalyses          Run the model development
+#' @param viewShiny            View the results as a shiny app
 #' @param packageResults       Should results be packaged for later sharing?     
 #' @param minCellCount         The minimum number of subjects contributing to a count before it can be included 
 #'                             in packaged results.
@@ -84,10 +85,10 @@
 #'         riskWindowEnd = 365,
 #'         endAnchor = 'cohort start',
 #'         standardCovariates = FeatureExtraction::createCovariateSettings(useDemographicsAgeGroup = T, useDemographicsGender = T),
-#'         customCovariates = 'customAtlasCovariates',
 #'         outputFolder = "c:/temp/study_results", 
 #'         createCohorts = T,
 #'         runAnalyses = T,
+#'         viewShiny = F,
 #'         packageResults = F,
 #'         minCellCount = 10,
 #'         verbosity = "INFO",
@@ -116,29 +117,30 @@ execute <- function(connectionDetails,
                     outputFolder,
                     createCohorts = F,
                     runAnalyses = F,
+                    viewShiny = F,
                     packageResults = F,
 					          minCellCount = 10,
                     verbosity = "INFO",
                     cdmVersion = 5) {
-  if (!file.exists(outputFolder))
-    dir.create(outputFolder, recursive = TRUE)
+  if (!file.exists(file.path(outputFolder,cdmDatabaseName)))
+    dir.create(file.path(outputFolder,cdmDatabaseName), recursive = TRUE)
   
-  OhdsiRTools::addDefaultFileLogger(file.path(outputFolder, "log.txt"))
+  ParallelLogger::addDefaultFileLogger(file.path(outputFolder,cdmDatabaseName, "log.txt"))
   
   if (createCohorts) {
-    OhdsiRTools::logInfo("Creating cohorts")
+    ParallelLogger::logInfo("Creating cohorts")
     createCohorts(connectionDetails = connectionDetails,
                   cdmDatabaseSchema = cdmDatabaseSchema,
                   cohortDatabaseSchema = cohortDatabaseSchema,
                   cohortTable = cohortTable,
                   oracleTempSchema = oracleTempSchema,
-                  outputFolder = outputFolder,
-                  cohortVariableSetting = customCovariates) 
+                  outputFolder = file.path(outputFolder, cdmDatabaseName)) 
   }
   
   if(runAnalyses){
     
     #getData
+    ParallelLogger::logInfo("Extracting data")
     plpData <- getData(connectionDetails = connectionDetails,
                           cdmDatabaseSchema = cdmDatabaseSchema,
                           cdmDatabaseName = cdmDatabaseName,
@@ -151,6 +153,7 @@ execute <- function(connectionDetails,
                           cdmVersion = cdmVersion)
     
     #create pop
+    ParallelLogger::logInfo("Creating population")
     population <- PatientLevelPrediction::createStudyPopulation(plpData = plpData, 
                                                                 outcomeId = 2,
                                                                 riskWindowStart = riskWindowStart,
@@ -173,7 +176,7 @@ execute <- function(connectionDetails,
                      trainCVAuc = NULL,
                      modelSettings = list(model = 'score', modelParameters = NULL),
                      metaData = NULL,
-                     populationSettings = NULL,
+                     populationSettings = attr(population, "metaData"),
                      trainingTime = NULL,
                      varImp = NULL,
                      dense = T,
@@ -183,11 +186,12 @@ execute <- function(connectionDetails,
                      predict = predictExisting
     )
     class(plpModel) <- 'plpModel'
+    ParallelLogger::logInfo("Applying and evaluating model")
     result <- PatientLevelPrediction::applyModel(population = population,
                                                  plpData = plpData,
                                                  plpModel = plpModel)
     
-    result$inputSetting$database <- databaseName
+    result$inputSetting$database <- cdmDatabaseName
     result$executionSummary  <- list()
     result$model <- plpModel
     result$analysisRef <- list()
@@ -196,20 +200,29 @@ execute <- function(connectionDetails,
     if(!dir.exists(file.path(outputFolder,cdmDatabaseName))){
       dir.create(file.path(outputFolder,cdmDatabaseName))
     }
+    ParallelLogger::logInfo("Saving results")
     saveRDS(result, file.path(outputFolder,cdmDatabaseName,'validationResults.rds'))
-    
+    ParallelLogger::logInfo(paste0("Results saved to:",file.path(outputFolder,cdmDatabaseName,'validationResults.rds')))
   }
   
   # [TODO] add create shiny app
-  
+  viewer <- TRUE
+  if(viewShiny) {
+    if(file.exists(file.path(outputFolder,cdmDatabaseName,'validationResults.rds'))){
+      result <- readRDS(file.path(outputFolder,cdmDatabaseName,'validationResults.rds'))
+      viewer <- PatientLevelPrediction::viewPlp(result)
+    } else{
+      warning('No results to view...')
+    }
+  }
   
   if (packageResults) {
-    OhdsiRTools::logInfo("Packaging results")
+    ParallelLogger::logInfo("Packaging results")
     packageResults(outputFolder = outputFolder,
                    minCellCount = minCellCount)
   }
    
-  invisible(NULL)
+  return(viewer)
 }
 
 
