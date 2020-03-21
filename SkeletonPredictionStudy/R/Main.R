@@ -39,6 +39,9 @@
 #'                             performance.
 #' @param createProtocol       Creates a protocol based on the analyses specification                             
 #' @param createCohorts        Create the cohortTable table with the target population and outcome cohorts?
+#' @param runDiagnostic        Runs a diagnostic of the T, O and tar settings for the cdmDatabaseSchema - can be used to check whether to change 
+#'                             settings or whether the prediction may not do well.  
+#' @param viewDiagnostic       Opens a shiny app with the diagnostic results (run after runDiagnostic completes)                              
 #' @param runAnalyses          Run the model development
 #' @param createResultsDoc     Create a document containing the results of each prediction
 #' @param createValidationPackage  Create a package for sharing the models 
@@ -77,6 +80,8 @@
 #'         outputFolder = "c:/temp/study_results", 
 #'         createProtocol = T,
 #'         createCohorts = T,
+#'         runDiagnostic = F,
+#'         viewDiagnostic = F,
 #'         runAnalyses = T,
 #'         createResultsDoc = T,
 #'         createValidationPackage = T,
@@ -98,6 +103,8 @@ execute <- function(connectionDetails,
                     outputFolder,
                     createProtocol = F,
                     createCohorts = F,
+                    runDiagnostic = F,
+                    viewDiagnostic = F,
                     runAnalyses = F,
                     createResultsDoc = F,
                     createValidationPackage = F,
@@ -129,6 +136,91 @@ execute <- function(connectionDetails,
                   oracleTempSchema = oracleTempSchema,
                   outputFolder = outputFolder,
                   cohortVariableSetting = cohortVariableSetting)
+  }
+  
+  if(runDiagnostic){
+    ParallelLogger::logInfo(paste0("Creating diagnostic results for ",cdmDatabaseName))
+    predictionAnalysisListFile <- system.file("settings",
+                                              "predictionAnalysisList.json",
+                                              package = "SkeletonPredictionStudy")
+    predictionAnalysisList <- PatientLevelPrediction::loadPredictionAnalysisList(predictionAnalysisListFile)
+    
+    
+    # extract settings
+    sampleSize = predictionAnalysisList$maxSampleSize
+    cohortIds= predictionAnalysisList$cohortIds
+    cohortNames = predictionAnalysisList$cohortNames
+    outcomeIds = predictionAnalysisList$outcomeIds
+    outcomeNames = predictionAnalysisList$outcomeNames
+    
+    tars <- do.call(rbind, lapply(predictionAnalysisList$modelAnalysisList$populationSettings, function(x){
+      c(x$riskWindowStart, ifelse(x$addExposureDaysToStart==T,'cohort end','cohort start'), 
+        x$riskWindowEnd, ifelse(x$addExposureDaysToEnd==T,'cohort end','cohort start'))}))
+    riskWindowStart = tars[,1]
+    startAnchor = tars[,2]
+    riskWindowEnd = tars[,3]
+    endAnchor = tars[,4]
+    
+    # run diagnostic
+    for(i in 1:length(cohortIds)){
+      cohortId <- cohortIds[i]
+      cohortName <- cohortNames[i]
+      
+      ParallelLogger::logInfo(paste0("Target Cohort: ", cohortName, ' generating'))
+      
+      diag <- tryCatch({PatientLevelPrediction::diagnostic(cdmDatabaseName = cdmDatabaseName, 
+                                                 connectionDetails = connectionDetails, 
+                                                 cdmDatabaseSchema = cdmDatabaseSchema, 
+                                                 oracleTempSchema = oracleTempSchema, 
+                                                 cohortId = cohortId, 
+                                                 cohortName = cohortName, 
+                                                 outcomeIds = outcomeIds, 
+                                                 outcomeNames = outcomeNames, 
+                                                 cohortDatabaseSchema = cohortDatabaseSchema, 
+                                                 cohortTable = cohortTable, 
+                                                 outcomeDatabaseSchema = cohortDatabaseSchema, 
+                                                 outcomeTable = cohortTable, 
+                                                 cdmVersion = cdmVersion, 
+                                                 outputFolder = file.path(outputFolder, 'diagnostics'), 
+                                                 sampleSize = sampleSize, 
+                                                 minCellCount = minCellCount, 
+                                                 riskWindowStart = as.double(riskWindowStart), 
+                                                 startAnchor = startAnchor, 
+                                                 riskWindowEnd = as.double(riskWindowEnd), 
+                                                 endAnchor = endAnchor)},
+                       error = function(err) {
+                         # error handler picks up where error was generated
+                         ParallelLogger::logError(paste("Diagnostic error:  ",err))
+                         return(NULL)
+                         
+                       })
+    }
+    
+    
+  }
+  
+  if(viewDiagnostic){
+    ParallelLogger::logInfo(paste0("Loading diagnostic shiny app"))
+    
+    checkDiagnosticResults <- dir.exists(file.path(outputFolder, 'diagnostics'))
+    checkShinyViewer <- dir.exists(system.file("shiny", "DiagnosticsExplorer", package = "PatientLevelPrediction"))
+    if(!checkDiagnosticResults){
+      warning('No diagnosstic results found, please execute with runDiagnostic first')
+    } else if(!checkShinyViewer){
+      warning('No DiagnosticsExplorer shiny app found in your PatientLevelPrediction library - try updating PatientLevelPrediction')
+    } else{
+      ensure_installed("shiny")
+      ensure_installed("shinydashboard")
+      ensure_installed("DT")
+      ensure_installed("VennDiagram")
+      ensure_installed("htmltools")
+      shinyDirectory <- system.file("shiny", "DiagnosticsExplorer", package = "PatientLevelPrediction")
+      shinySettings <- list(dataFolder = file.path(outputFolder, 'diagnostics'))
+      .GlobalEnv$shinySettings <- shinySettings
+      on.exit(rm(shinySettings, envir = .GlobalEnv))
+      shiny::runApp(shinyDirectory)
+    }
+    
   }
   
   if(runAnalyses){

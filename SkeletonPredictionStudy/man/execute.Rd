@@ -14,6 +14,8 @@ execute(
   outputFolder,
   createProtocol = F,
   createCohorts = F,
+  runDiagnostic = F,
+  viewDiagnostic = F,
   runAnalyses = F,
   createResultsDoc = F,
   createValidationPackage = F,
@@ -57,6 +59,11 @@ performance.}
 \item{createProtocol}{Creates a protocol based on the analyses specification}
 
 \item{createCohorts}{Create the cohortTable table with the target population and outcome cohorts?}
+
+\item{runDiagnostic}{Runs a diagnostic of the T, O and tar settings for the cdmDatabaseSchema - can be used to check whether to change 
+settings or whether the prediction may not do well.}
+
+\item{viewDiagnostic}{Opens a shiny app with the diagnostic results (run after runDiagnostic completes)}
 
 \item{runAnalyses}{Run the model development}
 
@@ -113,6 +120,8 @@ execute(connectionDetails,
         outputFolder = "c:/temp/study_results", 
         createProtocol = T,
         createCohorts = T,
+        runDiagnostic = F,
+        viewDiagnostic = F,
         runAnalyses = T,
         createResultsDoc = T,
         createValidationPackage = T,

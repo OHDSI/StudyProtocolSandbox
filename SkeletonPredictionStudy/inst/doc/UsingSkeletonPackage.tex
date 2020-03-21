@@ -111,7 +111,7 @@
 
 \title{Using the package skeleton for patient-level prediction studies}
 \author{Jenna M. Reps}
-\date{2020-03-06}
+\date{2020-03-21}
 
 \begin{document}
 \maketitle
@@ -211,9 +211,11 @@ By default all the options are set to F for the execute fuction:
         \DataTypeTok{cdmDatabaseName =} \StringTok{'Name of database used in study'}\NormalTok{,}
         \DataTypeTok{cohortTable =} \StringTok{"cohort"}\NormalTok{,}
         \DataTypeTok{oracleTempSchema =} \OtherTok{NULL}\NormalTok{,}
-        \DataTypeTok{outputFolder =} \StringTok{'./results'}\NormalTok{,}
+        \DataTypeTok{outputFolder =} \StringTok{'./results'}\NormalTok{, }
         \DataTypeTok{createProtocol =}\NormalTok{ F,}
         \DataTypeTok{createCohorts =}\NormalTok{ F,}
+        \DataTypeTok{runDiagnostic =}\NormalTok{ F, }
+        \DataTypeTok{viewDiagnostic =}\NormalTok{ F, }
         \DataTypeTok{runAnalyses =}\NormalTok{ F,}
         \DataTypeTok{createResultsDoc =}\NormalTok{ F,}
         \DataTypeTok{packageResults =}\NormalTok{ F,}
@@ -308,6 +310,23 @@ createCohorts\strut
 \end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
 TRUE or FALSE indicating whether to create the target population and
 outcome cohorts for the study\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+runDiagnostic\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE indicating whether to run a diagnostic into the prediction
+- this can identify potential issues with the settings or prediction
+(Note: requires study cohorts are already created)\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+TRUE\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.21\columnwidth}\raggedright
+viewDiagnostic\strut
+\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\raggedright
+TRUE or FALSE if runDiagnostic completed sucessfully then this opens a
+shiny viewer to explore the results\strut
 \end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
 TRUE\strut
 \end{minipage}\tabularnewline
@@ -420,6 +439,17 @@ cohortDatabaseSchema.cohortTable)
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{    createCohorts =}\StringTok{ }\NormalTok{T}
+\end{Highlighting}
+\end{Shaded}
+
+To run and view the study diagnostic (results are saved into the
+`diagnostic' folder in outputFolder), run the code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{    runDiagnostic =}\StringTok{ }\NormalTok{T}
+\NormalTok{    viewDiagnostic =}\StringTok{ }\NormalTok{T}
+\NormalTok{    minCellCount =}\StringTok{ }\DecValTok{0}
 \end{Highlighting}
 \end{Shaded}
 

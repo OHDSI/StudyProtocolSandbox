@@ -28,7 +28,7 @@ source('./extras/packageDeps.R')
 
 
 
-Instructions To Run Package
+Instructions To Run Study
 ===================
 - Execute the study by running the code in (extras/CodeToRun.R) :
 ```r
@@ -75,6 +75,8 @@ execute(connectionDetails = connectionDetails,
         oracleTempSchema = oracleTempSchema,
         outputFolder = outputFolder,
         createProtocol = F,
+        runDiagnostic = F,
+        viewDiagnostic = F,
         createCohorts = T,
         runAnalyses = T,
         createResultsDoc = F,
