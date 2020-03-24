@@ -50,8 +50,6 @@ getCohortCovariateData <- function(connection,
     {@countval}?{count(distinct b.cohort_start_date)}:{max(1)} as covariate_value",
     "from @cohort_temp_table a inner join @covariate_cohort_schema.@covariate_cohort_table b",
     " on a.subject_id = b.subject_id and ",
-    #" b.cohort_start_date >= dateadd(day, @startDay, a.cohort_start_date) and ",
-    #" b.cohort_start_date <= dateadd(day, @endDay, a.cohort_start_date) ",
     " b.cohort_start_date <= dateadd(day, @endDay, a.cohort_start_date) and ",
     " b.cohort_end_date >= dateadd(day, @startDay, a.cohort_start_date) ",
     "where b.cohort_definition_id = @covariate_cohort_id

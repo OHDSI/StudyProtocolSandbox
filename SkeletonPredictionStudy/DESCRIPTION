@@ -10,8 +10,8 @@ Depends:
 Imports:
     SqlRender,
     Cyclops,
-    FeatureExtraction,
-    PatientLevelPrediction,
+    FeatureExtraction (>= 2.0.0),
+    PatientLevelPrediction (>= 3.0.14),
     ggplot2,
     ff,
     ffbase,
