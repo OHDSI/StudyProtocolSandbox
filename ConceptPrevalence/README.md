@@ -1,6 +1,9 @@
 ConceptPrevalence
 ================
 
+The package was moved to https://github.com/ohdsi-studies/ConceptPrevalence
+================
+
 Introduction
 ==========
 A package to calculate the counts of the standard and source concepts in an OMOP CDM and extract the current version of the mappings used
@@ -19,7 +22,7 @@ Getting started
 In R, use the following commands to download and install:
 
 install.packages("devtools")
-devtools::install_github("OHDSI/StudyProtocolSandbox/ConceptPrevalence")
+devtools::install_github("https://github.com/ohdsi-studies/ConceptPrevalence")
 
 library('ConceptPrevalence')
 
