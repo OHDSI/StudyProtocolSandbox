@@ -25,6 +25,7 @@ execute(
   createShiny = F,
   createJournalDocument = F,
   analysisIdDocument = 1,
+  onlyFetchData = F,
   verbosity = "INFO",
   cdmVersion = 5,
   cohortVariableSetting = NULL
@@ -83,6 +84,8 @@ in packaged results.}
 \item{createJournalDocument}{Do you want to create a template journal document populated with results?}
 
 \item{analysisIdDocument}{Which Analysis_id do you want to create the document for?}
+
+\item{onlyFetchData}{Only fetch data for the analyses without fitting models. Setting this flag will overwrite your input provided to the runAnalyses and createCohorts parameters.}
 
 \item{verbosity}{Sets the level of the verbosity. If the log level is at or higher in priority than the logger threshold, a message will print. The levels are:
 \itemize{
