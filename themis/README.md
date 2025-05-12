@@ -25,3 +25,7 @@ Previous protocol from 2018 is availabe at https://github.com/OHDSI/StudyProtoco
 - Huser V, Kim D, Park RW, Londhe A, Philofsky M, Van Zandt M, et al. Real Word Database for Validation of Units for Clinical Laboratory Tests. Proc AMIA Symp. 2018. https://www.researchgate.net/publication/378737424_Real_World_Database_for_Validation_of_Units_for_Clinical_Laboratory_Tests
 
 - Huser V, Facilitating analysis of measurements data though stricter model conventions: Exploring units variability across sites, OHDSI Symposium 2017
+
+## Related repository
+
+https://github.com/vojtechhuser/DataQuality (work on looking at the min and max threshold; only distantly related to the test-preferredUnit goal)
