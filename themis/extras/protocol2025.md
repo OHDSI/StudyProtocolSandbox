@@ -9,7 +9,7 @@ Data supplied by study site contributors has been reviewed by their local govern
 The study is not a human subject research.
 
 # IRB review
-The study is following the protocol of OHDSI Evidence network. 
+The study is following the protocol of OHDSI Evidence network. And following the data practices there. The analysis is executed by custodian of the Evidence Network
 
 
 
