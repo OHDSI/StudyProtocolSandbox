@@ -5,6 +5,8 @@ In 2018, OHDSI researchers analyzed what units are used for a subset of laborato
 # Analyzed data
 
 The input to the study are concept usage data. This data is included in data export collected for  OHDSI Evidence network.
+Data supplied by study site contributors has been reviewed by their local governance. It is subsumed in Evidence Network.
+The study is not a human subject research.
 
 # IRB review
 The study is following the protocol of OHDSI Evidence network. 
