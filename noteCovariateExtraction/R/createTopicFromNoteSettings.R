@@ -10,6 +10,7 @@ createTopicFromNoteSettings <- function(useTopicFromNote = TRUE,
                                         noteConceptId = noteConceptId,
                                         useDictionary=TRUE,
                                         selectDictionary = c('KOR'),
+                                        implementLanguage = c('KOR','ENG'),
                                         useTextToVec = FALSE,
                                         useTopicModeling=FALSE,
                                         numberOfTopics=10L,
@@ -18,10 +19,29 @@ createTopicFromNoteSettings <- function(useTopicFromNote = TRUE,
                                         useAutoencoder=FALSE,
                                         LatentDimensionForAutoEncoder = 100L,
                                         sampleSize=-1){
+
     if(sum(useDictionary) == 0){
         stop('Not implemented.')
     }
     else{
+
+        if(sum(length(selectDictionary)) <= 2){
+
+            if(length(unique(selectDictionary %in% implementLanguage)) == 1){
+                if(unique(selectDictionary %in% implementLanguage)){
+
+                }
+                else{
+                    stop(paste('Only choose implement Language :', paste(implementLanguage,collapse=" ")))
+                }
+            }
+            else{
+                stop(paste('Only choose implement Language :', paste(implementLanguage,collapse=" ")))
+            }
+        }
+        else{
+            stop('Please choose up to two.')
+        }
         if (sum (useTextToVec,useTopicModeling,useGloVe,useAutoencoder) != 1 ) {
             stop("Choose only one among useTextToVec,useTopicModeling,useGloVe,useAutoencoder")
         }
@@ -30,6 +50,7 @@ createTopicFromNoteSettings <- function(useTopicFromNote = TRUE,
                                       noteConceptId = noteConceptId,
                                       useDictionary=useDictionary,
                                       selectDictionary=selectDictionary,
+                                      implementLanguage = implementLanguage,
                                       useTextToVec=useTextToVec,
                                       useTopicModeling=useTopicModeling,
                                       numberOfTopics = numberOfTopics,

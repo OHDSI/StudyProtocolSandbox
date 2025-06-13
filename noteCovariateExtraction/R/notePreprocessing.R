@@ -5,8 +5,8 @@
 #' @keywordsa createCovariateSetting
 #' @export
 #' @examples
-#' Preprocessing_KOR()
-Preprocessing_KOR <- function(covariate_id){
+#' notePreprocessing()
+notePreprocessing <- function(covariate_id){
 
     covariate_id <- gsub('<[^<>]*>',' ',covariate_id) #Remove Tag
     #Remove html special characters
@@ -16,12 +16,25 @@ Preprocessing_KOR <- function(covariate_id){
     covariate_id <- gsub('&amp;', " ", covariate_id)
     covariate_id <- gsub('&quot;', " ", covariate_id)
 
-    #remove hangle typo
-    covariate_id <- gsub('[ㅏ-ㅣ]*','',covariate_id)
-    covariate_id <- gsub('[ㄱ-ㅎ]*','',covariate_id)
+    #####At least one should be included.
+    #KOR PreProcessing
+    if('KOR' %in% covariateSettings$selectDictionary){
+        #remove hangle typo
+        covariate_id <- gsub('[ㅏ-ㅣ]*','',covariate_id)
+        covariate_id <- gsub('[ㄱ-ㅎ]*','',covariate_id)
 
-    #Only Korean and English are left. (remove special characters)
-    covariate_id <- gsub('[^가-힣a-zA-Z]',' ',covariate_id)
+        #Only Korean and English are left. (remove special characters)
+        covariate_id <- gsub('[^가-힣a-zA-Z]',' ',covariate_id)
+    }
+    #Other Language PreProcessing
+    #if('Other' %in% covariateSettings$selectDictionary){}
+    ###################################
+
+    #Only ENG PreProcessing
+    else{
+        covariate_id <- gsub('[^a-zA-Z]',' ',covariate_id)
+    }
+
 
     #The spacing is only once
     covariate_id <- stringr::str_replace_all(covariate_id,"[[:space:]]{1,}"," ")
@@ -34,3 +47,6 @@ Preprocessing_KOR <- function(covariate_id){
 
     return(covariate_id)
 }
+
+
+
